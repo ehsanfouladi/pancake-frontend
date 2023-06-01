@@ -5,7 +5,7 @@ import { Token } from '@pancakeswap/sdk'
 import { SerializedWrappedToken } from '@pancakeswap/token-lists'
 import { Pool } from '@pancakeswap/uikit'
 import BigNumber from 'bignumber.js'
-import { CampaignType, FetchStatus, LotteryStatus, LotteryTicket, Team, TranslatableText } from 'config/constants/types'
+import { CampaignType, FetchStatus, LotteryStatus, ClaimStatus, LotteryTicket, Team, TranslatableText } from 'config/constants/types'
 import { NftToken } from './nftMarket/types'
 
 export enum GAS_PRICE {
@@ -462,6 +462,11 @@ interface LotteryRoundGenerics {
   finalNumber: number
 }
 
+interface ClaimGenerics {
+  isLoading?: boolean
+  status: ClaimStatus
+}
+
 export interface LotteryRound extends LotteryRoundGenerics {
   userTickets?: LotteryRoundUserTickets
   priceTicketInCadinu: BigNumber
@@ -481,6 +486,11 @@ export interface LotteryResponse extends LotteryRoundGenerics {
   rewardsBreakdown: SerializedBigNumber[]
 }
 
+export interface ClaimResponse extends ClaimGenerics {
+  priceRewardInCadinu: SerializedBigNumber
+  amountCollectedInCadinu: SerializedBigNumber
+}
+
 export interface LotteryState {
   currentLotteryId: string
   maxNumberTicketsPerBuyOrClaim: string
@@ -489,6 +499,20 @@ export interface LotteryState {
   lotteriesData?: LotteryRoundGraphEntity[]
   userLotteryData?: LotteryUserGraphEntity
 }
+
+export interface ClaimState {
+  reward: string
+  lastReward: string
+  lastRewardTime: string
+  totalClaim: string
+  availableReward: string
+  minRewardAmount: string
+  maxRewardAmount: string
+  totalClaimByUsers: string
+  totalRewardPaidToUsers: string
+  isTransitioning: boolean
+}
+
 
 export interface LotteryRoundGraphEntity {
   id: string
@@ -619,4 +643,5 @@ export interface State {
   predictions: PredictionsState
   lottery: LotteryState
   pottery: PotteryState
+  claim: ClaimState
 }

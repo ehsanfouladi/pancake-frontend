@@ -1,23 +1,23 @@
+import {useEffect, useMemo, useState} from "react";
+import {readContract} from "@wagmi/core";
+import {floor} from "lodash";
 import styled, { keyframes } from 'styled-components'
-import {useMemo} from "react";
-
+import {useAccount, useContractRead, useContractWrite, usePrepareContractWrite} from "wagmi";
 import { Box, Flex, Heading, Skeleton, Balance } from '@pancakeswap/uikit'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
-
-import {ChainId} from "@pancakeswap/sdk"
-import {CADINU} from '@pancakeswap/tokens'
-import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import { useTranslation } from '@pancakeswap/localization'
-
-
-
 import BigNumber from 'bignumber.js'
-import { LotteryStatus } from 'config/constants/types'
-
-import { useLottery } from 'state/lottery/hooks'
 import { TicketPurchaseCard } from '../svgs'
 import BuyTicketsButton from './BuyTicketsButton'
-import useBUSDPrice from "../../../hooks/useBUSDPrice"
+import claimADAbi from "../../../config/abi/claimAD.json";
+import {getClaimAddress} from "../../../utils/addressHelpers";
+import {getClaimContract} from "../../../utils/contractHelpers";
+import WalletNotConnected from "./WalletNotConnected";
+import useGetNextClaimEvent from "../hooks/useGetNextClaimEvent";
+import {ClaimStatus} from "../../../config/constants/types";
+import Countdown from "../../Lottery/components/Countdown";
+import NextDrawCard from "../../Lottery/components/NextDrawCard";
+
 
 export const floatingStarsLeft = keyframes`
   from {
@@ -90,7 +90,7 @@ const PrizeTotalBalance = styled(Balance)`
 `
 
 const StyledBuyTicketButton = styled(BuyTicketsButton)<{ disabled: boolean }>`
-  background: ${({ theme, disabled }) =>
+  background: ${({ theme, disabled, contract, contractAddress, setIsSuccess}) =>
     disabled ? theme.colors.disabled : 'linear-gradient(180deg, #7645d9 0%, #452a7a 100%)'};
   width: 200px;
   ${({ theme }) => theme.mediaQueries.xs} {
@@ -267,33 +267,147 @@ const CnyDecorations = styled(Box)`
   }
 `
 
-const Hero = () => {
+const Hero = ({disabled , setDisabled, setIsSuccess , isSuccess}) => {
   const { t } = useTranslation()
+  const { address: account } = useAccount()
+  const claimAddress = getClaimAddress()
+  const claimContract = getClaimContract(claimAddress)
+
+
+
   const {
-    currentRound: { amountCollectedInCadinu, status },
-    isTransitioning,
-  } = useLottery()
-  const price = useBUSDPrice(CADINU[ChainId.BSC])
-  const cakePriceBusd = useMemo(() => (price ? new BigNumber(price.toSignificant(6)) : BIG_ZERO), [price])
-  const prizeInBusd = amountCollectedInCadinu.times(cakePriceBusd)
-  const prizeTotal = getBalanceNumber(prizeInBusd)
-  const ticketBuyIsDisabled = status !== LotteryStatus.OPEN || isTransitioning
+    data: maxRewardAmount,
+    isError:maxRewardAmountIsError,
+    isLoading:maxRewardAmountIsLoading
+  } = useContractRead(
+      {
+      address: claimContract.address as `0x${string}`,
+      abi: claimADAbi,
+      functionName: 'maxRewardAmount',
+          onSuccess(){
+              console.log(maxRewardAmount.toString())
+              console.log(typeof(maxRewardAmount))
+
+          },
+      onError(error) {
+      console.log('Error', error)
+    },
+  })
+  const maxRewardBig = new BigNumber(maxRewardAmount?.toString())
+  const maxReward = getBalanceNumber(maxRewardBig)
+
+  const {
+      data:lastRewardTime,
+      isSuccess:lastRewardTimeIsSuccess,
+      isLoading: lastRewardTimeIsLoading
+  } = useContractRead({
+            address: claimContract.address as `0x${string}`,
+            abi: claimADAbi,
+            functionName:"lastRewardTime",
+            args:[account]
+        }
+    )
+  const lastRewardTimeAsInt = useMemo(
+        ()=> {
+            return parseInt(
+                lastRewardTime && lastRewardTime.toString(),
+                10)
+        },
+        [lastRewardTime,lastRewardTimeIsSuccess, isSuccess])
+
+  const {
+      data:timeBetweenEachClaim,
+      isSuccess:timeBetweenEachClaimIsSuccess
+  } = useContractRead({
+            address: claimContract.address as `0x${string}`,
+            abi: claimADAbi,
+            functionName:"timeBetweenEachClaim",
+
+        }
+    )
+  const timeBetweenEachClaimAsInt = useMemo(
+         ()=> parseInt(
+             timeBetweenEachClaim && timeBetweenEachClaim.toString(),
+            10),
+        [timeBetweenEachClaim])
+
+
+  const {
+        nextEventTime,
+        postCountdownText,
+        preCountdownText
+    } = useGetNextClaimEvent(lastRewardTimeAsInt, ClaimStatus.OPEN, timeBetweenEachClaimAsInt)
+
+  const [isClaimAvailable, setIsClaimAvailable] = useState(true)
+
+  useEffect(()=>{
+      if (
+          !lastRewardTimeIsLoading && lastRewardTimeIsSuccess &&
+          floor(Date.now()/1000) < lastRewardTimeAsInt + timeBetweenEachClaimAsInt
+      ){
+          setIsClaimAvailable(false)
+          setDisabled(true)
+          setTimeout(()=>{
+          setIsClaimAvailable(true)
+          setDisabled(false)},
+              ((lastRewardTimeAsInt + timeBetweenEachClaimAsInt) - floor(Date.now()/1000))*1000
+              )
+      }
+      if (isSuccess) {
+          setIsClaimAvailable(false)
+          setDisabled(true)
+          // setIsSuccess(false)
+          setTimeout(() => {
+              setIsClaimAvailable(true)
+              setDisabled(false)
+              }, (timeBetweenEachClaimAsInt * 1000)
+          )
+      }
+      console.log("checkiiiidee")
+
+  },[isSuccess, timeBetweenEachClaimAsInt, lastRewardTimeAsInt, lastRewardTimeIsLoading, lastRewardTimeIsSuccess])
+
 
   const getHeroHeading = () => {
-    if (status === LotteryStatus.OPEN) {
       return (
         <>
-          {prizeInBusd.isNaN() ? (
-            <Skeleton my="7px" height={60} width={190} />
+
+            {lastRewardTimeIsSuccess && (
+                <>
+            <Flex alignItems="center" justifyContent="center" flexDirection="column" pt="24px">
+                 <Flex alignItems="center" justifyContent="center" mb="48px" pt="24px">
+                     {!isClaimAvailable ?(
+                      <Countdown
+                        nextEventTime={nextEventTime}
+                        postCountdownText={postCountdownText}
+                        preCountdownText=""
+                     /> ) : (
+                         <Heading scale="xl" color="#ffffff" mb="24px" textAlign="center">
+                             Get Free CADINU Now!
+                         </Heading>
+                         )
+                     }
+                </Flex>
+                  {/* <Heading scale="xl" color="#ffffff" mb="24px" textAlign="center"> */}
+                  {/*  {t('Get Free CADINU!')} */}
+                  {/* </Heading> */}
+
+              </Flex>
+            <Heading mb="32px" scale="lg" color="#ffffff" textAlign="center">
+            {t('win up to')}
+            </Heading>
+
+          {maxRewardAmount ? (
+
+              <PrizeTotalBalance fontSize="64px" bold unit=' CADINU' value={maxReward} mb="8px" decimals={0} />
           ) : (
-            <PrizeTotalBalance fontSize="64px" bold prefix="$" value={prizeTotal} mb="8px" decimals={0} />
+               <Skeleton my="7px" height={60} width={190} />
           )}
-          <Heading mb="32px" scale="lg" color="#ffffff">
-            {t('in prizes!')}
-          </Heading>
+ </>
+            )}
         </>
       )
-    }
+
     return (
       <Heading mb="24px" scale="xl" color="#ffffff">
         {t('Tickets on sale soon')}
@@ -302,8 +416,7 @@ const Hero = () => {
   }
 
   return (
-    <
-  Flex flexDirection="column" alignItems="center" justifyContent="center">
+    <Flex flexDirection="column" alignItems="center" justifyContent="center">
       {/* <CnyDecorations> */}
       {/*  <img src="/images/cny-asset/cny-lantern-1.png" width="200px" height="280px" alt="" /> */}
       {/*  <img src="/images/cny-asset/cny-lantern-2.png" width="184px" height="210px" alt="" /> */}
@@ -318,9 +431,12 @@ const Hero = () => {
         <img src="/images/lottery/cadinu_ticket_4.svg" width="121px" height="72px" alt="" />
       </StarsDecorations>
       <Heading style={{ zIndex: 1 }} mb="8px" scale="md" color="#ffffff" id="lottery-hero-title">
-        {t('The Cadinu Lottery')}
+        {t('The Cadinu Claim Airdrop')}
       </Heading>
       {getHeroHeading()}
+        {!account ?
+            (<WalletNotConnected />)
+            :(
       <TicketContainer
         position="relative"
         width={['240px', '288px']}
@@ -329,12 +445,19 @@ const Hero = () => {
         justifyContent="center"
       >
         <ButtonWrapper>
-          <StyledBuyTicketButton disabled={ticketBuyIsDisabled} themeMode="light" />
+          <StyledBuyTicketButton
+              disabled = {disabled}
+              themeMode="light"
+              setIsSuccess= {(p)=>setIsSuccess(p)}
+              contract={claimContract}
+              contractAddress={claimAddress}
+
+          />
         </ButtonWrapper>
         <TicketSvgWrapper>
           <TicketPurchaseCard width="100%" />
         </TicketSvgWrapper>
-      </TicketContainer>
+      </TicketContainer>)}
     </Flex>
   )
 }

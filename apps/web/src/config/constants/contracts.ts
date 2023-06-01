@@ -161,4 +161,8 @@ export default {
     56: '0x0726a8C8206b9eC0AfB788df5adb36a8AEDB13c2',
     97: '0xBab5d3B6bA24E185f216419f3ba07f03984bF983',
   },
+  // CADINU
+  claimAD:{
+    56: '0xc529d32fD8e74157a08a269596487E0C52530488'
+  }
 }

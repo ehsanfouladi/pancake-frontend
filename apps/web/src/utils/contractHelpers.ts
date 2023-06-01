@@ -42,7 +42,7 @@ import {
   getBCakeFarmBoosterProxyFactoryAddress,
   getNonBscVaultAddress,
   getCrossFarmingSenderAddress,
-  getCrossFarmingReceiverAddress,
+  getCrossFarmingReceiverAddress, getClaimAddress,
 } from 'utils/addressHelpers'
 
 // ABI
@@ -64,6 +64,7 @@ import sousChef from 'config/abi/sousChef.json'
 import sousChefV2 from 'config/abi/sousChefV2.json'
 import sousChefBnb from 'config/abi/sousChefBnb.json'
 import claimRefundAbi from 'config/abi/claimRefund.json'
+import claimAD from 'config/abi/claimAD.json'
 import tradingCompetitionEasterAbi from 'config/abi/tradingCompetitionEaster.json'
 import tradingCompetitionFanTokenAbi from 'config/abi/tradingCompetitionFanToken.json'
 import tradingCompetitionMoboxAbi from 'config/abi/tradingCompetitionMobox.json'
@@ -111,6 +112,7 @@ import type {
   Erc721,
   Cake,
   Cadinu,
+  ClaimAD,
   BunnyFactory,
   PancakeBunnies,
   PancakeProfile,
@@ -211,6 +213,18 @@ export const getCadinuContract = (signer?: Signer | Provider, chainId?: number) 
     address: chainId ? CADINU[chainId].address : CADINU[ChainId.BSC].address,
     signer,
   }) as Cadinu
+}
+
+// export const getClaimContract = (signer?: Signer | Provider, chainId?: number) => {
+//   return getContract({
+//     abi: claimAD,
+//     address: chainId ? CADINU[chainId].address : CADINU[ChainId.BSC].address,
+//     signer,
+//   })
+// }
+
+export const getClaimContract = (address: string, signer?: Signer | Provider) => {
+  return getContract({abi: claimAD, address: getClaimAddress(), signer}) as ClaimAD
 }
 export const getProfileContract = (signer?: Signer | Provider) => {
   return getContract({ abi: profileABI, address: getPancakeProfileAddress(), signer }) as PancakeProfile

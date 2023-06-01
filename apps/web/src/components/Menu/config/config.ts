@@ -120,6 +120,11 @@ const config: (
           href: '/lottery',
           image: '/images/decorations/lottery.png',
         },
+        {
+          label: t('Claim Reward'),
+          href: '/claim',
+          image: '/images/decorations/lottery.png',
+        },
         // {
         //   label: t('Pottery (BETA)'),
         //   href: '/pottery',

@@ -132,3 +132,7 @@ export const getCrossFarmingSenderAddress = (chainId?: number) => {
 export const getCrossFarmingReceiverAddress = (chainId?: number) => {
   return getAddress(addresses.crossFarmingReceiver, chainId)
 }
+
+export const getClaimAddress = (chainId?: number) => {
+  return getAddress(addresses.claimAD, chainId)
+}

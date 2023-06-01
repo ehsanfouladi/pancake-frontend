@@ -114,6 +114,8 @@ export enum LotteryStatus {
   CLAIMABLE = 'claimable',
 }
 
+
+
 export interface LotteryTicket {
   id: string
   number: string
@@ -123,11 +125,34 @@ export interface LotteryTicket {
   cadinuReward?: string
 }
 
+
+
 export interface LotteryTicketClaimData {
   ticketsWithUnclaimedRewards: LotteryTicket[]
   allWinningTickets: LotteryTicket[]
   cadinuTotal: BigNumber
   roundId: string
+}
+
+// Claim
+
+export enum ClaimStatus {
+  PENDING = 'pending',
+  OPEN = 'open',
+  CLOSE = 'close',
+  CLAIMABLE = 'claimable',
+}
+export interface ClaimData {
+  unclaimedRewards: BigNumber
+  claculatedReward: BigNumber
+  lastReward: BigNumber
+  lastRewardTime: BigNumber
+  totalClaim:BigNumber
+  availableReward: BigNumber
+  minRewardAmount: BigNumber
+  maxRewardAmount : BigNumber
+  totalClaimByUsers: BigNumber
+  totalRewardPaidToUsers:BigNumber
 }
 
 // Farm Auction
