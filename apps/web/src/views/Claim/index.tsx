@@ -19,7 +19,7 @@ import Hero from "./components/Hero";
 // import {GET_TICKETS_BG} from "../Lottery/pageSectionStyles";
 import {ClaimStatus} from "../../config/constants/types";
 import Countdown from "../Lottery/components/Countdown";
-import NextDrawCard from "../Lottery/components/NextDrawCard";
+import NextDrawCard from "./components/NextClaimCard";
 import useGetNextClaimEvent from "./hooks/useGetNextClaimEvent";
 import useGetLastReward from "./hooks/useGetLastReward";
 import {floor} from "lodash";
@@ -102,18 +102,19 @@ const Claim = () => {
         <>
           <PageMeta />
           <ClaimPage>
-              <PageSection background={CNY_TITLE_BG} index={1} hasCurvedDivider={false}>
+              <PageSection background={CNY_TITLE_BG} index={1} hasCurvedDivider clipFill={{ light: '#7E0C33' }}>
                   <Hero disabled={disabled} setDisabled={setDisabled} setIsSuccess={setIsSuccess} isSuccess={isSuccess} />
               </PageSection>
                <PageSection
               containerProps={{ style: { marginTop: '-30px' } }}
               background={GET_TICKETS_BG}
               concaveDivider
-              clipFill={{ light: '#7645D9' }}
+              hasCurvedDivider
+              clipFill={{ light: '#7E0C33' }}
               dividerPosition="top"
               index={2}
             >
-              <Flex alignItems="center" justifyContent="center" flexDirection="column" pt="24px">
+              <Flex alignItems="center" justifyContent="center" flexDirection="column"  pt="24px">
                 <NextDrawCard isSuccess={isSuccess} />
               </Flex>
             </PageSection>

@@ -5,14 +5,14 @@ import { ChainId } from '@pancakeswap/sdk'
 import { useMemo } from 'react'
 import { useNetwork } from 'wagmi'
 import { atom, useAtom } from 'jotai'
-import { SUPPORT_ONLY_BSC } from 'config/constants/supportChains'
+import {SUPPORT_ONLY_BSC, SUPPORT_ZAP} from 'config/constants/supportChains'
 import { UnsupportedNetworkModal } from './UnsupportedNetworkModal'
 import { WrongNetworkModal } from './WrongNetworkModal'
 import { PageNetworkSupportModal } from './PageNetworkSupportModal'
 
 export const hideWrongNetworkModalAtom = atom(false)
 
-export const NetworkModal = ({ pageSupportedChains = SUPPORT_ONLY_BSC }: { pageSupportedChains?: number[] }) => {
+export const NetworkModal = ({ pageSupportedChains = SUPPORT_ZAP }: { pageSupportedChains?: number[] }) => {
   const { chainId, chain, isWrongNetwork } = useActiveWeb3React()
   const { chains } = useNetwork()
   const [dismissWrongNetwork, setDismissWrongNetwork] = useAtom(hideWrongNetworkModalAtom)

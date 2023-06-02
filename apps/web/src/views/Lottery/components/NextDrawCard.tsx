@@ -1,10 +1,8 @@
-import {useEffect, useMemo, useState} from 'react'
-import {useRouter} from "next/navigation";
+import {useMemo, useState} from 'react'
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
-import claimADAbi from 'config/abi/claimAD.json';
+import {ChainId} from "@pancakeswap/sdk"
 import BigNumber from 'bignumber.js'
 import styled from 'styled-components'
-import {readContract} from "@wagmi/core";
 import {
   Card,
   CardHeader,
@@ -20,11 +18,11 @@ import {
   ExpandableLabel,
   Balance,
 } from '@pancakeswap/uikit'
-import {useAccount, useContractRead, useContractWrite, usePrepareContractWrite, useWaitForTransaction} from 'wagmi'
+import { useAccount } from 'wagmi'
 import { LotteryStatus } from 'config/constants/types'
-
 import { useTranslation } from '@pancakeswap/localization'
 import {CADINU} from '@pancakeswap/tokens'
+
 import { useLottery } from 'state/lottery/hooks'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import ViewTicketsModal from './ViewTicketsModal'
@@ -32,11 +30,6 @@ import BuyTicketsButton from './BuyTicketsButton'
 import { dateTimeOptions } from '../helpers'
 import RewardBrackets from './RewardBrackets'
 import useBUSDPrice from "../../../hooks/useBUSDPrice"
-import {getClaimContract} from "../../../utils/contractHelpers";
-import {getClaimAddress} from "../../../utils/addressHelpers";
-
-
-
 
 const Grid = styled.div`
   display: grid;
@@ -65,289 +58,168 @@ const NextDrawWrapper = styled.div`
   padding: 24px;
 `
 
-const NextDrawCard = ({isSuccess}) => {
+const NextDrawCard = () => {
   const {
     t,
     currentLanguage: { locale },
   } = useTranslation()
   const { address: account } = useAccount()
-  const claimAddress = getClaimAddress()
-  const claimContract = getClaimContract(claimAddress)
+  const { currentLotteryId, isTransitioning, currentRound } = useLottery()
+  const { endTime, amountCollectedInCadinu, userTickets, status } = currentRound
 
-  //
-  //
-  //
-  //
-  // const [totalRewardClaimedOrPaidToUsers, setRewardClaimedOrPaidToUsers] = useState(null)
-// const {data:fetchedTotalRewardClaimedByUsers, isSuccess:totlaClaimedIsSuccess} = useContractRead({
-//         address: claimContract.address as `0x${string}`,
-//         abi: claimADAbi,
-//         functionName:"totalClaimedByUsers",
-//         onSuccess: (()=>{
-//           if(fetchedTotalRewardClaimedByUsers){
-//           console.log("totalRewardClaimedByUsers", fetchedTotalRewardClaimedByUsers)
-//         }})}
-//   );
+  const [onPresentViewTicketsModal] = useModal(<ViewTicketsModal roundId={currentLotteryId} roundStatus={status} />)
+  const [isExpanded, setIsExpanded] = useState(false)
+  const ticketBuyIsDisabled = status !== LotteryStatus.OPEN || isTransitioning
 
-  const [totalRewardClaimedByUsers , setTotalRewardClaimedByUsers] = useState(null);
-  const getTotalRewardClaimedByUsers = async () => {
-      const fetchedTotalRewardClaimedByUsers = await readContract({
-          address: claimContract.address as `0x${string}`,
-          abi: claimADAbi,
-          functionName: 'totalClaimedByUsers',
-      });
-
-    const totalRewardClaimedByUsersBig = new BigNumber(fetchedTotalRewardClaimedByUsers?.toString())
-    const totalRewardClaimedByUsersAsInt =getBalanceNumber(totalRewardClaimedByUsersBig);
-    setTotalRewardClaimedByUsers(totalRewardClaimedByUsersAsInt);
-    return fetchedTotalRewardClaimedByUsers;
-  };
-
-  // const {data:fetchedTotalRewardPaidToUsers, isSuccess:totlaPaidIsSuccess} = useContractRead({
-  //       address: claimContract.address as `0x${string}`,
-  //       abi: claimADAbi,
-  //       functionName:"totalRewardForAllUsers",
-  //    onSuccess: (()=>{
-  //         if(fetchedTotalRewardPaidToUsers){
-  //         console.log("totalRewardPaidToUsers", fetchedTotalRewardPaidToUsers)
-  //       }})
-  // }
-  // );
-  const [totalRewardPaidToUsers , setTotalRewardPaidToUsers] = useState(null);
-  const getTotalRewardPaidToUsers = async () => {
-      const fetchedTotalRewardPaidToUsers = await readContract({
-          address: claimContract.address as `0x${string}`,
-          abi: claimADAbi,
-          functionName: 'totalRewardForAllUsers',
-      });
-      const RewardPaidToUsersBig = new BigNumber(fetchedTotalRewardPaidToUsers?.toString());
-
-      const RewardPaidToUsersAsInt =  getBalanceNumber(RewardPaidToUsersBig);
-      setTotalRewardPaidToUsers(RewardPaidToUsersAsInt);
-      return fetchedTotalRewardPaidToUsers;
-  }
-// const {data:fetchedTotalClaim, isSuccess:fetchedTotalClaimIsSuccess} = useContractRead({
-//         address: claimContract.address as `0x${string}`,
-//         abi: claimADAbi,
-//         functionName:"totalClaim",
-//         args:[account]
-//       }
-//      );
-  const [totalClaim , setTotalClaim] = useState(null);
-  const getTotalClaim = async () => {
-     const fetchedTotalClaim = await readContract({
-        address: claimContract.address as `0x${string}`,
-        abi: claimADAbi,
-        functionName: 'totalClaim',
-        args: [account]
-        });
-     const totalClaimBig = new BigNumber(fetchedTotalClaim?.toString());
-     const totalClaimAsInt = getBalanceNumber(totalClaimBig);
-     setTotalClaim(totalClaimAsInt);
-     return fetchedTotalClaim
-     }
-    //
-    // const totalClaim =
-
-  // const {data:fetchedAvailableReward, isSuccess:fetchedAvailableRewardIsSuccess} = useContractRead(
-  //         {
-  //       address: claimContract.address as `0x${string}`,
-  //       abi: claimADAbi,
-  //       functionName:"availableReward",
-  //       args:[account],
-  //       staleTime: 2,
-  //       structuralSharing:false,
-  //       onSettled(data){
-  //                 console.log("CHECKK ZAMAN")
-  //             }
-  //     }
-  //    )
-
-    const [availableReward , setAvailableReward] = useState(null)
-    const getAvailableReward = async () => {
-      const fetchedAvailableReward = await readContract({
-          address: claimContract.address as `0x${string}`,
-          abi: claimADAbi,
-          functionName: 'availableReward',
-          args: [account]
-      })
-      const availableRewardBig = new BigNumber(fetchedAvailableReward?.toString());
-      const availableRewardAsInt = getBalanceNumber(availableRewardBig);
-      setAvailableReward(availableRewardAsInt);
-      return fetchedAvailableReward
-
-  }
+  // const cakePriceBusd = usePriceCakeBusd()
 
 
 
-
-  const {config, error: prepareClaimError, status} = usePrepareContractWrite({
-    address: claimContract.address as `0x${string}`,
-    abi: claimADAbi,
-    functionName: 'claim',
-    onError(error) {
-        console.log('PrepareErrors', error)
-    },
-    })
-  const {
-    data: claimData,
-    isLoading: claimIsLoading,
-    isSuccess: claimIsSuccess,
-    error:claimError,
-    write: transferToWallet
-    }
-    = useContractWrite({
-      ...config,
-    })
-  const {isLoading, isSuccess:isSuccessClaim} = useWaitForTransaction({
-    hash: claimData?.hash,
-    })
-
-  // useEffect(  ()=> {
-  //     if (account) {
-  //         if (!availableReward) {
-  //             getAvailableReward()
-  //         }
-  //         if (!totalClaim) {
-  //             getTotalClaim()
-  //         }
-  //         if (!totalRewardClaimedByUsers) {
-  //             getTotalRewardClaimedByUsers()
-  //         }
-  //         if (!totalRewardPaidToUsers) {
-  //             getTotalRewardPaidToUsers()
-  //         }
-  //     }
-  //       }, []
-  //
-  //   )
-
-
-useEffect(()=>{
-        getTotalRewardClaimedByUsers();
-        getTotalRewardPaidToUsers();
-    if (account){
-        getAvailableReward();
-
-        getTotalClaim();
-
-    }
-},[isSuccessClaim, isSuccess, account] )
-
-
-
-
-
-
-
-
-  const totalRewardClaimedOrPaidToUsers = useMemo( ()=> {
-          return (totalRewardClaimedByUsers + totalRewardPaidToUsers)
-      },[totalRewardClaimedByUsers, totalRewardPaidToUsers]
-)
-  // console.log("RewardClaimedOrPaidToUsers", totalRewardClaimedOrPaidToUsers)
-
-  // const price = useBUSDPrice(CADINU[ChainId.BSC])
-  // const cakePriceBusd = useMemo(() => (price ? new BigNumber(price.toSignificant(6)) : BIG_ZERO), [price])
-
+  const price = useBUSDPrice(CADINU[ChainId.BSC])
+  const cakePriceBusd = useMemo(() => (price ? new BigNumber(price.toSignificant(6)) : BIG_ZERO), [price])
+  const prizeInBusd = amountCollectedInCadinu.times(cakePriceBusd)
+  const endTimeMs = parseInt(endTime, 10) * 1000
+  const endDate = new Date(endTimeMs)
+  const isLotteryOpen = status === LotteryStatus.OPEN
+  const userTicketCount = userTickets?.tickets?.length || 0
 
   const getPrizeBalances = () => {
+    // if (status === LotteryStatus.CLOSE || status === LotteryStatus.CLAIMABLE) {
+    //   return (
+    //     <Heading scale="xl" color="secondary" textAlign={['center', null, null, 'left']}>
+    //       {t('Calculating')}...
+    //     </Heading>
+    //   )
+    // }
     return (
       <>
+        {prizeInBusd.isNaN() ? (
+          <Skeleton my="7px" height={40} width={160} />
+        ) : (
           <Balance
-            fontSize="24px"
+            fontSize="40px"
             color="secondary"
             textAlign={['center', null, null, 'left']}
             lineHeight="1"
             bold
-            // prefix="~$"
-            unit = " CADINU"
-            value={totalRewardClaimedOrPaidToUsers && totalRewardClaimedOrPaidToUsers}
+            prefix="~$"
+            value={getBalanceNumber(prizeInBusd)}
             decimals={0}
           />
-
+        )}
+        {prizeInBusd.isNaN() ? (
+          <Skeleton my="2px" height={14} width={90} />
+        ) : (
+          <Balance
+            fontSize="14px"
+            color="textSubtle"
+            textAlign={['center', null, null, 'left']}
+            unit=" CADINU"
+            value={getBalanceNumber(amountCollectedInCadinu)}
+            decimals={0}
+          />
+        )}
       </>
     )
   }
 
+  const getNextDrawId = () => {
+    if (status === LotteryStatus.OPEN) {
+      return `${currentLotteryId} |`
+    }
+    if (status === LotteryStatus.PENDING) {
+      return ''
+    }
+    return parseInt(currentLotteryId, 10) + 1
+  }
 
+  const getNextDrawDateTime = () => {
+    if (status === LotteryStatus.OPEN) {
+      return `${t('Draw')}: ${endDate.toLocaleString(locale, dateTimeOptions)}`
+    }
+    return ''
+  }
 
-
-
+  const ticketRoundText =
+    userTicketCount > 1
+      ? t('You have %amount% tickets this round', { amount: userTicketCount })
+      : t('You have %amount% ticket this round', { amount: userTicketCount })
+  const [youHaveText, ticketsThisRoundText] = ticketRoundText.split(userTicketCount.toString())
 
   return (
     <StyledCard>
       <CardHeader p="16px 24px">
         <Flex justifyContent="space-between">
-          <Heading mr="12px">{t('Claim Information')}</Heading>
+          <Heading mr="12px">{t('Next Draw')}</Heading>
+          <Text>
+            {currentLotteryId && `#${getNextDrawId()}`} {Boolean(endTime) && getNextDrawDateTime()}
+          </Text>
         </Flex>
       </CardHeader>
       <CardBody>
         <Grid>
-          <Flex justifyContent={['center', null, null, 'flex-start']} >
-            <Heading>{t('Total CADINU Rewarded')}</Heading>
+          <Flex justifyContent={['center', null, null, 'flex-start']}>
+            <Heading>{t('Prize Pot')}</Heading>
           </Flex>
           <Flex flexDirection="column" mb="18px">
             {getPrizeBalances()}
           </Flex>
-
-          <Flex justifyContent={['center', null, null, 'flex-start']} >
-            <Heading>{t('You Already Claimed')}</Heading>
-          </Flex>
+          <Box display={['none', null, null, 'flex']}>
+            <Heading>{t('Your tickets')}</Heading>
+          </Box>
           <Flex flexDirection={['column', null, null, 'row']} alignItems={['center', null, null, 'flex-start']}>
+            {isLotteryOpen && (
               <Flex
                 flexDirection="column"
                 mr={[null, null, null, '24px']}
                 alignItems={['center', null, null, 'flex-start']}
               >
-
-                  <Flex justifyContent={['center', null, null, 'flex-start']} mb="16px">
-                      <Balance value={totalClaim && totalClaim} decimals={0} display="inline" bold mx="4px" />
-                    <Text display="inline"> CADINU </Text>
+                {account && (
+                  <Flex justifyContent={['center', null, null, 'flex-start']}>
+                    <Text display="inline">{youHaveText} </Text>
+                    {!userTickets.isLoading ? (
+                      <Balance value={userTicketCount} decimals={0} display="inline" bold mx="4px" />
+                    ) : (
+                      <Skeleton mx="4px" height={20} width={40} />
+                    )}
+                    <Text display="inline"> {ticketsThisRoundText}</Text>
                   </Flex>
-
+                )}
+                {!userTickets.isLoading && userTicketCount > 0 && (
+                  <Button
+                    onClick={onPresentViewTicketsModal}
+                    height="auto"
+                    width="fit-content"
+                    p="0"
+                    mb={['32px', null, null, '0']}
+                    variant="text"
+                    scale="sm"
+                  >
+                    {t('View your tickets')}
+                  </Button>
+                )}
               </Flex>
-          </Flex>
-             <Flex justifyContent={['center', null, null, 'flex-start']} >
-            <Heading>{t('You Can Claim')}</Heading>
-             </Flex>
-          <Flex flexDirection={['column', null, null, 'row']} alignItems={['center', null, null, 'flex-start']}>
-              <Flex
-                flexDirection="column"
-                mr={[null, null, null, '24px']}
-                alignItems={['center', null, null, 'flex-start']}
-              >
-                  <Flex justifyContent={['center', null, null, 'flex-start']} mb="16px">
-                      <Balance value={availableReward && availableReward} decimals={0} display="inline" bold mx="4px" />
-                    <Text display="inline"> CADINU </Text>
-
-
-                  </Flex>
-              </Flex>
+            )}
+            <BuyTicketsButton disabled={ticketBuyIsDisabled} maxWidth="280px" />
           </Flex>
         </Grid>
-              {account && (
-        <div>
-
-              <Flex
-                  flexDirection={['column', null, null, "row-reverse"]}
-                  alignItems={['center', 'center', 'center', 'flex-start']}
-              >
-                  <Flex
-                flexDirection="row-reverse"
-                mr={[null, null, null, "10px"]}
-                mb={[null, null, null, "10px"]}
-
-
-                alignItems={['center', 'center', 'center', 'flex-start']}
-              >
-                <Button  isLoading={claimIsLoading} onClick={()=>transferToWallet?.()}>{claimIsLoading ? "Check Wallet..." : "Claim Now"}</Button>
-                  </Flex>
-              </Flex>
-</div> )}
-
       </CardBody>
-      </StyledCard>
-  )}
+      <CardFooter p="0">
+        {isExpanded && (
+          <NextDrawWrapper>
+            <RewardBrackets lotteryNodeData={currentRound} />
+          </NextDrawWrapper>
+        )}
+        {(status === LotteryStatus.OPEN || status === LotteryStatus.CLOSE) && (
+          <Flex p="8px 24px" alignItems="center" justifyContent="center">
+            <ExpandableLabel expanded={isExpanded} onClick={() => setIsExpanded(!isExpanded)}>
+              {isExpanded ? t('Hide') : t('Details')}
+            </ExpandableLabel>
+          </Flex>
+        )}
+      </CardFooter>
+    </StyledCard>
+  )
+}
 
 export default NextDrawCard

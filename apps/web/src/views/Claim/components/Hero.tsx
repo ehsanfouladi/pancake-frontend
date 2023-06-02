@@ -16,7 +16,9 @@ import WalletNotConnected from "./WalletNotConnected";
 import useGetNextClaimEvent from "../hooks/useGetNextClaimEvent";
 import {ClaimStatus} from "../../../config/constants/types";
 import Countdown from "../../Lottery/components/Countdown";
-import NextDrawCard from "../../Lottery/components/NextDrawCard";
+
+import {ChainId} from "@pancakeswap/sdk";
+import {useRouter} from "next/navigation";
 
 
 export const floatingStarsLeft = keyframes`
@@ -290,123 +292,172 @@ const Hero = ({disabled , setDisabled, setIsSuccess , isSuccess}) => {
 
           },
       onError(error) {
-      console.log('Error', error)
+      console.log('Error MAX', error)
     },
   })
   const maxRewardBig = new BigNumber(maxRewardAmount?.toString())
   const maxReward = getBalanceNumber(maxRewardBig)
 
-  const {
-      data:lastRewardTime,
-      isSuccess:lastRewardTimeIsSuccess,
-      isLoading: lastRewardTimeIsLoading
-  } = useContractRead({
-            address: claimContract.address as `0x${string}`,
-            abi: claimADAbi,
-            functionName:"lastRewardTime",
-            args:[account]
-        }
-    )
-  const lastRewardTimeAsInt = useMemo(
-        ()=> {
-            return parseInt(
-                lastRewardTime && lastRewardTime.toString(),
-                10)
-        },
-        [lastRewardTime,lastRewardTimeIsSuccess, isSuccess])
+  // const {
+  //     data:lastRewardTime,
+  //     isSuccess:lastRewardTimeIsSuccess,
+  //     isLoading: lastRewardTimeIsLoading
+  // } = useContractRead({
+  //           address: claimContract.address as `0x${string}`,
+  //           abi: claimADAbi,
+  //           functionName:"lastRewardTime",
+  //           args:[account]
+  //       }
+  //   )
+    const [lastRewardTime, setLastRewardTime] = useState(0)
+     const getlastRewardTime = async () => {
+      const fetchedlastRewardTime = await readContract({
+          address: claimContract.address as `0x${string}`,
+          abi: claimADAbi,
+          functionName: 'lastRewardTime',
+          args:[account]
+      });
+    const lastRewardTimeAsInt =parseInt(fetchedlastRewardTime && fetchedlastRewardTime?.toString(), 10);
+    setLastRewardTime(lastRewardTimeAsInt);
+    return fetchedlastRewardTime;
+  };
+  // const lastRewardTimeAsInt = useMemo(
+  //       ()=> {
+  //           return parseInt(
+  //               lastRewardTime && lastRewardTime.toString(),
+  //               10)
+  //       },
+  //       [lastRewardTime,lastRewardTimeIsSuccess, isSuccess])
 
-  const {
-      data:timeBetweenEachClaim,
-      isSuccess:timeBetweenEachClaimIsSuccess
-  } = useContractRead({
-            address: claimContract.address as `0x${string}`,
-            abi: claimADAbi,
-            functionName:"timeBetweenEachClaim",
+  // const {
+  //     data:timeBetweenEachClaim,
+  //     isSuccess:timeBetweenEachClaimIsSuccess
+  // } = useContractRead({
+  //           address: claimContract.address as `0x${string}`,
+  //           abi: claimADAbi,
+  //           functionName:"timeBetweenEachClaim",
+  //
+  //       }
+  //   )
+     const [timeBetweenEachClaim, setTimeBetweenEachClaim] = useState(0)
+     const getTimeBetweenEachClaim = async () => {
+      const fetchedTimeBetweenEachClaim = await readContract({
+          address: claimContract.address as `0x${string}`,
+          abi: claimADAbi,
+          functionName: 'timeBetweenEachClaim',
+      });
+    const timeBetweenEachClaimAsInt =parseInt(fetchedTimeBetweenEachClaim && fetchedTimeBetweenEachClaim?.toString(), 10);
+    setTimeBetweenEachClaim(timeBetweenEachClaimAsInt);
+    return fetchedTimeBetweenEachClaim;
+  };
+  // const timeBetweenEachClaimAsInt = useMemo(
+  //        ()=> parseInt(
+  //            timeBetweenEachClaim && timeBetweenEachClaim.toString(),
+  //           10),
+  //       [timeBetweenEachClaim])
 
-        }
-    )
-  const timeBetweenEachClaimAsInt = useMemo(
-         ()=> parseInt(
-             timeBetweenEachClaim && timeBetweenEachClaim.toString(),
-            10),
-        [timeBetweenEachClaim])
 
-
-  const {
-        nextEventTime,
-        postCountdownText,
-        preCountdownText
-    } = useGetNextClaimEvent(lastRewardTimeAsInt, ClaimStatus.OPEN, timeBetweenEachClaimAsInt)
+  const postCountdownText = "until next reward."
+    const [nextEventTime, setNextEventTime]=useState(0)
+    const nextEventTimeCalc = (
+        lastRewardTimeAsEntry,
+        timeBetweenEachClaimAsEntry
+    )=>{
+      const calc =  (lastRewardTimeAsEntry + timeBetweenEachClaimAsEntry)
+        return calc
+    }
 
   const [isClaimAvailable, setIsClaimAvailable] = useState(true)
 
   useEffect(()=>{
-      if (
-          !lastRewardTimeIsLoading && lastRewardTimeIsSuccess &&
-          floor(Date.now()/1000) < lastRewardTimeAsInt + timeBetweenEachClaimAsInt
+      getTimeBetweenEachClaim()
+      console.log("timeBetweenEachClaim",timeBetweenEachClaim)
+      getlastRewardTime()
+      console.log("lastRewardTime",lastRewardTime)
+      const nextEventTimeCalculated = nextEventTimeCalc(lastRewardTime, timeBetweenEachClaim)
+      setNextEventTime(nextEventTimeCalculated)
+      console.log("nextRewardTime", nextEventTimeCalculated)
+      console.log("NOW", floor(Date.now() ))
+      if (lastRewardTime>0 &&
+          floor(Date.now()/1000) < nextEventTimeCalculated
       ){
-          setIsClaimAvailable(false)
-          setDisabled(true)
+          setIsClaimAvailable(false);
+          setDisabled(true);
           setTimeout(()=>{
-          setIsClaimAvailable(true)
+          setIsClaimAvailable(true);
           setDisabled(false)},
-              ((lastRewardTimeAsInt + timeBetweenEachClaimAsInt) - floor(Date.now()/1000))*1000
-              )
-      }
-      if (isSuccess) {
-          setIsClaimAvailable(false)
-          setDisabled(true)
-          // setIsSuccess(false)
-          setTimeout(() => {
-              setIsClaimAvailable(true)
-              setDisabled(false)
-              }, (timeBetweenEachClaimAsInt * 1000)
-          )
-      }
+              ((nextEventTimeCalculated) - floor(Date.now()/1000))*1000
+              );}
+      // if (isSuccess) {
+      //     setIsClaimAvailable(false)
+      //     setDisabled(true)
+      //     getlastRewardTime()
+      //     // setIsSuccess(false)
+      //     setTimeout(() => {
+      //         setIsClaimAvailable(true)
+      //         setDisabled(false)
+      //         }, (timeBetweenEachClaim * 1000)
+      //     )
+      // }
       console.log("checkiiiidee")
 
-  },[isSuccess, timeBetweenEachClaimAsInt, lastRewardTimeAsInt, lastRewardTimeIsLoading, lastRewardTimeIsSuccess])
+  },[isSuccess, lastRewardTime, timeBetweenEachClaim, Date.now()
+  ])
 
+
+    const router = useRouter()
+  //   const [isFirstAccount, setIsFirstAccount] = useState(true)
+  // useEffect(()=>{
+  //
+  //     if (account){
+  //         if(!isFirstAccount) {
+  //             router.refresh()
+  //         }else{
+  //             setIsFirstAccount(false)
+  //         }
+  //     }
+  // }, [account])
 
   const getHeroHeading = () => {
       return (
         <>
-
-            {lastRewardTimeIsSuccess && (
-                <>
-            <Flex alignItems="center" justifyContent="center" flexDirection="column" pt="24px">
-                 <Flex alignItems="center" justifyContent="center" mb="48px" pt="24px">
-                     {!isClaimAvailable ?(
-                      <Countdown
+            <Flex alignItems="center" justifyContent="center" flexDirection="column">
+                <Flex alignItems="center" justifyContent="center" mb="1px" >
+                    {!isClaimAvailable ?(
+                        <div>
+                        <Heading style={{ zIndex: 1 }} mb="8px" scale="md" color="#ffffff" id="lottery-hero-title">
+                          {t('The Cadinu Claim Airdrop')}
+                        </Heading>
+                        <Countdown
                         nextEventTime={nextEventTime}
                         postCountdownText={postCountdownText}
                         preCountdownText=""
-                     /> ) : (
-                         <Heading scale="xl" color="#ffffff" mb="24px" textAlign="center">
-                             Get Free CADINU Now!
-                         </Heading>
-                         )
-                     }
+                        /> </div>) : (
+                        <Heading scale="xl" color="#ffffff" mb="28px" textAlign="center">
+                        Get Free CADINU Now!
+                        </Heading>
+                        )
+                    }
                 </Flex>
                   {/* <Heading scale="xl" color="#ffffff" mb="24px" textAlign="center"> */}
                   {/*  {t('Get Free CADINU!')} */}
                   {/* </Heading> */}
 
               </Flex>
-            <Heading mb="32px" scale="lg" color="#ffffff" textAlign="center">
+            { isClaimAvailable &&
+            <Heading mb="16px" scale="lg" color="#ffffff" textAlign="center">
             {t('win up to')}
             </Heading>
+            }
 
           {maxRewardAmount ? (
 
-              <PrizeTotalBalance fontSize="64px" bold unit=' CADINU' value={maxReward} mb="8px" decimals={0} />
+              <PrizeTotalBalance fontSize="48px" bold unit=' CADINU' value={maxReward} mb="4px" decimals={0} />
           ) : (
                <Skeleton my="7px" height={60} width={190} />
           )}
  </>
-            )}
-        </>
-      )
+)
 
     return (
       <Heading mb="24px" scale="xl" color="#ffffff">
@@ -416,7 +467,7 @@ const Hero = ({disabled , setDisabled, setIsSuccess , isSuccess}) => {
   }
 
   return (
-    <Flex flexDirection="column" alignItems="center" justifyContent="center">
+    <Flex flexDirection="column" alignItems="center" justifyContent="center" mb="120px">
       {/* <CnyDecorations> */}
       {/*  <img src="/images/cny-asset/cny-lantern-1.png" width="200px" height="280px" alt="" /> */}
       {/*  <img src="/images/cny-asset/cny-lantern-2.png" width="184px" height="210px" alt="" /> */}
@@ -430,9 +481,9 @@ const Hero = ({disabled , setDisabled, setIsSuccess , isSuccess}) => {
         <img src="/images/lottery/cadinu_ticket_3.svg" width="123px" height="83px" alt="" />
         <img src="/images/lottery/cadinu_ticket_4.svg" width="121px" height="72px" alt="" />
       </StarsDecorations>
-      <Heading style={{ zIndex: 1 }} mb="8px" scale="md" color="#ffffff" id="lottery-hero-title">
-        {t('The Cadinu Claim Airdrop')}
-      </Heading>
+      {/*<Heading style={{ zIndex: 1 }} mb="8px" scale="md" color="#ffffff" id="lottery-hero-title">*/}
+      {/*  {t('The Cadinu Claim Airdrop')}*/}
+      {/*</Heading>*/}
       {getHeroHeading()}
         {!account ?
             (<WalletNotConnected />)

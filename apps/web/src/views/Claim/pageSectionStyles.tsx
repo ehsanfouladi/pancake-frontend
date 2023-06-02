@@ -1,6 +1,6 @@
 export const TITLE_BG = 'linear-gradient(180deg, #7645D9 0%, #452A7A 100%)'
-export const CNY_TITLE_BG = ' linear-gradient(180deg, #794AD8 0%, #563794 100%)'
-export const GET_TICKETS_BG = 'linear-gradient(180deg, #7645D9 0%, #5121B1 100%)'
+export const CNY_TITLE_BG = ' linear-gradient(180deg, #0D467D 0%, #7E0C33 100%)'
+export const GET_TICKETS_BG = 'linear-gradient(180deg, #7E0C33 0%, #0D467D 100%)'
 export const CHECK_PRIZES_BG = 'linear-gradient(139.73deg, #313D5C 0%, #3D2A54 100%)'
 export const FINISHED_ROUNDS_BG = 'linear-gradient(180deg, #CBD7EF 0%, #9A9FD0 100%)'
 export const FINISHED_ROUNDS_BG_DARK = 'linear-gradient(180deg, #434575 0%, #66578D 100%)'
