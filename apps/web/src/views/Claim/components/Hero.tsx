@@ -218,28 +218,13 @@ const StarsDecorations = styled(Box)`
 `
 
 
-const Hero = ({disabled , setDisabled, setIsSuccess , isSuccess}) => {
+const Hero = ({disabled , setDisabled, setIsSuccess , isSuccess, maxReward}) => {
   const { t } = useTranslation()
   const { address: account } = useAccount()
   const claimAddress = getClaimAddress()
   const claimContract = getClaimContract(claimAddress)
 
 
-
-  const {
-    data: maxRewardAmount,
-  } = useContractRead(
-      {
-      address: claimContract.address as `0x${string}`,
-      abi: claimADAbi,
-      functionName: 'maxRewardAmount',
-
-  })
-  const maxRewardBig = new BigNumber(maxRewardAmount?.toString())
-  const maxReward = getBalanceNumber(maxRewardBig)
-    if (maxReward === 0){
-        setDisabled(true)
-    }
 
 
     const [lastRewardTime, setLastRewardTime] = useState(0)
@@ -254,24 +239,10 @@ const Hero = ({disabled , setDisabled, setIsSuccess , isSuccess}) => {
     setLastRewardTime(lastRewardTimeAsInt);
     return fetchedlastRewardTime;
   };
-  // const lastRewardTimeAsInt = useMemo(
-  //       ()=> {
-  //           return parseInt(
-  //               lastRewardTime && lastRewardTime.toString(),
-  //               10)
-  //       },
-  //       [lastRewardTime,lastRewardTimeIsSuccess, isSuccess])
 
-  // const {
-  //     data:timeBetweenEachClaim,
-  //     isSuccess:timeBetweenEachClaimIsSuccess
-  // } = useContractRead({
-  //           address: claimContract.address as `0x${string}`,
-  //           abi: claimADAbi,
-  //           functionName:"timeBetweenEachClaim",
-  //
-  //       }
-  //   )
+
+
+
      const [timeBetweenEachClaim, setTimeBetweenEachClaim] = useState(0)
      const getTimeBetweenEachClaim = async () => {
       const fetchedTimeBetweenEachClaim = await readContract({
@@ -283,11 +254,6 @@ const Hero = ({disabled , setDisabled, setIsSuccess , isSuccess}) => {
     setTimeBetweenEachClaim(timeBetweenEachClaimAsInt);
     return fetchedTimeBetweenEachClaim;
   };
-  // const timeBetweenEachClaimAsInt = useMemo(
-  //        ()=> parseInt(
-  //            timeBetweenEachClaim && timeBetweenEachClaim.toString(),
-  //           10),
-  //       [timeBetweenEachClaim])
 
 
   const postCountdownText = "until next reward."
@@ -307,6 +273,7 @@ const Hero = ({disabled , setDisabled, setIsSuccess , isSuccess}) => {
       getlastRewardTime().catch(console.error)
       const nextEventTimeCalculated = nextEventTimeCalc(lastRewardTime, timeBetweenEachClaim)
       setNextEventTime(nextEventTimeCalculated)
+      console.log( Math.floor(Date.now()/1000), lastRewardTime)
       if (lastRewardTime>0 &&
           Math.floor(Date.now()/1000) < nextEventTimeCalculated
       ){
@@ -322,8 +289,8 @@ const Hero = ({disabled , setDisabled, setIsSuccess , isSuccess}) => {
   },[isSuccess,
       lastRewardTime,
       timeBetweenEachClaim,
-      Date.now(),
-      getTimeBetweenEachClaim
+      Date.now()
+
   ])
 
 
@@ -360,7 +327,7 @@ const Hero = ({disabled , setDisabled, setIsSuccess , isSuccess}) => {
             </Heading>
             }
 
-          {maxRewardAmount ? (
+          {maxReward ? (
 
               <PrizeTotalBalance fontSize="48px" bold unit=' CADINU' value={maxReward} mb="4px" decimals={0} />
           ) : (
@@ -413,7 +380,7 @@ const Hero = ({disabled , setDisabled, setIsSuccess , isSuccess}) => {
 
           />
         </ButtonWrapper>
-        <TicketSvgWrapper>
+           <TicketSvgWrapper>
           <TicketPurchaseCard width="100%" />
         </TicketSvgWrapper>
       </TicketContainer>)}

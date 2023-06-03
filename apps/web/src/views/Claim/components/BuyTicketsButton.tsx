@@ -90,7 +90,7 @@ const BuyTicketsButton: React.FC<React.PropsWithChildren<BuyTicketsButtonProps>>
              getLastReward().catch(console.error)
              openWinRateModal()
              setIsSuccess(isSuccess)
-    }}, [isSuccess, reward, getLastReward, setIsSuccess, openWinRateModal])
+    }}, [isSuccess, reward])
 
     const getBuyButtonText = () => {
         if (!disabled) {

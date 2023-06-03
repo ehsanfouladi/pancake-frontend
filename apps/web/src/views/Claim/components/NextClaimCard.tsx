@@ -50,7 +50,7 @@ const StyledCard = styled(Card)`
 //   padding: 24px;
 // `
 
-const NextDrawCard = ({isSuccess}) => {
+const NextDrawCard = ({isSuccess, prizeAvailable}) => {
   const {
     t,
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -180,6 +180,25 @@ useEffect(()=>{
     )
   }
 
+   const getAvailblePrizeBalances = () => {
+    return (
+      <>
+          <Balance
+            fontSize="24px"
+            color="secondary"
+            textAlign={['center', null, null, 'left']}
+            lineHeight="1"
+            bold
+            // prefix="~$"
+            unit = " CADINU"
+            value={prizeAvailable}
+            decimals={0}
+          />
+
+      </>
+    )
+  }
+
   return (
     <StyledCard>
       <CardHeader p="16px 24px">
@@ -189,6 +208,12 @@ useEffect(()=>{
       </CardHeader>
       <CardBody>
         <Grid>
+            <Flex justifyContent={['center', null, null, 'flex-start']} >
+            <Heading>{t('Available Reward In Pot')}</Heading>
+          </Flex>
+          <Flex flexDirection="column" mb="18px">
+            {getAvailblePrizeBalances()}
+          </Flex>
           <Flex justifyContent={['center', null, null, 'flex-start']} >
             <Heading>{t('Total CADINU Rewarded')}</Heading>
           </Flex>
