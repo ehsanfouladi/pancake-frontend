@@ -22,6 +22,7 @@ const ConnectWalletButton = ({ children, ...props }: ButtonProps) => {
   const { chainId } = useActiveChainId()
   const [open, setOpen] = useState(false)
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const docLink = useMemo(() => getDocLink(code), [code])
 
   const handleClick = () => {

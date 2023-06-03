@@ -1,8 +1,7 @@
-import {useEffect, useMemo, useState} from "react";
+import {useEffect, useState} from "react";
 import {readContract} from "@wagmi/core";
-import {floor} from "lodash";
 import styled, { keyframes } from 'styled-components'
-import {useAccount, useContractRead, useContractWrite, usePrepareContractWrite} from "wagmi";
+import {useAccount, useContractRead} from "wagmi";
 import { Box, Flex, Heading, Skeleton, Balance } from '@pancakeswap/uikit'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { useTranslation } from '@pancakeswap/localization'
@@ -13,12 +12,7 @@ import claimADAbi from "../../../config/abi/claimAD.json";
 import {getClaimAddress} from "../../../utils/addressHelpers";
 import {getClaimContract} from "../../../utils/contractHelpers";
 import WalletNotConnected from "./WalletNotConnected";
-import useGetNextClaimEvent from "../hooks/useGetNextClaimEvent";
-import {ClaimStatus} from "../../../config/constants/types";
 import Countdown from "../../Lottery/components/Countdown";
-
-import {ChainId} from "@pancakeswap/sdk";
-import {useRouter} from "next/navigation";
 
 
 export const floatingStarsLeft = keyframes`
@@ -92,7 +86,7 @@ const PrizeTotalBalance = styled(Balance)`
 `
 
 const StyledBuyTicketButton = styled(BuyTicketsButton)<{ disabled: boolean }>`
-  background: ${({ theme, disabled, contract, contractAddress, setIsSuccess}) =>
+  background: ${({ theme, disabled}) =>
     disabled ? theme.colors.disabled : 'linear-gradient(180deg, #7645d9 0%, #452a7a 100%)'};
   width: 200px;
   ${({ theme }) => theme.mediaQueries.xs} {
@@ -223,51 +217,6 @@ const StarsDecorations = styled(Box)`
   }
 `
 
-const CnyDecorations = styled(Box)`
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-
-  & :nth-child(1),
-  & :nth-child(2) {
-    display: none;
-    z-index: 1;
-  }
-
-  & :nth-child(1) {
-    position: absolute;
-    top: 0;
-    left: 15%;
-    animation: ${floatingStarsLeft} 3s ease-in-out infinite;
-    animation-delay: 0.25s;
-  }
-
-  & :nth-child(2) {
-    position: absolute;
-    bottom: 0;
-    right: 15%;
-    animation: ${floatingStarsLeft} 3.5s ease-in-out infinite;
-    animation-delay: 0.5s;
-  }
-
-  & :nth-child(3) {
-    display: none;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    z-index: 0;
-    transform: translate(-50%, -50%);
-  }
-
-  ${({ theme }) => theme.mediaQueries.lg} {
-    & :nth-child(1),
-    & :nth-child(2),
-    & :nth-child(3) {
-      display: block;
-    }
-  }
-`
 
 const Hero = ({disabled , setDisabled, setIsSuccess , isSuccess}) => {
   const { t } = useTranslation()
@@ -279,36 +228,20 @@ const Hero = ({disabled , setDisabled, setIsSuccess , isSuccess}) => {
 
   const {
     data: maxRewardAmount,
-    isError:maxRewardAmountIsError,
-    isLoading:maxRewardAmountIsLoading
   } = useContractRead(
       {
       address: claimContract.address as `0x${string}`,
       abi: claimADAbi,
       functionName: 'maxRewardAmount',
-          onSuccess(){
-              console.log(maxRewardAmount.toString())
-              console.log(typeof(maxRewardAmount))
 
-          },
-      onError(error) {
-      console.log('Error MAX', error)
-    },
   })
   const maxRewardBig = new BigNumber(maxRewardAmount?.toString())
   const maxReward = getBalanceNumber(maxRewardBig)
+    if (maxReward === 0){
+        setDisabled(true)
+    }
 
-  // const {
-  //     data:lastRewardTime,
-  //     isSuccess:lastRewardTimeIsSuccess,
-  //     isLoading: lastRewardTimeIsLoading
-  // } = useContractRead({
-  //           address: claimContract.address as `0x${string}`,
-  //           abi: claimADAbi,
-  //           functionName:"lastRewardTime",
-  //           args:[account]
-  //       }
-  //   )
+
     const [lastRewardTime, setLastRewardTime] = useState(0)
      const getlastRewardTime = async () => {
       const fetchedlastRewardTime = await readContract({
@@ -370,53 +303,30 @@ const Hero = ({disabled , setDisabled, setIsSuccess , isSuccess}) => {
   const [isClaimAvailable, setIsClaimAvailable] = useState(true)
 
   useEffect(()=>{
-      getTimeBetweenEachClaim()
-      console.log("timeBetweenEachClaim",timeBetweenEachClaim)
-      getlastRewardTime()
-      console.log("lastRewardTime",lastRewardTime)
+      getTimeBetweenEachClaim().catch(console.error)
+      getlastRewardTime().catch(console.error)
       const nextEventTimeCalculated = nextEventTimeCalc(lastRewardTime, timeBetweenEachClaim)
       setNextEventTime(nextEventTimeCalculated)
-      console.log("nextRewardTime", nextEventTimeCalculated)
-      console.log("NOW", floor(Date.now() ))
       if (lastRewardTime>0 &&
-          floor(Date.now()/1000) < nextEventTimeCalculated
+          Math.floor(Date.now()/1000) < nextEventTimeCalculated
       ){
           setIsClaimAvailable(false);
           setDisabled(true);
           setTimeout(()=>{
           setIsClaimAvailable(true);
           setDisabled(false)},
-              ((nextEventTimeCalculated) - floor(Date.now()/1000))*1000
+              ((nextEventTimeCalculated) - Math.floor(Date.now()/1000))*1000
               );}
-      // if (isSuccess) {
-      //     setIsClaimAvailable(false)
-      //     setDisabled(true)
-      //     getlastRewardTime()
-      //     // setIsSuccess(false)
-      //     setTimeout(() => {
-      //         setIsClaimAvailable(true)
-      //         setDisabled(false)
-      //         }, (timeBetweenEachClaim * 1000)
-      //     )
-      // }
-      console.log("checkiiiidee")
 
-  },[isSuccess, lastRewardTime, timeBetweenEachClaim, Date.now()
+
+  },[isSuccess,
+      lastRewardTime,
+      timeBetweenEachClaim,
+      Date.now(),
+      getTimeBetweenEachClaim
   ])
 
 
-    const router = useRouter()
-  //   const [isFirstAccount, setIsFirstAccount] = useState(true)
-  // useEffect(()=>{
-  //
-  //     if (account){
-  //         if(!isFirstAccount) {
-  //             router.refresh()
-  //         }else{
-  //             setIsFirstAccount(false)
-  //         }
-  //     }
-  // }, [account])
 
   const getHeroHeading = () => {
       return (
@@ -478,12 +388,10 @@ const Hero = ({disabled , setDisabled, setIsSuccess , isSuccess}) => {
         <img src="/images/lottery/star-big.png" width="124px" height="109px" alt="" />
         <img src="/images/lottery/star-small.png" width="70px" height="62px" alt="" />
         <img src="/images/lottery/three-stars.png" width="130px" height="144px" alt="" />
-        <img src="/images/lottery/cadinu_ticket_3.svg" width="123px" height="83px" alt="" />
-        <img src="/images/lottery/cadinu_ticket_4.svg" width="121px" height="72px" alt="" />
+        {/* <img src="/images/lottery/cadinu_ticket_3.svg" width="123px" height="83px" alt="" /> */}
+        {/* <img src="/images/lottery/cadinu_ticket_4.svg" width="121px" height="72px" alt="" /> */}
       </StarsDecorations>
-      {/*<Heading style={{ zIndex: 1 }} mb="8px" scale="md" color="#ffffff" id="lottery-hero-title">*/}
-      {/*  {t('The Cadinu Claim Airdrop')}*/}
-      {/*</Heading>*/}
+
       {getHeroHeading()}
         {!account ?
             (<WalletNotConnected />)

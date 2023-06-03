@@ -1,6 +1,6 @@
-import {Button, useModal, WaitIcon, ButtonProps, Balance} from '@pancakeswap/uikit'
+import {Button, useModal, WaitIcon, ButtonProps} from '@pancakeswap/uikit'
 import BigNumber from "bignumber.js";
-import {useEffect, useMemo, useState} from "react";
+import {useEffect,  useState} from "react";
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { useTranslation } from '@pancakeswap/localization'
 import { useTheme } from '@pancakeswap/hooks'
@@ -11,7 +11,6 @@ import {
     useWaitForTransaction
 } from "wagmi";
 import {readContract} from '@wagmi/core'
-import styled from "styled-components";
 import claimADAbi from "../../../config/abi/claimAD.json";
 import WinRateModal from "./rewardShowModal";
 
@@ -22,17 +21,17 @@ interface BuyTicketsButtonProps extends ButtonProps {
   contractAddress
   setIsSuccess
 }
-const PrizeTotalBalance = styled(Balance)`
-  background: ${({ theme }) => theme.colors.gradientGold};
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-`
+// const PrizeTotalBalance = styled(Balance)`
+//   background: ${({ theme }) => theme.colors.gradientGold};
+//   -webkit-background-clip: text;
+//   -webkit-text-fill-color: transparent;
+// `
 
 const BuyTicketsButton: React.FC<React.PropsWithChildren<BuyTicketsButtonProps>> = ({
   disabled,
   themeMode,
     contract,
-    contractAddress,
+
     setIsSuccess,
 
   ...props
@@ -42,20 +41,20 @@ const BuyTicketsButton: React.FC<React.PropsWithChildren<BuyTicketsButtonProps>>
     const {isDark} = useTheme()
     const [reward, setReward] = useState(0)
 
-    const {config, error: fetchRewardError, status} = usePrepareContractWrite({
+    const {config} = usePrepareContractWrite({
         address: contract.address as `0x${string}`,
         abi: claimADAbi,
         functionName: 'rewardCalculation',
+
         onError(error) {
+            // eslint-disable-next-line no-console
             console.log('PrepareErrors', error)
         },
     })
     const {
         data: rewardCalculatedData,
-        isLoading: isRewardCalculatedLoading,
-        isSuccess: isRewardCalculatedSuccess,
-        error:rewardCalculateError,
-        write: calculate
+        write:calculate
+
     }
         = useContractWrite({
         ...config,
@@ -78,19 +77,20 @@ const BuyTicketsButton: React.FC<React.PropsWithChildren<BuyTicketsButtonProps>>
         const balancedReward = getBalanceNumber(BigReward)
         // await setReward(balancedReward)
         setReward(balancedReward)
-        console.log("REWARD", reward)
         // await console.log("REWARD", reward)
         return fetchedLastReward;
 
 
     }
+       const [openWinRateModal] = useModal(
+    <WinRateModal reward={reward}/>
+  )
     useEffect(() => {
-        console.log("IsSuccess", isSuccess)
         if (isSuccess) {
-             getLastReward()
+             getLastReward().catch(console.error)
              openWinRateModal()
              setIsSuccess(isSuccess)
-    }}, [isSuccess, reward])
+    }}, [isSuccess, reward, getLastReward, setIsSuccess, openWinRateModal])
 
     const getBuyButtonText = () => {
         if (!disabled) {
@@ -104,9 +104,7 @@ const BuyTicketsButton: React.FC<React.PropsWithChildren<BuyTicketsButtonProps>>
     }
 
     const themeStr = themeMode ?? (isDark ? 'dark' : 'light')
-    const [openWinRateModal] = useModal(
-    <WinRateModal reward={reward}/>
-  )
+
     return (
         <>
             <Button data-theme={themeStr} {...props} disabled={disabled || isLoading} onClick={() => {

@@ -1,8 +1,6 @@
 import styled from "styled-components";
-import {Balance, Box, Button, Flex, Modal, ModalBody, ModalHeader, Text} from "@pancakeswap/uikit";
-import BigNumber from "bignumber.js";
+import {Balance, Box, Button, Flex, Modal, Text} from "@pancakeswap/uikit";
 import Link from "next/link";
-import BuyTicketsButton from "./BuyTicketsButton";
 
 const StyledModal = styled(Modal)`
   

@@ -25,14 +25,14 @@ const StyledModalHeader = styled(ModalHeader)`
   border-top-right-radius: 32px;
   border-top-left-radius: 32px;
 `
-
-const BunnyDecoration = styled.div`
-  position: absolute;
-  top: -116px; // line up bunny at the top of the modal
-  left: 0px;
-  text-align: center;
-  width: 100%;
-`
+//
+// const BunnyDecoration = styled.div`
+//   position: absolute;
+//   top: -116px; // line up bunny at the top of the modal
+//   left: 0px;
+//   text-align: center;
+//   width: 100%;
+// `
 
 const showConfetti = () => {
   confetti({

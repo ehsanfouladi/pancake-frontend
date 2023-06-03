@@ -1,6 +1,5 @@
 import {useEffect, useMemo, useState} from 'react'
 import claimADAbi from 'config/abi/claimAD.json';
-import {ChainId} from "@pancakeswap/sdk";
 import BigNumber from 'bignumber.js'
 import styled from 'styled-components'
 import {readContract} from "@wagmi/core";
@@ -46,36 +45,23 @@ const StyledCard = styled(Card)`
   }
 `
 
-const NextDrawWrapper = styled.div`
-  background: ${({ theme }) => theme.colors.background};
-  padding: 24px;
-`
+// const NextDrawWrapper = styled.div`
+//   background: ${({ theme }) => theme.colors.background};
+//   padding: 24px;
+// `
 
 const NextDrawCard = ({isSuccess}) => {
   const {
     t,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     currentLanguage: { locale },
   } = useTranslation()
   const { address: account } = useAccount()
   const claimAddress = getClaimAddress()
   const claimContract = getClaimContract(claimAddress)
 
-  //
-  //
-  //
-  //
-  // const [totalRewardClaimedOrPaidToUsers, setRewardClaimedOrPaidToUsers] = useState(null)
-// const {data:fetchedTotalRewardClaimedByUsers, isSuccess:totlaClaimedIsSuccess} = useContractRead({
-//         address: claimContract.address as `0x${string}`,
-//         abi: claimADAbi,
-//         functionName:"totalClaimedByUsers",
-//         onSuccess: (()=>{
-//           if(fetchedTotalRewardClaimedByUsers){
-//           console.log("totalRewardClaimedByUsers", fetchedTotalRewardClaimedByUsers)
-//         }})}
-//   );
-
   const [totalRewardClaimedByUsers , setTotalRewardClaimedByUsers] = useState(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   const getTotalRewardClaimedByUsers = async () => {
       const fetchedTotalRewardClaimedByUsers = await readContract({
           address: claimContract.address as `0x${string}`,
@@ -89,17 +75,8 @@ const NextDrawCard = ({isSuccess}) => {
     return fetchedTotalRewardClaimedByUsers;
   };
 
-  // const {data:fetchedTotalRewardPaidToUsers, isSuccess:totlaPaidIsSuccess} = useContractRead({
-  //       address: claimContract.address as `0x${string}`,
-  //       abi: claimADAbi,
-  //       functionName:"totalRewardForAllUsers",
-  //    onSuccess: (()=>{
-  //         if(fetchedTotalRewardPaidToUsers){
-  //         console.log("totalRewardPaidToUsers", fetchedTotalRewardPaidToUsers)
-  //       }})
-  // }
-  // );
   const [totalRewardPaidToUsers , setTotalRewardPaidToUsers] = useState(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   const getTotalRewardPaidToUsers = async () => {
       const fetchedTotalRewardPaidToUsers = await readContract({
           address: claimContract.address as `0x${string}`,
@@ -109,18 +86,11 @@ const NextDrawCard = ({isSuccess}) => {
       const RewardPaidToUsersBig = new BigNumber(fetchedTotalRewardPaidToUsers?.toString());
 
       const RewardPaidToUsersAsInt =  getBalanceNumber(RewardPaidToUsersBig);
-      console.log("address", claimContract.address)
       setTotalRewardPaidToUsers(RewardPaidToUsersAsInt);
       return fetchedTotalRewardPaidToUsers;
   }
-// const {data:fetchedTotalClaim, isSuccess:fetchedTotalClaimIsSuccess} = useContractRead({
-//         address: claimContract.address as `0x${string}`,
-//         abi: claimADAbi,
-//         functionName:"totalClaim",
-//         args:[account]
-//       }
-//      );
   const [totalClaim , setTotalClaim] = useState(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   const getTotalClaim = async () => {
      const fetchedTotalClaim = await readContract({
         address: claimContract.address as `0x${string}`,
@@ -133,24 +103,9 @@ const NextDrawCard = ({isSuccess}) => {
      setTotalClaim(totalClaimAsInt);
      return fetchedTotalClaim
      }
-    //
-    // const totalClaim =
-
-  // const {data:fetchedAvailableReward, isSuccess:fetchedAvailableRewardIsSuccess} = useContractRead(
-  //         {
-  //       address: claimContract.address as `0x${string}`,
-  //       abi: claimADAbi,
-  //       functionName:"availableReward",
-  //       args:[account],
-  //       staleTime: 2,
-  //       structuralSharing:false,
-  //       onSettled(data){
-  //                 console.log("CHECKK ZAMAN")
-  //             }
-  //     }
-  //    )
 
     const [availableReward , setAvailableReward] = useState(null)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const getAvailableReward = async () => {
       const fetchedAvailableReward = await readContract({
           address: claimContract.address as `0x${string}`,
@@ -165,79 +120,47 @@ const NextDrawCard = ({isSuccess}) => {
 
   }
 
-
-
-
-  const {config, error: prepareClaimError, status} = usePrepareContractWrite({
+  const {config} = usePrepareContractWrite({
     address: claimContract.address as `0x${string}`,
     abi: claimADAbi,
-    functionName: 'claim',
-    onError(error) {
-        console.log('PrepareErrors', error)
-    },
-    })
+    functionName: 'claim'}
+    )
   const {
     data: claimData,
     isLoading: claimIsLoading,
-    isSuccess: claimIsSuccess,
-    error:claimError,
     write: transferToWallet
     }
     = useContractWrite({
       ...config,
     })
-  const {isLoading, isSuccess:isSuccessClaim} = useWaitForTransaction({
+  const { isSuccess:isSuccessClaim} = useWaitForTransaction({
     hash: claimData?.hash,
     })
 
-  // useEffect(  ()=> {
-  //     if (account) {
-  //         if (!availableReward) {
-  //             getAvailableReward()
-  //         }
-  //         if (!totalClaim) {
-  //             getTotalClaim()
-  //         }
-  //         if (!totalRewardClaimedByUsers) {
-  //             getTotalRewardClaimedByUsers()
-  //         }
-  //         if (!totalRewardPaidToUsers) {
-  //             getTotalRewardPaidToUsers()
-  //         }
-  //     }
-  //       }, []
-  //
-  //   )
-
 
 useEffect(()=>{
-        getTotalRewardClaimedByUsers();
-        getTotalRewardPaidToUsers();
+        getTotalRewardClaimedByUsers().catch(console.error);
+        getTotalRewardPaidToUsers().catch(console.error);
+
     if (account){
-        getAvailableReward();
-
-        getTotalClaim();
-
+        getAvailableReward().catch(console.error);
+        getTotalClaim().catch(console.error);
     }
-},[isSuccessClaim, isSuccess, account] )
-
-
-
-
-
-
+},[
+    isSuccessClaim,
+    isSuccess,
+    account,
+    getAvailableReward,
+    getTotalRewardClaimedByUsers,
+    getTotalRewardPaidToUsers,
+    getTotalClaim,
+] )
 
 
   const totalRewardClaimedOrPaidToUsers = useMemo( ()=> {
           return (totalRewardClaimedByUsers + totalRewardPaidToUsers)
       },[totalRewardClaimedByUsers, totalRewardPaidToUsers]
 )
-  // console.log("RewardClaimedOrPaidToUsers", totalRewardClaimedOrPaidToUsers)
-
-  // const price = useBUSDPrice(CADINU[ChainId.BSC])
-  // const cakePriceBusd = useMemo(() => (price ? new BigNumber(price.toSignificant(6)) : BIG_ZERO), [price])
-
-
   const getPrizeBalances = () => {
     return (
       <>
@@ -256,11 +179,6 @@ useEffect(()=>{
       </>
     )
   }
-
-
-
-
-
 
   return (
     <StyledCard>

@@ -9,7 +9,7 @@ import { useFetchLottery, useLottery } from 'state/lottery/hooks'
 import {
   CNY_TITLE_BG,
   GET_TICKETS_BG,
-  CNY_FINISHED_ROUNDS_BG,
+  // CNY_FINISHED_ROUNDS_BG,
   CHECK_PRIZES_BG,
   FINISHED_ROUNDS_BG
 } from './pageSectionStyles'
@@ -25,7 +25,7 @@ import CheckPrizesSection from './components/CheckPrizesSection'
 import HowToPlay from './components/HowToPlay'
 import useShowMoreUserHistory from './hooks/useShowMoreUserRounds'
 import { PageMeta } from '../../components/Layout/Page'
-import CnyDecorations from './components/LotteryCnyEffect'
+// import CnyDecorations from './components/LotteryCnyEffect'
 // import CnyLotteryDraw from './components/CnyLotteryDraw'
 
 const LotteryPage = styled.div`
