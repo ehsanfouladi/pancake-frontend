@@ -121,8 +121,8 @@ const config: (
           image: '/images/decorations/lottery.png',
         },
         {
-          label: t('Claim Reward'),
-          href: '/claim',
+          label: t('Click To Win'),
+          href: '/click-to-win',
           image: '/images/decorations/lottery.png',
         },
         // {
