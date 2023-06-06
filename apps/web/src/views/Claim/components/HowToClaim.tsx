@@ -52,10 +52,15 @@ const StepCard: React.FC<React.PropsWithChildren<{ step: Step }>> = ({ step }) =
   )
 }
 
+interface HowToPlayProps {
+  children?: React.ReactNode;
+  minRewardAmount: number;
+}
 
 
 
-const HowToPlay: React.FC<React.PropsWithChildren> = () => {
+// @ts-ignore
+const HowToPlay: React.FC<HowToPlayProps> = ({minRewardAmount}) => {
   const { t } = useTranslation()
 
   const steps: Step[] = [
@@ -104,7 +109,7 @@ const HowToPlay: React.FC<React.PropsWithChildren> = () => {
             Whenever the rewards pool is evacuated, the maximum reward will be displayed as zero. We will immediately inform you on CADINU<span>&#39;</span>s social media after charging the rewards pool through click-to-win (C2W) opportunities. Follow CADINU<span>&#39;</span>s social media accounts and turn on its notifications to be one of the first users informed about the distribution of rewards and updates regarding CADINU TOKEN! Stay engaged with our C2W activities to earn CADINU TOKEN and maximize your rewards!
           </Text>
           <Text mb="16px" color="textSubtle" textAlign="justify">
-            When participating in click-to-win (C2W) activities, please note that the minimum prize amount is 45,000 CADINU tokens. However, it<span>&#39;</span>s important to keep in mind that the maximum prize amount can vary and may be different each time. So, before you click, you can check the current maximum reward on offer. This ensures that you know the potential prize you can earn before proceeding.
+            {`When participating in click-to-win (C2W) activities, please note that the minimum prize amount is ${minRewardAmount && minRewardAmount} CADINU tokens. However, it<span>&#39;</span>s important to keep in mind that the maximum prize amount can vary and may be different each time. So, before you click, you can check the current maximum reward on offer. This ensures that you know the potential prize you can earn before proceeding.`}
           </Text>
           <Text mb="16px" color="textSubtle" textAlign="justify">
             All click-to-win (C2W) operations within CADINU are conducted on the Binance Smart Chain (BSC). As a result, there is a gas fee associated with these transactions. For the first click, the gas fee is approximately 0.00035 BNB, while subsequent clicks incur a fee of about 0.00017 BNB. It<span>&#39;</span>s important to note that these gas fees can vary depending on the congestion level on the blockchain.

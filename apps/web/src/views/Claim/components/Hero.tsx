@@ -273,7 +273,6 @@ const Hero = ({disabled , setDisabled, setIsSuccess , isSuccess, maxReward}) => 
       getlastRewardTime().catch(console.error)
       const nextEventTimeCalculated = nextEventTimeCalc(lastRewardTime, timeBetweenEachClaim)
       setNextEventTime(nextEventTimeCalculated)
-      console.log( Math.floor(Date.now()/1000), lastRewardTime)
       if (lastRewardTime>0 &&
           Math.floor(Date.now()/1000) < nextEventTimeCalculated
       ){
@@ -284,6 +283,10 @@ const Hero = ({disabled , setDisabled, setIsSuccess , isSuccess, maxReward}) => 
           setDisabled(false)},
               ((nextEventTimeCalculated) - Math.floor(Date.now()/1000))*1000
               );}
+      if (lastRewardTime === 0){
+          setIsClaimAvailable(true)
+          setDisabled(false)
+      }
 
 
   },[isSuccess,
@@ -300,7 +303,7 @@ const Hero = ({disabled , setDisabled, setIsSuccess , isSuccess, maxReward}) => 
         <>
             <Flex alignItems="center" justifyContent="center" flexDirection="column">
                 <Flex alignItems="center" justifyContent="center" mb="1px" >
-                    {!isClaimAvailable ?(
+                    {!isClaimAvailable && account && lastRewardTime>0 ?(
                         <div>
                         <Heading style={{ zIndex: 1 }} mb="8px" scale="md" color="#ffffff" id="lottery-hero-title">
                           {t('The Cadinu Claim Airdrop')}

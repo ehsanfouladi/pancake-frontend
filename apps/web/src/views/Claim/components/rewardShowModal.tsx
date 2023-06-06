@@ -1,6 +1,9 @@
 import styled from "styled-components";
 import {Balance, Box, Button, Flex, Modal, Text} from "@pancakeswap/uikit";
 import Link from "next/link";
+import confetti from "canvas-confetti";
+import delay from "lodash/delay";
+import {useEffect} from "react";
 
 const StyledModal = styled(Modal)`
   
@@ -42,10 +45,31 @@ const StyledButton = styled(Button)<{ disabled: boolean }>`
       }
   `
 
+const showConfetti = () => {
+  confetti({
+    particleCount: 200,
+    startVelocity: 30,
+    gravity: 0.5,
+    spread: 350,
+    origin: {
+      x: 0.5,
+      y: 0.3,
+    },
+  })
+}
+
+
 const WinRateModal: React.FC<React.PropsWithChildren<WinRateModalProps>> = ({
   onDismiss,
   reward
 }) => {
+
+      useEffect(() => {
+
+    delay(showConfetti, 100);
+
+  }, [])
+
     return (
     <StyledModal
       title='Congratulations!'

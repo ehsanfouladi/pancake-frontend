@@ -32,11 +32,24 @@ const Claim = () => {
       functionName: 'maxRewardAmount',
 
   })
-  const maxRewardBig = new BigNumber(maxRewardAmount?.toString())
+     const maxRewardBig = new BigNumber(maxRewardAmount?.toString())
   const maxReward = getBalanceNumber(maxRewardBig)
-    if (maxReward === 0){
+        if (maxReward === 0){
         setDisabled(true)
     }
+
+
+      const {
+    data: minRewardAmount,
+  } = useContractRead(
+      {
+      address: claimContract.address as `0x${string}`,
+      abi: claimADAbi,
+      functionName: 'minRewardAmount',
+
+  })
+  const minRewardBig = new BigNumber(minRewardAmount?.toString())
+  const minReward = getBalanceNumber(minRewardBig)
 
      const getTokenInPot = async () => {
       const fetchedTokenInPot = await readContract({
@@ -82,6 +95,9 @@ const Claim = () => {
   }, [isSuccess,tokenInPot,totalRewardForAllUsers])
 
 
+    // @ts-ignore
+    // @ts-ignore
+    // @ts-ignore
     return (
         <>
           <PageMeta />
@@ -103,7 +119,7 @@ const Claim = () => {
               </Flex>
             </PageSection>
               <PageSection index={3}>
-                  <HowToClaim />
+                  <HowToClaim minRewardAmount={minReward} />
               </PageSection>
           </ClaimPage>
         </>

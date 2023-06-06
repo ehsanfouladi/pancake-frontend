@@ -85,16 +85,18 @@ const BuyTicketsButton: React.FC<React.PropsWithChildren<BuyTicketsButtonProps>>
        const [openWinRateModal] = useModal(
     <WinRateModal reward={reward}/>
   )
+    const audio = new Audio ('/applause.mp3')
     useEffect(() => {
         if (isSuccess) {
              getLastReward().catch(console.error)
-             openWinRateModal()
-             setIsSuccess(isSuccess)
-    }}, [isSuccess, reward])
+             openWinRateModal();
+             setIsSuccess(isSuccess);
+             audio.play().then()
+        }}, [isSuccess, reward])
 
     const getBuyButtonText = () => {
         if (!disabled) {
-            return t('Check for Reward')
+            return t('Click to Win')
         }
         return (
             <>
@@ -104,12 +106,15 @@ const BuyTicketsButton: React.FC<React.PropsWithChildren<BuyTicketsButtonProps>>
     }
 
     const themeStr = themeMode ?? (isDark ? 'dark' : 'light')
+    const sound = new Audio('/cash-register-sound-effect.mp3')
+    const onClickHandler = ()=> {
+        sound.play().then()
+        calculate?.()
+            }
 
     return (
         <>
-            <Button data-theme={themeStr} {...props} disabled={disabled || isLoading} onClick={() => {
-                calculate?.()
-            }}>
+            <Button data-theme={themeStr} {...props} disabled={disabled || isLoading} onClick={onClickHandler}>
                 {!isLoading ?
                     getBuyButtonText() : (
                         <>
