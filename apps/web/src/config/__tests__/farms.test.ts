@@ -61,7 +61,9 @@ describe.concurrent(
     // The first pid using the new factory
     // BSC
     const START_PID = 2
-    const FACTORY_ADDRESS = '0xca143ce32fe78f1f7019d7d551a6402fc5350c73'
+    // const FACTORY_ADDRESS = '0xca143ce32fe78f1f7019d7d551a6402fc5350c73'
+    // CADINU:
+    const FACTORY_ADDRESS = '0x5daf6fed0e85218b275db7d86001621043b561da'
     const newFarmsToTest = farmsToTest.filter((farmSet) => farmSet[0] >= START_PID)
 
     it.each(newFarmsToTest)('farm %d is using correct factory address', async (pid, farm) => {
