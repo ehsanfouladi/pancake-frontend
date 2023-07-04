@@ -1,8 +1,8 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Currency } from '@pancakeswap/sdk'
-import { BottomDrawer, Flex, Modal, ModalV2, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { BottomDrawer, Flex, Modal, ModalV2, useMatchBreakpoints, Card, CardProps } from '@pancakeswap/uikit'
 import replaceBrowserHistory from '@pancakeswap/utils/replaceBrowserHistory'
-import { AppBody } from 'components/App'
+// import { AppBody } from 'components/App'
 import { useRouter } from 'next/router'
 import { useCallback, useContext, useEffect, useState } from 'react'
 import { useSwapActionHandlers } from 'state/swap/useSwapActionHandlers'
@@ -12,6 +12,7 @@ import { useSwapHotTokenDisplay } from 'hooks/useSwapHotTokenDisplay'
 import { useCurrency } from 'hooks/Tokens'
 import { Field } from 'state/swap/actions'
 import { useDefaultsFromURLSearch, useSingleTokenSwapInfo, useSwapState } from 'state/swap/hooks'
+import styled from 'styled-components'
 import Page from '../Page'
 import PriceChartContainer from './components/Chart/PriceChartContainer'
 import HotTokenList from './components/HotTokenList'
@@ -19,6 +20,20 @@ import useWarningImport from './hooks/useWarningImport'
 import { V3SwapForm } from './V3Swap'
 import { StyledInputCurrencyWrapper, StyledSwapContainer } from './styles'
 import { SwapFeaturesContext } from './SwapFeaturesContext'
+
+export const BodyWrapper = styled(Card)`
+  border-radius: 24px;
+  max-width: 412px;
+  width: 500px;
+  z-index: 1;
+`
+
+/**
+ * The styled container element that wraps the content of most pages and the tabs.
+ */
+export function AppBody({ children, ...cardProps }: { children: React.ReactNode } & CardProps) {
+  return <BodyWrapper {...cardProps}>{children}</BodyWrapper>
+}
 
 export default function Swap() {
   const { query } = useRouter()
@@ -63,7 +78,7 @@ export default function Swap() {
     [Field.INPUT]: inputCurrency ?? undefined,
     [Field.OUTPUT]: outputCurrency ?? undefined,
   }
-
+  const [newUrlExtention, setNewUrlExtention] = useState('')
   const singleTokenPrice = useSingleTokenSwapInfo(inputCurrencyId, inputCurrency, outputCurrencyId, outputCurrency)
   const warningSwapHandler = useWarningImport()
   useDefaultsFromURLSearch()
@@ -75,6 +90,7 @@ export default function Swap() {
       warningSwapHandler(newCurrencyOutput)
 
       const newCurrencyOutputId = currencyId(newCurrencyOutput)
+
       if (newCurrencyOutputId === inputCurrencyId) {
         replaceBrowserHistory('inputCurrency', outputCurrencyId)
       }
@@ -83,6 +99,31 @@ export default function Swap() {
 
     [inputCurrencyId, outputCurrencyId, onCurrencySelection, warningSwapHandler],
   )
+
+  const PancakeIframe = useCallback(() => {
+    return (
+      <AppBody mx={isDesktop ? '20px' : 0} mt={isDesktop ? 0 : '20px'}>
+        <iframe
+          title="PancakeSwap"
+          src={`https://pancakeswap.finance/swap${newUrlExtention}`}
+          width="100%"
+          height="800px"
+        />
+      </AppBody>
+    )
+  }, [newUrlExtention, isDesktop])
+
+  const BiSwapIframe = useCallback(() => {
+    return (
+      <AppBody mx={isDesktop ? '20px' : 0} mt={isDesktop ? 0 : '20px'}>
+        <iframe title="Biswap" src={`https://biswap.org/swap${newUrlExtention}`} width="100%" height="800px" />
+      </AppBody>
+    )
+  }, [newUrlExtention, isDesktop])
+
+  useEffect(() => {
+    setNewUrlExtention(`?inputCurrency=${inputCurrencyId}&outputCurrency=${outputCurrencyId}`)
+  }, [inputCurrencyId, outputCurrencyId])
 
   return (
     <Page removePadding={isChartExpanded} hideFooterOnDesktop={isChartExpanded}>
@@ -140,16 +181,38 @@ export default function Swap() {
             />
           </Modal>
         </ModalV2>
-        <Flex flexDirection="column">
+
+        <StyledSwapContainer $isChartExpanded={isChartExpanded}>
+          <StyledInputCurrencyWrapper mt={isChartExpanded ? '24px' : '0'}>
+            <AppBody mb="10px">
+              <V3SwapForm />
+            </AppBody>
+          </StyledInputCurrencyWrapper>
+        </StyledSwapContainer>
+      </Flex>
+
+      {isDesktop ? (
+        <Flex flexDirection="row-reverse" justifyContent="space-between" alignItems="center">
+          {/* <StyledSwapContainer $isChartExpanded={isChartExpanded}>
+            <StyledInputCurrencyWrapper > */}
+          <span>{BiSwapIframe}</span>
+          <span>{PancakeIframe}</span>
+          <span>{BiSwapIframe}</span>
+
+          {/* </StyledInputCurrencyWrapper>
+              </StyledSwapContainer> */}
+        </Flex>
+      ) : (
+        <Flex flexDirection={isDesktop ? 'row' : 'column'} justifyContent="space-between" minHeight="2500px">
           <StyledSwapContainer $isChartExpanded={isChartExpanded}>
-            <StyledInputCurrencyWrapper mt={isChartExpanded ? '24px' : '0'}>
-              <AppBody>
-                <V3SwapForm />
-              </AppBody>
+            <StyledInputCurrencyWrapper>
+              {BiSwapIframe(newUrlExtention)}
+              {PancakeIframe(newUrlExtention)}
+              {BiSwapIframe(newUrlExtention)}
             </StyledInputCurrencyWrapper>
           </StyledSwapContainer>
         </Flex>
-      </Flex>
+      )}
     </Page>
   )
 }
