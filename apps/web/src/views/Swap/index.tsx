@@ -206,9 +206,9 @@ export default function Swap() {
         <Flex flexDirection={isDesktop ? 'row' : 'column'} justifyContent="space-between" minHeight="2500px">
           <StyledSwapContainer $isChartExpanded={isChartExpanded}>
             <StyledInputCurrencyWrapper>
-              {BiSwapIframe(newUrlExtention)}
-              {PancakeIframe(newUrlExtention)}
-              {BiSwapIframe(newUrlExtention)}
+              {BiSwapIframe}
+              {PancakeIframe}
+              {BiSwapIframe}
             </StyledInputCurrencyWrapper>
           </StyledSwapContainer>
         </Flex>
