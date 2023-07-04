@@ -195,9 +195,9 @@ export default function Swap() {
         <Flex flexDirection="row-reverse" justifyContent="space-between" alignItems="center">
           {/* <StyledSwapContainer $isChartExpanded={isChartExpanded}>
             <StyledInputCurrencyWrapper > */}
-          <span>{BiSwapIframe}</span>
-          <span>{PancakeIframe}</span>
-          <span>{BiSwapIframe}</span>
+          <span>{BiSwapIframe()}</span>
+          <span>{PancakeIframe()}</span>
+          <span>{BiSwapIframe()}</span>
 
           {/* </StyledInputCurrencyWrapper>
               </StyledSwapContainer> */}
@@ -206,9 +206,9 @@ export default function Swap() {
         <Flex flexDirection={isDesktop ? 'row' : 'column'} justifyContent="space-between" minHeight="2500px">
           <StyledSwapContainer $isChartExpanded={isChartExpanded}>
             <StyledInputCurrencyWrapper>
-              {BiSwapIframe}
-              {PancakeIframe}
-              {BiSwapIframe}
+              {BiSwapIframe()}
+              {PancakeIframe()}
+              {BiSwapIframe()}
             </StyledInputCurrencyWrapper>
           </StyledSwapContainer>
         </Flex>
