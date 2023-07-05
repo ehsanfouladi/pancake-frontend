@@ -11,6 +11,22 @@ const tokens = {
     decimals: 18,
     projectLink: "https://pancakeswap.finance/",
   },
+  cadinu: {
+    symbol: "CADINU",
+    address: {
+      56: "0x76e112203eF59D445452ef7556386dD2DF3Ed914",
+    },
+    decimals: 18,
+    projectLink: "https://cadinu.io/",
+  },
+  cbon: {
+    symbol: "CBON",
+    address: {
+      56: "0x6e64fCF15Be3eB71C3d42AcF44D85bB119b2D98b",
+    },
+    decimals: 18,
+    projectLink: "https://cadinu.io/",
+  },
   txl: {
     symbol: "TXL",
     address: {

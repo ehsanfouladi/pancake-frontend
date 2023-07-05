@@ -16,7 +16,7 @@ export const masterChefAddresses = {
 export const masterChefV3Addresses = {
   [ChainId.ETHEREUM]: '0x556B9306565093C855AEA9AE92A594704c2Cd59e',
   [ChainId.GOERLI]: '0x864ED564875BdDD6F421e226494a0E7c071C06f8',
-  [ChainId.BSC]: '0x556B9306565093C855AEA9AE92A594704c2Cd59e',
+  [ChainId.BSC]: '0x8C1ec68fE9478F5B915390F0CA57f1F2A039EBae',
   [ChainId.BSC_TESTNET]: '0x4c650FB471fe4e0f476fD3437C3411B1122c4e3B',
 } as const satisfies Record<FarmSupportedChainId, string>
 
