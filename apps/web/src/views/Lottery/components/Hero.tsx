@@ -1,10 +1,10 @@
+import { useCadinuPrice } from '@pancakeswap/utils/useCakePrice';
 import styled, { keyframes } from 'styled-components'
 import { Box, Flex, Heading, Skeleton, Balance } from '@pancakeswap/uikit'
-import { LotteryStatus } from 'config/constants/types'
-import { useTranslation } from '@pancakeswap/localization'
-import { usePriceCakeUSD } from 'state/farms/hooks'
-import { useLottery } from 'state/lottery/hooks'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
+import { useTranslation } from '@pancakeswap/localization'
+import { LotteryStatus } from 'config/constants/types'
+import { useLottery } from 'state/lottery/hooks'
 import { TicketPurchaseCard } from '../svgs'
 import BuyTicketsButton from './BuyTicketsButton'
 
@@ -210,15 +210,63 @@ const StarsDecorations = styled(Box)`
   }
 `
 
+// const CnyDecorations = styled(Box)`
+//   position: absolute;
+//   width: 100%;
+//   height: 100%;
+//   z-index: 0;
+//
+//   & :nth-child(1),
+//   & :nth-child(2) {
+//     display: none;
+//     z-index: 1;
+//   }
+//
+//   & :nth-child(1) {
+//     position: absolute;
+//     top: 0;
+//     left: 15%;
+//     animation: ${floatingStarsLeft} 3s ease-in-out infinite;
+//     animation-delay: 0.25s;
+//   }
+//
+//   & :nth-child(2) {
+//     position: absolute;
+//     bottom: 0;
+//     right: 15%;
+//     animation: ${floatingStarsLeft} 3.5s ease-in-out infinite;
+//     animation-delay: 0.5s;
+//   }
+//
+//   & :nth-child(3) {
+//     display: none;
+//     position: absolute;
+//     top: 50%;
+//     left: 50%;
+//     z-index: 0;
+//     transform: translate(-50%, -50%);
+//   }
+//
+//   ${({ theme }) => theme.mediaQueries.lg} {
+//     & :nth-child(1),
+//     & :nth-child(2),
+//     & :nth-child(3) {
+//       display: block;
+//     }
+//   }
+// `
+
 const Hero = () => {
   const { t } = useTranslation()
   const {
-    currentRound: { amountCollectedInCake, status },
+    currentRound: { amountCollectedInCadinu, status },
     isTransitioning,
   } = useLottery()
+  const price = useCadinuPrice()
+  console.log("price", price)
 
-  const cakePriceBusd = usePriceCakeUSD()
-  const prizeInBusd = amountCollectedInCake.times(cakePriceBusd)
+  // const cakePriceBusd = useMemo(() => (price ? new BigNumber(price.toSignificant(6)) : BIG_ZERO), [price])
+  const prizeInBusd = amountCollectedInCadinu.times(Number(price.data))
   const prizeTotal = getBalanceNumber(prizeInBusd)
   const ticketBuyIsDisabled = status !== LotteryStatus.OPEN || isTransitioning
 
@@ -245,17 +293,23 @@ const Hero = () => {
   }
 
   return (
-    <Flex flexDirection="column" alignItems="center" justifyContent="center">
+    <
+  Flex flexDirection="column" alignItems="center" justifyContent="center">
+      {/* <CnyDecorations> */}
+      {/*  <img src="/images/cny-asset/cny-lantern-1.png" width="200px" height="280px" alt="" /> */}
+      {/*  <img src="/images/cny-asset/cny-lantern-2.png" width="184px" height="210px" alt="" /> */}
+      {/*  <img src="/images/cny-asset/cny-frame.png" width="900px" height="400px" alt="" /> */}
+      {/* </CnyDecorations> */}
       <Decorations />
       <StarsDecorations display={['none', 'none', 'block']}>
         <img src="/images/lottery/star-big.png" width="124px" height="109px" alt="" />
         <img src="/images/lottery/star-small.png" width="70px" height="62px" alt="" />
         <img src="/images/lottery/three-stars.png" width="130px" height="144px" alt="" />
-        <img src="/images/lottery/ticket-l.png" width="123px" height="83px" alt="" />
-        <img src="/images/lottery/ticket-r.png" width="121px" height="72px" alt="" />
+        <img src="/images/lottery/cadinu_ticket_3.svg" width="123px" height="83px" alt="" />
+        <img src="/images/lottery/cadinu_ticket_4.svg" width="121px" height="72px" alt="" />
       </StarsDecorations>
       <Heading style={{ zIndex: 1 }} mb="8px" scale="md" color="#ffffff" id="lottery-hero-title">
-        {t('The PancakeSwap Lottery')}
+        {t('The Cadinu Lottery')}
       </Heading>
       {getHeroHeading()}
       <TicketContainer

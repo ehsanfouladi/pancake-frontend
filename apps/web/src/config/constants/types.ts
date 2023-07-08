@@ -126,7 +126,7 @@ export interface LotteryTicket {
 export interface LotteryTicketClaimData {
   ticketsWithUnclaimedRewards: LotteryTicket[]
   allWinningTickets: LotteryTicket[]
-  cakeTotal: BigNumber
+  cadinuTotal: BigNumber
   roundId: string
 }
 

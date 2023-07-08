@@ -16,10 +16,6 @@ export default {
     97: '0xd3af5fe61dbaf8f73149bfcfa9fb653ff096029a',
     56: '0x6ab8463a4185b80905e05a9ff80a2d6b714b9e95',
   },
-  lotteryV2: {
-    97: '0x5790c3534F30437641541a0FA04C992799602998',
-    56: '0x5aF6D33DE2ccEC94efb1bDF8f92Bd58085432d2c',
-  },
   multiCall: {
     1: '0xcA11bde05977b3631167028862bE2a173976CA11',
     4: '0xcA11bde05977b3631167028862bE2a173976CA11',
@@ -226,4 +222,15 @@ export default {
     56: '0x549d484F493b778A5c70638E30Fc6Dc6B2Dcc4c0',
     97: '0x',
   },
+
+     // CADINU
+     claimAD:{
+      // 56: '0xc529d32fD8e74157a08a269596487E0C52530488',
+      56: '0xc529d32fD8e74157a08a269596487E0C52530488',
+      // 97: '0xfa753b62e5ba7f0e1e19a4eb6deda83290b11f4e',
+    },
+      lotteryV2: {
+      97: '0x5790c3534F30437641541a0FA04C992799602998',
+      56: '0xec1ED03Da04D6ab50bF51A5C56F9e340c894D931',
+    },
 } as const satisfies Record<string, Record<number, `0x${string}`>>

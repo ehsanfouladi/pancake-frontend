@@ -23,9 +23,9 @@ const applyNodeDataToUserGraphResponse = (
         endTime: nodeRound.endTime,
         status: nodeRound.status,
         lotteryId: nodeRound.lotteryId.toString(),
-        claimed: hasRoundBeenClaimed(ticketDataForRound.userTickets),
-        totalTickets: `${ticketDataForRound.userTickets.length.toString()}`,
-        tickets: ticketDataForRound.userTickets,
+        claimed: hasRoundBeenClaimed?.(ticketDataForRound?.userTickets),
+        totalTickets: `${ticketDataForRound?.userTickets.length.toString()}`,
+        tickets: ticketDataForRound?.userTickets,
       }
     })
   }
@@ -65,7 +65,7 @@ export const getGraphLotteryUser = async (
   let user
   const blankUser = {
     account,
-    totalCake: '',
+    totalCadinu: '',
     totalTickets: '',
     rounds: [],
   }
@@ -78,7 +78,7 @@ export const getGraphLotteryUser = async (
           user(id: $account) {
             id
             totalTickets
-            totalCake
+            totalCadinu
             rounds(first: $first, skip: $skip, where: $where, orderDirection: desc, orderBy: block) {
               id
               lottery {
@@ -102,7 +102,7 @@ export const getGraphLotteryUser = async (
     } else {
       user = {
         account: userRes.id,
-        totalCake: userRes.totalCake,
+        cadinuTotal: userRes.cadinuTotal,
         totalTickets: userRes.totalTickets,
         rounds: userRes.rounds.map((round) => {
           return {

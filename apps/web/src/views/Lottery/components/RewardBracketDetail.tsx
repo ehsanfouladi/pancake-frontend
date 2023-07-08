@@ -1,11 +1,14 @@
 import BigNumber from 'bignumber.js'
+import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import { Flex, Skeleton, Text, Balance } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import { usePriceCakeUSD } from 'state/farms/hooks'
 import { getBalanceNumber, getFullDisplayBalance } from '@pancakeswap/utils/formatBalance'
+import {useMemo} from "react";
+import { usePriceCadinuUSD } from 'state/farms/hooks'
+
 
 interface RewardBracketDetailProps {
-  cakeAmount: BigNumber
+  cadinuAmount: BigNumber
   rewardBracket?: number
   numberWinners?: string
   isBurn?: boolean
@@ -15,14 +18,15 @@ interface RewardBracketDetailProps {
 
 const RewardBracketDetail: React.FC<React.PropsWithChildren<RewardBracketDetailProps>> = ({
   rewardBracket,
-  cakeAmount,
+  cadinuAmount,
   numberWinners,
   isHistoricRound,
   isBurn,
   isLoading,
 }) => {
   const { t } = useTranslation()
-  const cakePriceBusd = usePriceCakeUSD()
+  const price = usePriceCadinuUSD()
+  const cadinuPriceBusd = useMemo(() => (price ? Number(price) : BIG_ZERO), [price])
 
   const getRewardText = () => {
     const numberMatch = rewardBracket + 1
@@ -45,12 +49,12 @@ const RewardBracketDetail: React.FC<React.PropsWithChildren<RewardBracketDetailP
         </Text>
       )}
       <>
-        {isLoading || cakeAmount.isNaN() ? (
+        {isLoading || cadinuAmount.isNaN() ? (
           <Skeleton my="4px" mr="10px" height={20} width={110} />
         ) : (
-          <Balance fontSize="20px" bold unit=" CAKE" value={getBalanceNumber(cakeAmount)} decimals={0} />
+          <Balance fontSize="16px" bold unit=" CADINU" value={getBalanceNumber(cadinuAmount)} decimals={0} />
         )}
-        {isLoading || cakeAmount.isNaN() ? (
+        {isLoading || cadinuAmount.isNaN() ? (
           <>
             <Skeleton mt="4px" mb="16px" height={12} width={70} />
           </>
@@ -59,15 +63,15 @@ const RewardBracketDetail: React.FC<React.PropsWithChildren<RewardBracketDetailP
             fontSize="12px"
             color="textSubtle"
             prefix="~$"
-            value={getBalanceNumber(cakeAmount.times(cakePriceBusd))}
+            value={getBalanceNumber(cadinuAmount.times(cadinuPriceBusd))}
             decimals={0}
           />
         )}
-        {isHistoricRound && cakeAmount && (
+        {isHistoricRound && cadinuAmount && (
           <>
             {numberWinners !== '0' && (
               <Text fontSize="12px" color="textSubtle">
-                {getFullDisplayBalance(cakeAmount.div(parseInt(numberWinners, 10)), 18, 2)} CAKE {t('each')}
+                {getFullDisplayBalance(cadinuAmount.div(parseInt(numberWinners, 10)), 18, 2)} CADINU {t('each')}
               </Text>
             )}
             <Text fontSize="12px" color="textSubtle">

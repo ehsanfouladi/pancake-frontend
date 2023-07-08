@@ -140,3 +140,8 @@ export const getAffiliateProgramAddress = (chainId?: number) => {
 export const getTradingRewardTopTradesAddress = (chainId?: number) => {
   return getAddressFromMap(addresses.tradingRewardTopTrades, chainId)
 }
+// CADINU
+
+export const getClaimAddress = (chainId?: number) => {
+  return getAddressFromMap(addresses.claimAD, chainId)
+}

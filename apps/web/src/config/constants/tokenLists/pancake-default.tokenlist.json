@@ -257,6 +257,14 @@
       "chainId": 1,
       "decimals": 8,
       "logoURI": "https://tokens.pancakeswap.finance/images/symbol/wbtc.png"
+    },
+    {
+      "name": "Canadian  Dog Inuit V2 Token",
+      "symbol": "CADINU",
+      "address": "0x76e112203eF59D445452ef7556386dD2DF3Ed914",
+      "chainId": 56,
+      "decimals": 18,
+      "logoURI": "https://cadinu.io/wp-content/uploads/2021/07/CAD-LOG-RED-2-1-e1670616678246.png"
     }
   ]
 }

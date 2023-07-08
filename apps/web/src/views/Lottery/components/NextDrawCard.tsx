@@ -1,4 +1,7 @@
-import { useState } from 'react'
+import {useMemo, useState} from 'react'
+import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
+import {ChainId} from "@pancakeswap/sdk"
+import BigNumber from 'bignumber.js'
 import styled from 'styled-components'
 import {
   Card,
@@ -18,13 +21,16 @@ import {
 import { useAccount } from 'wagmi'
 import { LotteryStatus } from 'config/constants/types'
 import { useTranslation } from '@pancakeswap/localization'
-import { usePriceCakeUSD } from 'state/farms/hooks'
+import {CADINU} from '@pancakeswap/tokens'
+
 import { useLottery } from 'state/lottery/hooks'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
+import { usePriceCadinuUSD } from 'state/farms/hooks'
 import ViewTicketsModal from './ViewTicketsModal'
 import BuyTicketsButton from './BuyTicketsButton'
 import { dateTimeOptions } from '../helpers'
 import RewardBrackets from './RewardBrackets'
+
 
 const Grid = styled.div`
   display: grid;
@@ -60,19 +66,19 @@ const NextDrawCard = () => {
   } = useTranslation()
   const { address: account } = useAccount()
   const { currentLotteryId, isTransitioning, currentRound } = useLottery()
-  const { endTime, amountCollectedInCake, userTickets, status } = currentRound
+  const { endTime, amountCollectedInCadinu, userTickets, status } = currentRound
 
   const [onPresentViewTicketsModal] = useModal(<ViewTicketsModal roundId={currentLotteryId} roundStatus={status} />)
   const [isExpanded, setIsExpanded] = useState(false)
   const ticketBuyIsDisabled = status !== LotteryStatus.OPEN || isTransitioning
 
-  const cakePriceBusd = usePriceCakeUSD()
-  const prizeInBusd = amountCollectedInCake.times(cakePriceBusd)
+  const price = usePriceCadinuUSD()
+  // const cakePriceBusd = useMemo(() => (price ? new BigNumber(price.toSignificant(6)) : BIG_ZERO), [price])
+  const prizeInBusd = amountCollectedInCadinu.times(Number(price))
   const endTimeMs = parseInt(endTime, 10) * 1000
   const endDate = new Date(endTimeMs)
   const isLotteryOpen = status === LotteryStatus.OPEN
   const userTicketCount = userTickets?.tickets?.length || 0
-
   const getPrizeBalances = () => {
     if (status === LotteryStatus.CLOSE || status === LotteryStatus.CLAIMABLE) {
       return (
@@ -104,8 +110,8 @@ const NextDrawCard = () => {
             fontSize="14px"
             color="textSubtle"
             textAlign={['center', null, null, 'left']}
-            unit=" CAKE"
-            value={getBalanceNumber(amountCollectedInCake)}
+            unit=" CADINU"
+            value={getBalanceNumber(amountCollectedInCadinu)}
             decimals={0}
           />
         )}

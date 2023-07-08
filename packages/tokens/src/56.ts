@@ -2634,4 +2634,11 @@ export const bscTokens = {
     'Governance xAlgo',
     'https://folks.finance/',
   ),
-}
+  cadinu: new ERC20Token(
+    ChainId.BSC,
+    '0x76e112203eF59D445452ef7556386dD2DF3Ed914',
+    18,
+    'CADINU',
+    'Canadian  Dog Inuit V2 Token',
+    'https://cadinu.io',
+  ),}

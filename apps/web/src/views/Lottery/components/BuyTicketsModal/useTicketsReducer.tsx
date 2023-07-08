@@ -1,5 +1,5 @@
 import { LotteryTicket } from 'config/constants/types'
-import { useCallback, useEffect, useReducer } from 'react'
+import { useEffect, useReducer } from 'react'
 import { parseRetrievedNumber } from '../../helpers'
 import generateTicketNumbers from './generateTicketNumbers'
 
@@ -107,25 +107,22 @@ export const useTicketsReducer = (
     dispatch({ type: 'reset', payload: { amount, userCurrentTickets } })
   }, [amount, userCurrentTickets])
 
-  const updateTicket = useCallback(
-    (ticketId: number, newNumbers: string[]) => {
-      dispatch({ type: 'updateTicket', payload: { ticketId, newNumbers } })
-    },
-    [dispatch],
-  )
+  const updateTicket = (ticketId: number, newNumbers: string[]) => {
+    dispatch({ type: 'updateTicket', payload: { ticketId, newNumbers } })
+  }
 
-  const randomize = useCallback(() => {
+  const randomize = () => {
     dispatch({ type: 'reset', payload: { amount, userCurrentTickets } })
-  }, [dispatch, amount, userCurrentTickets])
+  }
 
-  const getTicketsForPurchase = useCallback(() => {
+  const getTicketsForPurchase = () => {
     return state.tickets.map((ticket) => {
       const reversedTicket = [...ticket.numbers].map((num) => parseInt(num, 10)).reverse()
       reversedTicket.unshift(1)
       const ticketAsNumber = parseInt(reversedTicket.join(''), 10)
       return ticketAsNumber
     })
-  }, [state])
+  }
 
   return [updateTicket, randomize, state.tickets, state.allComplete, getTicketsForPurchase]
 }

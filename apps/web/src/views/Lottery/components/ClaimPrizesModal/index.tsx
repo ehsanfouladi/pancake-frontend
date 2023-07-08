@@ -25,14 +25,14 @@ const StyledModalHeader = styled(ModalHeader)`
   border-top-right-radius: 32px;
   border-top-left-radius: 32px;
 `
-
-const BunnyDecoration = styled.div`
-  position: absolute;
-  top: -116px; // line up bunny at the top of the modal
-  left: 0px;
-  text-align: center;
-  width: 100%;
-`
+//
+// const BunnyDecoration = styled.div`
+//   position: absolute;
+//   top: -116px; // line up bunny at the top of the modal
+//   left: 0px;
+//   text-align: center;
+//   width: 100%;
+// `
 
 const showConfetti = () => {
   confetti({
@@ -67,9 +67,7 @@ const ClaimPrizesModal: React.FC<React.PropsWithChildren<ClaimPrizesModalModalPr
 
   return (
     <StyledModal minWidth="280px">
-      <BunnyDecoration>
-        <img src="/images/decorations/prize-bunny.png" alt="bunny decoration" height="124px" width="168px" />
-      </BunnyDecoration>
+
       <StyledModalHeader>
         <ModalTitle>
           <Heading>{t('Collect Winnings')}</Heading>

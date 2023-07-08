@@ -49,7 +49,7 @@ import {
 } from 'utils/contractHelpers'
 
 import { ChainId, WNATIVE, pancakePairV2ABI } from '@pancakeswap/sdk'
-import { CAKE } from '@pancakeswap/tokens'
+import { CADINU, CAKE } from '@pancakeswap/tokens'
 import { nonfungiblePositionManagerABI } from '@pancakeswap/v3-sdk'
 import { multicallABI } from 'config/abi/Multicall'
 import { erc20Bytes32ABI } from 'config/abi/erc20_bytes32'
@@ -392,3 +392,10 @@ export const useTradingRewardTopTraderContract = ({ chainId: chainId_ }: { chain
   const { data: signer } = useWalletClient()
   return useMemo(() => getTradingRewardTopTradesContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
 }
+
+export const useCadinu = () => {
+  const { chainId } = useActiveChainId()
+
+  return useContract(CADINU[chainId].address ?? CADINU[ChainId.BSC].address, erc20ABI)
+}
+

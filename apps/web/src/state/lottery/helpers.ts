@@ -19,19 +19,19 @@ const processViewLotterySuccessResponse = (
     status,
     startTime,
     endTime,
-    priceTicketInCake,
+    priceTicketInCadinu,
     discountDivisor,
     treasuryFee,
     firstTicketId,
-    amountCollectedInCake,
+    amountCollectedInCadinu,
     finalNumber,
-    cakePerBracket,
+    cadinuPerBracket,
     countWinnersPerBracket,
     rewardsBreakdown,
   } = response
 
   const statusKey = Object.keys(LotteryStatus)[status]
-  const serializedCakePerBracket = cakePerBracket.map((cakeInBracket) => bigIntToSerializedBigNumber(cakeInBracket))
+  const serializedCakePerBracket = cadinuPerBracket.map((cakeInBracket) => bigIntToSerializedBigNumber(cakeInBracket))
   const serializedCountWinnersPerBracket = countWinnersPerBracket.map((winnersInBracket) =>
     bigIntToSerializedBigNumber(winnersInBracket),
   )
@@ -43,13 +43,13 @@ const processViewLotterySuccessResponse = (
     status: LotteryStatus[statusKey],
     startTime: startTime?.toString(),
     endTime: endTime?.toString(),
-    priceTicketInCake: bigIntToSerializedBigNumber(priceTicketInCake),
+    priceTicketInCadinu: bigIntToSerializedBigNumber(priceTicketInCadinu),
     discountDivisor: discountDivisor?.toString(),
     treasuryFee: treasuryFee?.toString(),
     firstTicketId: firstTicketId?.toString(),
-    amountCollectedInCake: bigIntToSerializedBigNumber(amountCollectedInCake),
+    amountCollectedInCadinu: bigIntToSerializedBigNumber(amountCollectedInCadinu),
     finalNumber,
-    cakePerBracket: serializedCakePerBracket,
+    cadinuPerBracket: serializedCakePerBracket,
     countWinnersPerBracket: serializedCountWinnersPerBracket,
     rewardsBreakdown: serializedRewardsBreakdown,
   }
@@ -62,13 +62,13 @@ const processViewLotteryErrorResponse = (lotteryId: string): LotteryResponse => 
     status: LotteryStatus.PENDING,
     startTime: '',
     endTime: '',
-    priceTicketInCake: '',
+    priceTicketInCadinu: '',
     discountDivisor: '',
     treasuryFee: '',
     firstTicketId: '',
-    amountCollectedInCake: '',
+    amountCollectedInCadinu: '',
     finalNumber: null,
-    cakePerBracket: [],
+    cadinuPerBracket: [],
     countWinnersPerBracket: [],
     rewardsBreakdown: [],
   }

@@ -333,3 +333,4 @@ export const useBNBBusdPrice = (
   const wbnb: Token = isTestnet ? WBNB[ChainId.BSC_TESTNET] : WBNB[ChainId.BSC]
   return usePriceByPairs(BUSD[wbnb.chainId], wbnb)
 }
+

@@ -1,4 +1,23 @@
-import { Svg, SvgProps } from '@pancakeswap/uikit'
+import { Svg, SvgProps } from '@pancakeswap/uikit';
+import React from 'react';
+
+interface ValueColorPair {
+  id : number;
+  value: number;
+  color: string;
+}
+
+const data: ValueColorPair[] = [
+  { value: 2.425, color: '#FFE362', id:1 },
+  { value: 3.6375, color: '#85C54E', id:2 },
+  { value: 6.0625, color: '#028E75', id:3 },
+  { value: 12.125, color: '#36E8F5', id:4 },
+  { value: 24.25, color: '#A881FC',  id:5 },
+  { value: 48.5, color: '#D750B2', id:6 },
+  { value: 3, color: '#BDC2C4'  , id:7},
+];
+
+const total = data.reduce((acc, curr) => acc + curr.value, 0);
 
 const PoolAllocationChart: React.FC<React.PropsWithChildren<SvgProps>> = (props) => {
   return (
@@ -15,69 +34,27 @@ const PoolAllocationChart: React.FC<React.PropsWithChildren<SvgProps>> = (props)
           strokeOpacity="0.05"
           strokeWidth="2"
         />
-        <path
-          d="M201.5 2.00002C243.63 2.00002 284.679 15.4044 318.763 40.2921C352.847 65.1798 378.217 100.273 391.236 140.542C404.255 180.811 404.255 224.189 391.236 264.458C378.217 304.727 352.847 339.82 318.763 364.708C284.679 389.596 243.63 403 201.5 403C159.37 403 118.321 389.596 84.2368 364.708C50.1527 339.82 24.7832 304.727 11.7642 264.458C-1.25475 224.189 -1.25475 180.811 11.7642 140.542L201.5 202.5L201.5 2.00002Z"
-          fill="#D750B2"
-          stroke="#0E0E0E"
-          strokeOpacity="0.05"
-          strokeWidth="2"
-        />
-        <path
-          d="M201.5 2.00002C243.63 2.00002 284.679 15.4044 318.763 40.2921C352.847 65.1798 378.217 100.273 391.236 140.542C404.255 180.811 404.255 224.189 391.236 264.458C378.217 304.727 352.847 339.82 318.763 364.708L201.5 202.5L201.5 2.00002Z"
-          fill="#A881FC"
-          stroke="#0E0E0E"
-          strokeOpacity="0.05"
-          strokeWidth="2"
-          strokeLinejoin="round"
-        />
-        <path
-          d="M201.5 2.00002C243.63 2.00002 284.679 15.4044 318.763 40.2921C352.847 65.1798 378.217 100.273 391.236 140.542L201.5 202.5L201.5 2.00002Z"
-          fill="#3AF3F8"
-          stroke="#0E0E0E"
-          strokeOpacity="0.05"
-          strokeWidth="2"
-          strokeLinejoin="round"
-        />
-        <path
-          d="M201.5 2.00002C243.63 2.00002 284.679 15.4044 318.763 40.2921L201.5 202.5L201.5 2.00002Z"
-          fill="#10AC87"
-          stroke="#0E0E0E"
-          strokeOpacity="0.05"
-          strokeWidth="2"
-          strokeLinejoin="round"
-        />
-        <path
-          d="M201.5 2.00002C218.235 2.00002 234.904 4.11632 251.114 8.29909L201.5 202.5L201.5 2.00002Z"
-          fill="#93D45A"
-          stroke="#0E0E0E"
-          strokeOpacity="0.05"
-          strokeWidth="2"
-          strokeLinejoin="round"
-        />
-        <path
-          d="M201.5 2.00002C222.435 2.00002 243.239 5.3116 263.149 11.8132L201.5 202.5L201.5 2.00002Z"
-          fill="#8FD74F"
-          stroke="#0E0E0E"
-          strokeOpacity="0.05"
-          strokeWidth="2"
-          strokeLinejoin="round"
-        />
-        <path
-          d="M201.5 2.00002C205.679 2.00002 209.856 2.13198 214.027 2.39565L201.5 202.5L201.5 2.00002Z"
-          fill="#C4C4C4"
-          stroke="#0E0E0E"
-          strokeOpacity="0.05"
-          strokeWidth="2"
-          strokeLinejoin="round"
-        />
-        <path
-          d="M201.5 2.00002C209.859 2.00002 218.211 2.52807 226.504 3.58101L201.5 202.5L201.5 2.00002Z"
-          fill="#FFD307"
-          stroke="#0E0E0E"
-          strokeOpacity="0.05"
-          strokeWidth="2"
-          strokeLinejoin="round"
-        />
+        {data.map((item, index) => {
+          const startAngle = data.slice(0, index).reduce((acc, curr) => acc + (curr.value / total) * 360, 0);
+          const endAngle = startAngle + (item.value / total) * 360;
+          const largeArcFlag = endAngle - startAngle <= 180 ? 0 : 1;
+
+          const startX = 201.5 + Math.cos((startAngle * Math.PI) / 180) * 200.5;
+          const startY = 202.5 + Math.sin((startAngle * Math.PI) / 180) * 199.5;
+          const endX = 201.5 + Math.cos((endAngle * Math.PI) / 180) * 200.5;
+          const endY = 202.5 + Math.sin((endAngle * Math.PI) / 180) * 199.5;
+
+          return (
+            <path
+              key={item.id}
+              d={`M201.5 202.5 L${startX} ${startY} A200.5 199.5 0 ${largeArcFlag} 1 ${endX} ${endY} Z`}
+              fill={item.color}
+              stroke="#0E0E0E"
+              strokeOpacity="0.05"
+              strokeWidth="2"
+            />
+          );
+        })}
         <ellipse
           opacity="0.2"
           cx="201.5"
@@ -90,7 +67,7 @@ const PoolAllocationChart: React.FC<React.PropsWithChildren<SvgProps>> = (props)
         />
       </svg>
     </Svg>
-  )
-}
+  );
+};
 
-export default PoolAllocationChart
+export default PoolAllocationChart;

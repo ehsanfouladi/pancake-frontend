@@ -22,13 +22,13 @@ const initialState: LotteryState = {
     status: LotteryStatus.PENDING,
     startTime: '',
     endTime: '',
-    priceTicketInCake: '',
+    priceTicketInCadinu: '',
     discountDivisor: '',
     treasuryFee: '',
     firstTicketId: '',
-    amountCollectedInCake: '',
+    amountCollectedInCadinu: '',
     finalNumber: null,
-    cakePerBracket: [],
+    cadinuPerBracket: [],
     countWinnersPerBracket: [],
     rewardsBreakdown: [],
     userTickets: {
@@ -37,7 +37,7 @@ const initialState: LotteryState = {
     },
   },
   lotteriesData: null,
-  userLotteryData: { account: '', totalCake: '', totalTickets: '', rounds: [] },
+  userLotteryData: { account: '', totalCadinu: '', totalTickets: '', rounds: [] },
 }
 
 export const fetchCurrentLottery = createAsyncThunk<LotteryResponse, { currentLotteryId: string }>(
@@ -87,9 +87,10 @@ export const fetchUserLotteries = createAsyncThunk<
 
 export const fetchAdditionalUserLotteries = createAsyncThunk<
   LotteryUserGraphEntity,
-  { account: string; skip?: number }
+  { account?: string; skip?: number }
 >('lottery/fetchAdditionalUserLotteries', async ({ account, skip }) => {
-  const additionalUserLotteries = await getGraphLotteryUser(account, undefined, skip)
+  const additionalUserLotteries = await getGraphLotteryUser(account
+    , undefined, skip)
   return additionalUserLotteries
 })
 

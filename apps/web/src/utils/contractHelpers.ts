@@ -1,4 +1,4 @@
-import { CAKE } from '@pancakeswap/tokens'
+import { CAKE, CADINU } from '@pancakeswap/tokens'
 
 // Addresses
 import {
@@ -32,6 +32,7 @@ import {
   getV3MigratorAddress,
   getAffiliateProgramAddress,
   getTradingRewardTopTradesAddress,
+  getClaimAddress,
 } from 'utils/addressHelpers'
 
 // ABI
@@ -43,6 +44,9 @@ import { nonBscVaultABI } from 'config/abi/nonBscVault'
 import { pointCenterIfoABI } from 'config/abi/pointCenterIfo'
 import { predictionsV1ABI } from 'config/abi/predictionsV1'
 import { stableSwapNativeHelperABI } from 'config/abi/stableSwapNativeHelper'
+
+
+import {claimADAbi} from 'config/abi/claimAD'
 
 import {
   cakeFlexibleSideVaultV2ABI,
@@ -130,6 +134,13 @@ export const getCakeContract = (chainId?: number) => {
   return getContract({
     abi: erc20ABI,
     address: chainId ? CAKE[chainId]?.address : CAKE[ChainId.BSC].address,
+    chainId,
+  })
+}
+export const getCadinuContract = (chainId?: number) => {
+  return getContract({
+    abi: erc20ABI,
+    address: chainId ? CADINU[chainId]?.address : CADINU[ChainId.BSC].address,
     chainId,
   })
 }
@@ -387,4 +398,13 @@ export const getTradingRewardTopTradesContract = (signer?: WalletClient, chainId
     signer,
     chainId,
   })
+}
+
+export const getClaimContract = (signer?: WalletClient, chainId?: number) => {
+  return getContract({
+    abi: claimADAbi,
+    address: getClaimAddress(),
+    signer,
+    chainId
+    })
 }

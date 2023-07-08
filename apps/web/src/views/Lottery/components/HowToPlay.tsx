@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { Box, Flex, Text, Heading, Link, Image, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { Box, Flex, Text, Heading, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import useTheme from 'hooks/useTheme'
 import { BallWithNumber, MatchExampleA, MatchExampleB, PoolAllocationChart } from '../svgs'
@@ -85,10 +85,10 @@ const BallsContainer = styled(Flex)`
     padding-left: 40px;
   }
 `
-
-const InlineLink = styled(Link)`
-  display: inline;
-`
+//
+// const InlineLink = styled(Link)`
+//   display: inline;
+// `
 
 const ExampleBalls = () => {
   const { isDesktop } = useMatchBreakpoints()
@@ -182,31 +182,31 @@ const PoolAllocations = () => {
         <AllocationGrid>
           <AllocationMatch color="#FFE362" text={t('Matches first %digits%', { digits: 1 })} />
           <Text textAlign="right" bold>
-            2%
+            2.43%
           </Text>
           <AllocationMatch color="#85C54E" text={t('Matches first %digits%', { digits: 2 })} />
           <Text textAlign="right" bold>
-            3%
+            3.64%
           </Text>
           <AllocationMatch color="#028E75" text={t('Matches first %digits%', { digits: 3 })} />
           <Text textAlign="right" bold>
-            5%
+            6.06%
           </Text>
           <AllocationMatch color="#36E8F5" text={t('Matches first %digits%', { digits: 4 })} />
           <Text textAlign="right" bold>
-            10%
+            12.12%
           </Text>
           <AllocationMatch color="#A881FC" text={t('Matches first %digits%', { digits: 5 })} />
           <Text textAlign="right" bold>
-            20%
+            24.25%
           </Text>
           <AllocationMatch color="#D750B2" text={t('Matches all 6')} />
           <Text textAlign="right" bold>
-            40%
+            48.50%
           </Text>
           <AllocationMatch color="#BDC2C4" text={t('Burn Pool')} />
           <Text textAlign="right" bold>
-            20%
+            3.00%
           </Text>
         </AllocationGrid>
       </StepCardInner>
@@ -225,7 +225,7 @@ const HowToPlay: React.FC<React.PropsWithChildren> = () => {
     {
       label: t('Step %number%', { number: 1 }),
       title: t('Buy Tickets'),
-      subtitle: t('Prices are set when the round starts, equal to 5 USD in CAKE per ticket.'),
+      subtitle: t('Prices are set when the round starts, equal to 3 USD in CADINU per ticket.'),
     },
     {
       label: t('Step %number%', { number: 2 }),
@@ -307,7 +307,7 @@ const HowToPlay: React.FC<React.PropsWithChildren> = () => {
           <BulletList>
             <li>
               <Text display="inline" color="textSubtle">
-                {t('100% of the CAKE paid by people buying tickets that round goes back into the prize pools.')}
+                {t('100% of the CADINU paid by people buying tickets that round goes back into the prize pools.')}
               </Text>
             </li>
           </BulletList>
@@ -318,46 +318,18 @@ const HowToPlay: React.FC<React.PropsWithChildren> = () => {
             <li>
               <Text display="inline" color="textSubtle">
                 {t(
-                  'After every round, if nobody wins in one of the prize brackets, the unclaimed CAKE for that bracket rolls over into the next round and are redistributed among the prize pools.',
+                  'After every round, if nobody wins in one of the prize brackets, the unclaimed CADINU for that bracket rolls over into the next round and are redistributed among the prize pools.',
                 )}
               </Text>
             </li>
           </BulletList>
-          <Heading my="16px" scale="md">
-            {t('CAKE Injections')}
-          </Heading>
-          <BulletList>
-            <li>
-              <Text display="inline" color="textSubtle">
-                {t(
-                  'An average total of 35,000 CAKE from the treasury is added to lottery rounds over the course of a week. This CAKE is of course also included in rollovers! Read more in our guide to ',
-                )}
-                <InlineLink href="https://docs.pancakeswap.finance/tokenomics/cake/cake-tokenomics">
-                  {t('CAKE Tokenomics')}
-                </InlineLink>
-              </Text>
-            </li>
-          </BulletList>
+
         </Flex>
         <Flex flex="1" justifyContent="center">
           <PoolAllocations />
         </Flex>
       </GappedFlex>
-      <Divider />
-      <Flex justifyContent="center" alignItems="center" flexDirection={['column', 'column', 'row']}>
-        <Image width={240} height={172} src="/images/lottery/tombola.png" alt="tombola bunny" mr="8px" mb="16px" />
-        <Flex maxWidth="300px" flexDirection="column">
-          <Heading mb="16px" scale="md">
-            {t('Still got questions?')}
-          </Heading>
-          <Text>
-            {t('Check our in-depth guide on')}{' '}
-            <InlineLink href="https://docs.pancakeswap.finance/products/lottery/lottery-guide">
-              {t('how to play the PancakeSwap lottery!')}
-            </InlineLink>
-          </Text>
-        </Flex>
-      </Flex>
+
     </Box>
   )
 }

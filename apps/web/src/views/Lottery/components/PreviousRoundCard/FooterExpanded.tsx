@@ -1,14 +1,18 @@
-import { useState, useEffect } from 'react'
+import {useState, useEffect, useMemo} from 'react'
 import styled from 'styled-components'
 import BigNumber from 'bignumber.js'
+import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
+import { usePriceCadinuUSD } from 'state/farms/hooks';
 import { Flex, Skeleton, Heading, Box, Text, Balance } from '@pancakeswap/uikit'
+import { formatNumber, getBalanceNumber } from '@pancakeswap/utils/formatBalance'
+
 import { useTranslation } from '@pancakeswap/localization'
 import { LotteryRound, LotteryRoundGraphEntity } from 'state/types'
-import { usePriceCakeUSD } from 'state/farms/hooks'
+// import { usePriceCadinuBusd } from 'state/farms/hooks'
 import { useGetLotteryGraphDataById } from 'state/lottery/hooks'
 import { getGraphLotteries } from 'state/lottery/getLotteriesData'
-import { formatNumber, getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import RewardBrackets from '../RewardBrackets'
+
 
 const NextDrawWrapper = styled(Flex)`
   background: ${({ theme }) => theme.colors.background};
@@ -26,7 +30,8 @@ const PreviousRoundCardFooter: React.FC<
   const { t } = useTranslation()
   const [fetchedLotteryGraphData, setFetchedLotteryGraphData] = useState<LotteryRoundGraphEntity>()
   const lotteryGraphDataFromState = useGetLotteryGraphDataById(lotteryId)
-  const cakePriceBusd = usePriceCakeUSD()
+  const price = usePriceCadinuUSD()
+  const cadinuPriceBusd = useMemo(() => (price ? Number(price) : BIG_ZERO), [price])
 
   useEffect(() => {
     const getGraphData = async () => {
@@ -40,23 +45,26 @@ const PreviousRoundCardFooter: React.FC<
 
   let prizeInBusd = new BigNumber(NaN)
   if (lotteryNodeData) {
-    const { amountCollectedInCake } = lotteryNodeData
-    prizeInBusd = amountCollectedInCake.times(cakePriceBusd)
+    const { amountCollectedInCadinu } = lotteryNodeData
+    prizeInBusd = amountCollectedInCadinu.times(cadinuPriceBusd)
+
   }
 
   const getTotalUsers = (): string => {
     if (!lotteryGraphDataFromState && fetchedLotteryGraphData) {
-      return fetchedLotteryGraphData?.totalUsers
+      return fetchedLotteryGraphData?.totalUsers?.toLocaleString()
     }
 
     if (lotteryGraphDataFromState) {
-      return lotteryGraphDataFromState?.totalUsers
+      return lotteryGraphDataFromState?.totalUsers?.toLocaleString()
     }
 
     return null
   }
 
   const getPrizeBalances = () => {
+    console.log('prizeInBusd',getBalanceNumber(prizeInBusd));
+    
     return (
       <>
         {prizeInBusd.isNaN() ? (
@@ -72,8 +80,8 @@ const PreviousRoundCardFooter: React.FC<
           <Balance
             fontSize="14px"
             color="textSubtle"
-            unit=" CAKE"
-            value={getBalanceNumber(lotteryNodeData?.amountCollectedInCake)}
+            unit=" CADINU"
+            value={getBalanceNumber(lotteryNodeData?.amountCollectedInCadinu)}
             decimals={0}
           />
         )}
