@@ -71,7 +71,7 @@ const PreviousRoundCardBody: React.FC<
 
   const totalTicketNumber = userDataForRound ? userDataForRound.totalTickets : 0
   const ticketRoundText =
-    totalTicketNumber > 1
+    Number(totalTicketNumber) > 1
       ? t('You had %amount% tickets this round', { amount: totalTicketNumber })
       : t('You had %amount% ticket this round', { amount: totalTicketNumber })
   const [youHadText, ticketsThisRoundText] = ticketRoundText.split(totalTicketNumber.toString())

@@ -57,7 +57,7 @@ export const processLotteryResponse = (
     discountDivisor,
     treasuryFee: lotteryData.treasuryFee,
     firstTicketId: lotteryData.firstTicketId,
-    lastTicketId: lotteryData.lastTicketId,
+    // lastTicketId: lotteryData.lastTicketId,
     amountCollectedInCadinu,
     finalNumber: lotteryData.finalNumber,
     cadinuPerBracket: lotteryData.cadinuPerBracket,

@@ -10,7 +10,7 @@ const useGetUnclaimedRewards = () => {
   const userLotteryData = useGetUserLotteriesGraphData()
   const lotteriesData = useGetLotteriesGraphData()
   const [unclaimedRewards, setUnclaimedRewards] = useState([])
-  const [fetchStatus, setFetchStatus] = useState(FetchStatus.Idle)
+  const [fetchStatus, setFetchStatus] = useState(FetchStatus.Idle as string)
 
   useEffect(() => {
     // Reset on account change and round transition

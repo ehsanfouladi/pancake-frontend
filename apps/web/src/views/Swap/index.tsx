@@ -1,6 +1,16 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Currency } from '@pancakeswap/sdk'
-import { BottomDrawer, Flex, Modal, ModalV2, useMatchBreakpoints, Card, CardProps, Heading } from '@pancakeswap/uikit'
+import {
+  BottomDrawer,
+  Flex,
+  Modal,
+  ModalV2,
+  useMatchBreakpoints,
+  Card,
+  CardProps,
+  Heading,
+  Message,
+} from '@pancakeswap/uikit'
 import replaceBrowserHistory from '@pancakeswap/utils/replaceBrowserHistory'
 // import { AppBody } from 'components/App'
 import { useRouter } from 'next/router'
@@ -27,22 +37,22 @@ export const BodyWrapper = styled(Card)`
   width: 500px;
   z-index: 1;
 `
-const StyledHeaderInner = styled(Flex)`
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: start;
-  margin-top: 32px;
-  margin-bottom: 32px;
-  align-self: center;
+// const StyledHeaderInner = styled(Flex)`
+//   flex-direction: row;
+//   justify-content: space-between;
+//   align-items: start;
+//   margin-top: 32px;
+//   margin-bottom: 32px;
+//   align-self: center;
 
-  ${({ theme }) => theme.mediaQueries.sm} {
-    flex-direction: row;
-    align-items: center;
-    align-self: center;
-    margin-top: 32px;
-    margin-bottom: 32px;
-  }
-`
+//   ${({ theme }) => theme.mediaQueries.sm} {
+//     flex-direction: row;
+//     align-items: center;
+//     align-self: center;
+//     margin-top: 32px;
+//     margin-bottom: 32px;
+//   }
+// `
 /**
  * The styled container element that wraps the content of most pages and the tabs.
  */
@@ -114,7 +124,16 @@ export default function Swap() {
 
     [inputCurrencyId, outputCurrencyId, onCurrencySelection, warningSwapHandler],
   )
+  const [iframeLoaded, setIframeLoaded] = useState(false)
 
+  const handlePancakeOnLoad = () => {
+    setIframeLoaded(true)
+  }
+
+  const [multiSwapShow, setMultiSwapShow] = useState(false)
+  const onShowButtonClick = () => {
+    setMultiSwapShow(!multiSwapShow)
+  }
   const PancakeIframe = useCallback(() => {
     return (
       <>
@@ -127,21 +146,32 @@ export default function Swap() {
             src={`https://pancakeswap.finance/swap${newUrlExtention}`}
             width="100%"
             height="800px"
+            // onLoad={handlePancakeOnLoad}
+            style={!iframeLoaded ? { display: 'none' } : { display: 'block' }}
           />
         </AppBody>
       </>
     )
-  }, [newUrlExtention, isDesktop])
+  }, [newUrlExtention, isDesktop, iframeLoaded])
+
   const UniSwapIframe = useCallback(() => {
     return (
       <AppBody mx={isDesktop ? '5px' : 0} mt={isDesktop ? 0 : '20px'}>
         <Heading as="h3" textAlign="center" color="primary">
           UniSwap
         </Heading>
-        <iframe title="UniSwap" src={`https://app.uniswap.org/#/swap${newUrlExtention}`} width="100%" height="800px" />
+        <iframe
+          title="UniSwap"
+          src={`https://app.uniswap.org/#/swap${newUrlExtention}`}
+          width="100%"
+          height="800px"
+          onLoad={handlePancakeOnLoad}
+          tabIndex={-500}
+          style={!iframeLoaded ? { display: 'none' } : { display: 'block', position: 'relative' }}
+        />
       </AppBody>
     )
-  }, [newUrlExtention, isDesktop])
+  }, [newUrlExtention, isDesktop, iframeLoaded])
 
   const BiSwapIframe = useCallback(() => {
     return (
@@ -150,10 +180,17 @@ export default function Swap() {
           Biswap
         </Heading>
 
-        <iframe title="Biswap" src={`https://biswap.org/swap${newUrlExtention}`} width="100%" height="800px" />
+        <iframe
+          title="Biswap"
+          src={`https://biswap.org/swap${newUrlExtention}`}
+          width="100%"
+          height="800px"
+          // onLoad={handlePancakeOnLoad}
+          style={!iframeLoaded ? { display: 'none' } : { display: 'block' }}
+        />
       </AppBody>
     )
-  }, [newUrlExtention, isDesktop])
+  }, [newUrlExtention, isDesktop, iframeLoaded])
 
   useEffect(() => {
     setNewUrlExtention(`?inputCurrency=${inputCurrencyId}&outputCurrency=${outputCurrencyId}`)
@@ -218,7 +255,7 @@ export default function Swap() {
 
         <StyledSwapContainer $isChartExpanded={isChartExpanded}>
           <StyledInputCurrencyWrapper mt={isChartExpanded ? '24px' : '0'}>
-            <AppBody mb="10px">
+            <AppBody mb="10px" id="foo">
               <V3SwapForm />
             </AppBody>
           </StyledInputCurrencyWrapper>
@@ -248,20 +285,31 @@ export default function Swap() {
 .decorated > span:after{
     left: 100%;
 }`}</style>
-      <h2 className="decorated">
-        <span>Multi Swap</span>
-      </h2>
+      <div
+        role="button"
+        tabIndex={0}
+        onKeyDown={onShowButtonClick}
+        onClick={onShowButtonClick}
+        style={{ cursor: 'pointer' }}
+      >
+        <h2 className="decorated">
+          <span>{multiSwapShow ? 'Hide ' : 'Show '}Multi Swap</span>
+        </h2>
+      </div>
       {isDesktop ? (
-        <Flex flexDirection="row-reverse" justifyContent="space-between" alignItems="center">
-          {/* <StyledSwapContainer $isChartExpanded={isChartExpanded}>
-            <StyledInputCurrencyWrapper > */}
-          <span>{UniSwapIframe()}</span>
-          <span>{BiSwapIframe()}</span>
-          <span>{PancakeIframe()}</span>
-
-          {/* </StyledInputCurrencyWrapper>
-              </StyledSwapContainer> */}
-        </Flex>
+        <>
+          {multiSwapShow && (
+            <Message variant="danger" mb="15px">
+              In order for it to work properly, please accept the conditions of the exchange each time you select a
+              pair.
+            </Message>
+          )}
+          <Flex flexDirection="row-reverse" justifyContent="space-between" alignItems="center">
+            <span style={multiSwapShow ? { display: 'block' } : { display: 'none' }}>{UniSwapIframe()}</span>
+            <span style={multiSwapShow ? { display: 'block' } : { display: 'none' }}>{BiSwapIframe()}</span>
+            <span style={multiSwapShow ? { display: 'block' } : { display: 'none' }}>{PancakeIframe()}</span>
+          </Flex>
+        </>
       ) : (
         <Flex flexDirection={isDesktop ? 'row' : 'column'} justifyContent="space-between" minHeight="2500px">
           <StyledSwapContainer $isChartExpanded={isChartExpanded}>
