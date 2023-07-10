@@ -26,18 +26,25 @@ const sentryWebpackPluginOptions =
         //   urlPrefix, include, ignore
         silent: false, // Logging when deploying to check if there is any problem
         validate: true,
-        hideSourceMaps: ture,
+        hideSourceMaps: false,
         // https://github.com/getsentry/sentry-webpack-plugin#options.
       }
     : {
-        hideSourceMaps: ture,
+        hideSourceMaps: false,
         silent: true, // Suppresses all logs
         dryRun: !process.env.SENTRY_AUTH_TOKEN,
       }
 
 const workerDeps = Object.keys(smartRouterPkgs.dependencies)
   .map((d) => d.replace('@pancakeswap/', 'packages/'))
-  .concat(['/packages/smart-router/', '/packages/swap-sdk/', '/packages/token-lists/'])
+  .concat([
+    '/packages/smart-router/',
+    '/packages/swap-sdk/',
+    '/packages/token-lists/',
+    '/packages/cadinu-smart-router/',
+    '/packages/cadinu-swap-sdk/',
+    '/packages/cadinu-v3-sdk/'
+  ])
 
 /** @type {import('next').NextConfig} */
 const config = {
@@ -59,6 +66,9 @@ const config = {
     '@pancakeswap/localization',
     '@pancakeswap/hooks',
     '@pancakeswap/utils',
+    '@pancakeswap/cadinu-smart-router',
+    '@pancakeswap/cadinu-swap-sdk',
+    '@pancakeswap/cadinu-v3-sdk'    
   ],
   reactStrictMode: true,
   swcMinify: true,
@@ -126,6 +136,7 @@ const config = {
   },
   async redirects() {
     return [
+      //TODO
       {
         source: '/send',
         destination: '/swap',

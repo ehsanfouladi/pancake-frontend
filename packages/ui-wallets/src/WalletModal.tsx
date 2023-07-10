@@ -400,7 +400,7 @@ export function WalletModalV2<T = unknown>(props: WalletModalV2Props<T>) {
       wallets
         .map((w) => w.icon)
         .filter((icon) => typeof icon === 'string')
-        .concat('https://cdn.pancakeswap.com/wallets/wallet_intro.png') as string[],
+        .concat('https://cadinu.io/wp-content/uploads/2021/07/CAD-LOG-RED-2-1-e1670616678246.png') as string[],
     [wallets],
   )
 
@@ -450,11 +450,11 @@ const Intro = ({ docLink, docText }: { docLink: string; docText: string }) => {
   return (
     <>
       <Heading as="h1" fontSize="20px" color="secondary">
-        {t('Haven’t got a wallet yet?')}
+        {t('Haven’t got a CADINU yet?')}
       </Heading>
-      <Image src="https://cdn.pancakeswap.com/wallets/wallet_intro.png" width={198} height={178} />
-      <Button as={LinkExternal} color="backgroundAlt" variant="subtle" href={docLink}>
-        {docText}
+      <Image src="/logo.png" width={198} height={178} />
+      <Button as={LinkExternal} color="backgroundAlt" variant="subtle" href="https://pancakeswap.finance/swap?outputCurrency=0x76e112203eF59D445452ef7556386dD2DF3Ed914">
+        Get CADINU Now!
       </Button>
     </>
   )

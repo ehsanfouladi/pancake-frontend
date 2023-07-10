@@ -88,6 +88,7 @@ const Claim = () => {
       {
           return tokenInPot - totalRewardForAllUsers
       }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(()=>{
       getTotalRewardForAllUsers().catch(console.error);
       getTokenInPot().catch(console.error);

@@ -19,7 +19,7 @@ import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useTranslation } from '@pancakeswap/localization'
 import useAuth from 'hooks/useAuth'
 import useNativeCurrency from 'hooks/useNativeCurrency'
-import useTokenBalance, { useBSCCakeBalance } from 'hooks/useTokenBalance'
+import useTokenBalance, { useBSCCadinuBalance } from 'hooks/useTokenBalance'
 import { ChainLogo } from 'components/Logo/ChainLogo'
 
 import { getBlockExploreLink, getBlockExploreName } from 'utils'
@@ -54,7 +54,7 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ hasLowNativeBalance, onDismiss 
   const wBNBToken = WNATIVE[ChainId.BSC]
   const { balance: wNativeBalance, fetchStatus: wNativeFetchStatus } = useTokenBalance(wNativeToken?.address)
   const { balance: wBNBBalance, fetchStatus: wBNBFetchStatus } = useTokenBalance(wBNBToken?.address, true)
-  const { balance: cakeBalance, fetchStatus: cakeFetchStatus } = useBSCCakeBalance()
+  const { balance: cadinuBalance, fetchStatus: cadinuFetchStatus } = useBSCCadinuBalance()
   const [mobileTooltipShow, setMobileTooltipShow] = useState(false)
   const { logout } = useAuth()
 
@@ -198,15 +198,15 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ hasLowNativeBalance, onDismiss 
           </Flex>
         )}
         <Flex alignItems="center" justifyContent="space-between">
-          <Text color="textSubtle">{t('CAKE Balance')}</Text>
-          {cakeFetchStatus !== FetchStatus.Fetched ? (
+          <Text color="textSubtle">{t('CADINU Balance')}</Text>
+          {cadinuFetchStatus !== FetchStatus.Fetched ? (
             <Skeleton height="22px" width="60px" />
           ) : (
-            <Text>{formatBigInt(cakeBalance, 3)}</Text>
+            <Text>{formatBigInt(cadinuBalance, 3)}</Text>
           )}
         </Flex>
       </Box>
-      <CakeBenefitsCard onDismiss={onDismiss} />
+      {/* <CakeBenefitsCard onDismiss={onDismiss} /> */}
       <Button variant="secondary" width="100%" minHeight={48} onClick={handleLogout}>
         {t('Disconnect Wallet')}
       </Button>

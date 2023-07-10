@@ -63,7 +63,7 @@ const NextDrawCard = ({isSuccess, prizeAvailable}) => {
     currentLanguage: { locale },
   } = useTranslation()
   const { address: account } = useAccount()
-  const claimAddress = getClaimAddress()
+  // const claimAddress = getClaimAddress()
   const claimContract = getClaimContract()
   
   

@@ -4,7 +4,7 @@ import { bsc } from 'viem/chains'
 
 
 import styled, { keyframes } from 'styled-components'
-import {useAccount, useContractRead} from "wagmi";
+import {useAccount} from "wagmi";
 import { Box, Flex, Heading, Skeleton, Balance } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { TicketPurchaseCard } from '../svgs'
@@ -271,7 +271,7 @@ const Hero = ({disabled , setDisabled, setIsSuccess , isSuccess, maxReward}) => 
     }
 
   const [isClaimAvailable, setIsClaimAvailable] = useState(true)
-
+// eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(()=>{
       getTimeBetweenEachClaim().catch(console.error)
       getlastRewardTime().catch(console.error)

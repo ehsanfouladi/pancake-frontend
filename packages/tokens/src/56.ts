@@ -2641,4 +2641,14 @@ export const bscTokens = {
     'CADINU',
     'Canadian  Dog Inuit V2 Token',
     'https://cadinu.io',
-  ),}
+  ),
+  cbon: new ERC20Token(
+    ChainId.BSC,
+    '0x6e64fCF15Be3eB71C3d42AcF44D85bB119b2D98b',
+    18,
+    'CBON',
+    'Cadinu Bonus Token',
+    'https://cadinu.io',
+  ),
+
+}

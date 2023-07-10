@@ -10,6 +10,10 @@ import {
   CardProps,
   Heading,
   Message,
+  Button,
+  ButtonMenuItem,
+  ChevronDownIcon,
+  ChevronUpIcon,
 } from '@pancakeswap/uikit'
 import replaceBrowserHistory from '@pancakeswap/utils/replaceBrowserHistory'
 // import { AppBody } from 'components/App'
@@ -276,6 +280,7 @@ export default function Swap() {
     position: absolute;
     top: 50%;
     border-bottom: 2px solid;
+    border-color: black;
     width: 30vw;
     margin: 0 20px;
 }
@@ -285,17 +290,18 @@ export default function Swap() {
 .decorated > span:after{
     left: 100%;
 }`}</style>
-      <div
-        role="button"
+      <ButtonMenuItem
+        // role="button"
+        scale='sm'
+        variant='secondary'
         tabIndex={0}
-        onKeyDown={onShowButtonClick}
         onClick={onShowButtonClick}
-        style={{ cursor: 'pointer' }}
+        mb="15px"
       >
         <h2 className="decorated">
-          <span>{multiSwapShow ? 'Hide ' : 'Show '}Multi Swap</span>
+          <span>{!multiSwapShow ?<ChevronDownIcon color="text" width="12px" /> : <ChevronUpIcon color="text" width="12px" />} {multiSwapShow ? 'Hide ' : 'Show '}Multi Swap {!multiSwapShow ?<ChevronDownIcon color="text" width="12px" /> : <ChevronUpIcon color="text" width="12px" />}</span>
         </h2>
-      </div>
+      </ButtonMenuItem>
       {isDesktop ? (
         <>
           {multiSwapShow && (
@@ -310,7 +316,7 @@ export default function Swap() {
             <span style={multiSwapShow ? { display: 'block' } : { display: 'none' }}>{PancakeIframe()}</span>
           </Flex>
         </>
-      ) : (
+      ) : (multiSwapShow && (
         <Flex flexDirection={isDesktop ? 'row' : 'column'} justifyContent="space-between" minHeight="2500px">
           <StyledSwapContainer $isChartExpanded={isChartExpanded}>
             <StyledInputCurrencyWrapper>
@@ -319,7 +325,7 @@ export default function Swap() {
               {PancakeIframe()}
             </StyledInputCurrencyWrapper>
           </StyledSwapContainer>
-        </Flex>
+        </Flex>)
       )}
     </Page>
   )

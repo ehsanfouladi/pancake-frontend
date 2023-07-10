@@ -1,7 +1,5 @@
-import {useMemo, useState} from 'react'
-import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
-import {ChainId} from "@pancakeswap/sdk"
-import BigNumber from 'bignumber.js'
+import { useState} from 'react'
+
 import styled from 'styled-components'
 import {
   Card,
@@ -21,7 +19,6 @@ import {
 import { useAccount } from 'wagmi'
 import { LotteryStatus } from 'config/constants/types'
 import { useTranslation } from '@pancakeswap/localization'
-import {CADINU} from '@pancakeswap/tokens'
 
 import { useLottery } from 'state/lottery/hooks'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'

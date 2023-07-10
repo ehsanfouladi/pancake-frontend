@@ -63,7 +63,7 @@ const PreviousRoundCardFooter: React.FC<
   }
 
   const getPrizeBalances = () => {
-    console.log('prizeInBusd',getBalanceNumber(prizeInBusd));
+    // console.log('prizeInBusd',getBalanceNumber(prizeInBusd));
     
     return (
       <>
