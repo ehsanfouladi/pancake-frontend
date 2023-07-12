@@ -4,22 +4,22 @@ import {
   SwapIcon,
   SwapFillIcon,
   EarnFillIcon,
-  // PancakeProtectorIcon,
+  PancakeProtectorIcon,
   EarnIcon,
   TrophyIcon,
   TrophyFillIcon,
-  // NftIcon,
-  // NftFillIcon,
+  NftIcon,
+  NftFillIcon,
   MoreIcon,
   DropdownMenuItems,
   PlayCircleOutlineIcon,
 } from '@pancakeswap/uikit'
 import { ContextApi } from '@pancakeswap/localization'
 import { SUPPORTED_CHAIN_IDS as POOL_SUPPORTED_CHAINS } from '@pancakeswap/pools'
-// import { nftsBaseUrl } from 'views/Nft/market/constants'
-// import { getPerpetualUrl } from 'utils/getPerpetualUrl'
+import { nftsBaseUrl } from 'views/Nft/market/constants'
+import { getPerpetualUrl } from 'utils/getPerpetualUrl'
 import { SUPPORT_FARMS, SUPPORT_ONLY_BSC } from 'config/constants/supportChains'
-// import { NewIconButton } from 'views/BuyCrypto/components/NewIcon'
+import { NewIconButton } from 'views/BuyCrypto/components/NewIcon'
 
 export type ConfigMenuDropDownItemsType = DropdownMenuItems & { hideSubNav?: boolean }
 export type ConfigMenuItemsType = Omit<MenuItemsType, 'items'> & { hideSubNav?: boolean; image?: string } & {
@@ -92,10 +92,23 @@ const config: (
     },
     {
       label: t('Game'),
-      icon: PlayCircleOutlineIcon,
-      fillIcon: PlayCircleOutlineIcon,
-      href: 'https://cadinu.io/beta-games',
-      showItemsOnMobile: false,
+      icon: PancakeProtectorIcon,
+      hideSubNav: true,
+      items: [
+        {
+          label: t('Cadinu Games'),
+          href: 'https://cadinu.io/beta-games',
+          type: DropdownMenuItemType.EXTERNAL_LINK,
+          status: { text: t('New'), color: 'success' },
+        },
+      ],
+    },
+    {
+      label: t('Info'),
+      icon: NftIcon,
+      fillIcon: NftIcon,
+      href: 'https://coinmarketcap.com/currencies/canadian-inuit-dog-v2/',
+      showItemsOnMobile: true,
       items: [].map((item) => addMenuItemSupported(item, chainId)),
     },
     // {
@@ -116,11 +129,11 @@ const config: (
     //       href: '/pools',
     //       supportChainIds: POOL_SUPPORTED_CHAINS,
     //     },
-    //     // {
-    //     //   label: t('Liquid Staking'),
-    //     //   href: '/liquid-staking',
-    //     //   supportChainIds: POOL_SUPPORTED_CHAINS,
-    //     // },
+    //     {
+    //       label: t('Liquid Staking'),
+    //       href: '/liquid-staking',
+    //       supportChainIds: POOL_SUPPORTED_CHAINS,
+    //     },
     //   ].map((item) => addMenuItemSupported(item, chainId)),
     // },
     {
@@ -185,69 +198,57 @@ const config: (
     //     },
     //   ],
     // },
-    // {
-    //   label: t('Game'),
-    //   icon: PancakeProtectorIcon,
-    //   hideSubNav: true,
-    //   items: [
-    //     {
-    //       label: t('Pancake Protectors'),
-    //       href: 'https://protectors.pancakeswap.finance',
-    //       type: DropdownMenuItemType.EXTERNAL_LINK,
-    //       status: { text: t('New'), color: 'success' },
-    //     },
-    //   ],
-    // },
-    // {
-    //   label: '',
-    //   href: '/info',
-    //   icon: MoreIcon,
-    //   hideSubNav: true,
-    //   items: [
-    //     {
-    //       label: t('Info'),
-    //       href: '/info/v3',
-    //     },
-    //     {
-    //       label: t('IFO'),
-    //       href: '/ifo',
-    //       supportChainIds: SUPPORT_ONLY_BSC,
-    //       image: '/images/ifos/ifo-bunny.png',
-    //     },
-    //     {
-    //       label: t('Affiliate Program'),
-    //       href: '/affiliates-program',
-    //     },
-    //     {
-    //       label: t('Voting'),
-    //       href: '/voting',
-    //       supportChainIds: SUPPORT_ONLY_BSC,
-    //       image: '/images/voting/voting-bunny.png',
-    //     },
-    //     {
-    //       type: DropdownMenuItemType.DIVIDER,
-    //     },
-    //     {
-    //       label: t('Leaderboard'),
-    //       href: '/teams',
-    //       supportChainIds: SUPPORT_ONLY_BSC,
-    //       image: '/images/decorations/leaderboard.png',
-    //     },
-    //     {
-    //       type: DropdownMenuItemType.DIVIDER,
-    //     },
-    //     // {
-    //     //   label: t('Blog'),
-    //     //   href: 'https://blog.pancakeswap.finance',
-    //     //   type: DropdownMenuItemType.EXTERNAL_LINK,
-    //     // },
-    //     // {
-    //     //   label: t('Docs'),
-    //     //   href: 'https://docs.pancakeswap.finance',
-    //     //   type: DropdownMenuItemType.EXTERNAL_LINK,
-    //     // },
-    //   ].map((item) => addMenuItemSupported(item, chainId)),
-    // },
+
+    {
+      label: '',
+      href: '/info',
+      icon: MoreIcon,
+      hideSubNav: true,
+      items: [
+        //   {
+        //     label: t('Info'),
+        //     href: '/info/v3',
+        //   },
+        //   {
+        //     label: t('IFO'),
+        //     href: '/ifo',
+        //     supportChainIds: SUPPORT_ONLY_BSC,
+        //     image: '/images/ifos/ifo-bunny.png',
+        //   },
+        //   {
+        //     label: t('Affiliate Program'),
+        //     href: '/affiliates-program',
+        //   },
+        //   {
+        //     label: t('Voting'),
+        //     href: '/voting',
+        //     supportChainIds: SUPPORT_ONLY_BSC,
+        //     image: '/images/voting/voting-bunny.png',
+        //   },
+        //   {
+        //     type: DropdownMenuItemType.DIVIDER,
+        //   },
+        //   {
+        //     label: t('Leaderboard'),
+        //     href: '/teams',
+        //     supportChainIds: SUPPORT_ONLY_BSC,
+        //     image: '/images/decorations/leaderboard.png',
+        //   },
+        //   {
+        //     type: DropdownMenuItemType.DIVIDER,
+        //   },
+        //   {
+        //     label: t('Blog'),
+        //     href: 'https://blog.pancakeswap.finance',
+        //     type: DropdownMenuItemType.EXTERNAL_LINK,
+        //   },
+        //   {
+        //     label: t('Docs'),
+        //     href: 'https://docs.pancakeswap.finance',
+        //     type: DropdownMenuItemType.EXTERNAL_LINK,
+        //   },
+      ].map((item) => addMenuItemSupported(item, chainId)),
+    },
   ].map((item) => addMenuItemSupported(item, chainId))
 
 export default config
