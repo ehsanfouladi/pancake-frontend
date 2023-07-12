@@ -201,8 +201,9 @@ const config: (
 
     {
       label: '',
-      href: '/',
+      href: 'https://cadinu.io',
       icon: MoreIcon,
+      type: DropdownMenuItemType.EXTERNAL_LINK,
       hideSubNav: true,
       items: [
         //   {
