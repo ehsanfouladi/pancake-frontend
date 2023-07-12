@@ -201,7 +201,7 @@ const config: (
 
     {
       label: '',
-      href: '/info',
+      href: '/',
       icon: MoreIcon,
       hideSubNav: true,
       items: [
