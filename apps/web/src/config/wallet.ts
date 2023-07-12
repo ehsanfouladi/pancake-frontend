@@ -63,9 +63,9 @@ const walletsConfig = ({
         // && metaMaskConnector.ready
       },
       connectorId: ConnectorNames.MetaMask,
-      deepLink: 'https://metamask.app.link/dapp/www.cadinu.space/',
+      deepLink: 'https://metamask.app.link/dapp/apps.cadinu.io/',
       qrCode,
-      downloadLink: 'https://metamask.app.link/dapp/www.cadinu.space/',
+      downloadLink: 'https://metamask.app.link/dapp/apps.cadinu.io/',
     },
     {
       id: 'binance',
@@ -98,7 +98,7 @@ const walletsConfig = ({
       get installed() {
         return !!getTrustWalletProvider()
       },
-      deepLink: 'https://link.trustwallet.com/open_url?url=https://www.cadinu.space/',
+      deepLink: 'https://link.trustwallet.com/open_url?url=https://apps.cadinu.io/',
       downloadLink: 'https://chrome.google.com/webstore/detail/trust-wallet/egjidjbpglichdcondbcbdnbeeppgdph',
       guide: {
         desktop: 'https://trustwallet.com/browser-extension',
