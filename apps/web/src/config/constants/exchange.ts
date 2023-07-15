@@ -121,7 +121,7 @@ export const DEFAULT_INPUT_CURRENCY = 'BNB'
 // export const DEFAULT_OUTPUT_CURRENCY = '0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82'
 
 //  CADINU
-export const DEFAULT_OUTPUT_CURRENCY = '0x76e112203eF59D445452ef7556386dD2DF3Ed914'
+export const DEFAULT_OUTPUT_CURRENCY = '0x6e64fCF15Be3eB71C3d42AcF44D85bB119b2D98b'
 
 // Handler string is passed to Gelato to use PCS router
 export const GELATO_HANDLER = 'pancakeswap'

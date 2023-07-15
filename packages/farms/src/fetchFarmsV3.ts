@@ -31,6 +31,9 @@ export async function farmV3FetchFarms({
     (await fetch('https://farms-api.pancakeswap.com/price/cake')).json(),
     fetchV3Pools(farms, chainId, provider),
   ])
+  console.log('farms>>>', poolInfos, cakePrice, v3PoolData)
+
+  console.log('v3PoolData>>>', poolInfos)
 
   const lmPoolInfos = await fetchLmPools(
     v3PoolData.map((v3Pool) => (v3Pool[1] ? v3Pool[1] : null)).filter(Boolean) as Address[],
@@ -81,7 +84,7 @@ export async function farmV3FetchFarms({
 const masterchefV3Abi = [
   {
     inputs: [],
-    name: 'latestPeriodCakePerSecond',
+    name: 'latestPeriodCadinuPerSecond',
     outputs: [
       {
         internalType: 'uint256',
@@ -97,7 +100,7 @@ const masterchefV3Abi = [
     name: 'poolInfo',
     outputs: [
       { internalType: 'uint256', name: 'allocPoint', type: 'uint256' },
-      { internalType: 'contract IPancakeV3Pool', name: 'v3Pool', type: 'address' },
+      { internalType: 'contract ICadinuV3Pool', name: 'v3Pool', type: 'address' },
       { internalType: 'address', name: 'token0', type: 'address' },
       { internalType: 'address', name: 'token1', type: 'address' },
       { internalType: 'uint24', name: 'fee', type: 'uint24' },
@@ -134,9 +137,9 @@ export async function fetchMasterChefV3Data({
 }): Promise<{
   poolLength: bigint
   totalAllocPoint: bigint
-  latestPeriodCakePerSecond: bigint
+  latestPeriodCadinuPerSecond: bigint
 }> {
-  const [poolLength, totalAllocPoint, latestPeriodCakePerSecond] = await provider({ chainId }).multicall({
+  const [poolLength, totalAllocPoint, latestPeriodCadinuPerSecond] = await provider({ chainId }).multicall({
     contracts: [
       {
         address: masterChefAddress,
@@ -151,7 +154,7 @@ export async function fetchMasterChefV3Data({
       {
         address: masterChefAddress,
         abi: masterchefV3Abi,
-        functionName: 'latestPeriodCakePerSecond',
+        functionName: 'latestPeriodCadinuPerSecond',
       },
     ],
     allowFailure: false,
@@ -160,7 +163,7 @@ export async function fetchMasterChefV3Data({
   return {
     poolLength,
     totalAllocPoint,
-    latestPeriodCakePerSecond,
+    latestPeriodCadinuPerSecond,
   }
 }
 
@@ -207,6 +210,7 @@ const fetchPoolInfos = async (
       contracts: calls,
       allowFailure: false,
     })
+    console.log('masterChefMultiCallResult', masterChefMultiCallResult)
 
     let masterChefChunkedResultCounter = 0
     return calls.map((masterChefCall) => {
@@ -284,7 +288,7 @@ const v3PoolAbi = [
   {
     inputs: [],
     name: 'lmPool',
-    outputs: [{ internalType: 'contract IPancakeV3LmPool', name: '', type: 'address' }],
+    outputs: [{ internalType: 'contract ICadinuV3LmPool', name: '', type: 'address' }],
     stateMutability: 'view',
     type: 'function',
   },

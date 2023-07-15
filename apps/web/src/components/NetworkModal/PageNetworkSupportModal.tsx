@@ -51,9 +51,7 @@ export function PageNetworkSupportModal() {
           </Box>
         )}
         <Text small>
-          {t(
-            'Our Pools, Limit, Trading Competition, Prediction, Lottery and NFTs features are currently available only on BNB Chain! Come over and join the community in the fun!',
-          )}
+          {t('Our products are currently available only on BNB Chain! Come over and join the community in the fun!')}
         </Text>
         {canSwitch ? (
           <Button

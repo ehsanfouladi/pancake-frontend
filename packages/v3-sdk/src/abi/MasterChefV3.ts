@@ -402,7 +402,7 @@ export const masterChefV3ABI = [
   },
   {
     inputs: [],
-    name: 'latestPeriodCakePerSecond',
+    name: 'latestPeriodCadinuPerSecond',
     outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',

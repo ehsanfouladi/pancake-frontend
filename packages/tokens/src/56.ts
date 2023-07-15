@@ -2650,5 +2650,28 @@ export const bscTokens = {
     'Cadinu Bonus Token',
     'https://cadinu.io',
   ),
-
+  arcane: new ERC20Token(
+    ChainId.BSC,
+    '0xb6FB7B18751c63308F49D9c88c5e80542831F579',
+    18,
+    'ARCANE',
+    'ARCANE LOL',
+    'https://cadinu.io',
+  ),
+  test1: new ERC20Token(
+    ChainId.BSC,
+    '0xCbc31057eB634192Cb6ba5c9fea9972731609Efa',
+    18,
+    'TEST1',
+    'TEST1 LOL',
+    'https://cadinu.io',
+  ),
+  test2: new ERC20Token(
+    ChainId.BSC,
+    '0xA086C4d900457a0A8313F19eCd6a669989e83bDa',
+    18,
+    'TEST2',
+    'TEST2 LOL',
+    'https://cadinu.io',
+  ),
 }
