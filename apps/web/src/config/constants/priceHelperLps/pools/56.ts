@@ -10,6 +10,8 @@ const priceHelperLps: SerializedFarmConfig[] = [
    * Prices are then fetched for all farms (masterchef + priceHelperLps).
    * Before storing to redux, farms without a PID are filtered out.
    */
+
+  // TODO: Add CAdinu Wbnb if needed!
   {
     pid: null,
     token: bscTokens.sd,
