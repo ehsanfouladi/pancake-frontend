@@ -13,7 +13,7 @@ const config = (t) => [
     description: (
       <>
         {t(
-          'Different providers will support different currencies and payment methods in your region. Please refer to our',
+          'Different providers will support different currencies and payment methods in your region. Please refer to this',
         )}{' '}
         <LinkExternal
           style={{ display: 'inline-flex' }}
@@ -37,7 +37,7 @@ const config = (t) => [
     title: t('Where can find more information on the Buy Crypto feature?'),
     description: (
       <>
-        {t('Please refer to our documentation')}{' '}
+        {t('Please refer to this documentation')}{' '}
         <LinkExternal
           style={{ display: 'inline-flex' }}
           href="https://docs.pancakeswap.finance/products/buy-crypto"
@@ -53,7 +53,7 @@ const config = (t) => [
     description: (
       <>
         {t(
-          'Different providers will support different currencies and payment methods in your region. Please refer to our documentation or partners documentation (',
+          'Different providers will support different currencies and payment methods in your region. Please refer to this documentation or partners documentation (',
         )}{' '}
         <LinkExternal
           style={{ display: 'inline-flex' }}

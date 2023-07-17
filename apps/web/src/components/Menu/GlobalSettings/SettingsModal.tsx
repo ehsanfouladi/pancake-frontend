@@ -230,7 +230,7 @@ const SettingsModal: React.FC<React.PropsWithChildren<InjectedModalProps>> = ({ 
               <Flex alignItems="center">
                 <Text>{t('Flippy sounds')}</Text>
                 <QuestionHelper
-                  text={t('Fun sounds to make a truly immersive pancake-flipping trading experience')}
+                  text={t('Fun sounds to make a truly immersive cadinu-flipping trading experience')}
                   placement="top"
                   ml="4px"
                 />
@@ -309,7 +309,7 @@ function RoutingSettings() {
           <PreTitle mb="24px">{t('Liquidity source')}</PreTitle>
           <Flex justifyContent="space-between" alignItems="center" mb="24px">
             <Flex alignItems="center">
-              <Text>PancakeSwap V3</Text>
+              <Text>Cadinu-Swap V3</Text>
               <QuestionHelper
                 text={
                   <Flex>
@@ -333,7 +333,7 @@ function RoutingSettings() {
           </Flex>
           <Flex justifyContent="space-between" alignItems="center" mb="24px">
             <Flex alignItems="center">
-              <Text>PancakeSwap V2</Text>
+              <Text>Cadinu-Swap V2</Text>
               <QuestionHelper
                 text={
                   <Flex flexDirection="column">
@@ -358,7 +358,7 @@ function RoutingSettings() {
           </Flex>
           <Flex justifyContent="space-between" alignItems="center" mb="24px">
             <Flex alignItems="center">
-              <Text>PancakeSwap {t('StableSwap')}</Text>
+              <Text>Cadinu-Swap {t('StableSwap')}</Text>
               <QuestionHelper
                 text={
                   <Flex flexDirection="column">
@@ -385,7 +385,7 @@ function RoutingSettings() {
           </Flex>
           <Flex justifyContent="space-between" alignItems="center" mb="24px">
             <Flex alignItems="center">
-              <Text>{`PancakeSwap ${t('MM Linked Pool')}`}</Text>
+              <Text>{`Cadinu-Swap ${t('MM Linked Pool')}`}</Text>
               <QuestionHelper
                 text={
                   <Flex flexDirection="column">

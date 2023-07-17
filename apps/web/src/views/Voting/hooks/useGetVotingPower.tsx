@@ -16,10 +16,10 @@ interface State {
   ifoPoolBalance?: number
   total: number
   lockedCakeBalance?: number
-  lockedEndTime?: number
+  lockedEndTime?: number,
 }
 
-const useGetVotingPower = (block?: number): State & { isLoading: boolean; isError: boolean } => {
+const useGetVotingPower = (block?: number, proposalId?:String): State & { isLoading: boolean; isError: boolean } => {
   const { address: account } = useAccount()
   const { data, status, error } = useSWRImmutable(account ? [account, block, 'votingPower'] : null, async () => {
     const blockNumber = block ? BigInt(block) : await publicClient({ chainId: ChainId.BSC }).getBlockNumber()
@@ -29,26 +29,27 @@ const useGetVotingPower = (block?: number): State & { isLoading: boolean; isErro
       .map(({ contractAddress }) => contractAddress)
 
     const {
-      cakeBalance,
-      cakeBnbLpBalance,
-      cakePoolBalance,
-      total,
-      poolsBalance,
-      cakeVaultBalance,
-      ifoPoolBalance,
-      lockedCakeBalance,
-      lockedEndTime,
-    } = await getVotingPower(account, poolAddresses, blockNumber)
+      // cakeBalance,
+      // cakeBnbLpBalance,
+      // cakePoolBalance,
+      // total,
+      // poolsBalance,
+      // cakeVaultBalance,
+      // ifoPoolBalance,
+      // lockedCakeBalance,
+      // lockedEndTime,
+      total
+    } = await getVotingPower(account, proposalId)
     return {
-      cakeBalance,
-      cakeBnbLpBalance,
-      cakePoolBalance,
-      poolsBalance,
-      cakeVaultBalance,
-      ifoPoolBalance,
+      // cakeBalance,
+      // cakeBnbLpBalance,
+      // cakePoolBalance,
+      // poolsBalance,
+      // cakeVaultBalance,
+      // ifoPoolBalance,
       total,
-      lockedCakeBalance,
-      lockedEndTime,
+      // lockedCakeBalance,
+      // lockedEndTime,
     }
   })
   if (error) console.error(error)

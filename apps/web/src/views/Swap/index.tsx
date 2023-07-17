@@ -305,7 +305,7 @@ export default function Swap() {
       {isDesktop ? (
         <>
           {multiSwapShow && (
-            <Message variant="danger" mb="15px">
+            <Message variant="warning" mb="15px">
               In order for it to work properly, please accept the conditions of the exchange each time you select a
               pair.
             </Message>

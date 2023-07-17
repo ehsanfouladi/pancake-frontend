@@ -202,7 +202,7 @@ export default function PoolListPage() {
     <Page>
       {isMigrationSupported && (
         <Flex m="24px 0" maxWidth="854px">
-          <FarmV3MigrationBanner />
+          {/* <FarmV3MigrationBanner /> */}
         </Flex>
       )}
       <AppBody
@@ -242,9 +242,9 @@ export default function PoolListPage() {
               >
                 <ButtonMenuItem>{t('All')}</ButtonMenuItem>
                 <ButtonMenuItem>V3</ButtonMenuItem>
-                <ButtonMenuItem display={isStableSwapSupported(chainId) ? 'inline-flex' : 'none'}>
-                  {t('StableSwap')}
-                </ButtonMenuItem>
+                {/* <ButtonMenuItem display={isStableSwapSupported(chainId) ? 'inline-flex' : 'none'}>
+                  {t('StableSwap')} */}
+                {/* </ButtonMenuItem> */}
                 <ButtonMenuItem>V2</ButtonMenuItem>
               </ButtonMenu>
             </>

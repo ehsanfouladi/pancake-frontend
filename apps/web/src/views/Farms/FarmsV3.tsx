@@ -437,7 +437,7 @@ const Farms: React.FC<React.PropsWithChildren> = ({ children }) => {
       <PageHeader>
         <Flex flexDirection="column">
           <Box m="24px 0">
-            <FarmV3MigrationBanner />
+            {/* <FarmV3MigrationBanner /> */}
           </Box>
           <FarmFlexWrapper justifyContent="space-between">
             <Box style={{ flex: '1 1 100%' }}>
@@ -447,21 +447,21 @@ const Farms: React.FC<React.PropsWithChildren> = ({ children }) => {
               <FarmH2 scale="lg" color="text">
                 {t('Stake LP tokens to earn.')}
               </FarmH2>
-              <NextLinkFromReactRouter to="/farms/auction" prefetch={false}>
+              {/* <NextLinkFromReactRouter to="/farms/auction" prefetch={false}>
                 <Button p="0" variant="text">
                   <Text color="primary" bold fontSize="16px" mr="4px">
                     {t('Community Auctions')}
                   </Text>
                   <ArrowForwardIcon color="primary" />
                 </Button>
-              </NextLinkFromReactRouter>
+              </NextLinkFromReactRouter> */}
             </Box>
 
-            {(chainId === ChainId.BSC || chainId === ChainId.BSC_TESTNET) && (
+            {/* {(chainId === ChainId.BSC || chainId === ChainId.BSC_TESTNET) && (
               <Box>
                 <BCakeBoosterCard />
               </Box>
-            )}
+            )} */}
           </FarmFlexWrapper>
         </Flex>
       </PageHeader>
@@ -539,7 +539,7 @@ const Farms: React.FC<React.PropsWithChildren> = ({ children }) => {
             </LabelWrapper>
           </FilterContainer>
         </ControlContainer>
-        {isInactive && (
+        {/* {isInactive && (
           <FinishedTextContainer>
             <Text fontSize={['16px', null, '20px']} color="failure" pr="4px">
               {t("Don't see the farm you are staking?")}
@@ -555,7 +555,7 @@ const Farms: React.FC<React.PropsWithChildren> = ({ children }) => {
               </FinishedTextLink>
             </Flex>
           </FinishedTextContainer>
-        )}
+        )} */}
 
         {!isLoading && // FarmV3 initial data will be slower, wait for it loads for now to prevent showing the v2 farm from config and then v3 pop up later
           (viewMode === ViewMode.TABLE ? (
@@ -569,7 +569,7 @@ const Farms: React.FC<React.PropsWithChildren> = ({ children }) => {
           </Flex>
         )}
         {chosenFarms.length > 0 && <div ref={observerRef} />}
-        <StyledImage src="/images/decorations/3dpan.png" alt="Cadinu illustration" width={120} height={103} />
+        <StyledImage src="/images/decorations/lottery.png" alt="Cadinu illustration" width={102} height={125} />
         <V3SubgraphHealthIndicator />
       </Page>
     </FarmsV3Context.Provider>

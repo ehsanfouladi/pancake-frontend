@@ -27,7 +27,7 @@ const SWAP_INFO_BY_CHAIN = {
   [ChainId.BSC]: {
     v2: INFO_CLIENT,
     stable: STABLESWAP_SUBGRAPH_CLIENT,
-    // v3: V3_SUBGRAPH_URLS[ChainId.BSC],
+    v3: V3_SUBGRAPH_URLS[ChainId.BSC],
   },
   [ChainId.ETHEREUM]: {
     v2: INFO_CLIENT_ETH,

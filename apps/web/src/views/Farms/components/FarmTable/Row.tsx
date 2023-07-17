@@ -165,7 +165,7 @@ const Row: React.FunctionComponent<React.PropsWithChildren<RowPropsWithLoading>>
                         )
                       ) : null}
                       {props.type === 'v3' && <V3FeeTag feeAmount={props.details.feeAmount} scale="sm" />}
-                      {props?.details?.boosted && props.type === 'v3' ? <BoostedTag scale="sm" /> : null}
+                      {/* {props?.details?.boosted && props.type === 'v3' ? <BoostedTag scale="sm" /> : null} */}
                     </CellInner>
                   </td>
                 )

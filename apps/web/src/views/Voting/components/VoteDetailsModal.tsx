@@ -13,15 +13,17 @@ const VoteDetailsModal: React.FC<React.PropsWithChildren<VoteDetailsModalProps>>
   const {
     isLoading,
     total,
-    cakeBalance,
-    cakeVaultBalance,
-    cakePoolBalance,
-    poolsBalance,
-    cakeBnbLpBalance,
-    ifoPoolBalance,
-    lockedCakeBalance,
-    lockedEndTime,
+    // cakeBalance,
+    // cakeVaultBalance,
+    // cakePoolBalance,
+    // poolsBalance,
+    // cakeBnbLpBalance,
+    // ifoPoolBalance,
+    // lockedCakeBalance,
+    // lockedEndTime,
   } = useGetVotingPower(block)
+  console.log("VP>>>>>>>>>>>>>>>>>>", total);
+  
   const { theme } = useTheme()
 
   const handleDismiss = () => {
@@ -37,18 +39,18 @@ const VoteDetailsModal: React.FC<React.PropsWithChildren<VoteDetailsModalProps>>
           </Flex>
         ) : (
           <>
-            <DetailsView
-              total={total}
-              cakeBalance={cakeBalance}
-              cakeVaultBalance={cakeVaultBalance}
-              cakePoolBalance={cakePoolBalance}
-              poolsBalance={poolsBalance}
-              ifoPoolBalance={ifoPoolBalance}
-              cakeBnbLpBalance={cakeBnbLpBalance}
-              lockedCakeBalance={lockedCakeBalance}
-              lockedEndTime={lockedEndTime}
-              block={block}
-            />
+            <h2>
+              {total}
+              {/* // cakeBalance={cakeBalance}
+              // cakeVaultBalance={cakeVaultBalance}
+              // cakePoolBalance={cakePoolBalance}
+              // poolsBalance={poolsBalance}
+              // ifoPoolBalance={ifoPoolBalance}
+              // cakeBnbLpBalance={cakeBnbLpBalance}
+              // lockedCakeBalance={lockedCakeBalance}
+              // lockedEndTime={lockedEndTime}
+              // block={block} */}
+            </h2>
             <Button variant="secondary" onClick={onDismiss} width="100%" mt="16px">
               {t('Close')}
             </Button>

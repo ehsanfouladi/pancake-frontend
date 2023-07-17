@@ -13,6 +13,7 @@ import { convertSharesToCake } from 'views/Pools/helpers'
 import { ADMINS, PANCAKE_SPACE, SNAPSHOT_VERSION } from './config'
 import { getScores } from './getScores'
 import * as strategies from './strategies'
+import { GraphQLClient, gql } from 'graphql-request'
 
 export const isCoreProposal = (proposal: Proposal) => {
   return ADMINS.includes(proposal.author.toLowerCase())
@@ -45,7 +46,7 @@ export interface Message {
 }
 
 const STRATEGIES = [
-  { name: 'cake', params: { symbol: 'CAKE', address: bscTokens.cake.address, decimals: 18, max: 300 } },
+  { name: 'erc20-balance-of', params: { symbol: 'CBON', address: bscTokens.cbon.address, decimals: 18, max: 300 } },
 ]
 const NETWORK = '56'
 
@@ -119,98 +120,135 @@ const nodeRealProvider = createPublicClient({
   chain: bsc,
 })
 
-export const getVotingPower = async (
-  account: Address,
-  poolAddresses: Address[],
-  blockNumber?: bigint,
-): Promise<GetVotingPowerType> => {
-  if (blockNumber && (blockNumber >= VOTING_POWER_BLOCK.v0 || blockNumber >= VOTING_POWER_BLOCK.v1)) {
-    const cakeVaultAddress = getCakeVaultAddress()
-    const version = blockNumber >= VOTING_POWER_BLOCK.v1 ? 'v1' : 'v0'
+// export const getVotingPower = async (
+//   account: Address,
+//   poolAddresses: Address[],
+//   blockNumber?: bigint,
+// ): Promise<GetVotingPowerType> => {
+//   if (blockNumber && (blockNumber >= VOTING_POWER_BLOCK.v0 || blockNumber >= VOTING_POWER_BLOCK.v1)) {
+//     const cakeVaultAddress = getCakeVaultAddress()
+//     const version = blockNumber >= VOTING_POWER_BLOCK.v1 ? 'v1' : 'v0'
 
-    const [
-      pricePerShare,
-      [
-        shares,
-        _lastDepositedTime,
-        _cakeAtLastUserAction,
-        _lastUserActionTime,
-        _lockStartTime,
-        lockEndTime,
-        userBoostedShare,
-      ],
-    ] = await nodeRealProvider.multicall({
-      contracts: [
-        {
-          address: cakeVaultAddress,
-          abi: cakeVaultV2ABI,
-          functionName: 'getPricePerFullShare',
-        },
-        {
-          address: cakeVaultAddress,
-          abi: cakeVaultV2ABI,
-          functionName: 'userInfo',
-          args: [account],
-        },
-      ],
-      blockNumber,
-      allowFailure: false,
-    })
+//     const [
+//       pricePerShare,
+//       [
+//         shares,
+//         _lastDepositedTime,
+//         _cakeAtLastUserAction,
+//         _lastUserActionTime,
+//         _lockStartTime,
+//         lockEndTime,
+//         userBoostedShare,
+//       ],
+//     ] = await nodeRealProvider.multicall({
+//       contracts: [
+//         {
+//           address: cakeVaultAddress,
+//           abi: cakeVaultV2ABI,
+//           functionName: 'getPricePerFullShare',
+//         },
+//         {
+//           address: cakeVaultAddress,
+//           abi: cakeVaultV2ABI,
+//           functionName: 'userInfo',
+//           args: [account],
+//         },
+//       ],
+//       blockNumber,
+//       allowFailure: false,
+//     })
 
-    const [cakeBalance, cakeBnbLpBalance, cakePoolBalance, cakeVaultBalance, poolsBalance, total, ifoPoolBalance] =
-      await getScores(
-        PANCAKE_SPACE,
-        [
-          strategies.cakeBalanceStrategy(version),
-          strategies.cakeBnbLpBalanceStrategy(version),
-          strategies.cakePoolBalanceStrategy(version),
-          strategies.cakeVaultBalanceStrategy(version),
-          strategies.createPoolsBalanceStrategy(poolAddresses, version),
-          strategies.createTotalStrategy(poolAddresses, version),
-          strategies.ifoPoolBalanceStrategy,
-        ],
-        NETWORK,
-        [account],
-        Number(blockNumber),
-      )
+//     const [cakeBalance, cakeBnbLpBalance, cakePoolBalance, cakeVaultBalance, poolsBalance, total, ifoPoolBalance
+//     ] =
+//       await getScores(
+//         PANCAKE_SPACE,
+//         [
+//           strategies.cakeBalanceStrategy(version),
+//           strategies.cakeBnbLpBalanceStrategy(version),
+//           strategies.cakePoolBalanceStrategy(version),
+//           strategies.cakeVaultBalanceStrategy(version),
+//           strategies.createPoolsBalanceStrategy(poolAddresses, version),
+//           strategies.createTotalStrategy(poolAddresses, version),
+//           strategies.ifoPoolBalanceStrategy,
+//         ],
+//         NETWORK,
+//         [account],
+//         Number(blockNumber),
+//       )
 
-    const lockedCakeBalance = convertSharesToCake(
-      new BigNumber(shares.toString()),
-      new BigNumber(pricePerShare.toString()),
-      18,
-      3,
-      new BigNumber(userBoostedShare.toString()),
-    )?.cakeAsNumberBalance
+//     const lockedCakeBalance = convertSharesToCake(
+//       new BigNumber(shares.toString()),
+//       new BigNumber(pricePerShare.toString()),
+//       18,
+//       3,
+//       new BigNumber(userBoostedShare.toString()),
+//     )?.cakeAsNumberBalance
 
-    const versionOne =
-      version === 'v0'
-        ? {
-            ifoPoolBalance: ifoPoolBalance[account] ? ifoPoolBalance[account] : 0,
-          }
-        : {}
+//     const versionOne =
+//       version === 'v0'
+//         ? {
+//             ifoPoolBalance: ifoPoolBalance[account] ? ifoPoolBalance[account] : 0,
+//           }
+//         : {}
 
-    return {
-      ...versionOne,
+//     return {
+//       ...versionOne,
+//       voter: account,
+//       total: total[account] ? total[account] : 0,
+//       poolsBalance: poolsBalance[account] ? poolsBalance[account] : 0,
+//       cakeBalance: cakeBalance[account] ? cakeBalance[account] : 0,
+//       cakePoolBalance: cakePoolBalance[account] ? cakePoolBalance[account] : 0,
+//       cakeBnbLpBalance: cakeBnbLpBalance[account] ? cakeBnbLpBalance[account] : 0,
+//       cakeVaultBalance: cakeVaultBalance[account] ? cakeVaultBalance[account] : 0,
+//       lockedCakeBalance: Number.isFinite(lockedCakeBalance) ? lockedCakeBalance : 0,
+//       lockedEndTime: lockEndTime ? +lockEndTime.toString() : 0,
+//     }
+//   }
+
+//   const [total] = await getScores(PANCAKE_SPACE, STRATEGIES, NETWORK, [account], Number(blockNumber))
+
+//   return {
+//     total: total[account] ? total[account] : 0,
+//     voter: account,
+//   }
+// }
+
+// export const getVotingPower = async (
+//     account: Address,
+//     poolAddresses: Address[],
+//     blockNumber?: bigint,)=>{
+//   const [total] = await getScores(PANCAKE_SPACE, STRATEGIES, NETWORK, [account], Number(blockNumber))
+// }
+
+const scoreApiUrl = new GraphQLClient('https://hub.snapshot.org/graphql', {
+  fetch,
+})
+
+export const getVotingPower = async (account: Address, proposalId : String) =>{
+  console.log("proposalIdGETVP", proposalId);
+  
+  const data = await scoreApiUrl.request(
+  gql`
+  query {
+    vp (
+      voter: "${account}"
+      space: "${PANCAKE_SPACE}"
+      proposal: "${proposalId ? proposalId : ''}"
+    ) {
+      vp
+      vp_by_strategy
+      vp_state
+    } 
+  }
+  `,
+)
+
+return {
+      total: data ? data.vp.vp : 0,
       voter: account,
-      total: total[account] ? total[account] : 0,
-      poolsBalance: poolsBalance[account] ? poolsBalance[account] : 0,
-      cakeBalance: cakeBalance[account] ? cakeBalance[account] : 0,
-      cakePoolBalance: cakePoolBalance[account] ? cakePoolBalance[account] : 0,
-      cakeBnbLpBalance: cakeBnbLpBalance[account] ? cakeBnbLpBalance[account] : 0,
-      cakeVaultBalance: cakeVaultBalance[account] ? cakeVaultBalance[account] : 0,
-      lockedCakeBalance: Number.isFinite(lockedCakeBalance) ? lockedCakeBalance : 0,
-      lockedEndTime: lockEndTime ? +lockEndTime.toString() : 0,
     }
-  }
-
-  const [total] = await getScores(PANCAKE_SPACE, STRATEGIES, NETWORK, [account], Number(blockNumber))
-
-  return {
-    total: total[account] ? total[account] : 0,
-    voter: account,
-  }
 }
-
+ 
 export const calculateVoteResults = (votes: Vote[]): { [key: string]: Vote[] } => {
   if (votes) {
     const result = groupBy(votes, (vote) => vote.proposal.choices[vote.choice - 1])
@@ -239,11 +277,13 @@ export const getTotalFromVotes = (votes: Vote[]) => {
  */
 export async function getVotingPowerByCakeStrategy(voters: string[], blockNumber: number) {
   const strategyResponse = await getScores(PANCAKE_SPACE, STRATEGIES, NETWORK, voters, blockNumber)
+  console.log("{strategyResponse", strategyResponse);
+  
 
   const result = fromPairs(
     voters.map((voter) => {
       const defaultTotal = strategyResponse.reduce(
-        (total, scoreList) => total + (scoreList[voter] ? scoreList[voter] : 0),
+        (total: any, scoreList: { [x: string]: any }) => total + (scoreList[voter] ? scoreList[voter] : 0),
         0,
       )
 

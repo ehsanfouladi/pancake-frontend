@@ -39,7 +39,10 @@ const CastVoteModal: React.FC<React.PropsWithChildren<CastVoteModalProps>> = ({
     ifoPoolBalance,
     lockedCakeBalance,
     lockedEndTime,
-  } = useGetVotingPower(block)
+  } = useGetVotingPower(block, proposalId.toString())
+
+  console.log("proposalId>>", proposalId);
+  
 
   const isStartView = view === ConfirmVoteView.MAIN
   const handleBack = isStartView ? null : () => setView(ConfirmVoteView.MAIN)

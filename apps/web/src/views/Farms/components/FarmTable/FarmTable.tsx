@@ -153,7 +153,7 @@ const FarmTable: React.FC<React.PropsWithChildren<ITableProps>> = ({ farms, cake
       const { token, quoteToken } = farm
       const tokenAddress = token.address
       const quoteTokenAddress = quoteToken.address
-      const lpLabel = farm.lpSymbol && farm.lpSymbol.replace(/pancake/gi, '')
+      const lpLabel = farm.lpSymbol && farm.lpSymbol.replace(/cadinu/gi, '')
       const lowercaseQuery = latinise(typeof query?.search === 'string' ? query.search.toLowerCase() : '')
       const initialActivity = latinise(lpLabel?.toLowerCase()) === lowercaseQuery
 

@@ -9,8 +9,9 @@ const Spinner: React.FC<React.PropsWithChildren<SpinnerProps>> = ({ size = 128 }
       <Image
         width={size}
         height={size * 1.197}
-        src="https://assets.pancakeswap.finance/web/pancake-3d-spinner-v2.gif"
-        alt="pancake-3d-spinner"
+        // src="https://assets.pancakeswap.finance/web/pancake-3d-spinner-v2.gif"
+        src="/Spinner.gif"
+        alt="cadinu-spinner"
       />
     </Box>
   );

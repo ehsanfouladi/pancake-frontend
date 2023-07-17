@@ -146,7 +146,7 @@ const FarmV3MigrationBanner = () => {
           </Flex>
         </S.LeftWrapper>
         <RightWrapper>
-          {isMobile || isTablet ? (
+          {/* {isMobile || isTablet ? (
             <Image
               src={farmV3MigrationMobileBunny}
               alt="farmV3MigrationMobileBunny"
@@ -156,7 +156,7 @@ const FarmV3MigrationBanner = () => {
             />
           ) : (
             <Image src={farmV3MigrationBunny} alt="farmV3MigrationBunny" width={300} height={230} unoptimized />
-          )}
+          )} */}
         </RightWrapper>
       </S.Inner>
     </S.Wrapper>
