@@ -45,7 +45,7 @@ const BCakeCalculator: React.FC<React.PropsWithChildren<BCakeCalculatorProps>> =
   targetInputBalance,
   earningTokenPrice,
   initialState,
-  stakingTokenSymbol = 'CAKE',
+  stakingTokenSymbol = 'CBON',
   lpTokenStakedAmount,
   setBCakeMultiplier,
 }) => {
@@ -96,7 +96,7 @@ const BCakeCalculator: React.FC<React.PropsWithChildren<BCakeCalculatorProps>> =
     targetRef: myBalanceTargetRef,
     tooltip: myBalanceTooltip,
     tooltipVisible: myBalanceTooltipVisible,
-  } = useTooltip(t('Boost multiplier calculation does not include profit from CAKE staking pool'), {
+  } = useTooltip(t('Boost multiplier calculation does not include profit from CBON staking pool'), {
     placement: 'top-end',
     tooltipOffset: [20, 10],
   })
@@ -113,7 +113,7 @@ const BCakeCalculator: React.FC<React.PropsWithChildren<BCakeCalculatorProps>> =
         <>
           <BCakeBlock style={{ marginTop: 24 }}>
             <Text color="secondary" bold fontSize="12px" textTransform="uppercase">
-              {t('Cake locked')}
+              {t('CBON locked')}
             </Text>
             <BalanceInput
               inputProps={{

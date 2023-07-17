@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { useTranslation } from '@pancakeswap/localization'
 import Link from 'next/link'
 import Container from 'components/Layout/Container'
-import DesktopImage from './DesktopImage'
+// import DesktopImage from './DesktopImage'
 
 const StyledFooter = styled(Box)`
   background: ${({ theme }) => theme.colors.gradientBubblegum};
@@ -35,7 +35,7 @@ const Footer = () => {
               <Button startIcon={<ProposalIcon color="currentColor" width="24px" />}>{t('Make a Proposal')}</Button>
             </Link>
           </Box>
-          <DesktopImage src="/images/voting/voting-bunny.png" width={173} height={234} />
+          {/* <DesktopImage src="/images/voting/voting-bunny.png" width={173} height={234} /> */}
         </Flex>
       </Container>
     </StyledFooter>
