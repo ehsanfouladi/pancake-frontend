@@ -1,19 +1,19 @@
 import { createPublicClient, http } from 'viem'
 import { bscTokens } from '@pancakeswap/tokens'
-import BigNumber from 'bignumber.js'
+// import BigNumber from 'bignumber.js'
 import { SNAPSHOT_HUB_API } from 'config/constants/endpoints'
 import fromPairs from 'lodash/fromPairs'
 import groupBy from 'lodash/groupBy'
 import { Proposal, ProposalState, ProposalType, Vote } from 'state/types'
 import { bsc } from 'viem/chains'
-import { cakeVaultV2ABI } from '@pancakeswap/pools'
+// import { cakeVaultV2ABI } from '@pancakeswap/pools'
 import { Address } from 'wagmi'
-import { getCakeVaultAddress } from 'utils/addressHelpers'
-import { convertSharesToCake } from 'views/Pools/helpers'
+// import { getCakeVaultAddress } from 'utils/addressHelpers'
+// import { convertSharesToCake } from 'views/Pools/helpers'
+import { GraphQLClient, gql } from 'graphql-request'
 import { ADMINS, PANCAKE_SPACE, SNAPSHOT_VERSION } from './config'
 import { getScores } from './getScores'
-import * as strategies from './strategies'
-import { GraphQLClient, gql } from 'graphql-request'
+// import * as strategies from './strategies'
 
 export const isCoreProposal = (proposal: Proposal) => {
   return ADMINS.includes(proposal.author.toLowerCase())
@@ -224,7 +224,7 @@ const scoreApiUrl = new GraphQLClient('https://hub.snapshot.org/graphql', {
   fetch,
 })
 
-export const getVotingPower = async (account: Address, proposalId : String) =>{
+export const getVotingPower = async (account: Address, proposalId ) =>{
   console.log("proposalIdGETVP", proposalId);
   
   const data = await scoreApiUrl.request(
@@ -233,7 +233,7 @@ export const getVotingPower = async (account: Address, proposalId : String) =>{
     vp (
       voter: "${account}"
       space: "${PANCAKE_SPACE}"
-      proposal: "${proposalId ? proposalId : ''}"
+      proposal: "${proposalId || '' }"
     ) {
       vp
       vp_by_strategy

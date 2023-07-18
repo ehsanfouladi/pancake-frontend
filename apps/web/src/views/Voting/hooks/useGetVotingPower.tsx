@@ -19,7 +19,7 @@ interface State {
   lockedEndTime?: number,
 }
 
-const useGetVotingPower = (block?: number, proposalId?:String): State & { isLoading: boolean; isError: boolean } => {
+const useGetVotingPower = (block?: number, proposalId?): State & { isLoading: boolean; isError: boolean } => {
   const { address: account } = useAccount()
   const { data, status, error } = useSWRImmutable(account ? [account, block, 'votingPower'] : null, async () => {
     const blockNumber = block ? BigInt(block) : await publicClient({ chainId: ChainId.BSC }).getBlockNumber()
