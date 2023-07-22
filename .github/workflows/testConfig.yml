@@ -8,7 +8,7 @@ on:
       - 'packages/farms/constants/**'
   push:
     branches:
-      - develop
+      - final
 
 jobs:
   test:
