@@ -20,8 +20,6 @@ export const useCadinuPrice = () => {
     ['cadinu-usd-price'],
     async () => {
       const cadinu = await (await fetch('https://3rdparty-apis.coinmarketcap.com/v1/cryptocurrency/widget?id=22984&convert_id=1,2781,2781')).json()
-      console.log("PRICE>>>>>>>>>>>>", cadinu.data["22984"].quote["2781"].price);
-      
       return cadinu.data["22984"].quote["2781"].price as string
     },
     {

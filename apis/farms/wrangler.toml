@@ -1,6 +1,6 @@
 compatibility_date = "2022-05-20"
 kv_namespaces = [
-  {binding = "FARMS", id = "d8c9b05a13174eb59574425beceb2574", preview_id = "4ac09dba355c44fa858a67a22a9a63f1"},
+  {binding = "FARMS", id = "31478f36696d4c1294eb412a2adef108", preview_id = "31478f36696d4c1294eb412a2adef108"},
 ]
 main = "src/index.ts"
 name = "farms-dev"
@@ -13,7 +13,7 @@ crons = []
 
 [env.production]
 kv_namespaces = [
-  {binding = "FARMS", id = "e67e7b9d27784f64a1c65af5e8eb1509"},
+  {binding = "FARMS", id = "31478f36696d4c1294eb412a2adef108"},
 ]
 name = "farms"
 node_compat = true

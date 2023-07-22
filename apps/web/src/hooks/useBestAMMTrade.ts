@@ -88,6 +88,8 @@ export function useBestAMMTrade({ type = 'quoter', ...params }: useBestAMMTradeO
     autoRevalidate: quoterAutoRevalidate,
   })
 
+  console.log("bestTradeFromQuoterApi",bestTradeFromQuoterApi);
+  
   return useMemo(
     () => (isQuoterAPIEnabled ? bestTradeFromQuoterApi : bestTradeFromQuoterWorker),
     [bestTradeFromQuoterApi, bestTradeFromQuoterWorker, isQuoterAPIEnabled],
@@ -171,6 +173,8 @@ function bestTradeHookFactory({
         poolTypes,
       ],
       queryFn: async () => {
+        console.log("QUERYYYYY>>>>>");
+        
         if (!amount || !amount.currency || !currency || !deferQuotient) {
           return null
         }
@@ -180,6 +184,8 @@ function bestTradeHookFactory({
         } -> ${currency.symbol}, tradeType ${tradeType}`
         SmartRouter.log(label)
         SmartRouter.metric(label, candidatePools)
+
+        console.log("QUERYYYYY>>>>>FAIL", label);
         const res = await getBestTrade(deferAmount, currency, tradeType, {
           gasPriceWei:
             typeof gasPrice === 'bigint'
@@ -192,6 +198,8 @@ function bestTradeHookFactory({
           allowedPoolTypes: poolTypes,
           quoterOptimization,
         })
+        console.log("RESSSSSSPONSE", res);
+        
         if (res) {
           SmartRouter.metric(
             label,
@@ -216,6 +224,7 @@ function bestTradeHookFactory({
       staleTime: autoRevalidate ? POOLS_NORMAL_REVALIDATE[amount?.currency?.chainId] : 0,
       refetchInterval: autoRevalidate && POOLS_NORMAL_REVALIDATE[amount?.currency?.chainId],
     })
+    console.log("TRADE>>>>>", trade);
 
     useEffect(() => {
       if (!keepPreviousDataRef.current && trade) {

@@ -20,10 +20,14 @@ export const MOONPAY_SIGN_URL = 'https://pcs-on-ramp-api.com'
  */
 export const GRAPH_API_PREDICTION_V1 = 'https://api.thegraph.com/subgraphs/name/pancakeswap/prediction'
 
-export const INFO_CLIENT = 'https://proxy-worker.pancake-swap.workers.dev/bsc-exchange'
-export const V3_BSC_INFO_CLIENT = `https://open-platform.nodereal.io/${
-  process.env.NEXT_PUBLIC_NODE_REAL_API_INFO || process.env.NEXT_PUBLIC_NODE_REAL_API_ETH
-}/pancakeswap-v3/graphql`
+// export const INFO_CLIENT = 'https://proxy-worker.pancake-swap.workers.dev/bsc-exchange'
+export const INFO_CLIENT = 'https://api.thegraph.com/subgraphs/name/cadinu/exchange'
+// export const V3_BSC_INFO_CLIENT = `https://open-platform.nodereal.io/${
+//   process.env.NEXT_PUBLIC_NODE_REAL_API_INFO || process.env.NEXT_PUBLIC_NODE_REAL_API_ETH
+// }/pancakeswap-v3/graphql`
+
+export const V3_BSC_INFO_CLIENT = `https://api.thegraph.com/subgraphs/name/cadinu/exchange-v3-bsc`
+
 
 export const INFO_CLIENT_ETH = 'https://api.thegraph.com/subgraphs/name/pancakeswap/exhange-eth'
 export const BLOCKS_CLIENT = 'https://api.thegraph.com/subgraphs/name/pancakeswap/blocks'
@@ -58,7 +62,8 @@ export const ASSET_CDN = 'https://assets.pancakeswap.finance'
 export const V3_SUBGRAPH_URLS = {
   [ChainId.ETHEREUM]: 'https://api.thegraph.com/subgraphs/name/pancakeswap/exchange-v3-eth',
   [ChainId.GOERLI]: 'https://api.thegraph.com/subgraphs/name/pancakeswap/exchange-v3-goerli',
-  [ChainId.BSC]: `https://api.thegraph.com/subgraphs/name/cadinu/exchange-v3-lite`,
+  // [ChainId.BSC]: `https://api.thegraph.com/subgraphs/name/cadinu/exchange-v3-lite`,
+  [ChainId.BSC]: `https://api.thegraph.com/subgraphs/name/cadinu/exchange-v3-bsc`,
   [ChainId.BSC_TESTNET]: 'https://api.thegraph.com/subgraphs/name/pancakeswap/exchange-v3-chapel',
   // TODO: new chains
   [ChainId.ARBITRUM_ONE]: 'https://thegraph.com/hosted-service/subgraph/chef-jojo/exchange-v3-arb',

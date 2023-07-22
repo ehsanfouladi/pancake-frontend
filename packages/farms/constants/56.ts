@@ -41,11 +41,18 @@ export const farmsV3 = defineFarmV3Configs([
   //   lpAddress: '0x36696169C63e42cd08ce11f5deeBbCeBae652050',
   //   feeAmount: FeeAmount.LOW,
   // },
+  // {
+  //   pid: 1,
+  //   token0: bscTokens.test1,
+  //   token1: bscTokens.test2,
+  //   lpAddress: '0x307901b515798ED8F89F6696B49E13e99A6381a4',
+  //   feeAmount: FeeAmount.LOW,
+  // },
   {
-    pid: 1,
-    token0: bscTokens.test1,
-    token1: bscTokens.test2,
-    lpAddress: '0x307901b515798ED8F89F6696B49E13e99A6381a4',
+    pid: 2,
+    token0: bscTokens.usdt,
+    token1: bscTokens.wbnb,
+    lpAddress: '0x007a6d6504af2a41b1ccb5eb52b6c62b2e55572a',
     feeAmount: FeeAmount.LOW,
   },
   // keep those farms on top

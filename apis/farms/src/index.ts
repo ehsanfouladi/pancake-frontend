@@ -26,7 +26,7 @@ BigNumber.config({
 
 const router = Router()
 
-router.get('/price/cake', async (_, event) => {
+router.get('/price/cadinu', async (_, event) => {
   const cache = caches.default
   const cacheResponse = await cache.match(event.request)
   let response

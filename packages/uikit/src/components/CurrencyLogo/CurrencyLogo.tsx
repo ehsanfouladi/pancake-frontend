@@ -5,7 +5,8 @@ import styled from "styled-components";
 import { useHttpLocations } from "@pancakeswap/hooks";
 
 import { TokenLogo } from "../TokenLogo";
-import { BinanceIcon } from "../Svg";
+import { BinanceIcon, LogoRoundIcon } from "../Svg";
+
 import { getCurrencyLogoUrls } from "./utils";
 
 const StyledLogo = styled(TokenLogo)<{ size: string }>`
@@ -27,6 +28,7 @@ export function CurrencyLogo({
 
   const srcs: string[] = useMemo(() => {
     if (currency?.isNative) return [];
+    if (currency?.symbol === 'CADINU') return[];
 
     if (currency?.isToken) {
       const logoUrls = getCurrencyLogoUrls(currency);
@@ -51,6 +53,17 @@ export function CurrencyLogo({
         style={style}
       />
     );
+  }
+
+  if (currency?.symbol === 'CADINU'){
+    return(
+    <StyledLogo
+    size={size}
+    srcs={[`https://s2.coinmarketcap.com/static/img/coins/64x64/22984.png`]}
+    width={size}
+    style={style}
+  />)
+    // <LogoRoundIcon width={size} style={style} />;
   }
 
   return <StyledLogo size={size} srcs={srcs} alt={`${currency?.symbol ?? "token"} logo`} style={style} />;

@@ -126,7 +126,9 @@ const CurrencyInputPanel = memo(function CurrencyInputPanel({
   const token = pair ? pair.liquidityToken : currency?.isToken ? currency : null
   const tokenAddress = token ? isAddress(token.address) : null
 
-  const amountInDollar = useStablecoinPriceAmount(
+  const amountInDollar = 
+  
+  useStablecoinPriceAmount(
     showUSDPrice ? currency : undefined,
     Number.isFinite(+value) ? +value : undefined,
     {
@@ -134,6 +136,7 @@ const CurrencyInputPanel = memo(function CurrencyInputPanel({
       enabled: Number.isFinite(+value),
     },
   )
+
 
   const [onPresentCurrencyModal] = useModal(
     <CurrencySearchModal

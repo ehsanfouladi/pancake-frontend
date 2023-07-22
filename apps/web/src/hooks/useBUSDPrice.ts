@@ -12,13 +12,13 @@ import {
   TradeType,
 } from '@pancakeswap/sdk'
 import { FAST_INTERVAL } from 'config/constants'
-import { BUSD, CAKE, USDC, STABLE_COIN } from '@pancakeswap/tokens'
+import { BUSD, CAKE,CADINU, USDC, STABLE_COIN } from '@pancakeswap/tokens'
 import { useMemo } from 'react'
 import useSWR from 'swr'
 import useSWRImmutable from 'swr/immutable'
 import getLpAddress from 'utils/getLpAddress'
 import { multiplyPriceByAmount } from 'utils/prices'
-import { useCakePriceAsBN } from '@pancakeswap/utils/useCakePrice'
+import { useCadinuPriceAsBN } from '@pancakeswap/utils/useCakePrice'
 import { getFullDecimalMultiplier } from '@pancakeswap/utils/getFullDecimalMultiplier'
 import { computeTradePriceBreakdown } from 'views/Swap/V3Swap/utils/exchange'
 import { isChainTestnet } from 'utils/wagmi'
@@ -41,17 +41,19 @@ export function useStablecoinPrice(
   currency?: Currency,
   config: UseStablecoinPriceConfig = DEFAULT_CONFIG,
 ): Price<Currency, Currency> | undefined {
+
   const { chainId: currentChainId } = useActiveChainId()
   const chainId = currency?.chainId
   const { enabled, hideIfPriceImpactTooHigh } = { ...DEFAULT_CONFIG, ...config }
 
-  const cakePrice = useCakePriceAsBN()
+  const cakePrice = useCadinuPriceAsBN()
   const stableCoin = chainId in ChainId ? STABLE_COIN[chainId as ChainId] : undefined
-  const isCake = currency && CAKE[chainId] && currency.wrapped.equals(CAKE[chainId])
+  const isCadinu = currency && CADINU[chainId] && currency.wrapped.equals(CADINU[chainId])
 
   const isStableCoin = currency && stableCoin && currency.wrapped.equals(stableCoin)
+  
 
-  const shouldEnabled = currency && stableCoin && enabled && currentChainId === chainId && !isCake && !isStableCoin
+  const shouldEnabled = currency && stableCoin && enabled && currentChainId === chainId && !isCadinu && !isStableCoin
 
   const enableLlama = currency?.chainId === ChainId.ETHEREUM && shouldEnabled
 
@@ -59,6 +61,7 @@ export function useStablecoinPrice(
   const { data: priceFromLlama, isLoading } = useSWRImmutable<string>(
     currency && enableLlama && ['fiat-price-ethereum', currency],
     async () => {
+      
       const address = currency?.isToken ? currency.address : WETH9[ChainId.ETHEREUM]?.address
       return fetch(`https://coins.llama.fi/prices/current/ethereum:${address}`) // <3 llama
         .then((res) => res.json())
@@ -87,39 +90,49 @@ export function useStablecoinPrice(
     autoRevalidate: false,
     type: 'api',
   })
-
+  
   const price = useMemo(() => {
-    if (!currency || !stableCoin || !enabled) {
-      return undefined
-    }
+    // if (!currency || !stableCoin || !enabled) {
+    //   return undefined
+    // }
+    
+    
+    if (isCadinu && cakePrice) {
+      console.log("isCadinu>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 
-    if (isCake && cakePrice) {
       return new Price(
         currency,
         stableCoin,
         1 * 10 ** currency.decimals,
         getFullDecimalMultiplier(stableCoin.decimals).times(cakePrice.toFixed(stableCoin.decimals)).toString(),
-      )
-    }
-
+        )
+      }
+      
+      
     // handle stable coin
     if (isStableCoin) {
+      console.log("isStableCoin>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+
       return new Price(stableCoin, stableCoin, '1', '1')
     }
 
-    if (priceFromLlama && enableLlama) {
-      return new Price(
-        currency,
-        stableCoin,
-        1 * 10 ** currency.decimals,
-        getFullDecimalMultiplier(stableCoin.decimals)
-          .times(parseFloat(priceFromLlama).toFixed(stableCoin.decimals))
-          .toString(),
-      )
-    }
+    // if (priceFromLlama && enableLlama) {
+    //   console.log("priceFromLlama>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+
+    //   return new Price(
+    //     currency,
+    //     stableCoin,
+    //     1 * 10 ** currency.decimals,
+    //     getFullDecimalMultiplier(stableCoin.decimals)
+    //       .times(parseFloat(priceFromLlama).toFixed(stableCoin.decimals))
+    //       .toString(),
+    //   )
+    // }
 
     if (trade) {
+      console.log("TRADE^^^^^^^^^^^^^^^^^^^^^^^^");
       const { inputAmount, outputAmount } = trade
+      
 
       // if price impact is too high, don't show price
       if (hideIfPriceImpactTooHigh) {
@@ -138,7 +151,7 @@ export function useStablecoinPrice(
     currency,
     stableCoin,
     enabled,
-    isCake,
+    isCadinu,
     cakePrice,
     isStableCoin,
     priceFromLlama,
@@ -146,6 +159,7 @@ export function useStablecoinPrice(
     trade,
     hideIfPriceImpactTooHigh,
   ])
+console.log("FINAL>>>>>>>>>>>>>>>>>>>>>>>>>>>>", price);
 
   return price
 }
@@ -284,7 +298,8 @@ export const useStablecoinPriceAmount = (
   config?: UseStablecoinPriceConfig,
 ): number | undefined => {
   const stablePrice = useStablecoinPrice(currency, { enabled: !!currency, ...config })
-
+  console.log("<<<<<<<<<<<<<<<<stablePrice>>>>>>>>>>>>>>>>>", stablePrice);
+  
   if (amount) {
     if (stablePrice) {
       return multiplyPriceByAmount(stablePrice, amount)
@@ -314,7 +329,7 @@ export const useCakeBusdPrice = (
   const { chainId } = useActiveChainId()
   const isTestnet = !forceMainnet && isChainTestnet(chainId)
   // Return bsc testnet cake if chain is testnet
-  const cake: Token = isTestnet ? CAKE[ChainId.BSC_TESTNET] : CAKE[ChainId.BSC]
+  const cake: Token = isTestnet ? CADINU[ChainId.BSC_TESTNET] : CADINU[ChainId.BSC]
   return usePriceByPairs(BUSD[cake.chainId], cake)
 }
 
