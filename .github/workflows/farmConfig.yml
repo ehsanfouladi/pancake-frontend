@@ -2,7 +2,7 @@ name: Farm Config
 on:
   push:
     branches:
-      - develop
+      - final
     paths:
       - 'packages/farms/constants/**'
       - 'packages/tokens/**'
