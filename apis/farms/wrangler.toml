@@ -3,7 +3,7 @@ kv_namespaces = [
   {binding = "FARMS", id = "31478f36696d4c1294eb412a2adef108", preview_id = "31478f36696d4c1294eb412a2adef108"},
 ]
 main = "src/index.ts"
-name = "farms-dev"
+name = "cadinu-swap"
 node_compat = true
 [vars]
 FORCE_UPDATE_KEY = "force"
