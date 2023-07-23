@@ -189,7 +189,7 @@ const config = {
       },
       {
         source: '/api/v3/:chainId/farms/liquidity/:address',
-        destination: 'https://farms-api.pancakeswap.com/v3/:chainId/liquidity/:address',
+        destination: 'https://farms.cadinu.io/v3/:chainId/liquidity/:address',
         permanent: false,
       },
       {

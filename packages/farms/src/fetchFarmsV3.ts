@@ -28,7 +28,7 @@ export async function farmV3FetchFarms({
 }) {
   const [poolInfos, cakePrice, v3PoolData] = await Promise.all([
     fetchPoolInfos(farms, chainId, provider, masterChefAddress),
-    (await fetch('https://farms-api.pancakeswap.com/price/cake')).json(),
+    (await fetch('https://farms.cadinu.io/price/cadinu')).json(),
     fetchV3Pools(farms, chainId, provider),
   ])
   console.log('farms>>>', poolInfos, cakePrice, v3PoolData)

@@ -94,7 +94,7 @@ const initialState: PoolsState = {
 }
 
 export const fetchCakePoolPublicDataAsync = () => async (dispatch) => {
-  const cakePrice = await (await fetch('https://farms-api.pancakeswap.com/price/cake')).json()
+  const cakePrice = await (await fetch('https://farms.cadinu.io/price/cadinu')).json()
   const stakingTokenPrice = cakePrice.price
 
   const earningTokenPrice = cakePrice.price
