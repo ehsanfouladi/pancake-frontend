@@ -74,6 +74,8 @@ const ApyButton: React.FC<React.PropsWithChildren<ApyButtonProps>> = ({
     ? boostMultiplierFromSC
     : boosterMultiplierFromFE
   const boostMultiplierDisplay = boostMultiplier.toLocaleString(undefined, { maximumFractionDigits: 3 })
+  // console.log("apyButton", cakePrice);
+  
   const [onPresentApyModal] = useModal(
     <RoiCalculatorModal
       account={account}

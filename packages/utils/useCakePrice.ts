@@ -9,8 +9,21 @@ export const useCakePrice = () => {
   return useSWRImmutable(
     ['cake-usd-price'],
     async () => {
-      const cake = await (await fetch('https://farms.cadinu.io/price/cadinu')).json()
+      const cake = await (await fetch('https://farms.cadinu.io/price/cake')).json()
       return cake.price as string
+    },
+    {
+      refreshInterval: 1_000 * 10,
+    },
+  )
+}
+
+export const useCbonPrice = () => {
+  return useSWRImmutable(
+    ['cbon-usd-price'],
+    async () => {
+      const cbon = await (await fetch('https://farms.cadinu.io/price/cbon')).json()
+      return cbon.price as string
     },
     {
       refreshInterval: 1_000 * 10,
@@ -127,7 +140,7 @@ export const useCakePriceAsBN = () => {
 
 export const useCadinuPriceAsBN = () => {
   const { data } = useSWRImmutable(
-    ['cake-usd-price-bn'],
+    ['cadinu-usd-price-bn'],
     async () => {
       const cadinu = await (await fetch('https://farms.pancakeswap.com/price/cadinu')).json()
       return new BigNumber(cadinu.price)
@@ -167,9 +180,9 @@ export const useCadinuPriceAsBN = () => {
 
 export const useCbonPriceAsBN = () => {
   const { data } = useSWRImmutable(
-    ['cake-usd-price-bn'],
+    ['cbon-usd-price-bn'],
     async () => {
-      const cbon = await (await fetch('https://farms.pancakeswap.com/price/cbon')).json()
+      const cbon = await (await fetch('https://farms.cadinu.io/price/cbon')).json()
       return new BigNumber(cbon.price)
     },
     {

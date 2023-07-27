@@ -112,6 +112,7 @@ export function RoiCalculator({
   onApply,
   ...props
 }: RoiCalculatorProps) {
+  
   const { isMobile } = useMatchBreakpoints();
   const { t } = useTranslation();
   const stringDepositAmount = useMemo(() => String(depositAmountInUsd), [depositAmountInUsd]);
@@ -121,7 +122,8 @@ export function RoiCalculator({
   const [compoundIndex, setCompoundIndex] = useState(3);
   const [invertBase, setInvertBase] = useState(false);
   const onSwitchBaseCurrency = useCallback(() => setInvertBase(!invertBase), [invertBase]);
-
+  
+  
   const { currencyA, currencyB, balanceA, balanceB, currencyAUsdPrice, currencyBUsdPrice } = useMemo(
     () =>
       invertBase
@@ -480,7 +482,7 @@ export function RoiCalculator({
           sqrtRatioX96={sqrtRatioX96}
           isFarm={farmingRewardsEnabled}
           cakeReward={originalCakeReward}
-          cakePrice={farmingRewardsEnabled ? props.cakePrice : undefined}
+          cbonPrice={farmingRewardsEnabled ? props.cakePrice : undefined}
           setEditCakePrice={setEditCakePrice}
         />
         <AnimatedArrow state={{}} />

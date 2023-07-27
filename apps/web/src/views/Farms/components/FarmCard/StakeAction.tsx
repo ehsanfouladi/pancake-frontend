@@ -6,7 +6,7 @@ import BCakeCalculator from 'views/Farms/components/YieldBooster/components/BCak
 import { useCallback, useContext, useState, useMemo } from 'react'
 import styled from 'styled-components'
 import { useRouter } from 'next/router'
-import { usePriceCakeUSD, useFarmFromPid } from 'state/farms/hooks'
+import { useFarmFromPid, usePriceCbonUSD } from 'state/farms/hooks'
 import { useAppDispatch } from 'state'
 import { ChainId, WNATIVE, NATIVE } from '@pancakeswap/sdk'
 import { SendTransactionResult } from 'wagmi/actions'
@@ -72,7 +72,7 @@ const StakeAction: React.FC<React.PropsWithChildren<FarmCardActionsProps>> = ({
   const { account, chainId } = useAccountActiveChain()
   const native = useNativeCurrency()
   const { tokenBalance, stakedBalance, allowance } = userData
-  const cakePrice = usePriceCakeUSD()
+  const cakePrice = usePriceCbonUSD()
   const router = useRouter()
   const { lpTokenStakedAmount } = useFarmFromPid(pid)
   const { toastSuccess } = useToast()

@@ -8,7 +8,7 @@ import { useAppDispatch } from 'state'
 import { fetchFarmUserDataAsync } from 'state/farms'
 
 import { useCallback } from 'react'
-import { usePriceCakeUSD } from 'state/farms/hooks'
+import { usePriceCakeUSD, usePriceCbonUSD } from 'state/farms/hooks'
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import { SendTransactionResult } from 'wagmi/actions'
 import { getBalanceAmount } from '@pancakeswap/utils/formatBalance'
@@ -65,7 +65,7 @@ export const HarvestAction: React.FunctionComponent<React.PropsWithChildren<Harv
   const { toastSuccess } = useToast()
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
   const earningsBigNumber = new BigNumber(userData?.earnings)
-  const cakePrice = usePriceCakeUSD()
+  const cakePrice = usePriceCbonUSD()
   let earnings = BIG_ZERO
   let earningsBusd = 0
   let displayBalance = userDataReady ? earnings.toFixed(5, BigNumber.ROUND_DOWN) : <Skeleton width={60} />

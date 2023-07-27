@@ -31,9 +31,7 @@ export async function farmV3FetchFarms({
     (await fetch('https://farms.cadinu.io/price/cadinu')).json(),
     fetchV3Pools(farms, chainId, provider),
   ])
-  console.log('farms>>>', poolInfos, cakePrice, v3PoolData)
-
-  console.log('v3PoolData>>>', poolInfos)
+  
 
   const lmPoolInfos = await fetchLmPools(
     v3PoolData.map((v3Pool) => (v3Pool[1] ? v3Pool[1] : null)).filter(Boolean) as Address[],

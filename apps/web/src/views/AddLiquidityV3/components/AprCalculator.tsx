@@ -78,8 +78,8 @@ export function AprCalculator({
   const [isOpen, setOpen] = useState(false)
   const [priceSpan, setPriceSpan] = useState(0)
   const { data: farm } = useFarm({ currencyA: baseCurrency, currencyB: quoteCurrency, feeAmount })
-  const cakePrice = useCakePriceAsBN()
-  const cbonPrice = useCbonPriceAsBN()
+  const cakePrice = useCbonPriceAsBN()
+  // const cbonPrice = useCbonPriceAsBN()
 
   const formState = useV3FormState()
 

@@ -21,6 +21,7 @@ export function RoiCalculatorModal({
   ...rest
 }: RoiCalculatorProps & ModalV2Props) {
   const { t } = useTranslation();
+  
 
   return (
     <ModalV2 onDismiss={onDismiss} isOpen={isOpen} closeOnOverlayClick={closeOnOverlayClick}>

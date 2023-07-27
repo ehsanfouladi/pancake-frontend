@@ -2,8 +2,9 @@ import { useTranslation } from "@pancakeswap/localization";
 import { useCallback, useEffect, useState, useMemo, memo } from "react";
 import { Currency, CurrencyAmount, ONE_HUNDRED_PERCENT, ZERO_PERCENT } from "@pancakeswap/sdk";
 import { FeeCalculator, encodeSqrtRatioX96 } from "@pancakeswap/v3-sdk";
+import { useCbonPrice, useCbonPriceAsBN } from '../../../../../packages/utils/useCakePrice'
 import styled from "styled-components";
-import { CBON } from "@pancakeswap/tokens";
+import { CAKE, CBON } from "@pancakeswap/tokens";
 
 import { Section } from "./Section";
 import { Box, Row, AutoColumn, Toggle, RowBetween, DoubleCurrencyLogo, Message } from "../../components";
@@ -20,6 +21,8 @@ import {
 import { floatToPercent, toToken0Price } from "./utils";
 import { TwoColumns } from "./TwoColumns";
 import { EditableAssets } from "./EditableAssets";
+import BigNumber from 'bignumber.js';
+import { log } from 'console';
 
 const Container = styled(Box)`
   background: ${({ theme }) => theme.colors.background};
@@ -38,16 +41,17 @@ interface Props {
   lpReward?: number;
   cakeReward?: number;
   isFarm?: boolean;
-  cakePrice?: string;
-  setEditCakePrice: (cakePrice: number) => void;
+  cbonPrice?: string;
+  setEditCakePrice: (cbonPrice: number) => void;
 }
 
-const getCakeAssetsByReward = (chainId: number, cakeRewardAmount = 0, cakePrice: string) => {
+
+const getCakeAssetsByReward = (chainId: number, cakeRewardAmount = 0, cbonPrice: string) => {
   return {
     currency: CBON[chainId as keyof typeof CBON],
     amount: cakeRewardAmount,
-    price: cakePrice,
-    value: Number.isFinite(cakeRewardAmount) ? +cakeRewardAmount * +cakePrice : Infinity,
+    price: cbonPrice,
+    value: Number.isFinite(cakeRewardAmount) ? +cakeRewardAmount * +cbonPrice : Infinity,
     key: "CAKE_ASSET_BY_APY",
   };
 };
@@ -63,9 +67,15 @@ export const ImpermanentLossCalculator = memo(function ImpermanentLossCalculator
   lpReward = 0,
   cakeReward = 0,
   isFarm,
-  cakePrice = "100",
+  cbonPrice = "0",
   setEditCakePrice,
 }: Props) {
+
+cbonPrice = useCbonPriceAsBN().toString()
+// const cbon = getCbonPrice()
+// console.log(">>>>>>>>",Number(cbon).toString());
+
+  
   const { t } = useTranslation();
   const [on, setOn] = useState(false);
   const currencyA = amountA?.currency;
@@ -92,11 +102,11 @@ export const ImpermanentLossCalculator = memo(function ImpermanentLossCalculator
         : undefined,
     [valueA, currencyA, valueB, currencyB, currencyAUsdPrice, currencyBUsdPrice]
   );
-  console.log("cakePrice", cakePrice);
+  console.log("cbonPrice ImpLossCalc", cbonPrice);
   
   const cakeRewardAmount = useMemo(
-    () => (Number.isFinite(cakeReward) ? +cakeReward / +cakePrice : Infinity),
-    [cakeReward, cakePrice]
+    () => (Number.isFinite(cakeReward) ? +cakeReward / +cbonPrice : Infinity),
+    [cakeReward, cbonPrice]
   );
   const liquidity = useMemo(
     () =>
@@ -109,15 +119,16 @@ export const ImpermanentLossCalculator = memo(function ImpermanentLossCalculator
       FeeCalculator.getLiquidityByAmountsAndPrice({ amountA, amountB, tickUpper, tickLower, sqrtRatioX96 }),
     [amountA, amountB, tickUpper, tickLower, sqrtRatioX96]
   );
-
+  
+  
   const exitAssets = useMemo<Asset[] | undefined>(() => {
-    if (assets && isFarm && currencyA && currencyA.chainId in CBON && cakePrice) {
+    if (assets && isFarm && currencyA && currencyA.chainId in CBON && cbonPrice) {
       const cakePriceToUse =
-        assets.find((a) => a.currency.equals(CBON[currencyA.chainId as keyof typeof CBON]))?.price ?? cakePrice;
+        assets.find((a) => a.currency.equals(CBON[currencyA.chainId as keyof typeof CBON]))?.price ?? cbonPrice;
       return [...assets, getCakeAssetsByReward(currencyA.chainId, cakeRewardAmount, cakePriceToUse)];
     }
     return assets;
-  }, [assets, cakeRewardAmount, cakePrice, currencyA, isFarm]);
+  }, [assets, cakeRewardAmount, cbonPrice, currencyA, isFarm]);
 
   const [entry, setEntry] = useState<Asset[] | undefined>(assets);
   const [exit, setExit] = useState<Asset[] | undefined>(exitAssets);

@@ -13,7 +13,7 @@ import { farmsV3ConfigChainMap } from '@pancakeswap/farms/constants/v3'
 import { TvlMap, fetchCommonTokenUSDValue } from '@pancakeswap/farms/src/fetchFarmsV3'
 import { ChainId } from '@pancakeswap/sdk'
 import { deserializeToken } from '@pancakeswap/token-lists'
-import { useCakePriceAsBN } from '@pancakeswap/utils/useCakePrice'
+import { useCakePriceAsBN, useCbonPriceAsBN } from '@pancakeswap/utils/useCakePrice'
 import { bCakeFarmBoosterV3ABI } from 'config/abi/bCakeFarmBoosterV3'
 import { FAST_INTERVAL } from 'config/constants'
 import { FARMS_API } from 'config/constants/endpoints'
@@ -106,7 +106,7 @@ export const useFarmsV3 = ({ mockApr = false }: UseFarmsOptions = {}) => {
 
   const farmV3 = useFarmsV3Public()
 
-  const cakePrice = useCakePriceAsBN()
+  const cakePrice = useCbonPriceAsBN()
 
   const { data } = useSWR<FarmsV3Response<FarmV3DataWithPriceTVL>>(
     [chainId, 'cake-apr-tvl', farmV3.data],

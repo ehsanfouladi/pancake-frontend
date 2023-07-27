@@ -107,6 +107,7 @@ const DepositModal: React.FC<React.PropsWithChildren<DepositModalProps>> = ({
     apr,
     earningTokenPrice: cakePrice.toNumber(),
   });
+  
 
   const annualRoi = cakePrice.times(interestBreakdown[3]);
   const annualRoiAsNumber = annualRoi.toNumber();
@@ -143,7 +144,7 @@ const DepositModal: React.FC<React.PropsWithChildren<DepositModalProps>> = ({
     },
     [fullBalanceNumber, decimals, lpPrice]
   );
-
+    
   if (showRoiCalculator) {
     return (
       <ModalV2 isOpen={showRoiCalculator}>
