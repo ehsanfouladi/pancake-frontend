@@ -12,13 +12,13 @@ import {
   TradeType,
 } from '@pancakeswap/sdk'
 import { FAST_INTERVAL } from 'config/constants'
-import { BUSD, CAKE,CADINU, USDC, STABLE_COIN } from '@pancakeswap/tokens'
+import { BUSD, CAKE,CADINU, USDC, STABLE_COIN, CBON } from '@pancakeswap/tokens'
 import { useMemo } from 'react'
 import useSWR from 'swr'
 import useSWRImmutable from 'swr/immutable'
 import getLpAddress from 'utils/getLpAddress'
 import { multiplyPriceByAmount } from 'utils/prices'
-import { useCadinuPriceAsBN } from '@pancakeswap/utils/useCakePrice'
+import { useCadinuPriceAsBN, useCbonPriceAsBN } from '@pancakeswap/utils/useCakePrice'
 import { getFullDecimalMultiplier } from '@pancakeswap/utils/getFullDecimalMultiplier'
 import { computeTradePriceBreakdown } from 'views/Swap/V3Swap/utils/exchange'
 import { isChainTestnet } from 'utils/wagmi'
@@ -47,8 +47,12 @@ export function useStablecoinPrice(
   const { enabled, hideIfPriceImpactTooHigh } = { ...DEFAULT_CONFIG, ...config }
 
   const cakePrice = useCadinuPriceAsBN()
+  const cadinuPrice = useCadinuPriceAsBN()
+  const cbonPrice = useCbonPriceAsBN()
   const stableCoin = chainId in ChainId ? STABLE_COIN[chainId as ChainId] : undefined
   const isCadinu = currency && CADINU[chainId] && currency.wrapped.equals(CADINU[chainId])
+  const isCake = currency && CAKE[chainId] && currency.wrapped.equals(CAKE[chainId])
+  const isCbon = currency && CBON[chainId] && currency.wrapped.equals(CBON[chainId])
 
   const isStableCoin = currency && stableCoin && currency.wrapped.equals(stableCoin)
   
@@ -97,22 +101,38 @@ export function useStablecoinPrice(
     // }
     
     
-    if (isCadinu && cakePrice) {
-      console.log("isCadinu>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+    if (isCadinu && cadinuPrice) {
 
       return new Price(
         currency,
         stableCoin,
         1 * 10 ** currency.decimals,
-        getFullDecimalMultiplier(stableCoin.decimals).times(cakePrice.toFixed(stableCoin.decimals)).toString(),
+        getFullDecimalMultiplier(stableCoin.decimals).times(cadinuPrice.toFixed(stableCoin.decimals)).toString(),
         )
       }
-      
+    
+      if (isCake && cakePrice) {
+
+        return new Price(
+          currency,
+          stableCoin,
+          1 * 10 ** currency.decimals,
+          getFullDecimalMultiplier(stableCoin.decimals).times(cakePrice.toFixed(stableCoin.decimals)).toString(),
+          )
+        }
+
+        if (isCbon && cbonPrice) {
+
+          return new Price(
+            currency,
+            stableCoin,
+            1 * 10 ** currency.decimals,
+            getFullDecimalMultiplier(stableCoin.decimals).times(cbonPrice.toFixed(stableCoin.decimals)).toString(),
+            )
+          }
       
     // handle stable coin
     if (isStableCoin) {
-      console.log("isStableCoin>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-
       return new Price(stableCoin, stableCoin, '1', '1')
     }
 
@@ -130,19 +150,14 @@ export function useStablecoinPrice(
     // }
 
     if (trade) {
-      console.log("TRADE^^^^^^^^^^^^^^^^^^^^^^^^");
       const { inputAmount, outputAmount } = trade
-      
-
       // if price impact is too high, don't show price
       if (hideIfPriceImpactTooHigh) {
         const { priceImpactWithoutFee } = computeTradePriceBreakdown(trade)
-
         if (!priceImpactWithoutFee || warningSeverity(priceImpactWithoutFee) > 2) {
           return undefined
         }
       }
-
       return new Price(currency, stableCoin, inputAmount.quotient, outputAmount.quotient)
     }
 

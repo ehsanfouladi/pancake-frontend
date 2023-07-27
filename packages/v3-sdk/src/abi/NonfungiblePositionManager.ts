@@ -295,7 +295,7 @@ export const nonfungiblePositionManagerABI = [
       { internalType: 'uint256', name: 'amount1Owed', type: 'uint256' },
       { internalType: 'bytes', name: 'data', type: 'bytes' },
     ],
-    name: 'pancakeV3MintCallback',
+    name: 'cadinuV3MintCallback',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',

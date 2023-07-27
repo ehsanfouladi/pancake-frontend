@@ -310,7 +310,7 @@ export const swapRouterABI = [
         type: 'bytes',
       },
     ],
-    name: 'pancakeV3SwapCallback',
+    name: 'cadinuV3SwapCallback',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',

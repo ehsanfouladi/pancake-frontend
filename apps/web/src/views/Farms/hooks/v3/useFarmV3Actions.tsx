@@ -82,12 +82,17 @@ const useFarmV3Actions = ({
     onDone,
   ])
 
+  
+  
+
   const onStake = useCallback(async () => {
     const { calldata, value } = NonfungiblePositionManager.safeTransferFromParameters({
       tokenId,
       recipient: masterChefV3Address,
       sender: account,
     })
+
+      
 
     const txn = {
       to: nftPositionManagerAddress,
@@ -96,17 +101,21 @@ const useFarmV3Actions = ({
       account,
       chain: signer?.chain,
     }
+    
 
     const resp = await fetchWithCatchTxError(() =>
       publicClient.estimateGas(txn).then((estimate) => {
+    
         const newTxn = {
           ...txn,
           gas: calculateGasMargin(estimate),
         }
-
+     
         return sendTransactionAsync(newTxn)
       }),
     )
+    console.log("<<<<<<<RESP>>>>>>>>",txn);
+    
 
     if (resp?.status) {
       onDone?.()

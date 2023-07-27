@@ -16,7 +16,7 @@ import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { useTranslation } from '@pancakeswap/localization'
 import { formatPrice } from '@pancakeswap/utils/formatFractions'
-import { useCakePriceAsBN } from '@pancakeswap/utils/useCakePrice'
+import { useCakePriceAsBN, useCbonPriceAsBN } from '@pancakeswap/utils/useCakePrice'
 import { useRouter } from 'next/router'
 
 import useV3DerivedInfo from 'hooks/v3/useV3DerivedInfo'
@@ -79,6 +79,7 @@ export function AprCalculator({
   const [priceSpan, setPriceSpan] = useState(0)
   const { data: farm } = useFarm({ currencyA: baseCurrency, currencyB: quoteCurrency, feeAmount })
   const cakePrice = useCakePriceAsBN()
+  const cbonPrice = useCbonPriceAsBN()
 
   const formState = useV3FormState()
 

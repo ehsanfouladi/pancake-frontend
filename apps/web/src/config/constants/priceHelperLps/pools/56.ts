@@ -33,6 +33,13 @@ const priceHelperLps: SerializedFarmConfig[] = [
     lpSymbol: 'XCAD-BUSD LP',
     lpAddress: '0x43d86605F8d22407b959D668B2689eafba23571B',
   },
+  {
+    pid: null,
+    token: bscTokens.usdt,
+    quoteToken: bscTokens.wbnb,
+    lpSymbol: 'USDT-WBNB LP',
+    lpAddress: '0x007a6d6504AF2a41b1Ccb5eb52b6c62b2e55572a',
+  },
 ].map((p) => ({
   ...p,
   token: p.token.serialize,

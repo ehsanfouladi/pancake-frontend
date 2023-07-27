@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Box, Flex, Heading, Skeleton, PageSection } from '@pancakeswap/uikit'
 import { LotteryStatus } from 'config/constants/types'
@@ -25,6 +25,7 @@ import CheckPrizesSection from './components/CheckPrizesSection'
 import HowToPlay from './components/HowToPlay'
 import useShowMoreUserHistory from './hooks/useShowMoreUserRounds'
 import { PageMeta } from '../../components/Layout/Page'
+import { useCadinuPrice } from '@pancakeswap/utils/useCakePrice'
 // import CnyDecorations from './components/LotteryCnyEffect'
 // import CnyLotteryDraw from './components/CnyLotteryDraw'
 
@@ -45,11 +46,17 @@ const Lottery = () => {
   const endTimeAsInt = parseInt(endTime, 10)
   const { nextEventTime, postCountdownText, preCountdownText } = useGetNextLotteryEvent(endTimeAsInt, status)
   const { numUserRoundsRequested, handleShowMoreUserRounds } = useShowMoreUserHistory()
-
+  const cadinuPrice  = useCadinuPrice()
+  console.log(" useCadinuPrice()",  useCadinuPrice());
+  
   return (
     <>
+          
       <PageMeta />
       <LotteryPage>
+        <PageSection background={CNY_TITLE_BG} index={1} hasCurvedDivider={false}>
+         <Flex>{cadinuPrice? cadinuPrice.toString() : "nadarim"}</Flex>
+        </PageSection>
         <PageSection background={CNY_TITLE_BG} index={1} hasCurvedDivider={false}>
           <Hero />
         </PageSection>

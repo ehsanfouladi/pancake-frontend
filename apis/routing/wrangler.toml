@@ -1,6 +1,6 @@
 compatibility_date = "2022-05-20"
 kv_namespaces = [
-  {binding = "POOLS", id = "29d3e7e6c3c44fa7bf7174ee2b7b1295", preview_id = "c808d98df0444ae1a680bc84a029baaa"},
+  {binding = "POOLS", id = "33da70536f4a4f9b9ea3d5e7fe4e7eed", preview_id = "33da70536f4a4f9b9ea3d5e7fe4e7eed"},
 ]
 r2_buckets = [
   { binding = "SUBGRAPH_POOLS", bucket_name = "subgraph-pools", preview_bucket_name = "subgraph-pools-dev" }
@@ -13,7 +13,7 @@ crons = ["0 0 * * *"]
 
 [env.production]
 kv_namespaces = [
-  {binding = "POOLS", id = "5261431ca6b74625b08ffe288b86a2a5"},
+  {binding = "POOLS", id = "33da70536f4a4f9b9ea3d5e7fe4e7eed"},
 ]
 r2_buckets = [
   { binding = "SUBGRAPH_POOLS", bucket_name = "subgraph-pools", preview_bucket_name = "subgraph-pools-dev" }

@@ -46,7 +46,7 @@ const getActiveFarms = async (chainId: number) => {
   const lPoolAddresses = livePools
     .filter(({ sousId }) => sousId !== 0)
     .map(({ earningToken, stakingToken }) => {
-      if (earningToken.symbol === 'CAKE') {
+      if (earningToken.symbol === 'CBON') {
         return stakingToken.address
       }
       return earningToken.address

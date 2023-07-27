@@ -14,6 +14,8 @@ import {
 } from "../../components";
 import { PriceData } from "./types";
 import { FullWidthButtonMenu } from "./FullWidthButtonMenu";
+import { Logo } from "../Menu";
+import Image from "next/image";
 
 const PriceDisplayContainer = styled(Flex)`
   padding: 0.25em 0.5em;
@@ -74,7 +76,7 @@ export const PriceChart = memo(function PriceChart({
       </Box>
     ) : (
       <Flex mt="0.5em" width="100%" flexDirection="column" alignItems="center" height="200px" justifyContent="center">
-        <BunnyKnownPlaceholder />
+        <Image src={'/logo.png'} alt='cadinu logo' width={100} height={50} />
         <Text mt="1em" bold>
           {t("Price will appear here")}
         </Text>

@@ -88,14 +88,14 @@ const DetailsView: React.FC<React.PropsWithChildren<DetailsViewProps>> = ({
           <Text>
             {isBoostingExpired
               ? t(
-                  'Your vCAKE boosting was expired at the snapshot block. Renew your fixed-term staking position to activate the boost for future voting proposals.',
+                  'Your vCBON boosting was expired at the snapshot block. Renew your fixed-term staking position to activate the boost for future voting proposals.',
                 )
               : t(
-                  'Voting power is calculated using the staking amount and remaining staking duration of the fixed-term CAKE staking position at the block.',
+                  'Voting power is calculated using the staking amount and remaining staking duration of the fixed-term CBON staking position at the block.',
                 )}
           </Text>
           <Text bold m="10px 0">
-            {`${t('CAKE locked:')} ${formatNumber(lockedCakeBalance, 0, 2)}`}
+            {`${t('CBON locked:')} ${formatNumber(lockedCakeBalance, 0, 2)}`}
           </Text>
           <StyleLink href="/pools">{t('Go to Pools')}</StyleLink>
         </Box>
@@ -141,7 +141,7 @@ const DetailsView: React.FC<React.PropsWithChildren<DetailsViewProps>> = ({
       {Number.isFinite(cakeVaultBalance) && (
         <Flex alignItems="center" justifyContent="space-between" mb="4px">
           <Text color="textSubtle" fontSize="16px">
-            {t('Flexible CAKE Staking')}
+            {t('Flexible CBON Staking')}
           </Text>
           <Text textAlign="right">{formatNumber(cakeVaultBalance, 0, 3)}</Text>
         </Flex>
@@ -152,7 +152,7 @@ const DetailsView: React.FC<React.PropsWithChildren<DetailsViewProps>> = ({
             <Flex alignItems="center" justifyContent="space-between" mb="4px">
               <Flex>
                 <Text color="textSubtle" fontSize="16px">
-                  {t('Fixed Term CAKE Staking')}
+                  {t('Fixed Term CBON Staking')}
                 </Text>
                 {tooltipVisible && tooltip}
                 <Flex ref={targetRef}>
@@ -168,7 +168,7 @@ const DetailsView: React.FC<React.PropsWithChildren<DetailsViewProps>> = ({
               <FixedTermCardInner expired={isBoostingExpired}>
                 <Flex>
                   <Text color="textSubtle" fontSize="16px" mr="auto">
-                    {t('Fixed Term CAKE Staking')}
+                    {t('Fixed Term CBON Staking')}
                   </Text>
                   {tooltipVisible && tooltip}
                   <Flex ref={targetRef}>
@@ -182,7 +182,7 @@ const DetailsView: React.FC<React.PropsWithChildren<DetailsViewProps>> = ({
                   <Flex>
                     <RocketIcon color={isBoostingExpired ? 'warning' : 'secondary'} width="15px" height="15px" />
                     <Text ml="4px" color={isBoostingExpired ? 'warning' : 'secondary'} fontSize="12px">
-                      {isBoostingExpired ? t('Boosting Expired') : t('Boosted by vCAKE')}
+                      {isBoostingExpired ? t('Boosting Expired') : t('Boosted by vCBON')}
                     </Text>
                   </Flex>
                 </Flex>
@@ -210,7 +210,7 @@ const DetailsView: React.FC<React.PropsWithChildren<DetailsViewProps>> = ({
       {Number.isFinite(cakeBnbLpBalance) && (
         <Flex alignItems="center" justifyContent="space-between" mb="4px">
           <Text color="textSubtle" fontSize="16px">
-            {t('CAKE BNB LP')}
+            {t('CBON BNB LP')}
           </Text>
           <Text textAlign="right">{formatNumber(cakeBnbLpBalance, 0, 3)}</Text>
         </Flex>

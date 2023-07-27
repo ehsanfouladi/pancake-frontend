@@ -88,7 +88,6 @@ export function useBestAMMTrade({ type = 'quoter', ...params }: useBestAMMTradeO
     autoRevalidate: quoterAutoRevalidate,
   })
 
-  console.log("bestTradeFromQuoterApi",bestTradeFromQuoterApi);
   
   return useMemo(
     () => (isQuoterAPIEnabled ? bestTradeFromQuoterApi : bestTradeFromQuoterWorker),

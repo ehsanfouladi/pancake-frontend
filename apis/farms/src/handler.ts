@@ -1,13 +1,12 @@
 import BN from 'bignumber.js'
 import { formatUnits } from 'viem'
 import { SerializedFarmConfig, FarmWithPrices } from '@pancakeswap/farms'
-import { ChainId, CurrencyAmount, Pair } from '@pancakeswap/sdk'
-import { BUSD, CAKE } from '@pancakeswap/tokens'
+import { ChainId,  CurrencyAmount, Pair } from '@pancakeswap/sdk'
+import { BUSD, CAKE, CBON, CADINU } from '@pancakeswap/tokens'
 import { farmFetcher } from './helper'
 import { FarmKV, FarmResult } from './kv'
 import { updateLPsAPR } from './lpApr'
-import { bscClient, bscTestnetClient } from './provider'
-
+import { bscClient, bscTestnetClient, viemProviders } from './provider'
 // copy from src/config, should merge them later
 const BSC_BLOCK_TIME = 3
 const BLOCKS_PER_YEAR = (60 / BSC_BLOCK_TIME) * 60 * 24 * 365 // 10512000
@@ -63,8 +62,8 @@ const pairAbi = [
 
 const cakeBusdPairMap = {
   [ChainId.BSC]: {
-    address: Pair.getAddress(CAKE[ChainId.BSC], BUSD[ChainId.BSC]),
-    tokenA: CAKE[ChainId.BSC],
+    address: Pair.getAddress(CADINU[ChainId.BSC], BUSD[ChainId.BSC]),
+    tokenA: CADINU[ChainId.BSC],
     tokenB: BUSD[ChainId.BSC],
   },
   [ChainId.BSC_TESTNET]: {
@@ -195,3 +194,108 @@ export async function fetchCakePrice() {
 
   return formatUnits(latestAnswer, 8)
 }
+
+export const fetchCadinuPrice =  async () => {
+  const pairConfig = {
+      address: Pair.getAddress(CADINU[ChainId.BSC], BUSD[ChainId.BSC]),
+      tokenA: CADINU[ChainId.BSC],
+      tokenB: BUSD[ChainId.BSC],
+    }
+    console.log("pairConfig", pairConfig);
+    
+  // const pairConfig = pairConfig[ChainId.BSC]
+  const client = bscClient
+  const [reserve0, reserve1] = await client.readContract({
+    abi: pairAbi,
+    address: pairConfig.address,
+    functionName: 'getReserves',
+  })
+
+  const { tokenA, tokenB } = pairConfig
+
+  const [token0, token1] = tokenA.sortsBefore(tokenB) ? [tokenA, tokenB] : [tokenB, tokenA]
+
+  const pair = new Pair(
+    CurrencyAmount.fromRawAmount(token0, reserve0.toString()),
+    CurrencyAmount.fromRawAmount(token1, reserve1.toString()),
+  )
+
+  const a =pair.priceOf(tokenA)
+    console.info("pair.priceOf(tokenA) >>>" , a.toSignificant(18));
+    
+  return pair.priceOf(tokenA).toSignificant(18)
+}
+    // const cbon: cbon = await(await fetch('https://3rdparty-apis.coinmarketcap.com/v1/cryptocurrency/widget?id=22984&convert_id=1,2781,2781')).json()
+    // return cbon?.data["22984"].quote["2781"].price
+    
+export async function fetchCbonPrice(){
+  const v3PoolAbi = [
+    {
+      inputs: [],
+      name: 'slot0',
+      outputs: [
+        {
+          internalType: 'uint160',
+          name: 'sqrtPriceX96',
+          type: 'uint160',
+        },
+        {
+          internalType: 'int24',
+          name: 'tick',
+          type: 'int24',
+        },
+        {
+          internalType: 'uint16',
+          name: 'observationIndex',
+          type: 'uint16',
+        },
+        {
+          internalType: 'uint16',
+          name: 'observationCardinality',
+          type: 'uint16',
+        },
+        {
+          internalType: 'uint16',
+          name: 'observationCardinalityNext',
+          type: 'uint16',
+        },
+        {
+          internalType: 'uint32',
+          name: 'feeProtocol',
+          type: 'uint32',
+        },
+        {
+          internalType: 'bool',
+          name: 'unlocked',
+          type: 'bool',
+        },
+      ],
+      stateMutability: 'view',
+      type: 'function',
+    },
+  ] as const
+  const address = '0x007a6d6504AF2a41b1Ccb5eb52b6c62b2e55572a'
+  const client = viemProviders({ chainId: Number(56) })
+  const slot0 = await client.readContract({
+    abi: v3PoolAbi,
+    address: address as `0x${string}`,
+    functionName: 'slot0' 
+  })
+  const pricisionFactor = 10 ** 18
+  const sqrtPriceX96 = slot0[0]
+
+  console.log(sqrtPriceX96);
+  const sqrtPrice = Number(sqrtPriceX96 * BigInt(pricisionFactor) / (BigInt(2 ** 96))) / pricisionFactor
+  console.log("2^96", BigInt(2**96))
+  console.log("sqrtprc", sqrtPrice);
+  
+  const cbonPrice = sqrtPrice ** (2)
+  // return Number(cbonPrice)
+
+  return fetchCadinuPrice()
+
+}
+
+// AxfsUBa7kMAUS2x
+
+
