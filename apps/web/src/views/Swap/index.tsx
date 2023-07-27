@@ -311,18 +311,18 @@ export default function Swap() {
             </Message>
           )}
           <Flex flexDirection="row-reverse" justifyContent="space-between" alignItems="center">
-            {/* <span style={multiSwapShow ? { display: 'block' } : { display: 'none' }}>{UniSwapIframe()}</span>
+            <span style={multiSwapShow ? { display: 'block' } : { display: 'none' }}>{UniSwapIframe()}</span>
             <span style={multiSwapShow ? { display: 'block' } : { display: 'none' }}>{BiSwapIframe()}</span>
-            <span style={multiSwapShow ? { display: 'block' } : { display: 'none' }}>{PancakeIframe()}</span> */}
+            <span style={multiSwapShow ? { display: 'block' } : { display: 'none' }}>{PancakeIframe()}</span>
           </Flex>
         </>
       ) : (multiSwapShow && (
         <Flex flexDirection={isDesktop ? 'row' : 'column'} justifyContent="space-between" minHeight="2500px">
           <StyledSwapContainer $isChartExpanded={isChartExpanded}>
             <StyledInputCurrencyWrapper>
-              {/* {UniSwapIframe()}
+              {UniSwapIframe()}
               {BiSwapIframe()}
-              {PancakeIframe()} */}
+              {PancakeIframe()}
             </StyledInputCurrencyWrapper>
           </StyledSwapContainer>
         </Flex>)
