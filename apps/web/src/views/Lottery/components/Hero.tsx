@@ -262,8 +262,10 @@ const Hero = () => {
     currentRound: { amountCollectedInCadinu, status },
     isTransitioning,
   } = useLottery()
+
   const price = useCadinuPrice()
-  console.log("price", price.data)
+  console.log("PRIX", price.data);
+  
 
   // const cakePriceBusd = useMemo(() => (price ? new BigNumber(price.toSignificant(6)) : BIG_ZERO), [price])
   const prizeInBusd = amountCollectedInCadinu.times(Number(price.data))
