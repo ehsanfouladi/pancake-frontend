@@ -1,10 +1,10 @@
 import { ChainId,  CurrencyAmount, Pair } from '@pancakeswap/sdk'
-import { BUSD, CAKE, CBON, CADINU } from '@pancakeswap/tokens'
+import { BUSD, CADINU } from '@pancakeswap/tokens'
 import useSWRImmutable from 'swr/immutable'
 import useSWR from 'swr'
 import BigNumber from 'bignumber.js'
 import { BIG_ZERO } from './bigNumber'
-import { publicClient } from 'utils/wagmi'
+import { publicClient } from '../../apps/web/src/utils/wagmi'
 
 
 export const useCakePrice = () => {

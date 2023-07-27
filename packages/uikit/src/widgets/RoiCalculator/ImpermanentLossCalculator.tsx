@@ -4,7 +4,7 @@ import { Currency, CurrencyAmount, ONE_HUNDRED_PERCENT, ZERO_PERCENT } from "@pa
 import { FeeCalculator, encodeSqrtRatioX96 } from "@pancakeswap/v3-sdk";
 import {  useCbonPriceAsBN } from '../../../../../packages/utils/useCakePrice'
 import styled from "styled-components";
-import { CAKE, CBON } from "@pancakeswap/tokens";
+import {  CBON } from "@pancakeswap/tokens";
 
 import { Section } from "./Section";
 import { Box, Row, AutoColumn, Toggle, RowBetween, DoubleCurrencyLogo, Message } from "../../components";
