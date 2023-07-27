@@ -169,8 +169,8 @@ export const useCbonPriceAsBN = () => {
   const { data } = useSWRImmutable(
     ['cake-usd-price-bn'],
     async () => {
-      const cbon = await (await fetch('https://3rdparty-apis.coinmarketcap.com/v1/cryptocurrency/widget?id=22984&convert_id=1,2781,2781')).json()
-      return new BigNumber( cbon.data["22984"].quote["2781"].price)
+      const cbon = await (await fetch('https://farms.pancakeswap.com/price/cbon')).json()
+      return new BigNumber(cbon.price)
     },
     {
       compare: (a, b) => {

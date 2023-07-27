@@ -18,7 +18,7 @@ import useSWR from 'swr'
 import useSWRImmutable from 'swr/immutable'
 import getLpAddress from 'utils/getLpAddress'
 import { multiplyPriceByAmount } from 'utils/prices'
-import { useCadinuPriceAsBN, useCbonPriceAsBN } from '@pancakeswap/utils/useCakePrice'
+import { useCadinuPriceAsBN, useCakePriceAsBN, useCbonPriceAsBN } from '@pancakeswap/utils/useCakePrice'
 import { getFullDecimalMultiplier } from '@pancakeswap/utils/getFullDecimalMultiplier'
 import { computeTradePriceBreakdown } from 'views/Swap/V3Swap/utils/exchange'
 import { isChainTestnet } from 'utils/wagmi'
@@ -46,7 +46,7 @@ export function useStablecoinPrice(
   const chainId = currency?.chainId
   const { enabled, hideIfPriceImpactTooHigh } = { ...DEFAULT_CONFIG, ...config }
 
-  const cakePrice = useCadinuPriceAsBN()
+  const cakePrice = useCakePriceAsBN()
   const cadinuPrice = useCadinuPriceAsBN()
   const cbonPrice = useCbonPriceAsBN()
   const stableCoin = chainId in ChainId ? STABLE_COIN[chainId as ChainId] : undefined
