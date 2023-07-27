@@ -55,9 +55,6 @@ const Lottery = () => {
       <PageMeta />
       <LotteryPage>
         <PageSection background={CNY_TITLE_BG} index={1} hasCurvedDivider={false}>
-         <Flex>{cadinuPrice? cadinuPrice.toString() : "nadarim"}</Flex>
-        </PageSection>
-        <PageSection background={CNY_TITLE_BG} index={1} hasCurvedDivider={false}>
           <Hero />
         </PageSection>
         {/* <CnyLotteryDraw /> */}

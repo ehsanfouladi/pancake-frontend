@@ -1,9 +1,11 @@
 import { ChainId,  CurrencyAmount, Pair } from '@pancakeswap/sdk'
 import { BUSD, CAKE, CBON, CADINU } from '@pancakeswap/tokens'
 import useSWRImmutable from 'swr/immutable'
+import useSWR from 'swr'
 import BigNumber from 'bignumber.js'
 import { BIG_ZERO } from './bigNumber'
 import { publicClient } from 'utils/wagmi'
+
 
 export const useCakePrice = () => {
   return useSWRImmutable(
@@ -63,27 +65,37 @@ export const useCadinuPrice = () => {
     tokenA: CADINU[ChainId.BSC],
     tokenB: BUSD[ChainId.BSC],
   }
-  console.log("pairConfig", pairConfig);
-  
 // const pairConfig = pairConfig[ChainId.BSC]
 const bscClient = publicClient({chainId: ChainId.BSC})
-const getReserves = async ()=>{
+return useSWR(
+  ['cadinu-usd-price'],
+async ()=>{
 const [reserve0, reserve1] = await bscClient.readContract({
   abi: pairAbi,
   address: pairConfig.address,
   functionName: 'getReserves',
-})
-const { tokenA, tokenB } = pairConfig
+  })
+  const { tokenA, tokenB } = pairConfig
 
-const [token0, token1] = tokenA.sortsBefore(tokenB) ? [tokenA, tokenB] : [tokenB, tokenA]
+  const [token0, token1] = tokenA.sortsBefore(tokenB) ? [tokenA, tokenB] : [tokenB, tokenA]
 
-const pair = new Pair(
-  CurrencyAmount.fromRawAmount(token0, reserve0.toString()),
-  CurrencyAmount.fromRawAmount(token1, reserve1.toString()),
+  const pair = new Pair(
+    CurrencyAmount.fromRawAmount(token0, reserve0.toString()),
+    CurrencyAmount.fromRawAmount(token1, reserve1.toString()),
   )
-  return pair.priceOf(tokenA).toSignificant(18)
-}
-return getReserves
+  const cadinuPrice =  pair.priceOf(tokenA).toSignificant(18)
+  return cadinuPrice as string
+},
+
+{
+  refreshInterval: 1_000 * 10,
+},
+)
+
+// const cadinuPrice =
+//          useMemo(
+//           () =>{
+//            const cadinu = getPriceFromPair?.()} , [])
   // return useSWRImmutable(
   //   ['cadinu-usd-price'],
   //   async () => {
