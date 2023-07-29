@@ -100,37 +100,40 @@ const targetChains = [mainnet, bsc]
 export const NetworkSwitcher: React.FC<{ activeIndex: number }> = ({ activeIndex }) => {
   const { t } = useTranslation()
   const chainName = useChainNameByQuery()
+  /* jshint sub:true */
   const foundChain = chains.find((d) => d.id === multiChainId[chainName])
+
   const symbol = foundChain?.nativeCurrency?.symbol
   const router = useRouter()
-  const switchNetwork = useCallback(
-    (chianId: number) => {
-      const chainPath = multiChainPaths[chianId]
-      if (activeIndex === 0) router.push(`/info${chainPath}`)
-      if (activeIndex === 1) router.push(`/info${chainPath}/pairs`)
-      if (activeIndex === 2) router.push(`/info${chainPath}/tokens`)
-    },
-    [router, activeIndex],
-  )
+  // const switchNetwork = useCallback(
+  //   (chianId: number) => {
+  //     const chainPath = multiChainPaths[chianId]
+  //     if (activeIndex === 0) router.push(`/info${chainPath}`)
+  //     if (activeIndex === 1) router.push(`/info${chainPath}/pairs`)
+  //     if (activeIndex === 2) router.push(`/info${chainPath}/tokens`)
+  // },
+  // [router, activeIndex],
+  // )
 
   return (
     <UserMenu
       alignItems="top"
       ml="8px"
       avatarSrc={`${ASSET_CDN}/web/chains/${multiChainId[chainName]}.png`}
-      text={
-        foundChain ? (
-          <>
-            <Box display={['none', null, null, null, null, 'block']}>{foundChain.name}</Box>
-            <Box display={['block', null, null, null, null, 'none']}>{symbol}</Box>
-          </>
-        ) : (
-          t('Select a Network')
-        )
-      }
-      recalculatePopover
+      // text={
+      //   foundChain ? (
+      //     <>
+      //       <Box display={['none', null, null, null, null, 'block']}>{foundChain.name}</Box>
+      //       <Box display={['block', null, null, null, null, 'none']}>{symbol}</Box>
+      //     </>
+      //   ) : (
+      //     t('Select a Network')
+      //   )
+      // }
+      // recalculatePopover
     >
-      {() => <NetworkSelect chainId={multiChainId['chainName']} switchNetwork={switchNetwork} />}
+      {() => <>hi</>}
+      {/* <NetworkSelect chainId={multiChainId['chainName']} switchNetwork={switchNetwork} />} */}
     </UserMenu>
   )
 }
