@@ -16,7 +16,7 @@ interface PancakeFactory {
 }
 
 interface OverviewResponse {
-  pancakeFactories: PancakeFactory[]
+  cadinuFactories: PancakeFactory[]
   factories?: PancakeFactory[]
 }
 /**
@@ -26,7 +26,7 @@ const getOverviewData = async (
   chainName: MultiChainName,
   block?: number,
 ): Promise<{ data?: OverviewResponse; error: boolean }> => {
-  const factoryString = checkIsStableSwap() ? `factories` : `pancakeFactories`
+  const factoryString = checkIsStableSwap() ? `factories` : `cadinuFactories`
   try {
     const query = gql`query overview {
       ${factoryString}(
@@ -86,9 +86,9 @@ const useFetchProtocolData = (): ProtocolFetchState => {
         getOverviewData(chainName, block48?.number ?? undefined),
       ])
       const anyError = error || error24 || error48
-      const overviewData = formatPancakeFactoryResponse(data?.pancakeFactories)
-      const overviewData24 = formatPancakeFactoryResponse(data24?.pancakeFactories)
-      const overviewData48 = formatPancakeFactoryResponse(data48?.pancakeFactories)
+      const overviewData = formatPancakeFactoryResponse(data?.cadinuFactories)
+      const overviewData24 = formatPancakeFactoryResponse(data24?.cadinuFactories)
+      const overviewData48 = formatPancakeFactoryResponse(data48?.cadinuFactories)
       const allDataAvailable = overviewData && overviewData24 && overviewData48
       if (anyError || !allDataAvailable) {
         setFetchState({
@@ -137,14 +137,14 @@ export const fetchProtocolData = async (chainName: MultiChainName, block24: Bloc
     getOverviewData(chainName, block24?.number ?? undefined),
     getOverviewData(chainName, block48?.number ?? undefined),
   ])
-  if (data.factories && data.factories.length > 0) data.pancakeFactories = data.factories
-  if (data24.factories && data24.factories.length > 0) data24.pancakeFactories = data24.factories
-  if (data48.factories && data48.factories.length > 0) data48.pancakeFactories = data48.factories
+  if (data.factories && data.factories.length > 0) data.cadinuFactories = data.factories
+  if (data24.factories && data24.factories.length > 0) data24.cadinuFactories = data24.factories
+  if (data48.factories && data48.factories.length > 0) data48.cadinuFactories = data48.factories
 
   // const anyError = error || error24 || error48
-  const overviewData = formatPancakeFactoryResponse(data?.pancakeFactories)
-  const overviewData24 = formatPancakeFactoryResponse(data24?.pancakeFactories)
-  const overviewData48 = formatPancakeFactoryResponse(data48?.pancakeFactories)
+  const overviewData = formatPancakeFactoryResponse(data?.cadinuFactories)
+  const overviewData24 = formatPancakeFactoryResponse(data24?.cadinuFactories)
+  const overviewData48 = formatPancakeFactoryResponse(data48?.cadinuFactories)
   // const allDataAvailable = overviewData && overviewData24 && overviewData48
 
   const [volumeUSD, volumeUSDChange] = getChangeForPeriod(

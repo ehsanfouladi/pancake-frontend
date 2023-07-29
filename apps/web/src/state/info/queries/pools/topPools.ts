@@ -23,7 +23,7 @@ const fetchTopPools = async (chainName: MultiChainName, timestamp24hAgo: number)
   const firstCount = isStableSwap ? 100 : 30
   let whereCondition =
     chainName === 'BSC'
-      ? `where: { dailyTxns_gt: 300, token0_not_in: $blacklist, token1_not_in: $blacklist, date_gt: ${timestamp24hAgo} }`
+      ? `where: { dailyTxns_gte: 0, token0_not_in: $blacklist, token1_not_in: $blacklist }`
       : `where: { date_gt: ${timestamp24hAgo}, token0_not_in: $blacklist, token1_not_in: $blacklist, dailyVolumeUSD_gt: 2000 }`
   if (isStableSwap) whereCondition = `where: { date_gt: ${timestamp24hAgo}}`
   try {
@@ -55,7 +55,10 @@ const fetchTopPools = async (chainName: MultiChainName, timestamp24hAgo: number)
  */
 const useTopPoolAddresses = (): string[] => {
   const [topPoolAddresses, setTopPoolAddresses] = useState([])
-  const [timestamp24hAgo] = getDeltaTimestamps()
+  // const [timestamp24hAgo] = getDeltaTimestamps()
+  const [, , , , timestamp24hAgo] = getDeltaTimestamps()
+  console.log(timestamp24hAgo);
+  
   const chainName = useGetChainName()
 
   useEffect(() => {

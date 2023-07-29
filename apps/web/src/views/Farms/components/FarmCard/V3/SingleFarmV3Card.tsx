@@ -234,9 +234,12 @@ const SingleFarmV3Card: React.FunctionComponent<
                   >
                     <StyledTooltip
                       data-theme={isDark ? 'light' : 'dark'}
+                      
                       style={{
                         maxWidth: '160px',
                         position: 'relative',
+                     
+                        
                       }}
                     >
                       {outOfRangeUnstaked ? (
@@ -250,12 +253,12 @@ const SingleFarmV3Card: React.FunctionComponent<
                       )}
                       <Arrow />
                     </StyledTooltip>
-                    <Image
-                      src="/images/decorations/bulb-bunny.png"
-                      width={135}
-                      height={120}
+                    {/* <Image
+                      src="/images/decorations/lottery.png"
+                      width={100}
+                      height={100}
                       alt="bulb bunny reminds unstaking"
-                    />
+                    /> */}
                   </AtomBox>
                 </AtomBox>
                 <LightCard>
@@ -334,7 +337,7 @@ const SingleFarmV3Card: React.FunctionComponent<
             </RowBetween>
           </>
         )}
-        {farmCanBoost && (
+        {/* {farmCanBoost && (
           <>
             <AtomBox
               width={{
@@ -351,7 +354,7 @@ const SingleFarmV3Card: React.FunctionComponent<
               />
             </RowBetween>
           </>
-        )}
+        )} */}
       </ActionContainer>
     </AtomBox>
   )

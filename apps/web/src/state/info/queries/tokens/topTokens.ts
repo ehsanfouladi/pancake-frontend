@@ -27,6 +27,7 @@ interface StableSwapTopTokensResponse {
  * Tokens to display on Home page
  * The actual data is later requested in tokenData.ts
  * Note: dailyTxns_gt: 300 is there to prevent fetching incorrectly priced tokens with high dailyVolumeUSD
+ * `where: { dailyTxns_gt: 300, id_not_in: $blacklist, date_gt: ${timestamp24hAgo}}`
  */
 const fetchTopTokens = async (chainName: MultiChainName, timestamp24hAgo: number): Promise<string[]> => {
   const whereCondition =
@@ -34,7 +35,7 @@ const fetchTopTokens = async (chainName: MultiChainName, timestamp24hAgo: number
       ? `where: { date_gt: ${timestamp24hAgo}, token_not_in: $blacklist, dailyVolumeUSD_gt:2000 }`
       : checkIsStableSwap()
       ? ''
-      : `where: { dailyTxns_gt: 300, id_not_in: $blacklist, date_gt: ${timestamp24hAgo}}`
+      : `where: { dailyTxns_gte: 0, id_not_in: $blacklist, date_gt: ${timestamp24hAgo}}`
   const firstCount = 50
   try {
     const query = gql`
@@ -108,7 +109,7 @@ const useTopTokenAddresses = (): string[] => {
 }
 
 export const fetchTokenAddresses = async (chainName: MultiChainName) => {
-  const [timestamp24hAgo] = getDeltaTimestamps()
+  const [, , , ,timestamp24hAgo] = getDeltaTimestamps()
 
   const addresses = await fetchTopTokens(chainName, timestamp24hAgo)
 

@@ -14,9 +14,9 @@ export const useBoostStatus = (pid: number, tokenId?: string) => {
   const { isBoosted, mutate } = useIsBoostedPool(tokenId)
   const { farmCanBoost } = useBakeV3farmCanBoost(pid)
   const status = useMemo(() => {
-    if (!account && !farmCanBoost) return BoostStatus.CanNotBoost
-    if (!account && farmCanBoost) return BoostStatus.UpTo
-    if (farmCanBoost) return isBoosted ? BoostStatus.Boosted : BoostStatus.farmCanBoostButNot
+    // if (!account && !farmCanBoost) return BoostStatus.CanNotBoost
+    // if (!account && farmCanBoost) return BoostStatus.UpTo
+    // if (farmCanBoost) return isBoosted ? BoostStatus.Boosted : BoostStatus.farmCanBoostButNot
     return BoostStatus.CanNotBoost
   }, [account, farmCanBoost, isBoosted])
 

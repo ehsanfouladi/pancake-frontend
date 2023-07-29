@@ -69,7 +69,7 @@ const InfoNav: React.FC<{ isStableSwap: boolean }> = ({ isStableSwap }) => {
               </ButtonMenuItem>
             </ButtonMenu>
           </Box>
-          <NetworkSwitcher activeIndex={activeIndex} />
+          {/* <NetworkSwitcher activeIndex={activeIndex} /> */}
         </Flex>
         <Box width={['100%', '100%', '250px']}>
           <Search />
@@ -130,7 +130,7 @@ export const NetworkSwitcher: React.FC<{ activeIndex: number }> = ({ activeIndex
       }
       recalculatePopover
     >
-      {() => <NetworkSelect chainId={multiChainId[chainName]} switchNetwork={switchNetwork} />}
+      {() => <NetworkSelect chainId={multiChainId['chainName']} switchNetwork={switchNetwork} />}
     </UserMenu>
   )
 }

@@ -23,10 +23,10 @@ export const InfoPageLayout = ({ children }) => {
             label: t('V2'),
             href: `/info${chainPath}`,
           },
-          chainName === 'BSC' && {
-            label: t('StableSwap'),
-            href: '/info?type=stableSwap',
-          },
+          // chainName === 'BSC' && {
+          //   label: t('StableSwap'),
+          //   href: '/info?type=stableSwap',
+          // },
         ]}
         activeItem={isStableSwap ? '/info?type=stableSwap' : `/info${chainPath}`}
       />
