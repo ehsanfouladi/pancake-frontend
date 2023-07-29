@@ -48,8 +48,8 @@ export const SwapLineChart: React.FC<SwapLineChartNewProps> = ({
   const { isDark } = useTheme();
   const transformedData = useMemo(() => {
     return (
-      data?.map(({ time, value }) => {
-        return { time: Math.floor(time.getTime() / 1000) as UTCTimestamp, value };
+      data?.map(({ time, value }, index) => {
+        return { time: Math.floor(time.getTime() / 1000) + index as UTCTimestamp, value };
       }) || []
     );
   }, [data]);
@@ -61,6 +61,12 @@ export const SwapLineChart: React.FC<SwapLineChartNewProps> = ({
     return getChartColors({ isChangePositive });
   }, [isChangePositive]);
   const [chartCreated, setChart] = useState<IChartApi | undefined>();
+
+  console.log("DATA>>>", data);
+  console.log("TRANFORMEDDATA>>>", transformedData);
+
+  const AliTransformedData = 
+  
 
   useEffect(() => {
     if (!chartRef?.current) return;

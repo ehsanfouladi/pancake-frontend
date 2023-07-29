@@ -9,11 +9,12 @@ export const BSC_BLOCK_TIME = 3
 // 9 CAKE per block goes to Yield farms and lottery
 // CAKE_PER_BLOCK in config/index.ts = 40 as we only change the amount sent to the burn pool which is effectively a farm.
 // CAKE/Block in src/views/Home/components/CakeDataRow.tsx = 15 (40 - Amount sent to burn pool)
-export const CAKE_PER_BLOCK = 40
+// WE_CHANGED
+export const CAKE_PER_BLOCK = 0
 export const BLOCKS_PER_DAY = (60 / BSC_BLOCK_TIME) * 60 * 24
 export const BLOCKS_PER_YEAR = BLOCKS_PER_DAY * 365 // 10512000
 export const CAKE_PER_YEAR = CAKE_PER_BLOCK * BLOCKS_PER_YEAR
-export const BASE_URL = 'https://pancakeswap.finance'
+export const BASE_URL = 'https://apps.cadinu.io'
 export const BASE_ADD_LIQUIDITY_URL = `${BASE_URL}/add`
 export const DEFAULT_TOKEN_DECIMAL = getFullDecimalMultiplier(18)
 export const DEFAULT_GAS_LIMIT = 250000n

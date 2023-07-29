@@ -316,7 +316,8 @@ export async function fetchPairPriceChartTokenData(
       timestamps.push(time)
       time += interval
     }
-
+    // console.log("timestamps", timestamps);
+    
     // backout if invalid timestamp format
     if (timestamps.length === 0) {
       return {
@@ -329,6 +330,7 @@ export async function fetchPairPriceChartTokenData(
     const blocks = (await getBlocksFromTimestamps(timestamps, 'asc', 500, chainName)).filter(
       (d) => d.number >= subgraphStartBlock,
     )
+console.log("blocks", blocks);
 
     if (!blocks || blocks.length === 0) {
       console.error('Error fetching blocks')

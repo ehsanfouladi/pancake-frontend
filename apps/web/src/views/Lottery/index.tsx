@@ -5,6 +5,7 @@ import { LotteryStatus } from 'config/constants/types'
 import { useTranslation } from '@pancakeswap/localization'
 import useTheme from 'hooks/useTheme'
 import { useFetchLottery, useLottery } from 'state/lottery/hooks'
+import { useCadinuPrice } from '@pancakeswap/utils/useCakePrice'
 // import useChineseNewYearEffect from 'hooks/useChineseNewYearEffect'
 import {
   CNY_TITLE_BG,
@@ -25,7 +26,7 @@ import CheckPrizesSection from './components/CheckPrizesSection'
 import HowToPlay from './components/HowToPlay'
 import useShowMoreUserHistory from './hooks/useShowMoreUserRounds'
 import { PageMeta } from '../../components/Layout/Page'
-import { useCadinuPrice } from '@pancakeswap/utils/useCakePrice'
+
 // import CnyDecorations from './components/LotteryCnyEffect'
 // import CnyLotteryDraw from './components/CnyLotteryDraw'
 
