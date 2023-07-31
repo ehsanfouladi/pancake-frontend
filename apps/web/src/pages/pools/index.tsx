@@ -1,9 +1,16 @@
-import { SUPPORTED_CHAIN_IDS } from '@pancakeswap/pools'
+// import { SUPPORTED_CHAIN_IDS } from '@pancakeswap/pools'
 
-import Pools from 'views/Pools'
+// import Pools from 'views/Pools'
 
-const PoolsPage = () => <Pools />
+// const PoolsPage = () => <Pools />
 
-PoolsPage.chains = SUPPORTED_CHAIN_IDS
+// PoolsPage.chains = SUPPORTED_CHAIN_IDS
 
-export default PoolsPage
+// export default PoolsPage
+import { NotFound } from '@pancakeswap/uikit'
+
+const NotFoundPage = () => <NotFound />
+
+NotFoundPage.chains = []
+
+export default NotFoundPage

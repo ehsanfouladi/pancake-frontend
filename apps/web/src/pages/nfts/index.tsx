@@ -1,7 +1,15 @@
-import NftMarket from 'views/Nft/market/Home'
+// import NftMarket from 'views/Nft/market/Home'
 
-const NftMarketPage = () => {
-  return <NftMarket />
-}
+// const NftMarketPage = () => {
+//   return <NftMarket />
+// }
 
-export default NftMarketPage
+// export default NftMarketPage
+
+import { NotFound } from '@pancakeswap/uikit'
+
+const NotFoundPage = () => <NotFound />
+
+NotFoundPage.chains = []
+
+export default NotFoundPage

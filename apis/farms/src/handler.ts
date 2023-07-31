@@ -274,7 +274,7 @@ export async function fetchCbonPrice(){
       type: 'function',
     },
   ] as const
-  const address = '0x007a6d6504AF2a41b1Ccb5eb52b6c62b2e55572a'
+  const address = '0x68B317b8f1B24D7838D64e0E5222C39c4A56e9DB'
   const client = viemProviders({ chainId: Number(56) })
   const slot0 = await client.readContract({
     abi: v3PoolAbi,
@@ -290,9 +290,9 @@ export async function fetchCbonPrice(){
   console.log("sqrtprc", sqrtPrice);
   
   const cbonPrice = sqrtPrice ** (2)
-  // return Number(cbonPrice)
+  return Number(cbonPrice)
 
-  return fetchCadinuPrice()
+  // return fetchCadinuPrice()
 
 }
 

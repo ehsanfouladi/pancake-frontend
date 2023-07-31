@@ -1,31 +1,38 @@
-import { ChainId } from '@pancakeswap/sdk'
-import { AppHeader } from 'components/App'
-import { BodyWrapper } from 'components/App/AppBody'
-import { useRouter } from 'next/router'
-import { isAddress } from 'utils'
-import LiquidityFormProvider from 'views/AddLiquidityV3/formViews/V3FormView/form/LiquidityFormProvider'
-import { Migrate } from 'views/AddLiquidityV3/Migrate'
-import Page from 'views/Page'
+// import { ChainId } from '@pancakeswap/sdk'
+// import { AppHeader } from 'components/App'
+// import { BodyWrapper } from 'components/App/AppBody'
+// import { useRouter } from 'next/router'
+// import { isAddress } from 'utils'
+// import LiquidityFormProvider from 'views/AddLiquidityV3/formViews/V3FormView/form/LiquidityFormProvider'
+// import { Migrate } from 'views/AddLiquidityV3/Migrate'
+// import Page from 'views/Page'
 
-function MigratePage() {
-  // const { t } = useTranslation()
+// function MigratePage() {
+//   // const { t } = useTranslation()
 
-  const router = useRouter()
+//   const router = useRouter()
 
-  const address = isAddress(router.query.address)
+//   const address = isAddress(router.query.address)
 
-  return (
-    <LiquidityFormProvider>
-      <Page>
-        <BodyWrapper style={{ maxWidth: '858px' }}>
-          <AppHeader title="Migrate Liquidity" />
-          {address && <Migrate v2PairAddress={address} />}
-        </BodyWrapper>
-      </Page>
-    </LiquidityFormProvider>
-  )
-}
+//   return (
+//     <LiquidityFormProvider>
+//       <Page>
+//         <BodyWrapper style={{ maxWidth: '858px' }}>
+//           <AppHeader title="Migrate Liquidity" />
+//           {address && <Migrate v2PairAddress={address} />}
+//         </BodyWrapper>
+//       </Page>
+//     </LiquidityFormProvider>
+//   )
+// }
 
-export default MigratePage
+// export default MigratePage
 
-MigratePage.chains = [ChainId.BSC, ChainId.ETHEREUM, ChainId.BSC_TESTNET, ChainId.GOERLI]
+// MigratePage.chains = [ChainId.BSC, ChainId.ETHEREUM, ChainId.BSC_TESTNET, ChainId.GOERLI]
+import { NotFound } from '@pancakeswap/uikit'
+
+const NotFoundPage = () => <NotFound />
+
+NotFoundPage.chains = []
+
+export default NotFoundPage

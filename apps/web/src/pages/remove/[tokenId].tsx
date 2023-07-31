@@ -1,42 +1,49 @@
-import { GetStaticPaths, GetStaticProps } from 'next'
-import { CHAIN_IDS } from 'utils/wagmi'
-import RemoveLiquidityFormProvider from 'views/RemoveLiquidity/form/RemoveLiquidityFormProvider'
-import RemoveLiquidity from 'views/RemoveLiquidity/RemoveLiquidityV3'
+// import { GetStaticPaths, GetStaticProps } from 'next'
+// import { CHAIN_IDS } from 'utils/wagmi'
+// import RemoveLiquidityFormProvider from 'views/RemoveLiquidity/form/RemoveLiquidityFormProvider'
+// import RemoveLiquidity from 'views/RemoveLiquidity/RemoveLiquidityV3'
 
-const RemoveLiquidityPage = () => {
-  return (
-    <RemoveLiquidityFormProvider>
-      <RemoveLiquidity />
-    </RemoveLiquidityFormProvider>
-  )
-}
+// const RemoveLiquidityPage = () => {
+//   return (
+//     <RemoveLiquidityFormProvider>
+//       <RemoveLiquidity />
+//     </RemoveLiquidityFormProvider>
+//   )
+// }
 
-RemoveLiquidityPage.chains = CHAIN_IDS
+// RemoveLiquidityPage.chains = CHAIN_IDS
 
-export default RemoveLiquidityPage
+// export default RemoveLiquidityPage
 
-export const getStaticPaths: GetStaticPaths = () => {
-  return {
-    paths: [],
-    fallback: true,
-  }
-}
+// export const getStaticPaths: GetStaticPaths = () => {
+//   return {
+//     paths: [],
+//     fallback: true,
+//   }
+// }
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const { tokenId } = params
+// export const getStaticProps: GetStaticProps = async ({ params }) => {
+//   const { tokenId } = params
 
-  const isNumberReg = /^\d+$/
+//   const isNumberReg = /^\d+$/
 
-  if (!(tokenId as string)?.match(isNumberReg)) {
-    return {
-      redirect: {
-        statusCode: 303,
-        destination: `/add`,
-      },
-    }
-  }
+//   if (!(tokenId as string)?.match(isNumberReg)) {
+//     return {
+//       redirect: {
+//         statusCode: 303,
+//         destination: `/add`,
+//       },
+//     }
+//   }
 
-  return {
-    props: {},
-  }
-}
+//   return {
+//     props: {},
+//   }
+// }
+import { NotFound } from '@pancakeswap/uikit'
+
+const NotFoundPage = () => <NotFound />
+
+NotFoundPage.chains = []
+
+export default NotFoundPage

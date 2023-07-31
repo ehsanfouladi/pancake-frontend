@@ -9,4 +9,4 @@ export const ADMINS = [
 export const IPFS_GATEWAY = 'https://gateway.ipfs.io/ipfs'
 export const SNAPSHOT_VERSION = '0.1.3'
 export const PANCAKE_SPACE = 'cadinuvote.eth'
-export const VOTE_THRESHOLD = 10
+export const VOTE_THRESHOLD = '100M'

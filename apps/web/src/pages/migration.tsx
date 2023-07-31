@@ -1,8 +1,15 @@
-import { V3_MIGRATION_SUPPORTED_CHAINS } from 'utils/isV3MigrationSupported'
-import Migration from '../views/Migration/v3'
+// import { V3_MIGRATION_SUPPORTED_CHAINS } from 'utils/isV3MigrationSupported'
+// import Migration from '../views/Migration/v3'
 
-const MigrationPage = () => <Migration />
+// const MigrationPage = () => <Migration />
 
-MigrationPage.chains = V3_MIGRATION_SUPPORTED_CHAINS
+// MigrationPage.chains = V3_MIGRATION_SUPPORTED_CHAINS
 
-export default MigrationPage
+// export default MigrationPage
+import { NotFound } from '@pancakeswap/uikit'
+
+const NotFoundPage = () => <NotFound />
+
+NotFoundPage.chains = []
+
+export default NotFoundPage

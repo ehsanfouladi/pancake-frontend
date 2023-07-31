@@ -90,7 +90,7 @@ export const useCadinuPriceAsBN = () => {
   const { data } = useSWRImmutable(
     ['cadinu-usd-price-bn'],
     async () => {
-      const cadinu = await (await fetch('https://farms.pancakeswap.com/price/cadinu')).json()
+      const cadinu = await (await fetch('https://farms.cadinu.io/price/cadinu')).json()
       return new BigNumber(cadinu.price)
     },
     {

@@ -1,19 +1,26 @@
-import { CHAIN_IDS } from 'utils/wagmi'
+// import { CHAIN_IDS } from 'utils/wagmi'
 
-import { V3SubgraphHealthIndicator } from 'components/SubgraphHealthIndicator'
+// import { V3SubgraphHealthIndicator } from 'components/SubgraphHealthIndicator'
 
-import Swap from '../views/Swap'
-import { SwapFeaturesProvider } from '../views/Swap/SwapFeaturesContext'
+// import Swap from '../views/Swap'
+// import { SwapFeaturesProvider } from '../views/Swap/SwapFeaturesContext'
 
-const SwapPage = () => {
-  return (
-    <SwapFeaturesProvider>
-      <Swap />
-      <V3SubgraphHealthIndicator />
-    </SwapFeaturesProvider>
-  )
-}
+// const SwapPage = () => {
+//   return (
+//     <SwapFeaturesProvider>
+//       <Swap />
+//       <V3SubgraphHealthIndicator />
+//     </SwapFeaturesProvider>
+//   )
+// }
 
-SwapPage.chains = CHAIN_IDS
+// SwapPage.chains = CHAIN_IDS
 
-export default SwapPage
+// export default SwapPage
+import { NotFound } from '@pancakeswap/uikit'
+
+const NotFoundPage = () => <NotFound />
+
+NotFoundPage.chains = []
+
+export default NotFoundPage
