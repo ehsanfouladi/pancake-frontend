@@ -33,6 +33,7 @@ import {
   getAffiliateProgramAddress,
   getTradingRewardTopTradesAddress,
   getClaimAddress,
+  getPreSaleCbonAddress,
 } from 'utils/addressHelpers'
 
 // ABI
@@ -85,6 +86,7 @@ import { v3MigratorABI } from 'config/abi/v3Migrator'
 import { getViemClients, viemClients } from 'utils/viem'
 import { Abi, PublicClient, WalletClient, getContract as viemGetContract } from 'viem'
 import { Address, erc20ABI, erc721ABI } from 'wagmi'
+import { preSaleCbonAbi } from 'config/abi/preSaleCbon'
 
 export const getContract = <TAbi extends Abi | unknown[], TWalletClient extends WalletClient>({
   abi,
@@ -404,6 +406,15 @@ export const getClaimContract = (signer?: WalletClient, chainId?: number) => {
   return getContract({
     abi: claimADAbi,
     address: getClaimAddress(),
+    signer,
+    chainId
+    })
+}
+
+export const getPreSaleCbonContract = (signer?: WalletClient, chainId?: number) => {
+  return getContract({
+    abi: preSaleCbonAbi,
+    address: getPreSaleCbonAddress(),
     signer,
     chainId
     })

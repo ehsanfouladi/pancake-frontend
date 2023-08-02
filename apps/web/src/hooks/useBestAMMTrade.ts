@@ -223,7 +223,6 @@ function bestTradeHookFactory({
       staleTime: autoRevalidate ? POOLS_NORMAL_REVALIDATE[amount?.currency?.chainId] : 0,
       refetchInterval: autoRevalidate && POOLS_NORMAL_REVALIDATE[amount?.currency?.chainId],
     })
-    console.log("TRADE>>>>>", trade);
 
     useEffect(() => {
       if (!keepPreviousDataRef.current && trade) {

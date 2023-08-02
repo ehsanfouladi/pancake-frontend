@@ -174,7 +174,6 @@ export function useStablecoinPrice(
     trade,
     hideIfPriceImpactTooHigh,
   ])
-console.log("FINAL>>>>>>>>>>>>>>>>>>>>>>>>>>>>", price);
 
   return price
 }
@@ -313,7 +312,6 @@ export const useStablecoinPriceAmount = (
   config?: UseStablecoinPriceConfig,
 ): number | undefined => {
   const stablePrice = useStablecoinPrice(currency, { enabled: !!currency, ...config })
-  console.log("<<<<<<<<<<<<<<<<stablePrice>>>>>>>>>>>>>>>>>", stablePrice);
   
   if (amount) {
     if (stablePrice) {

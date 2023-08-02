@@ -229,7 +229,10 @@ export default {
       56: '0xc529d32fD8e74157a08a269596487E0C52530488',
       // 97: '0xfa753b62e5ba7f0e1e19a4eb6deda83290b11f4e',
     },
-      lotteryV2: {
+    preSaleCbon:{
+      56: '0xe622f629fe53c30768ff9d51714241307eab6500',
+    },
+    lotteryV2: {
       97: '0x5790c3534F30437641541a0FA04C992799602998',
       56: '0xec1ED03Da04D6ab50bF51A5C56F9e340c894D931',
     },

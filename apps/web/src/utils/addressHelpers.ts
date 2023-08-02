@@ -145,3 +145,6 @@ export const getTradingRewardTopTradesAddress = (chainId?: number) => {
 export const getClaimAddress = (chainId?: number) => {
   return getAddressFromMap(addresses.claimAD, chainId)
 }
+export const getPreSaleCbonAddress = (chainId?: number) => {
+  return getAddressFromMap(addresses.preSaleCbon, chainId)
+}

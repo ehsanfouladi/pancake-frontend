@@ -1,25 +1,27 @@
-import { Flex, Heading } from "@pancakeswap/uikit"
-import { CurrencyInputPanel } from "@pancakeswap/uikit/src/widgets/Swap/CurrencyInputPanel"
-import { useMemo, useState } from "react"
-import { useSwapState } from "state/swap/hooks"
-import { V3SwapForm } from "views/Swap/V3Swap"
-import { FormContainer } from "views/Swap/V3Swap/components"
-import { Field } from 'state/swap/actions'
+import { ONRAMP_API_BASE_URL } from 'config/constants/endpoints'
+import BuyCrypto from 'views/BuyCbon'
+import { SUPPORTED_CHAINS } from 'views/BuyCrypto/constants'
 
-const BuyCryptoPage = () => {
-  const [inputValue, setInputValue] = useState('')
-  
-  return (
-    <>
-    
-    <FormContainer>
-      
-    </FormContainer>
-    
-    </>
-  )
+const BuyCryptoPage = ({ userIp }) => {
+  return <BuyCrypto userIp={userIp} />
 }
 
-BuyCryptoPage.chains = 56
+export async function getServerSideProps() {
+  try {
+    const response = await fetch(`${ONRAMP_API_BASE_URL}/user-ip`)
+    const data = await response.json()
+    const userIp = data.ipAddress
+
+    return {
+      props: { userIp },
+    }
+  } catch (error) {
+    return {
+      props: { userIp: null }, // Pass null as the user IP if an error occurs
+    }
+  }
+}
+
+BuyCryptoPage.chains = SUPPORTED_CHAINS
 
 export default BuyCryptoPage
