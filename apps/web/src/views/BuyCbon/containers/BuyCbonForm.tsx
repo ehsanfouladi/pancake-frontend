@@ -24,7 +24,7 @@ import { CADINU, bscTokens } from '@pancakeswap/tokens'
 import { FlipButton } from 'views/Swap/V3Swap/containers/FlipButton'
 import { maxAmountSpend } from 'utils/maxAmountSpend'
 import { useCurrencyBalance } from 'state/wallet/hooks'
-import { useAccount, useContractWrite, usePrepareContractWrite } from 'wagmi'
+import { useAccount, useContractWrite, usePrepareContractWrite, useWaitForTransaction } from 'wagmi'
 import { createPublicClient, http } from 'viem'
 import { bsc } from 'viem/chains'
 import { getPreSaleCbonContract } from 'utils/contractHelpers'
@@ -48,11 +48,13 @@ export function BuyCbonForm({
   modalView,
   buyCbonState,
   fetchQuotes,
+  setIsBuySuccess,
 }: {
   setModalView: Dispatch<SetStateAction<CryptoFormView>>
   modalView: CryptoFormView
   buyCbonState: BuyCbonState
-  fetchQuotes: () => Promise<void>
+  fetchQuotes: () => Promise<void>,
+  setIsBuySuccess: Function
 }) {
   const { t } = useTranslation()
   const client = createPublicClient({ 
@@ -110,8 +112,16 @@ export function BuyCbonForm({
   const { data: preSaleData, write: preSale } = useContractWrite({
     ...config,
   })
-
-
+  const { isLoading, isSuccess } = useWaitForTransaction({
+    hash: preSaleData?.hash,
+    // confirmations: 3
+  })
+  useEffect(() => {
+    if(isSuccess){
+      setIsBuySuccess(true)
+    }
+  }, [isSuccess, setIsBuySuccess])
+  
   const inputCurrency = bscTokens.cbon
 
   const outputCurrency: any = useNativeCurrency()

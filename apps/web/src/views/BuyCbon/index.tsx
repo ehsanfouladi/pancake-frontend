@@ -112,19 +112,21 @@ const [cbonBalance, setCbonBalance] = useState(null)
 const { data, isSuccess } = useBalance({
   address:account,
   token: bscTokens.cbon.address,
+  chainId:56,
+  watch: true
 })
+
+  const [isBuySuccess, setIsBuySuccess] = useState(false)
 
   useEffect(() => {
       getTotalNumberOfPurchases().catch(console.error)
       getTotalCBONPurchased().catch(console.error)
+      
       if(isSuccess){
-      setCbonBalance(data?.formatted);
+        console.log("del ey del");
+        setCbonBalance(data?.formatted);
       }
-      // openWinRateModal()
-      // setIsSuccess(isSuccess)
-      // audio.play().then()
-    // }
-    }, [isSuccess])
+    }, [isSuccess, isBuySuccess, data, getTotalCBONPurchased, getTotalNumberOfPurchases])
 
   const getNumberOfPurchases = () => {
     return (
@@ -189,9 +191,6 @@ const { data, isSuccess } = useBalance({
 
   return (
     <Page>
-      {/* <Flex marginBottom="30px" justifyContent="center" position="relative" alignItems="flex-start">
-        <Flex flexDirection="column"> */}
-        {/* TODO: Responsive */}
           <StyledBuyCbonContainer>
             <AppWrapper>
                 <Flex verticalAlign="center" alignItems="center" flexDirection="column" mb="15px">
@@ -205,6 +204,7 @@ const { data, isSuccess } = useBalance({
                     modalView={modalView}
                     buyCbonState={buyCbonState}
                     fetchQuotes={fetchQuotes}
+                    setIsBuySuccess = {setIsBuySuccess}
                   />
               </AppBody>
             </AppWrapper>
