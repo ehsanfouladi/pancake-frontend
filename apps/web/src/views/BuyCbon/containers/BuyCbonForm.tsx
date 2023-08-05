@@ -33,6 +33,8 @@ import BigNumber from 'bignumber.js'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import useNativeCurrency from 'hooks/useNativeCurrency'
+import WalletNotConnected from 'views/ProfileCreation/WalletNotConnected'
+import ConnectWalletButton from 'components/ConnectWalletButton'
 
 const CenterWrapper = styled.div`
   position: absolute;
@@ -207,9 +209,14 @@ export function BuyCbonForm({
           <ArrowDownIcon className="icon-down" color="primary" width="22px" />
       </CenterWrapper>
       <AssetSelect onCurrencySelect={handleOutputSelect} currency={inputCurrency} bnbAmount={bnbAmountBig} cbonPrice={CBONPrice}/>
+      {account ? (
+
       <Button onClick={()=>preSale?.()} disabled={!preSale}>
         Get Cbon
       </Button>
+      ):
+      <ConnectWalletButton  />
+    }
       </FormContainer>
     </>
   )
