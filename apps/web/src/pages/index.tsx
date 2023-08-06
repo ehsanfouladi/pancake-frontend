@@ -7,7 +7,8 @@ import { getCakeVaultAddress } from 'utils/addressHelpers'
 import { getCakeContract } from 'utils/contractHelpers'
 import { getBlocksFromTimestamps } from 'utils/getBlocksFromTimestamps'
 import { bitQueryServerClient, infoServerClient } from 'utils/graphql'
-import Lottery from '../views/Lottery'
+// import Lottery from '../views/Lottery'
+import ShowCase from './show-case'
 
 const IndexPage = ({ totalTx30Days, addressCount30Days, tvl }) => {
   return (
@@ -20,7 +21,7 @@ const IndexPage = ({ totalTx30Days, addressCount30Days, tvl }) => {
         },
       }}
     >
-      <Lottery />
+      <ShowCase />
     </SWRConfig>
   )
 }

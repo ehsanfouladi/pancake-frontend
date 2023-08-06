@@ -42,7 +42,7 @@ export const farmsV3 = defineFarmV3Configs([
   //   feeAmount: FeeAmount.LOW,
   // },
   {
-    pid: 3,
+    pid: 1,
     token0: bscTokens.test1,
     token1: bscTokens.test2,
     lpAddress: '0x307901b515798ED8F89F6696B49E13e99A6381a4',
@@ -55,13 +55,7 @@ export const farmsV3 = defineFarmV3Configs([
     lpAddress: '0x007a6d6504af2a41b1ccb5eb52b6c62b2e55572a',
     feeAmount: FeeAmount.LOWEST,
   },
-  {
-  pid: 1,
-  token0: bscTokens.usdt,
-  token1: bscTokens.busd,
-  lpAddress: '0xDC08d753f35D523f06E0819c84c8033BB81A6BBa',
-  feeAmount: FeeAmount.LOW,
-},
+
   // keep those farms on top
   // {
   //   pid: 50,

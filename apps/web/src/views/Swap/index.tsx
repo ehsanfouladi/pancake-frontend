@@ -37,8 +37,8 @@ import { SwapFeaturesContext } from './SwapFeaturesContext'
 
 export const BodyWrapper = styled(Card)`
   border-radius: 24px;
-  max-width: 412px;
-  width: 500px;
+  max-width: 360px;
+  width: 480px;
   z-index: 1;
 `
 // const StyledHeaderInner = styled(Flex)`
@@ -292,14 +292,26 @@ export default function Swap() {
 }`}</style>
       <ButtonMenuItem
         // role="button"
-        scale='sm'
-        variant='secondary'
+        scale="sm"
+        variant="secondary"
         tabIndex={0}
         onClick={onShowButtonClick}
         mb="15px"
       >
         <h2 className="decorated">
-          <span>{!multiSwapShow ?<ChevronDownIcon color="text" width="12px" /> : <ChevronUpIcon color="text" width="12px" />} {multiSwapShow ? 'Hide ' : 'Show '}Multi Swap {!multiSwapShow ?<ChevronDownIcon color="text" width="12px" /> : <ChevronUpIcon color="text" width="12px" />}</span>
+          <span>
+            {!multiSwapShow ? (
+              <ChevronDownIcon color="text" width="12px" />
+            ) : (
+              <ChevronUpIcon color="text" width="12px" />
+            )}{' '}
+            {multiSwapShow ? 'Hide ' : 'Show '}Multi Swap{' '}
+            {!multiSwapShow ? (
+              <ChevronDownIcon color="text" width="12px" />
+            ) : (
+              <ChevronUpIcon color="text" width="12px" />
+            )}
+          </span>
         </h2>
       </ButtonMenuItem>
       {isDesktop ? (
@@ -316,16 +328,18 @@ export default function Swap() {
             <span style={multiSwapShow ? { display: 'block' } : { display: 'none' }}>{PancakeIframe()}</span>
           </Flex>
         </>
-      ) : (multiSwapShow && (
-        <Flex flexDirection={isDesktop ? 'row' : 'column'} justifyContent="space-between" minHeight="2500px">
-          <StyledSwapContainer $isChartExpanded={isChartExpanded}>
-            <StyledInputCurrencyWrapper>
-              {UniSwapIframe()}
-              {BiSwapIframe()}
-              {PancakeIframe()}
-            </StyledInputCurrencyWrapper>
-          </StyledSwapContainer>
-        </Flex>)
+      ) : (
+        multiSwapShow && (
+          <Flex flexDirection={isDesktop ? 'row' : 'column'} justifyContent="space-between" minHeight="2500px">
+            <StyledSwapContainer $isChartExpanded={isChartExpanded}>
+              <StyledInputCurrencyWrapper>
+                {UniSwapIframe()}
+                {BiSwapIframe()}
+                {PancakeIframe()}
+              </StyledInputCurrencyWrapper>
+            </StyledSwapContainer>
+          </Flex>
+        )
       )}
     </Page>
   )

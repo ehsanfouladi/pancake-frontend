@@ -1,5 +1,5 @@
 import FarmsMpPageLayout from 'views/Farms/MpPageLayout'
-import FarmsHistoryPage from 'pages/farms/history'
+import FarmsHistoryPage from 'pages/__farms/history'
 
 const MPFarmsHistoryPage = () => {
   return <FarmsHistoryPage />

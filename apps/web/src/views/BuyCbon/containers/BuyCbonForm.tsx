@@ -1,40 +1,25 @@
-import { Dispatch, SetStateAction, useCallback, useEffect, useMemo, useState } from 'react'
-import { BuyCbonState } from 'state/buyCbon/reducer'
 import { useTranslation } from '@pancakeswap/localization'
-import { Currency, NativeCurrency, Percent } from '@pancakeswap/sdk'
-import { ArrowDownIcon, Box, Button, Text } from '@pancakeswap/uikit'
+import { Percent } from '@pancakeswap/sdk'
+import { bscTokens } from '@pancakeswap/tokens'
+import { ArrowDownIcon, Button, Text } from '@pancakeswap/uikit'
+import ConnectWalletButton from 'components/ConnectWalletButton'
 import CurrencyInputPanel from 'components/CurrencyInputPanel'
-import {
-  calculateDefaultAmount,
-  fetchMinimumBuyAmount,
-  useBuyCbonActionHandlers,
-  useBuyCbonErrorInfo,
-} from 'state/buyCbon/hooks'
-import { useOnRampCurrency } from 'hooks/Tokens'
-import { Field } from 'state/swap/actions'
-import styled from 'styled-components'
-import toString from 'lodash/toString'
-import { CryptoFormView } from 'views/BuyCbon/types'
-import { FormHeader } from './FormHeader'
-import { FormContainer } from '../components/FormContainer'
-import AssetSelect from '../components/AssetSelect'
-import GetQuotesButton from '../components/GetQuotesButton'
-import { fiatCurrencyMap } from '../constants'
-import { CADINU, bscTokens } from '@pancakeswap/tokens'
-import { FlipButton } from 'views/Swap/V3Swap/containers/FlipButton'
-import { maxAmountSpend } from 'utils/maxAmountSpend'
+import { preSaleCbonAbi } from 'config/abi/preSaleCbon'
+import useNativeCurrency from 'hooks/useNativeCurrency'
+import { Dispatch, SetStateAction, useCallback, useEffect, useMemo, useState } from 'react'
+import { useBuyCbonActionHandlers } from 'state/buyCbon/hooks'
+import { BuyCbonState } from 'state/buyCbon/reducer'
 import { useCurrencyBalance } from 'state/wallet/hooks'
-import { useAccount, useContractWrite, usePrepareContractWrite, useWaitForTransaction } from 'wagmi'
+import styled from 'styled-components'
+import { getPreSaleCbonContract } from 'utils/contractHelpers'
+import { maxAmountSpend } from 'utils/maxAmountSpend'
 import { createPublicClient, http } from 'viem'
 import { bsc } from 'viem/chains'
-import { getPreSaleCbonContract } from 'utils/contractHelpers'
-import { preSaleCbonAbi } from 'config/abi/preSaleCbon'
-import BigNumber from 'bignumber.js'
-import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
-import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
-import useNativeCurrency from 'hooks/useNativeCurrency'
-import WalletNotConnected from 'views/ProfileCreation/WalletNotConnected'
-import ConnectWalletButton from 'components/ConnectWalletButton'
+import { useAccount, useContractWrite, usePrepareContractWrite, useWaitForTransaction } from 'wagmi'
+import AssetSelect from '../components/AssetSelect'
+import { FormContainer } from '../components/FormContainer'
+import { CryptoFormView } from '../types'
+import { FormHeader } from './FormHeader'
 
 const CenterWrapper = styled.div`
   position: absolute;
@@ -55,48 +40,46 @@ export function BuyCbonForm({
   setModalView: Dispatch<SetStateAction<CryptoFormView>>
   modalView: CryptoFormView
   buyCbonState: BuyCbonState
-  fetchQuotes: () => Promise<void>,
-  setIsBuySuccess: Function
+  fetchQuotes: () => Promise<void>
+  setIsBuySuccess: any
 }) {
   const { t } = useTranslation()
-  const client = createPublicClient({ 
+  const client = createPublicClient({
     chain: bsc,
-    transport: http()
+    transport: http(),
   })
-  
-  const [CBONPrice, setCBONPrice] = useState(1n);
-  
-  const preSaleContract = getPreSaleCbonContract();
-  
-  const getCbonPriceInWei = async()=>{
-    const fetchedCbonPriceInWei:any = await client.readContract({
+
+  const [CBONPrice, setCBONPrice] = useState(1n)
+
+  const preSaleContract = getPreSaleCbonContract()
+
+  const getCbonPriceInWei = async () => {
+    const fetchedCbonPriceInWei: any = await client.readContract({
       address: preSaleContract.address as `0x${string}`,
       abi: preSaleCbonAbi,
-      functionName: 'CBONPriceInWei'
+      functionName: 'CBONPriceInWei',
     })
     // const CBONPriceInWei = new BigNumber (fetchedCbonPriceInWei?.toString())
-      setCBONPrice(fetchedCbonPriceInWei)
+    setCBONPrice(fetchedCbonPriceInWei)
   }
-  const [isRunning, setIsRunning] = useState(false)
-  const getIsPreSaleRuning = async()=>{
-    const isPreSaleRunning = await client.readContract({
-      address: preSaleContract.address as `0x${string}`,
-      abi: preSaleCbonAbi,
-      functionName: 'isPreSaleRunning'
-    })
+  // const [isRunning, setIsRunning] = useState(false)
+  // const getIsPreSaleRuning = async()=>{
+  //   const isPreSaleRunning = await client.readContract({
+  //     address: preSaleContract.address as `0x${string}`,
+  //     abi: preSaleCbonAbi,
+  //     functionName: 'isPreSaleRunning'
+  //   })
 
-    console.log("isPreSaleRunning", isPreSaleRunning);
-    
-    
-    setIsRunning(isPreSaleRunning===true? true : false)
-  }
+  //   console.log("isPreSaleRunning", isPreSaleRunning);
 
-  
+  //   // eslint-disable-next-line
+  //   setIsRunning(isPreSaleRunning ? true : false)
+  // }
+
   const {
     typedValue,
     // [Field.INPUT]: { currencyId: inputCurrencyId },
     // [Field.OUTPUT]: { currencyId: outputCurrencyId },
-   
   } = buyCbonState
   const [bnbAmountBig, setBnbAmountBig] = useState(0n)
 
@@ -104,7 +87,7 @@ export function BuyCbonForm({
     address: preSaleContract.address as `0x${string}`,
     abi: preSaleCbonAbi,
     functionName: 'preSale',
-    value:bnbAmountBig,
+    value: bnbAmountBig,
 
     onError(error) {
       // eslint-disable-next-line no-console
@@ -119,11 +102,11 @@ export function BuyCbonForm({
     // confirmations: 3
   })
   useEffect(() => {
-    if(isSuccess){
+    if (isSuccess) {
       setIsBuySuccess(true)
     }
   }, [isSuccess, setIsBuySuccess])
-  
+
   const inputCurrency = bscTokens.cbon
 
   const outputCurrency: any = useNativeCurrency()
@@ -152,31 +135,31 @@ export function BuyCbonForm({
   //     limitAmounts.quoteCurrency?.maxBuyAmount,
   //   )
   // }, [outputCurrencyId, inputCurrencyId, onFieldAInput, onLimitAmountUpdate])
-  
+
   useEffect(() => {
     // fetchMinBuyAmounts()
     getCbonPriceInWei()
-    getIsPreSaleRuning()
-    const bnbBig = Number(typedValue) * 10**18
+    // getIsPreSaleRuning()
+    const bnbBig = Number(typedValue) * 10 ** 18
     const bnbBigInt = BigInt(Math.floor(bnbBig))
     setBnbAmountBig(bnbBigInt)
   }, [typedValue])
 
-  const handleOutputSelect = ()=> void(null)
-  const {address: account} = useAccount()
+  const handleOutputSelect = () => undefined
+  const { address: account } = useAccount()
   const inputBalance = useCurrencyBalance(account, outputCurrency)
   const maxAmountInput = useMemo(() => maxAmountSpend(inputBalance), [inputBalance])
   const handlePercentInput = useCallback(
     (percent: number) => {
       if (maxAmountInput) {
-        onFieldAInput( maxAmountInput.multiply(new Percent(percent, 100)).toExact())
+        onFieldAInput(maxAmountInput.multiply(new Percent(percent, 100)).toExact())
       }
     },
     [maxAmountInput, onFieldAInput],
   )
   const handleMaxInput = useCallback(() => {
     if (maxAmountInput) {
-      onFieldAInput( maxAmountInput.toExact())
+      onFieldAInput(maxAmountInput.toExact())
     }
   }, [maxAmountInput, onFieldAInput])
   return (
@@ -184,39 +167,44 @@ export function BuyCbonForm({
       <FormHeader title={t('Get CBON Now')} subTitle={t('Spend BNB to Get CBON')} />
       <FormContainer>
         <CurrencyInputPanel
-        id="bnb-currency-input"
-        showUSDPrice
-        showMaxButton
-        disableCurrencySelect={true}
-        // showCommonBases
-        inputLoading={false}
-        currencyLoading={!false}
-        title={
-          <Text px="4px" bold fontSize="12px" textTransform="uppercase" color="secondary">
-            {t('I want to spend')}
-          </Text>}
-        maxAmount={maxAmountInput}
-        value={typedValue}
-        showQuickInputButton
-        currency={outputCurrency}
-        onUserInput={handleTypeOutput}
-        onCurrencySelect={handleOutputSelect}
-        onMax={handleMaxInput}
-        // otherCurrency={outputCurrency}
-        onPercentInput = {handlePercentInput}
-      />
-      <CenterWrapper>
+          id="bnb-currency-input"
+          showUSDPrice
+          showMaxButton
+          disableCurrencySelect
+          // showCommonBases
+          inputLoading={false}
+          currencyLoading={!false}
+          title={
+            <Text px="4px" bold fontSize="12px" textTransform="uppercase" color="secondary">
+              {t('I want to spend')}
+            </Text>
+          }
+          maxAmount={maxAmountInput}
+          value={typedValue}
+          showQuickInputButton
+          currency={outputCurrency}
+          onUserInput={handleTypeOutput}
+          onCurrencySelect={handleOutputSelect}
+          onMax={handleMaxInput}
+          // otherCurrency={outputCurrency}
+          onPercentInput={handlePercentInput}
+        />
+        <CenterWrapper>
           <ArrowDownIcon className="icon-down" color="primary" width="22px" />
-      </CenterWrapper>
-      <AssetSelect onCurrencySelect={handleOutputSelect} currency={inputCurrency} bnbAmount={bnbAmountBig} cbonPrice={CBONPrice}/>
-      {account ? (
-
-      <Button onClick={()=>preSale?.()} disabled={!preSale}>
-        Get Cbon
-      </Button>
-      ):
-      <ConnectWalletButton  />
-    }
+        </CenterWrapper>
+        <AssetSelect
+          onCurrencySelect={handleOutputSelect}
+          currency={inputCurrency}
+          bnbAmount={bnbAmountBig}
+          cbonPrice={CBONPrice}
+        />
+        {account ? (
+          <Button onClick={() => preSale?.()} disabled={!preSale}>
+            Get Cbon
+          </Button>
+        ) : (
+          <ConnectWalletButton />
+        )}
       </FormContainer>
     </>
   )
