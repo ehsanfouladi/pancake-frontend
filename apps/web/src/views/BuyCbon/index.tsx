@@ -180,8 +180,21 @@ export default function BuyCbon({ userIp }: { userIp: string | null }) {
       <StyledBuyCbonContainer>
         <AppWrapper>
           <Flex verticalAlign="center" alignItems="center" flexDirection="column" mb="15px">
-            <Heading2Text>Introducing the Revolutionary New Token</Heading2Text>
-            <Heading2Text> Now On PreSale </Heading2Text>
+            <Heading2Text
+              style={{
+                fontSize: '4vw',
+              }}
+            >
+              Introducing the Revolutionary New Token
+            </Heading2Text>
+            <Heading2Text
+              style={{
+                fontSize: '4vw',
+              }}
+            >
+              {' '}
+              Now On PreSale{' '}
+            </Heading2Text>
           </Flex>
           <AppBody>
             <BuyCbonForm

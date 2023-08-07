@@ -38,7 +38,7 @@ import { SwapFeaturesContext } from './SwapFeaturesContext'
 export const BodyWrapper = styled(Card)`
   border-radius: 24px;
   max-width: 360px;
-  width: 480px;
+  width: 350px;
   z-index: 1;
 `
 // const StyledHeaderInner = styled(Flex)`
@@ -149,7 +149,7 @@ export default function Swap() {
             title="PancakeSwap"
             src={`https://pancakeswap.finance/swap${newUrlExtention}`}
             width="100%"
-            height="800px"
+            height="760px"
             // onLoad={handlePancakeOnLoad}
             style={!iframeLoaded ? { display: 'none' } : { display: 'block' }}
           />
@@ -168,9 +168,10 @@ export default function Swap() {
           title="UniSwap"
           src={`https://app.uniswap.org/#/swap${newUrlExtention}`}
           width="100%"
-          height="800px"
+          height="760px"
           onLoad={handlePancakeOnLoad}
           tabIndex={-500}
+          scrolling="no"
           style={!iframeLoaded ? { display: 'none' } : { display: 'block', position: 'relative' }}
         />
       </AppBody>
@@ -188,7 +189,8 @@ export default function Swap() {
           title="Biswap"
           src={`https://biswap.org/swap${newUrlExtention}`}
           width="100%"
-          height="800px"
+          height="760px"
+          scrolling="no"
           // onLoad={handlePancakeOnLoad}
           style={!iframeLoaded ? { display: 'none' } : { display: 'block' }}
         />
@@ -281,7 +283,7 @@ export default function Swap() {
     top: 50%;
     border-bottom: 2px solid;
     border-color: black;
-    width: 30vw;
+    width: 20vw;
     margin: 0 20px;
 }
 .decorated > span:before{
