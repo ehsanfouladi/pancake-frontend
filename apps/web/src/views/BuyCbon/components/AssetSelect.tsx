@@ -3,6 +3,8 @@ import {
   ArrowDropDownIcon,
   Box,
   CircleLoader,
+  CopyAddress,
+  CopyButton,
   CurrencyLogo,
   Flex,
   RowBetween,
@@ -34,8 +36,6 @@ const AssetSelectButton = styled.div`
   border-radius: 16px;
   background: ${({ theme }) => theme.colors.dropdown};
   transition: border-radius 0.15s;
-
- 
 `
 
 const chainIdToNetwork: { [network: number]: string } = {
@@ -55,13 +55,11 @@ function Balance({ balance, currency }: { balance: CurrencyAmount<Currency>; cur
 }
 export type BigintIsh = bigint | number | string
 
-
 const AssetSelect = ({ onCurrencySelect, currency, bnbAmount, cbonPrice }) => {
   const { t } = useTranslation()
   const account = useAccount()
-  const balance = CurrencyAmount.fromFractionalAmount(bscTokens.cbon,bnbAmount*1000000000000000000n,cbonPrice)
-  
-  
+  const balance = CurrencyAmount.fromFractionalAmount(bscTokens.cbon, bnbAmount * 1000000000000000000n, cbonPrice)
+
   // const balanceb = balanceB/cbonPrice
   const onRampTokens = useAllOnRampTokens()
   const [onPresentCurrencyModal] = useModal(
@@ -80,7 +78,7 @@ const AssetSelect = ({ onCurrencySelect, currency, bnbAmount, cbonPrice }) => {
   // }, [onPresentCurrencyModal])
 
   return (
-    <Flex flexDirection="column" >
+    <Flex flexDirection="column">
       <Flex justifyContent="space-between" px="4px">
         <Text mb="8px" bold fontSize="12px" textTransform="uppercase" color="secondary">
           {t('You will get')}
@@ -89,12 +87,19 @@ const AssetSelect = ({ onCurrencySelect, currency, bnbAmount, cbonPrice }) => {
           {balance ? <Balance balance={balance} currency={currency} /> : account.address ? <CircleLoader /> : null}
         </RowFixed>
       </Flex>
-      <AssetSelectButton >
+      <AssetSelectButton>
         <RowBetween>
           <Text>{chainIdToNetwork[currency?.chainId]}</Text>
           <Flex>
-            <Box width={24} height={24}>
-              <CurrencyLogo currency={currency} size="24px" />
+            <Box width={68} height={24}>
+              <Flex flexDirection="row-reverse" alignContent="space-between" verticalAlign="center">
+                <span>
+                  <CurrencyLogo currency={currency} size="24px" />
+                </span>
+                <span>
+                  <CopyButton text={currency.address} tooltipMessage="Copy CBON Address" color="secondary" mt={-2} />
+                </span>
+              </Flex>
             </Box>
             <Text mx="4px">{currency?.symbol}</Text>
             {/* <ArrowDropDownIcon /> */}

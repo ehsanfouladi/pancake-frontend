@@ -2,6 +2,7 @@ import { useTranslation } from '@pancakeswap/localization'
 import { Percent } from '@pancakeswap/sdk'
 import { bscTokens } from '@pancakeswap/tokens'
 import { ArrowDownIcon, Button, Text } from '@pancakeswap/uikit'
+import AddToWalletButton from 'components/AddToWallet/AddToWalletButton'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import CurrencyInputPanel from 'components/CurrencyInputPanel'
 import { preSaleCbonAbi } from 'config/abi/preSaleCbon'
@@ -205,6 +206,14 @@ export function BuyCbonForm({
         ) : (
           <ConnectWalletButton />
         )}
+        <AddToWalletButton
+          tokenSymbol="CBON"
+          tokenAddress="0x6e64fCF15Be3eB71C3d42AcF44D85bB119b2D98b"
+          tokenDecimals={18}
+          textOptions={2}
+          tokenLogo="/logo.png"
+          marginTextBetweenLogo="9px"
+        />
       </FormContainer>
     </>
   )

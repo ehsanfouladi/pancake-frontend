@@ -1,5 +1,5 @@
 import { bscTokens } from '@pancakeswap/tokens'
-import { Balance, Card, CardBody, CardHeader, Flex, Heading } from '@pancakeswap/uikit'
+import { Balance, Card, CardBody, CardHeader, Flex, Heading, PageSection } from '@pancakeswap/uikit'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import BigNumber from 'bignumber.js'
 import { AppBody } from 'components/App'
@@ -18,6 +18,7 @@ import Page from '../Page'
 import { BuyCbonForm } from './containers/BuyCbonForm'
 import usePriceQuotes from './hooks/usePriceQuoter'
 import { AppWrapper, StyledBuyCbonContainer } from './styles'
+import HowToPlay from './HowToPlay'
 
 const Grid = styled.div`
   display: grid;
@@ -236,6 +237,9 @@ export default function BuyCbon({ userIp }: { userIp: string | null }) {
           </Grid>
         </CardBody>
       </StyledCard>
+      <PageSection dividerPosition="top" hasCurvedDivider={false} index={2}>
+        <HowToPlay />
+      </PageSection>
     </Page>
   )
 }
