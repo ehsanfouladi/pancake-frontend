@@ -1,18 +1,18 @@
-// import Tokens from 'views/Info/Tokens'
-// import { InfoPageLayout } from 'views/Info'
+import Tokens from 'views/Info/Tokens'
+import { InfoPageLayout } from 'views/Info'
 
-// const InfoTokensPage = () => {
-//   return <Tokens />
-// }
+const InfoTokensPage = () => {
+  return <Tokens />
+}
 
-// InfoTokensPage.Layout = InfoPageLayout
-// InfoTokensPage.chains = [] // set all
+InfoTokensPage.Layout = InfoPageLayout
+InfoTokensPage.chains = [] // set all
 
-// export default InfoTokensPage
-import { NotFound } from '@pancakeswap/uikit'
+export default InfoTokensPage
+// import { NotFound } from '@pancakeswap/uikit'
 
-const NotFoundPage = () => <NotFound />
+// const NotFoundPage = () => <NotFound />
 
-NotFoundPage.chains = []
+// NotFoundPage.chains = []
 
-export default NotFoundPage
+// export default NotFoundPage

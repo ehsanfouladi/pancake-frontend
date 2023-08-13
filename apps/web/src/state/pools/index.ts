@@ -1,56 +1,57 @@
-import { createAsyncThunk, createSlice, PayloadAction, isAnyOf } from '@reduxjs/toolkit'
-import BigNumber from 'bignumber.js'
-import keyBy from 'lodash/keyBy'
-import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
-import { bscTokens } from '@pancakeswap/tokens'
-import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
-import { fetchTokenUSDValue } from '@pancakeswap/utils/llamaPrice'
 import {
-  fetchPoolsTimeLimits,
-  fetchPoolsTotalStaking,
+  fetchFlexibleSideVaultUser,
+  fetchPoolsAllowance,
   fetchPoolsProfileRequirement,
   fetchPoolsStakingLimits,
-  fetchPoolsAllowance,
+  fetchPoolsTimeLimits,
+  fetchPoolsTotalStaking,
+  fetchPublicFlexibleSideVaultData,
+  fetchPublicIfoData,
+  fetchPublicVaultData,
   fetchUserBalances,
+  fetchUserIfoCredit,
   fetchUserPendingRewards,
   fetchUserStakeBalances,
-  fetchPublicIfoData,
-  fetchUserIfoCredit,
-  fetchPublicVaultData,
-  fetchPublicFlexibleSideVaultData,
-  fetchVaultUser,
   fetchVaultFees,
-  fetchFlexibleSideVaultUser,
-  getCakeVaultAddress,
+  fetchVaultUser,
   getCakeFlexibleSideVaultAddress,
+  getCakeVaultAddress,
+  getPoolAprByTokenPerBlock,
+  getPoolAprByTokenPerSecond,
   getPoolsConfig,
   isLegacyPool,
-  getPoolAprByTokenPerSecond,
-  getPoolAprByTokenPerBlock,
 } from '@pancakeswap/pools'
 import { ChainId } from '@pancakeswap/sdk'
+import { bscTokens } from '@pancakeswap/tokens'
+import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
+import { fetchTokenUSDValue } from '@pancakeswap/utils/llamaPrice'
+import { PayloadAction, createAsyncThunk, createSlice, isAnyOf } from '@reduxjs/toolkit'
+import BigNumber from 'bignumber.js'
+import keyBy from 'lodash/keyBy'
 
-import {
-  PoolsState,
-  SerializedPool,
-  SerializedVaultFees,
-  SerializedCakeVault,
-  SerializedLockedVaultUser,
-  PublicIfoData,
-  SerializedVaultUser,
-  SerializedLockedCakeVault,
-} from 'state/types'
-import { Address, erc20ABI } from 'wagmi'
-import { isAddress } from 'utils'
-import { publicClient } from 'utils/wagmi'
-import { getViemClients } from 'utils/viem'
 import { getPoolsPriceHelperLpFiles } from 'config/constants/priceHelperLps/index'
 import { farmV3ApiFetch } from 'state/farmsV3/hooks'
+import {
+  PoolsState,
+  PublicIfoData,
+  SerializedCakeVault,
+  SerializedLockedCakeVault,
+  SerializedLockedVaultUser,
+  SerializedPool,
+  SerializedVaultFees,
+  SerializedVaultUser,
+} from 'state/types'
+import { isAddress } from 'utils'
+import { getViemClients } from 'utils/viem'
+import { publicClient } from 'utils/wagmi'
+import { Address, erc20ABI } from 'wagmi'
 
+import { useCbonPrice, useCbonPriceAsBN } from '@pancakeswap/utils/useCakePrice'
 import fetchFarms from '../farms/fetchFarms'
 import getFarmsPrices from '../farms/getFarmsPrices'
-import { getTokenPricesFromFarm } from './helpers'
 import { resetUserState } from '../global/actions'
+import { getTokenPricesFromFarm } from './helpers'
 
 export const initialPoolVaultState = Object.freeze({
   totalShares: null,
@@ -189,7 +190,7 @@ export const fetchPoolsPublicDataAsync = (chainId: number) => async (dispatch, g
       ? getFarmsPrices([bnbBusdFarm, ...poolsWithDifferentFarmToken], chainId)
       : []
 
-    const prices = getTokenPricesFromFarm([
+    const prices =  getTokenPricesFromFarm([
       ...farmsData,
       ...farmsWithPricesOfDifferentTokenPools,
       ...(farmV3?.farmsWithPrice ?? []),
@@ -205,7 +206,11 @@ export const fetchPoolsPublicDataAsync = (chainId: number) => async (dispatch, g
       const isPoolFinished = pool.isFinished || isPoolEndBlockExceeded
 
       const stakingTokenAddress = isAddress(pool.stakingToken.address)
-      let stakingTokenPrice = stakingTokenAddress ? prices[stakingTokenAddress] : 0
+      let stakingTokenPrice = 
+      // stakingTokenAddress === bscTokens.cbon.address ? useCbonPrice() :
+          stakingTokenAddress ? prices[stakingTokenAddress] : 0
+          console.log("stakingTokenPrice", stakingTokenPrice);
+      
       if (stakingTokenAddress && !prices[stakingTokenAddress] && !isPoolFinished) {
         // eslint-disable-next-line no-await-in-loop
         const result = await fetchTokenUSDValue(chainId, [stakingTokenAddress])
@@ -213,12 +218,17 @@ export const fetchPoolsPublicDataAsync = (chainId: number) => async (dispatch, g
       }
 
       const earningTokenAddress = isAddress(pool.earningToken.address)
-      let earningTokenPrice = earningTokenAddress ? prices[earningTokenAddress] : 0
+      
+      let earningTokenPrice =
+      //  earningTokenAddress === bscTokens.cbon.address ? useCbonPrice() : 
+        earningTokenAddress ? prices[earningTokenAddress] : 0
       if (earningTokenAddress && !prices[earningTokenAddress] && !isPoolFinished) {
         // eslint-disable-next-line no-await-in-loop
         const result = await fetchTokenUSDValue(chainId, [earningTokenAddress])
         earningTokenPrice = result.get(earningTokenAddress) || 0
       }
+      console.log("earningTokenPrice", earningTokenPrice);
+
       const totalStaked = getBalanceNumber(new BigNumber(totalStaking.totalStaked), pool.stakingToken.decimals)
       const apr = !isPoolFinished
         ? isLegacyPool(pool)
