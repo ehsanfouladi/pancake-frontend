@@ -1,19 +1,27 @@
-import { useEffect, useState } from 'react'
-import styles from "./showcaseStyles.module.css"
+import {
+  Box,
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  CardProps,
+  Flex,
+  Heading,
+  PageSection,
+  Tag,
+} from '@pancakeswap/uikit'
+import { PageMeta } from 'components/Layout/Page'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import weekOfYear from 'dayjs/plugin/weekOfYear'
-import {
-   Flex, Card, CardProps, CardHeader, CardBody, CardFooter, Heading, Tag, PageSection, Box 
-  } from '@pancakeswap/uikit'
-import styled from 'styled-components'
-import { PageMeta } from 'components/Layout/Page'
 import Image from 'next/image'
 import Link from 'next/link'
-import Countdown from './countdown'
+import { useEffect, useState } from 'react'
+import styled from 'styled-components'
 import { alignItems, bottom, display } from 'styled-system'
+import Countdown from './countdown'
 import PreSaleBanner from './preSaleBanner'
-
+import styles from './showcaseStyles.module.css'
 
 export const BodyWrapper = styled(Card)`
   border-radius: 40px;
@@ -97,46 +105,46 @@ export default function ShowCase() {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 24pt;
     font-weight: bold;
-    color: #CCAF5F;
-    background: -webkit-linear-gradient(90deg ,#B05656 0%, #B05656 100%);
+    color: #ccaf5f;
+    background: -webkit-linear-gradient(90deg, #b05656 0%, #b05656 100%);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-stroke: 2px transparent;
     text-shadow: 0px 4px 4px rgba(0, 255, 255, 0.25);
     text-transform: uppercase;
     margin-bottom: 8px;
-    flex:flex;
-    justify-content:center;
-    align-content:center;
-    text-align:center;
-    z-index:100;
+    flex: flex;
+    justify-content: center;
+    align-content: center;
+    text-align: center;
+    z-index: 100;
   `
-  
-  const StyledBannerWrapper = styled.div`
-  ${({ theme }) => `background-color: ${theme.colors.cardBorder}`};
-  flex: none;
-  position: relative;
-  width: 100%;
-  box-shadow: 5px 5px 7px #163553 ;
-  border-radius: 32px;
-  height: 95px;
-  overflow: hidden;
-  display:flex;
-  flex-wrap:wrap;
-  felx-direction: row;
-  vertical-align:center;
-  align-items:center;
-  justify-content:center;
-  // animation: ${styles.BannerAnimation} 10s ease infinite alternate;
-  
-  ${({ theme }) => theme.mediaQueries.sm} {
-    height: 192px;
-  }
 
-  ${({ theme }) => theme.mediaQueries.md} {
-    height: 256px;
-  }
-`
+  const StyledBannerWrapper = styled.div`
+    ${({ theme }) => `background-color: ${theme.colors.cardBorder}`};
+    flex: none;
+    position: relative;
+    width: 100%;
+    box-shadow: 5px 5px 7px #163553;
+    border-radius: 32px;
+    height: 95px;
+    overflow: hidden;
+    display: flex;
+    flex-wrap: wrap;
+    felx-direction: row;
+    vertical-align: center;
+    align-items: center;
+    justify-content: center;
+    // animation: ${styles.BannerAnimation} 10s ease infinite alternate;
+
+    ${({ theme }) => theme.mediaQueries.sm} {
+      height: 192px;
+    }
+
+    ${({ theme }) => theme.mediaQueries.md} {
+      height: 256px;
+    }
+  `
 
   const ShowCasePage = styled.div`
     min-height: calc(100vh - 50px);
@@ -153,14 +161,13 @@ export default function ShowCase() {
     return () => clearTimeout(timer)
   })
 
-
   return (
     <>
       <PageMeta />
       <ShowCasePage>
         <PageSection index={1} background="linear-gradient(135deg, #4c57a3 0%, #899dcf 100%)" hasCurvedDivider={false}>
           <StyledHeading>Cadinu Apps: The Ultimate Crypto Platform for Games and Apps</StyledHeading>
-          <Flex 
+          <Flex
             flexDirection="column"
             mb="24px"
             alignItems="center"
@@ -168,19 +175,19 @@ export default function ShowCase() {
             // backgroundImage="/images/teams/no-team-banner.png"
           >
             <Link href="/pre-sale">
-            <Box position="relative" pb="56px"  >
-              {/* <StyledBannerWrapper className={styles.banner} > */}
+              <Box position="relative" pb="56px">
+                {/* <StyledBannerWrapper className={styles.banner} > */}
                 {/* <StyledBanner>
                   Unveiling the Game-Changing CADINU Bonus Token: Secure Your PreSale Spot Now!
                 </StyledBanner> */}
                 <PreSaleBanner />
                 {/* <Flex flex="flex" position="absolute" flexDirection="column-reverse"
                 > */}
-              
+
                 {/* </Flex>  */}
                 {/* <Image src={bannerImage} alt={bannerAlt} fill style={{ objectFit: 'cover' }} priority /> */}
-              {/* </StyledBannerWrapper> */}
-            </Box>
+                {/* </StyledBannerWrapper> */}
+              </Box>
             </Link>
           </Flex>
           <Flex
@@ -199,13 +206,11 @@ export default function ShowCase() {
                     m={['15px', '10px']}
                     padding="0"
                     background="#F3F2EE"
-
                     style={{
                       flex: '0 1 24%',
                       // maxWidth: "calc(95% - 1em)"
                       height: '420px',
                       border: '10px',
-
                     }}
                   >
                     <CardHeader style={{ textAlign: 'center' }}>
@@ -214,7 +219,7 @@ export default function ShowCase() {
                     <CardBody
                       style={{
                         padding: '0',
-                        background:"#F3F2EE",
+                        background: '#F3F2EE',
                         // "height": "350px",
                         // "width": "350px",
                         textAlign: 'center',
