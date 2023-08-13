@@ -18,6 +18,12 @@ export const tokenImageChainNameMapping = {
 
 const getImageUrlFromToken = (token: Token) => {
   const address = token?.isNative ? token.wrapped.address : token.address
+  if (token.symbol==='CBON'){
+    return '/images/cbonLogo.PNG'
+  }
+  if (token.symbol==='CADINU'){
+    return '/logo.png'
+  }
 
   return `https://tokens.pancakeswap.finance/images/${tokenImageChainNameMapping[token.chainId]}${address}.png`
 }

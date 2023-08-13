@@ -29,6 +29,7 @@ export function CurrencyLogo({
   const srcs: string[] = useMemo(() => {
     if (currency?.isNative) return [];
     if (currency?.symbol === 'CADINU') return[];
+    if (currency?.symbol === 'CBON') return[];
 
     if (currency?.isToken) {
       const logoUrls = getCurrencyLogoUrls(currency);
@@ -60,6 +61,16 @@ export function CurrencyLogo({
     <StyledLogo
     size={size}
     srcs={[`https://s2.coinmarketcap.com/static/img/coins/64x64/22984.png`]}
+    width={size}
+    style={style}
+  />)
+    // <LogoRoundIcon width={size} style={style} />;
+  }
+  if (currency?.symbol === 'CBON'){
+    return(
+    <StyledLogo
+    size={size}
+    srcs={[`/images/cbonLogo.PNG`]}
     width={size}
     style={style}
   />)

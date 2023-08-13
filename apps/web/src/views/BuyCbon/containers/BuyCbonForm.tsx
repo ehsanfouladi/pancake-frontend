@@ -211,7 +211,7 @@ export function BuyCbonForm({
           tokenAddress="0x6e64fCF15Be3eB71C3d42AcF44D85bB119b2D98b"
           tokenDecimals={18}
           textOptions={2}
-          tokenLogo="/logo.png"
+          tokenLogo="/images/cbonLogo.PNG"
           marginTextBetweenLogo="9px"
         />
       </FormContainer>
