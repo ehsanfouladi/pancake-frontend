@@ -176,17 +176,7 @@ export default function ShowCase() {
           >
             <Link href="/pre-sale">
               <Box position="relative" pb="56px">
-                {/* <StyledBannerWrapper className={styles.banner} > */}
-                {/* <StyledBanner>
-                  Unveiling the Game-Changing CADINU Bonus Token: Secure Your PreSale Spot Now!
-                </StyledBanner> */}
                 <PreSaleBanner />
-                {/* <Flex flex="flex" position="absolute" flexDirection="column-reverse"
-                > */}
-
-                {/* </Flex>  */}
-                {/* <Image src={bannerImage} alt={bannerAlt} fill style={{ objectFit: 'cover' }} priority /> */}
-                {/* </StyledBannerWrapper> */}
               </Box>
             </Link>
           </Flex>
@@ -201,7 +191,10 @@ export default function ShowCase() {
           >
             {Apps.map((app) => {
               return (
-                <Link href={app.destination} style={{ pointerEvents: app.enabled ? 'visible' : 'none' }}>
+                <Link
+                   href={app.destination} 
+                   style={{
+                     pointerEvents: app.enabled  || (app.hasCountDown && 1692090000 < unixNow)  ? 'visible' : 'none' }}>
                   <AppBody
                     m={['15px', '10px']}
                     padding="0"
@@ -246,7 +239,12 @@ export default function ShowCase() {
                           <Tag variant="binance">Comming Soon</Tag>
                         </Flex>
                       )}
-                      {app.hasCountDown && !app.enabled && <Countdown nextEventTime={1692090000 - unixNow} />}
+                      {
+                        app.hasCountDown
+                        && !app.enabled
+                        && 1692090000 > unixNow 
+                        && <Countdown nextEventTime={1692090000 - unixNow} />
+                       }
                     </CardFooter>
                   </AppBody>
                 </Link>
