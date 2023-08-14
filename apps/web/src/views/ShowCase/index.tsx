@@ -194,7 +194,7 @@ export default function ShowCase() {
                 <Link
                    href={app.destination} 
                    style={{
-                     pointerEvents: app.enabled  || (app.hasCountDown && 1692090000 < unixNow)  ? 'visible' : 'none' }}>
+                     pointerEvents: app.enabled  || (app.hasCountDown &&   unixNow > 1692090000)  ? 'visible' : 'none' }}>
                   <AppBody
                     m={['15px', '10px']}
                     padding="0"
@@ -242,7 +242,7 @@ export default function ShowCase() {
                       {
                         app.hasCountDown
                         && !app.enabled
-                        && 1692090000 > unixNow 
+                        &&  unixNow < 1692090000
                         && <Countdown nextEventTime={1692090000 - unixNow} />
                        }
                     </CardFooter>

@@ -576,7 +576,6 @@ export default function PoolPage() {
                     <Text fontSize="12px" color="secondary" bold textTransform="uppercase">
                       {t('Liquidity')}
                     </Text>
-// 
                     <Text fontSize="24px" fontWeight={600} mb="8px">
                       $
                       {fiatValueOfLiquidity?.greaterThan(new Fraction(1, 100))
@@ -646,7 +645,6 @@ export default function PoolPage() {
                           ? fiatValueOfFees.toFixed(2, { groupSeparator: ',' })
                           : '-'}
                       </Text>
-// 
                       <Button
                         scale="sm"
                         disabled={
@@ -894,7 +892,6 @@ function PositionHistory_({
             <PreTitle>{t('Action')}</PreTitle>
             <PreTitle>{t('Token Transferred')}</PreTitle>
           </AtomBox>
-// 
           {data.map((d) => {
             return (
               <AutoColumn key={d.id} gap="16px">

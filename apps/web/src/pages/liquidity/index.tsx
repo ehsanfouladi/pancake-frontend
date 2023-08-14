@@ -233,7 +233,6 @@ export default function PoolListPage() {
                   {t('Hide closed positions')}
                 </Text>
               </Flex>
-// 
               <ButtonMenu
                 scale="sm"
                 activeIndex={selectedTypeIndex}
@@ -252,7 +251,6 @@ export default function PoolListPage() {
         />
         <Body>
           {mainSection}
-// 
           {selectedTypeIndex === FILTER.V2 ? <FindOtherLP /> : null}
         </Body>
         <CardFooter style={{ textAlign: 'center' }}>
