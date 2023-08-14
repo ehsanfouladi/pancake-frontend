@@ -217,7 +217,7 @@ const TermsOfService = () => {
         Farm Offerings:
       </Text>
       <Text as="p">
-        Belarus, Cuba, Crimea Region, Democratic Republic of Congo, Iran, Iraq, New Zealand, North Korea, South Sudan,
+        Belarus, Cuba, Crimea Region, Democratic Republic of Congo, Iraq, New Zealand, North Korea, South Sudan,
         Sudan, Syria, United States of America and its territories (American Samoa, Guam, Puerto Rico, the Northern
         Mariana Islands, and the U.S. Virgin Islands), Zimbabwe.
       </Text>

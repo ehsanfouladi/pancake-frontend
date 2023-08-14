@@ -1,7 +1,15 @@
-import LimitOrders from '../views/LimitOrders'
+// import LimitOrders from '../views/LimitOrders'
+// 
+// const LimitOrdersPage = () => {
+  // return <LimitOrders />
+// }
+// 
+// export default LimitOrdersPage
+// 
+import { NotFound } from '@pancakeswap/uikit'
 
-const LimitOrdersPage = () => {
-  return <LimitOrders />
-}
+const NotFoundPage = () => <NotFound />
 
-export default LimitOrdersPage
+NotFoundPage.chains = []
+
+export default NotFoundPage

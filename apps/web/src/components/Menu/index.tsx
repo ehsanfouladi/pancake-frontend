@@ -3,7 +3,7 @@ import { footerLinks, Menu as UikitMenu, NextLinkFromReactRouter, useModal } fro
 import USCitizenConfirmModal from 'components/Modal/USCitizenConfirmModal'
 // import { NetworkSwitcher } from 'components/NetworkSwitcher'
 import PhishingWarningBanner from 'components/PhishingWarningBanner'
-// import { useCakeBusdPrice } from 'hooks/useBUSDPrice'
+import { useCakeBusdPrice } from 'hooks/useBUSDPrice'
 import useTheme from 'hooks/useTheme'
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
@@ -23,7 +23,7 @@ const LinkComponent = (linkProps) => {
 const Menu = (props) => {
   const { chainId } = useActiveChainId()
   const { isDark, setTheme } = useTheme()
-  // const cakePriceUsd = useCakeBusdPrice({ forceMainnet: true })
+  const cakePriceUsd = useCakeBusdPrice({ forceMainnet: true })
   const { currentLanguage, setLanguage, t } = useTranslation()
   const { pathname } = useRouter()
   const [onUSCitizenModalPresent] = useModal(
@@ -65,14 +65,14 @@ const Menu = (props) => {
         currentLang={currentLanguage.code}
         langs={languageList}
         setLang={setLanguage}
-        // cakePriceUsd={cakePriceUsd}
+        cakePriceUsd={cakePriceUsd}
         links={menuItems}
         subLinks={activeMenuItem?.hideSubNav || activeSubMenuItem?.hideSubNav ? [] : activeMenuItem?.items}
         footerLinks={getFooterLinks}
         activeItem={activeMenuItem?.href}
         activeSubItem={activeSubMenuItem?.href}
-        buyCakeLabel={t('Buy CAKE')}
-        buyCakeLink="https://pancakeswap.finance/swap?outputCurrency=0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82&chainId=56"
+        buyCakeLabel={t('Buy Cadinu')}
+        buyCakeLink="https://apps.cadinu.io/swap?outputCurrency=0x76e112203eF59D445452ef7556386dD2DF3Ed914&chainId=56"
         {...props}
       />
     </>
