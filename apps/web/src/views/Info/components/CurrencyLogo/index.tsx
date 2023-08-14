@@ -30,7 +30,13 @@ export const CurrencyLogo: React.FC<
 
   const imagePath = chainName === 'BSC' ? '' : `${chainName?.toLowerCase()}/`
   const checkedSumAddress = isAddress(address)
-  const srcFromPCS = checkedSumAddress
+  console.log("address", address.toLowerCase());
+  
+  const srcFromPCS = checkedSumAddress && address==="0x76e112203ef59d445452ef7556386dd2df3ed914" ?
+    "https://cadinu.io/dl/200.png"
+    : checkedSumAddress && address === "0x6e64fcf15be3eb71c3d42acf44d85bb119b2d98b" ?
+    "https://cadinu.io/dl/CBON200.PNG" 
+    : checkedSumAddress
     ? `https://tokens.pancakeswap.finance/images/${imagePath}${checkedSumAddress}.png`
     : ''
   return <StyledLogo size={size} srcs={[srcFromPCS, src]} alt="token logo" useFilledIcon {...rest} />
