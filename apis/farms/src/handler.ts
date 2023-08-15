@@ -2,7 +2,7 @@ import BN from 'bignumber.js'
 import { formatUnits } from 'viem'
 import { SerializedFarmConfig, FarmWithPrices } from '@pancakeswap/farms'
 import { ChainId,  CurrencyAmount, Pair } from '@pancakeswap/sdk'
-import { BUSD, CAKE, CBON, CADINU } from '@pancakeswap/tokens'
+import { BUSD, CAKE, CBON, CADINU, USDT } from '@pancakeswap/tokens'
 import { farmFetcher } from './helper'
 import { FarmKV, FarmResult } from './kv'
 import { updateLPsAPR } from './lpApr'
@@ -62,19 +62,19 @@ const pairAbi = [
 
 const cakeBusdPairMap = {
   [ChainId.BSC]: {
-    address: Pair.getAddress(CADINU[ChainId.BSC], BUSD[ChainId.BSC]),
+    address: Pair.getAddress(CADINU[ChainId.BSC], USDT[ChainId.BSC]),
     tokenA: CADINU[ChainId.BSC],
-    tokenB: BUSD[ChainId.BSC],
+    tokenB: USDT[ChainId.BSC],
   },
-  [ChainId.BSC_TESTNET]: {
-    address: Pair.getAddress(CAKE[ChainId.BSC_TESTNET], BUSD[ChainId.BSC_TESTNET]),
-    tokenA: CAKE[ChainId.BSC_TESTNET],
-    tokenB: BUSD[ChainId.BSC_TESTNET],
-  },
+//   [ChainId.BSC_TESTNET]: {
+//     address: Pair.getAddress(CAKE[ChainId.BSC_TESTNET], BUSD[ChainId.BSC_TESTNET]),
+//     tokenA: CAKE[ChainId.BSC_TESTNET],
+//     tokenB: BUSD[ChainId.BSC_TESTNET],
+//   },
 }
 
 const getCakePrice = async (isTestnet: boolean) => {
-  const pairConfig = cakeBusdPairMap[isTestnet ? ChainId.BSC_TESTNET : ChainId.BSC]
+  const pairConfig = cakeBusdPairMap[ ChainId.BSC]
   const client = isTestnet ? bscTestnetClient : bscClient
   const [reserve0, reserve1] = await client.readContract({
     abi: pairAbi,
@@ -197,11 +197,10 @@ export async function fetchCakePrice() {
 
 export const fetchCadinuPrice =  async () => {
   const pairConfig = {
-      address: Pair.getAddress(CADINU[ChainId.BSC], BUSD[ChainId.BSC]),
+      address: Pair.getAddress(CADINU[ChainId.BSC], USDT[ChainId.BSC]),
       tokenA: CADINU[ChainId.BSC],
-      tokenB: BUSD[ChainId.BSC],
+      tokenB: USDT[ChainId.BSC],
     }
-    console.log("pairConfig", pairConfig);
     
   // const pairConfig = pairConfig[ChainId.BSC]
   const client = bscClient

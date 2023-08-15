@@ -12,7 +12,7 @@ import {
   TradeType,
 } from '@pancakeswap/sdk'
 import { FAST_INTERVAL } from 'config/constants'
-import { BUSD, CAKE,CADINU, USDC, STABLE_COIN, CBON } from '@pancakeswap/tokens'
+import { BUSD, CAKE,CADINU, USDC, STABLE_COIN, CBON, USDT } from '@pancakeswap/tokens'
 import { useMemo } from 'react'
 import useSWR from 'swr'
 import useSWRImmutable from 'swr/immutable'
@@ -342,8 +342,8 @@ export const useCakeBusdPrice = (
   const { chainId } = useActiveChainId()
   const isTestnet = !forceMainnet && isChainTestnet(chainId)
   // Return bsc testnet cake if chain is testnet
-  const cake: Token = isTestnet ? CADINU[ChainId.BSC_TESTNET] : CADINU[ChainId.BSC]
-  return usePriceByPairs(BUSD[cake.chainId], cake)
+  const cadinu: Token = isTestnet ? CADINU[ChainId.BSC_TESTNET] : CADINU[ChainId.BSC]
+  return usePriceByPairs(USDT[cadinu.chainId], cadinu)
 }
 
 /**
