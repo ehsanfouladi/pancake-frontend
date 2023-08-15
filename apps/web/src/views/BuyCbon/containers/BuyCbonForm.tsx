@@ -137,11 +137,17 @@ export function BuyCbonForm({
   //   )
   // }, [outputCurrencyId, inputCurrencyId, onFieldAInput, onLimitAmountUpdate])
 
+  const calcBigBNB = (bnbValue:string)=>{
+    if (Number(bnbValue)){
+      return Number(bnbValue) * 10 ** 18
+    }
+    return 0
+    }
   useEffect(() => {
     // fetchMinBuyAmounts()
     getCbonPriceInWei()
     // getIsPreSaleRuning()
-    const bnbBig = Number(typedValue) * 10 ** 18
+    const bnbBig = calcBigBNB(typedValue)
     const bnbBigInt = BigInt(Math.floor(bnbBig))
     setBnbAmountBig(bnbBigInt)
   }, [typedValue])
