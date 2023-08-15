@@ -223,7 +223,7 @@ export default function BuyCbon({ userIp }: { userIp: string | null }) {
               {getTotalurchased()}
             </Flex>
             <Flex justifyContent={['center', null, null, 'flex-start']}>
-              <Heading fontSize="12pt">Total Number of purcheses </Heading>
+              <Heading fontSize="12pt">Total Number of purchases </Heading>
             </Flex>
             <Flex flexDirection="column" mb="18px">
               {getNumberOfPurchases()}
