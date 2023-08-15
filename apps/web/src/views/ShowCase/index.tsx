@@ -196,6 +196,7 @@ export default function ShowCase() {
                    style={{
                      pointerEvents: app.enabled  || (app.hasCountDown &&   unixNow > 1692090000)  ? 'visible' : 'none' }}>
                   <AppBody
+                    
                     m={['15px', '10px']}
                     padding="0"
                     background="#F3F2EE"
@@ -210,6 +211,7 @@ export default function ShowCase() {
                       <strong>{app.title}</strong>
                     </CardHeader>
                     <CardBody
+                    // className='appCard'
                       style={{
                         padding: '0',
                         background: '#F3F2EE',
@@ -232,7 +234,7 @@ export default function ShowCase() {
                         }}
                       />
                     </CardBody>
-                    <CardFooter style={{ textAlign: 'center', whiteSpace: 'pre-wrap', verticalAlign: 'center' }}>
+                    <CardFooter  style={{ textAlign: 'center', whiteSpace: 'pre-wrap', verticalAlign: 'center' }}>
                       {app.desc}
                       {!app.enabled && !app.hasCountDown && (
                         <Flex justifyContent="center" mt="10px" position="relative">
