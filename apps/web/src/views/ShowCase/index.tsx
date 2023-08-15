@@ -34,7 +34,6 @@ export function AppBody({ children, ...cardProps }: { children: React.ReactNode 
   return <BodyWrapper {...cardProps}>{children}</BodyWrapper>
 }
 export default function ShowCase() {
-  const isEnabled = Date.now() / 1000 > 1692090000
   const Apps = [
     {
       title: 'VOTING',
@@ -66,8 +65,8 @@ export default function ShowCase() {
       alt: 'Cadinu-MultiSwap',
       desc: 'Effortlessly exchange cryptocurrencies like Bitcoin, Ethereum and etc with CADINU secure Dapp. Discover fast and seamless trading',
       destination: '/swap',
-      enabled: isEnabled,
-      hasCountDown: true,
+      enabled: true,
+      // hasCountDown: true,
     },
     {
       title: 'Farming',
@@ -75,8 +74,8 @@ export default function ShowCase() {
       alt: 'Cadinu-Farming',
       desc: " Earn CADINU and CBON rewards by providing liquidity to CADINU's decentralized exchange and fueling the CADINU ecosystem",
       destination: '/farms',
-      enabled: isEnabled,
-      hasCountDown: true,
+      enabled: true,
+      // hasCountDown: true,
     },
     {
       title: 'Staking',
@@ -84,7 +83,7 @@ export default function ShowCase() {
       alt: 'Cadinu-Staking',
       desc: " Lock up CBON, CADINU, and other tokens to earn passive rewards and support CADINU's growth journey, along with other promising projects.",
       destination: '/pools',
-      enabled: isEnabled,
+      enabled: false,
     },
   ]
 
@@ -149,18 +148,6 @@ export default function ShowCase() {
   const ShowCasePage = styled.div`
     min-height: calc(100vh - 50px);
   `
-  dayjs.extend(utc)
-  dayjs.extend(weekOfYear)
-
-  const [unixNow, setUnixNow] = useState(0)
-  useEffect(() => {
-    const timer = setInterval(() => {
-      const now = Math.floor(Date.now() / 1000)
-      setUnixNow(now)
-    }, 2000)
-    return () => clearTimeout(timer)
-  })
-
   return (
     <>
       <PageMeta />
@@ -194,7 +181,7 @@ export default function ShowCase() {
                 <Link
                    href={app.destination} 
                    style={{
-                     pointerEvents: app.enabled  || (app.hasCountDown &&   unixNow > 1692090000)  ? 'visible' : 'none' }}>
+                     pointerEvents: app.enabled  ? 'visible' : 'none' }}>
                   <AppBody
                     
                     m={['15px', '10px']}
@@ -236,17 +223,11 @@ export default function ShowCase() {
                     </CardBody>
                     <CardFooter  style={{ textAlign: 'center', whiteSpace: 'pre-wrap', verticalAlign: 'center' }}>
                       {app.desc}
-                      {!app.enabled && !app.hasCountDown && (
+                      {!app.enabled && (
                         <Flex justifyContent="center" mt="10px" position="relative">
                           <Tag variant="binance">Comming Soon</Tag>
                         </Flex>
                       )}
-                      {
-                        app.hasCountDown
-                        && !app.enabled
-                        &&  unixNow < 1692090000
-                        && <Countdown nextEventTime={1692090000 - unixNow} />
-                       }
                     </CardFooter>
                   </AppBody>
                 </Link>
