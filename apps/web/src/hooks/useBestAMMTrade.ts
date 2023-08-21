@@ -172,7 +172,6 @@ function bestTradeHookFactory({
         poolTypes,
       ],
       queryFn: async () => {
-        console.log("QUERYYYYY>>>>>");
         
         if (!amount || !amount.currency || !currency || !deferQuotient) {
           return null
@@ -184,7 +183,6 @@ function bestTradeHookFactory({
         SmartRouter.log(label)
         SmartRouter.metric(label, candidatePools)
 
-        console.log("QUERYYYYY>>>>>FAIL", label);
         const res = await getBestTrade(deferAmount, currency, tradeType, {
           gasPriceWei:
             typeof gasPrice === 'bigint'
