@@ -11,18 +11,11 @@ import {
   Tag,
 } from '@pancakeswap/uikit'
 import { PageMeta } from 'components/Layout/Page'
-import dayjs from 'dayjs'
-import utc from 'dayjs/plugin/utc'
-import weekOfYear from 'dayjs/plugin/weekOfYear'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { alignItems, bottom, display, space } from 'styled-system'
-import Countdown from './countdown'
 import PreSaleBanner from './preSaleBanner'
 import styles from './showcaseStyles.module.css'
-import { CardFooterProps } from '@pancakeswap/uikit/src/components/Card/CardFooter'
 
 export const BodyWrapper = styled(Card)`
   border-radius: 40px;
