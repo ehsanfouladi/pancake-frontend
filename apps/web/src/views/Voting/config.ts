@@ -5,6 +5,7 @@ export const ADMINS = [
   //   '0xa3D2124E4023ea5c74dC749012E0B46E42bDD648', // LIME cakevote.eth
   //   '0x4634fC1462B7974dB96B700E9aBe915f0884e60a', // GYOZA cakevote.eth
   //   '0xa7551aBe0A066555cb5d859849426fB55543Ca25', // MUSTARD cakevote.eth
+  '0xdb2ff236a2e8e8478c8993749e7f1c1d31c28c02', // BEZ
 ].map((address) => address.toLowerCase())
 export const IPFS_GATEWAY = 'https://gateway.ipfs.io/ipfs'
 export const SNAPSHOT_VERSION = '0.1.3'
