@@ -18,10 +18,11 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { alignItems, bottom, display } from 'styled-system'
+import { alignItems, bottom, display, space } from 'styled-system'
 import Countdown from './countdown'
 import PreSaleBanner from './preSaleBanner'
 import styles from './showcaseStyles.module.css'
+import { CardFooterProps } from '@pancakeswap/uikit/src/components/Card/CardFooter'
 
 export const BodyWrapper = styled(Card)`
   border-radius: 40px;
@@ -118,7 +119,11 @@ export default function ShowCase() {
     text-align: center;
     z-index: 100;
   `
-
+//   const StyledCardFooter = styled.div<CardFooterProps>`
+//   border-top: 1px solid ${({ theme }) => theme.colors.cardBorder};
+  
+//   ${space}
+// `
   const StyledBannerWrapper = styled.div`
     ${({ theme }) => `background-color: ${theme.colors.cardBorder}`};
     flex: none;
@@ -186,7 +191,8 @@ export default function ShowCase() {
                     
                     m={['15px', '10px']}
                     padding="0"
-                    background="#F3F2EE"
+                    // background="#F3F2EE"
+                    background= {`${({theme})=> theme.colors.background}`}
                     style={{
                       flex: '0 1 24%',
                       // maxWidth: "calc(95% - 1em)"
@@ -221,7 +227,7 @@ export default function ShowCase() {
                         }}
                       />
                     </CardBody>
-                    <CardFooter  style={{ textAlign: 'center', whiteSpace: 'pre-wrap', verticalAlign: 'center' }}>
+                    <CardFooter style={{ textAlign: 'center', whiteSpace: 'pre-wrap', verticalAlign: 'center' }}>
                       {app.desc}
                       {!app.enabled && (
                         <Flex justifyContent="center" mt="10px" position="relative">
