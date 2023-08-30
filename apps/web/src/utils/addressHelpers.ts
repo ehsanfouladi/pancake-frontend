@@ -148,3 +148,10 @@ export const getClaimAddress = (chainId?: number) => {
 export const getPreSaleCbonAddress = (chainId?: number) => {
   return getAddressFromMap(addresses.preSaleCbon, chainId)
 }
+export const getCadinuLockAddress = (chainId?: number) => {
+  return getAddressFromMap(addresses.cadinuLock, chainId)
+}
+
+export const getCadinuLockv3Address = (chainId?: number) => {
+  return getAddressFromMap(addresses.cadinuLockV3, chainId)
+}

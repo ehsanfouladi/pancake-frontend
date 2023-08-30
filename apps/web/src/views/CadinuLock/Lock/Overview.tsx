@@ -1,0 +1,217 @@
+import { useTranslation } from '@pancakeswap/localization'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { useCallback, useEffect, useState } from 'react'
+import { Address, erc20ABI, useAccount, useContractRead, useContractReads } from 'wagmi'
+import { fetchLocksByTokenAddress, fetchTotalLockCountForToken, getValueLocked } from '../helpers'
+import { Box, Card, CardBody, CardHeader, Container, Flex, FlexGap, Heading, LinkExternal, Loading, PaginationButton, Table, Td, Th, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { TableWrapper } from 'views/Info/components/InfoTables/shared'
+import { isAddress, zeroAddress } from 'viem'
+import { formatRawAmount } from 'utils/formatCurrencyAmount'
+import { mockComponent } from 'react-dom/test-utils'
+import _ from 'lodash'
+import Header from 'views/ProfileCreation/Header'
+import { wrap } from 'module'
+import { flexDirection } from 'styled-system'
+import { getCadinuLockAddress } from 'utils/addressHelpers'
+import { CadinuLockAbi } from 'config/abi/cadinuLock'
+import { bscTokens } from '@pancakeswap/tokens'
+import { useCadinuPriceAsBN, useCbonPriceAsBN } from '@pancakeswap/utils/useCakePrice'
+import Page from 'views/Page'
+
+const Overview = () => {
+  const { query } = useRouter()
+  const {tokenId,isMyLock, isV3} = query
+
+  if(!tokenId){
+    return <Loading />
+  }
+
+  const tokenContract = {
+    address: tokenId?.toString() as Address,
+    abi: erc20ABI,
+  }
+  const lockContract = {
+    address: getCadinuLockAddress(),
+    abi: CadinuLockAbi,
+  }
+  
+  const {data:tokenDetails,isSuccess} = useContractReads({
+    enabled:(tokenId!==undefined && isV3==='false'),
+    watch:false,
+    cacheTime:10000,
+    contracts:[
+      {
+        ...tokenContract,
+        functionName: 'name'
+      },
+      {
+        ...tokenContract,
+        functionName: 'symbol'
+      },
+      {
+        ...tokenContract,
+        functionName: 'decimals'
+      },
+      {
+        ...lockContract,
+        functionName : 'cumulativeLockInfo',
+        args:[tokenId.toString() as Address]
+      }
+    ]
+  })
+  
+  const { t } = useTranslation()
+  const { address: account } = useAccount()
+
+  const [details, setDetails] =useState([])
+  const [currentPage, setCurrentPage]= useState(1)
+  const [maxPage, setMaxPage] = useState(1)
+  const PAGE_SIZE = 5
+
+  const getDetails = useCallback(
+      async ()=>{
+          const countOfLocksForToken = await fetchTotalLockCountForToken(tokenId as Address)
+          setMaxPage(Math.ceil(Number(countOfLocksForToken)/PAGE_SIZE))
+          var start = BigInt((currentPage-1)*PAGE_SIZE)
+          var end = start + BigInt(PAGE_SIZE)
+          const lockDetails = await fetchLocksByTokenAddress(tokenId as Address, start, end)
+          setDetails(lockDetails)
+          console.log( lockDetails);
+        },[query])
+        
+  const cadinuPrice = Number(useCadinuPriceAsBN())
+  const cbonPrice = Number(useCbonPriceAsBN())
+  const getTokenValue = useCallback(async()=>{
+    if (tokenId === bscTokens.cadinu.address){
+      setValueLocked(cadinuPrice)
+      return
+    }
+    if (tokenId === bscTokens.cbon.address){
+      setValueLocked(cbonPrice)
+      return
+
+    }
+    const value = await getValueLocked(tokenId as Address)
+    setValueLocked(value)
+  },[tokenId])
+
+  useEffect(() => {
+    if(isV3==='false'){
+      getDetails()
+      if(!valueLocked || valueLocked===0 ){
+        getTokenValue()
+      }
+    }
+  },[] )
+
+  const getFormattedTime=(unixTime:number):string =>{
+    var t = new Date();
+    t.setSeconds(unixTime)
+    console.log(t);
+    
+    return t.toDateString() + " "+ t.toLocaleTimeString() 
+  }
+  _.throttle(getFormattedTime,10000)
+  
+  console.log("tokenDetails", tokenDetails);
+  const[valueLocked, setValueLocked]  = useState(0)
+  const { isXs, isSm, isMd } = useMatchBreakpoints()
+
+  return (
+    <>
+    <Page>
+    <Container>
+      <Card>
+        <CardHeader style={{textAlign:"center"}}>
+          <Heading>Lock Details</Heading>
+        </CardHeader>
+        <CardBody>
+          <Flex width='95%' flexDirection='row'  flexWrap="wrap" justifyContent='center'
+          >
+            <Box mt="5px" style={{display:'flex' , flexWrap:'wrap', flexDirection:'row' }} width="90%">
+            <strong style={{flex:'1 1 160px'}}>Token Name:</strong>
+
+            <span >{isSuccess && tokenDetails[0].status === 'success' && tokenDetails[0].result}</span>
+            </Box>
+            <Box mt="25px" style={{display:'flex' , flexWrap:'wrap', flexDirection:'row'}} width="90%">
+            <strong style={{flex:'1 1 160px'}}>Token Symbol:</strong>
+
+            <span >{isSuccess && tokenDetails[1].status === 'success' && tokenDetails[1].result}</span>
+            </Box>
+            <Box mt="25px" style={{display:'flex' , flexWrap:'wrap', flexDirection:'row'}} width="90%">
+            <strong style={{flex:'1 1 160px'}}>Total lock Amount:</strong>
+            <span > ~{isSuccess && tokenDetails[3].status ==='success' ? formatRawAmount(Number(tokenDetails[3].result[2]).toString(), Number(tokenDetails[2].result), 12) +" " + tokenDetails[1].result : "..."}</span>
+            </Box>
+            <Box mt="25px" style={{display:'flex' , flexWrap:'wrap', flexDirection:'row'}} width="90%">
+            <strong style={{flex:'1 1 160px'}}>Total lock Value:</strong>
+            <span > { valueLocked!==0 && tokenDetails[3].status ==='success' ?'$' +(Number(formatRawAmount(Number(tokenDetails[3].result[2]).toString(), Number(tokenDetails[2].result), 12))*valueLocked).toFixed(7) : "unknown"}</span>
+            </Box>
+          </Flex>
+        </CardBody>
+      </Card>
+    <TableWrapper mt="2vw" overflowX='scroll'>
+      <Table>
+      <Th>
+      #
+      </Th>
+      <Th>
+        Title
+      </Th>
+      <Th style= {{display: (isXs ||isMd|| isSm) && 'none'}}>
+        Owner
+      </Th>
+      <Th>
+        Amount Locked
+      </Th>
+     
+      <Th style= {{display: (isXs ||isMd|| isSm) && 'none'}}>
+        Unlock Time
+      </Th>
+      {details && details.length > 0 && details.map((lock)=>(
+        <tr> 
+          <Td>
+          <Link href={`${tokenId}/${lock.id}`} style={{textDecoration:'underline'} }>
+            {lock.id}
+          </Link>
+          </Td>
+          <Td>
+          <Link href={`${tokenId}/${lock.id}`} style={{textDecoration:'underline'} }>
+            {lock.description}
+          </Link>
+          </Td>
+          <Td style= {{display: (isXs || isMd || isSm) && 'none'}}>
+            { lock.owner === zeroAddress 
+            ?'Owner Renounced'
+            : (
+            <LinkExternal href={`https://bscscan.com/address/${lock.owner}`} >
+              {lock.owner.slice(0,6) + "..." + lock.owner.slice(-4,lock.owner.length)}
+            </LinkExternal>)}
+          </Td>
+          <Td>{
+          isSuccess && tokenDetails[2].status ==='success'
+
+            ? Number(formatRawAmount(
+              (
+                Number(lock.amount) - Number(lock.unlockedAmount)
+              ).toString(),
+               Number(tokenDetails[2].result), 12)).toLocaleString(
+                undefined,{maximumFractionDigits: 18}
+              ) 
+            : "..."} </Td>
+          <Td style= {{display: (isXs ||isMd || isSm) && 'none'}}>{lock.lockDate ? getFormattedTime(lock.lockDate): "..."}</Td>
+        </tr>
+      ))}
+      </Table>
+      {maxPage>1 &&
+        <PaginationButton showMaxPageText = {true} currentPage={currentPage} maxPage={maxPage} setCurrentPage={setCurrentPage} />
+      }
+      </TableWrapper>
+      </Container>
+      </Page>
+    </>
+  
+  )
+}
+
+export default Overview

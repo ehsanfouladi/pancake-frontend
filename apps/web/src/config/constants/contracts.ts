@@ -236,4 +236,10 @@ export default {
     97: '0x5790c3534F30437641541a0FA04C992799602998',
     56: '0xec1ED03Da04D6ab50bF51A5C56F9e340c894D931',
   },
+  cadinuLock:{
+    56: '0xc7D5a97421e122910AD14061bf53685e37575655',
+  },
+  cadinuLockV3:{
+    56: '0x9626aeA51924e1fE519164B47f971f0810e60Bc0',
+  }
 } as const satisfies Record<string, Record<number, `0x${string}`>>

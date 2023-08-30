@@ -1,6 +1,6 @@
 import { parseEther } from 'viem'
 import { SerializedFarmsState } from '@pancakeswap/farms'
-import { Token } from '@pancakeswap/sdk'
+import { Percent, SerializedToken, Token } from '@pancakeswap/sdk'
 import { SerializedPoolWithInfo } from '@pancakeswap/pools'
 import { Address } from 'wagmi'
 import BigNumber from 'bignumber.js'
@@ -403,6 +403,23 @@ export enum ProposalState {
   CLOSED = 'closed',
 }
 
+export enum LockFetchStatus {
+  FETCHED = 'fetched',
+  PENDING = 'pending',
+  FAILED = 'failed',
+  NOTFETCHED = 'notFetched'
+}
+
+export enum CadinuLockType {
+  ALL = 'all',
+  MYLOCK = 'myLock'
+}
+export enum CadinuLockState {
+  TOKENS = 'tokens',
+  LIQUIDITY_V2 = 'liquidity-v2',
+  LIQUIDITY_V3 = 'liquidity-v3',
+}
+
 export interface Proposal {
   author: string
   body: string
@@ -414,6 +431,38 @@ export interface Proposal {
   start: number
   state: ProposalState
   title: string
+}
+
+export interface Lock {
+  id: number
+  title: string
+  token: SerializedToken
+  totalLockedAmount: number
+  totalValueLocked: number
+  factory: Address
+  records: LockRecord[]
+}
+
+
+export interface LockRecord {
+  id: number
+  lockedAmount: number
+  valueLocked: number
+  wallet: Address
+  lockDate: number
+  unlockDate: number
+  tgeDate: number
+  cycle: number
+  cycleReleasePercent: Percent
+  unlockedAmount: number
+  isVesting : Boolean
+}[]
+
+
+export interface VestingRecord{
+  number: number
+  time: string
+  unlockedTokens: string
 }
 
 export interface Vote {
@@ -592,6 +641,35 @@ export interface PotteryWithdrawAbleData {
   totalLockCake: string
   lockedDate: string
   balanceOf: string
+}
+export interface LockResponse {
+  amount: SerializedBigNumber
+  cycle: SerializedBigNumber
+  cycleBps: SerializedBigNumber
+  description: string
+  id: SerializedBigNumber
+  unlockedAmount: SerializedBigNumber
+  owner: Address
+  token: Address
+  lockDate: SerializedBigNumber
+  tgeBps: SerializedBigNumber
+  tgeDate: SerializedBigNumber
+}
+
+export interface LockV3Response {
+  id: SerializedBigNumber
+  nftId: SerializedBigNumber
+  token: Address
+  owner: Address
+  lockDate: SerializedBigNumber
+  isUnlocked : Boolean
+  description: string
+}
+
+export interface ComulativeLockResponse {
+  token: Address
+  factory: Address
+  amount: SerializedBigNumber
 }
 
 // Global state

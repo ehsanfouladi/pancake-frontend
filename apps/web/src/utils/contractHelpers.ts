@@ -34,6 +34,8 @@ import {
   getTradingRewardTopTradesAddress,
   getClaimAddress,
   getPreSaleCbonAddress,
+  getCadinuLockAddress,
+  getCadinuLockv3Address,
 } from 'utils/addressHelpers'
 
 // ABI
@@ -87,6 +89,8 @@ import { getViemClients, viemClients } from 'utils/viem'
 import { Abi, PublicClient, WalletClient, getContract as viemGetContract } from 'viem'
 import { Address, erc20ABI, erc721ABI } from 'wagmi'
 import { preSaleCbonAbi } from 'config/abi/preSaleCbon'
+import { CadinuLockAbi} from 'config/abi/cadinuLock'
+import { CadinuLockV3Abi } from 'config/abi/cadinuLockV3'
 
 export const getContract = <TAbi extends Abi | unknown[], TWalletClient extends WalletClient>({
   abi,
@@ -418,4 +422,12 @@ export const getPreSaleCbonContract = (signer?: WalletClient, chainId?: number) 
     signer,
     chainId
     })
+}
+
+export const getCadinuLockContract = (signer?: WalletClient) => {
+  return getContract({ abi: CadinuLockAbi, address: getCadinuLockAddress(), signer })
+}
+
+export const getCadinuLockV3Contract = (signer?: WalletClient) => {
+  return getContract({ abi: CadinuLockV3Abi, address: getCadinuLockv3Address(), signer })
 }

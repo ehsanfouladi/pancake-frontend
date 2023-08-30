@@ -1,0 +1,171 @@
+{
+    "data": [
+        {
+            "address": "0x38f97e73d842ae1238837cf5a97b8e36b687df99",
+            "token": "Mog",
+            "chainId": 56
+        },
+        {
+            "address": "0x55780877737efa5baff4430b417022fc45ef2b6a",
+            "token": "Pets",
+            "chainId": 56
+        },
+        {
+            "address": "0x3cdf65af3637506249aecf42ff22e9e2511148e5",
+            "token": "DEV",
+            "chainId": 1
+        },
+        {
+            "address": "0x1a9bd7bb136545899bfd1bccae8030271d24ddfb",
+            "token": "LEGO",
+            "chainId": 56
+        },
+        {
+            "address": "0xca3568ca711aabbfa30ee2bf8f94a11807515dcb",
+            "token": "Base",
+            "chainId": 56
+        },
+        {
+            "address": "0xc33f5678d6dd14046b7b7db5df0ad24d36bb158c",
+            "token": "STARWARS",
+            "chainId": 56
+        },
+        {
+            "address": "0xffa2aa32eb1e86d199efe303b6e5c55ddb27040d",
+            "token": "FOMO",
+            "chainId": 1
+        },
+        {
+            "address": "0x720fe66920f6a18f8ca4cc99e1f1d19851774098",
+            "token": "PURR",
+            "chainId": 56
+        },
+        {
+            "address": "0x04f031396dce7c62087bcf58894eec09e537fbbd",
+            "token": "CEO",
+            "chainId": 1
+        },
+        {
+            "address": "0x6948dc89ad5185b6b0222cdd44e7ceffa17c8410",
+            "token": "Xepe",
+            "chainId": 56
+        },
+        {
+            "address": "0xd70c2731d844db7436082e805db01ec09218bdfc",
+            "token": "HPOSX",
+            "chainId": 1
+        },
+        {
+            "address": "0xcfa021a6eae6ff6146390e3c7aba385f3f53d60f",
+            "token": "HORS",
+            "chainId": 56
+        },
+        {
+            "address": "0x0360f5d2fd53acbd402ee8b0b33d3736436209e7",
+            "token": "BPX",
+            "chainId": 56
+        },
+        {
+            "address": "0x91d1aaaac7e9eb34370f9e7c3c1c7d08faa68265",
+            "token": "AINX",
+            "chainId": 56
+        },
+        {
+            "address": "0x7fec3d3b81d8df89951b75521f445dcfcff0732c",
+            "token": "TCK",
+            "chainId": 56
+        },
+        {
+            "address": "0xcdea49a1216596027ef91f1dced307a098ac1d16",
+            "token": "ACE",
+            "chainId": 42161
+        },
+        {
+            "address": "0x8e74450eb25c39f725f1558e88bf10735c5cb070",
+            "token": "TT",
+            "chainId": 1
+        },
+        {
+            "address": "0x36047be257cb6501137f186eed6430f9383be453",
+            "token": "VEL",
+            "chainId": 56
+        },
+        {
+            "address": "0x82bf48542734f28a1fbd23dd859495fa625c60b3",
+            "token": "ISOMA",
+            "chainId": 56
+        },
+        {
+            "address": "0x02a5119592e29644d85caf6fe7a05d92755adfaa",
+            "token": "TERRIER",
+            "chainId": 56
+        },
+        {
+            "address": "0x243ca544ded6d839eb1e77004fc6d3cf3cdd79b6",
+            "token": "WWD",
+            "chainId": 56
+        },
+        {
+            "address": "0xd3cf47a5d71cd06bef47eeb7649deaffdf3cd9a7",
+            "token": "XCAT",
+            "chainId": 56
+        },
+        {
+            "address": "0xabe70c3f1adb9b7062331846c2c0e17e6ffeadc5",
+            "token": "SCN",
+            "chainId": 56
+        },
+        {
+            "address": "0x221f5227d0ea8efdf42a07f11eb05916ce847156",
+            "token": "PETS",
+            "chainId": 1
+        },
+        {
+            "address": "0x4d7b79646b5d686c398b056d9fefbe51b2d27a4f",
+            "token": "RR",
+            "chainId": 1
+        },
+        {
+            "address": "0x2e6390d5c00ea83dbbd076388f277b4e68180051",
+            "token": "Oracle",
+            "chainId": 1
+        },
+        {
+            "address": "0x18db645febce180c01444aa81681c88708a64eb1",
+            "token": "TT",
+            "chainId": 1
+        },
+        {
+            "address": "0x7d573f8fd98369284dc9c59d041b85bb3a3e8e8c",
+            "token": "McMNY",
+            "chainId": 56
+        },
+        {
+            "address": "0x2884bb50e949a9479ba4f6bd281663675ed1c3e6",
+            "token": "MKF",
+            "chainId": 56
+        },
+        {
+            "address": "0xdcbc7dc8b7c9db47c2c8a6157f60ddc94dd8d583",
+            "token": "TT",
+            "chainId": 1
+        },
+        {
+            "address": "0x0af2f17e56c3b16938c62272bfcaed3a90c92148",
+            "token": "BESA",
+            "chainId": 56
+        },
+        {
+            "address": "0xd43ce82f6559613de77c151526e355d851e349ed",
+            "token": "Mira",
+            "chainId": 56
+        },
+        {
+            "address": "0x5d62167adc874ad85d58477c7e1e32ba55120feb",
+            "token": "OPC",
+            "chainId": 56
+        }
+    ],
+    "updatedAt": "2023-08-16T09:58:49.698Z",
+    "updatedAtMs": 1692179929698
+}
