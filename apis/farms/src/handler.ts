@@ -202,7 +202,6 @@ export const fetchCadinuPrice =  async () => {
       tokenB: USDT[ChainId.BSC],
     }
     
-  // const pairConfig = pairConfig[ChainId.BSC]
   const client = bscClient
   const [reserve0, reserve1] = await client.readContract({
     abi: pairAbi,
@@ -220,13 +219,10 @@ export const fetchCadinuPrice =  async () => {
   )
 
   const a =pair.priceOf(tokenA)
-    console.info("pair.priceOf(tokenA) >>>" , a.toSignificant(18));
     
   return pair.priceOf(tokenA).toSignificant(18)
 }
-    // const cbon: cbon = await(await fetch('https://3rdparty-apis.coinmarketcap.com/v1/cryptocurrency/widget?id=22984&convert_id=1,2781,2781')).json()
-    // return cbon?.data["22984"].quote["2781"].price
-    
+
 export async function fetchCbonPrice(){
   const v3PoolAbi = [
     {
@@ -273,7 +269,7 @@ export async function fetchCbonPrice(){
       type: 'function',
     },
   ] as const
-  const address = '0x68B317b8f1B24D7838D64e0E5222C39c4A56e9DB'
+  const address = '0x5760e9386bd0273e5c6b28d8131ac0c5b52c600c'
   const client = viemProviders({ chainId: Number(56) })
   const slot0 = await client.readContract({
     abi: v3PoolAbi,
@@ -282,14 +278,9 @@ export async function fetchCbonPrice(){
   })
   const pricisionFactor = 10 ** 18
   const sqrtPriceX96 = slot0[0]
-
-  console.log(sqrtPriceX96);
   const sqrtPrice = Number(sqrtPriceX96 * BigInt(pricisionFactor) / (BigInt(2 ** 96))) / pricisionFactor
-  console.log("2^96", BigInt(2**96))
-  console.log("sqrtprc", sqrtPrice);
-  
   const cbonPrice = sqrtPrice ** (2)
-  return Number(cbonPrice)
+  return Number(1/cbonPrice)
 
   // return fetchCadinuPrice()
 

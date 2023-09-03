@@ -5,7 +5,6 @@ import snapshot from '@snapshot-labs/snapshot.js'
 import useTheme from 'hooks/useTheme'
 import { useState } from 'react'
 import { PANCAKE_SPACE } from 'views/Voting/config'
-import useGetVotingPower from '../../hooks/useGetVotingPower'
 import DetailsView from './DetailsView'
 import MainView from './MainView'
 import { CastVoteModalProps, ConfirmVoteView } from './types'
@@ -27,21 +26,6 @@ const CastVoteModal: React.FC<React.PropsWithChildren<CastVoteModalProps>> = ({
   const { t } = useTranslation()
   const { toastError } = useToast()
   const { theme } = useTheme()
-  const {
-    isLoading,
-    isError,
-    total,
-    cakeBalance,
-    cakeVaultBalance,
-    cakePoolBalance,
-    poolsBalance,
-    cakeBnbLpBalance,
-    ifoPoolBalance,
-    lockedCakeBalance,
-    lockedEndTime,
-  } = useGetVotingPower(block, proposalId.toString())
-
-  console.log("proposalId>>", proposalId);
   
 
   const isStartView = view === ConfirmVoteView.MAIN
@@ -96,44 +80,7 @@ const CastVoteModal: React.FC<React.PropsWithChildren<CastVoteModalProps>> = ({
   }
 
   return (
-    <Modal
-      title={title[view]}
-      onBack={handleBack}
-      onDismiss={onDismiss}
-      hideCloseButton={!isStartView}
-      headerBackground={theme.colors.gradientCardHeader}
-    >
-      <Box mb="24px">
-        {view === ConfirmVoteView.MAIN && (
-          <MainView
-            vote={vote}
-            isError={isError}
-            isLoading={isLoading}
-            isPending={isPending}
-            total={total}
-            lockedCakeBalance={lockedCakeBalance}
-            lockedEndTime={lockedEndTime}
-            onConfirm={handleConfirmVote}
-            onViewDetails={handleViewDetails}
-            onDismiss={handleDismiss}
-          />
-        )}
-        {view === ConfirmVoteView.DETAILS && (
-          <DetailsView
-            total={total}
-            cakeBalance={cakeBalance}
-            ifoPoolBalance={ifoPoolBalance}
-            cakeVaultBalance={cakeVaultBalance}
-            cakePoolBalance={cakePoolBalance}
-            poolsBalance={poolsBalance}
-            cakeBnbLpBalance={cakeBnbLpBalance}
-            block={block}
-            lockedCakeBalance={lockedCakeBalance}
-            lockedEndTime={lockedEndTime}
-          />
-        )}
-      </Box>
-    </Modal>
+    <><div>Hi</div></>
   )
 }
 

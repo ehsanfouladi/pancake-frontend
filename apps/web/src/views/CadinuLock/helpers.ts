@@ -1,35 +1,18 @@
-import { ContractFunctionConfig, ContractFunctionResult, ReadContractParameters, createPublicClient, http } from 'viem'
 import { bscTokens } from '@pancakeswap/tokens'
-// import BigNumber from 'bignumber.js'
-import { SNAPSHOT_HUB_API } from 'config/constants/endpoints'
-import fromPairs from 'lodash/fromPairs'
-import groupBy from 'lodash/groupBy'
-import { CadinuLockState, CadinuLockType, ComulativeLockResponse, Lock, LockRecord, LockResponse, LockV3Response, ProposalState, Vote } from 'state/types'
-import { bsc } from 'viem/chains'
-import { Address, erc20ABI } from 'wagmi'
-import { GraphQLClient, gql } from 'graphql-request'
-import {  PANCAKE_SPACE, SNAPSHOT_VERSION } from './config'
-import { getScores } from './getScores'
-import { publicClient } from "utils/wagmi";
-import { isAddress, zeroAddress } from "viem";
+import { ContractFunctionResult, isAddress, zeroAddress } from 'viem'
 import { ChainId, pancakePairV2ABI } from '@pancakeswap/sdk'
+import { bigIntToSerializedBigNumber } from '@pancakeswap/utils/bigNumber'
 import { CadinuLockAbi } from 'config/abi/cadinuLock'
-import { bigIntToBigNumber, bigIntToSerializedBigNumber } from '@pancakeswap/utils/bigNumber'
-import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
-import { lpTokenABI } from 'config/abi/lpTokenAbi'
-import { SetStateAction } from 'react'
-import { getCadinuLockContract, getCadinuLockV3Contract } from 'utils/contractHelpers'
 import { CadinuLockV3Abi } from 'config/abi/cadinuLockV3'
-import { factory } from 'typescript'
+import { CadinuLockState, CadinuLockType, ComulativeLockResponse, LockRecord, LockResponse, LockV3Response } from 'state/types'
+import { getCadinuLockContract, getCadinuLockV3Contract } from 'utils/contractHelpers'
+import { publicClient } from "utils/wagmi"
+import { Address, erc20ABI } from 'wagmi'
 
 
 const cadinuLockContract = getCadinuLockContract()
 const cadinuLockV3Contract = getCadinuLockV3Contract()
 
-const LockV3Contract = {
-  address:cadinuLockV3Contract.address,
-  abi:CadinuLockV3Abi
-} as const 
 
 const LockContract = {
   address:cadinuLockContract.address,
@@ -126,8 +109,8 @@ const processLockResponse = (
     description: description?.toString() ,
     id: bigIntToSerializedBigNumber(id) ,
     unlockedAmount:bigIntToSerializedBigNumber(unlockedAmount) ,
-    owner: owner,
-    token: token ,
+    owner,
+    token,
     lockDate: bigIntToSerializedBigNumber(lockDate) ,
     tgeBps: bigIntToSerializedBigNumber(tgeBps) ,
     tgeDate:bigIntToSerializedBigNumber(tgeDate) ,
@@ -152,10 +135,10 @@ const processLockV3Response = (
   return {
     id: bigIntToSerializedBigNumber(lockId) ,
     nftId: bigIntToSerializedBigNumber(nftId) ,
-    owner: owner,
+    owner,
     token: nonFungiblePositionManagerAddress ,
     lockDate: bigIntToSerializedBigNumber(lockDate) ,
-    isUnlocked : isUnlocked,
+    isUnlocked,
     description: description?.toString() ,
     
   }
@@ -188,7 +171,7 @@ export const fetchAllV3LockCount = async()=>{
   return bigIntToSerializedBigNumber(count)
 }
 
-export const fetchLcokById = async (lockId: string): Promise<LockResponse> => {
+export const fetchLcokById = async (lockId: string): Promise<LockResponse| Error> => {
   try {
     const lockData = await cadinuLockContract.read.getLockById([BigInt(lockId)])
     return processLockResponse(lockData)
@@ -224,13 +207,12 @@ export const fetchCumulativeLockInfo =async (address:Address):Promise<Comulative
     const data = await cadinuLockContract.read.cumulativeLockInfo([address])
     return processComulativeLockResponse(data)
   }catch(e){
-    console.log(e);
+     console.log(e);
     
   }
 }
 
 export const fetchCumulativeNormalTokenLockInfo =async (start:bigint, end:bigint)=>{
- 
   try{
     const data = await publicClient({chainId: ChainId.BSC}).multicall({
       contracts:[{
@@ -241,8 +223,7 @@ export const fetchCumulativeNormalTokenLockInfo =async (start:bigint, end:bigint
     })
         return ({result : data[0].result,status: data[0].status})
   }catch(e){
-    console.log(e);
-    
+     console.log(e);
   }
 }
 
@@ -260,8 +241,7 @@ export const fetchCumulativeLpTokenLockInfo =async (start:bigint, end:bigint)=>{
     
         return ({result : data[0].result,status: data[0].status})
   }catch(e){
-    console.log(e);
-    
+     console.log(e);
   }
 }
 
@@ -269,10 +249,8 @@ export const fetchLocksByTokenAddress = async (address:Address, start:bigint, en
   try{
       const locks = await cadinuLockContract.read.getLocksForToken([address, start, end])
       return locks.map(lock => processLockResponse(lock))
-      
   }catch(e){
-    console.log(e);
-    
+     console.log(e);
   }
 }
 
@@ -296,8 +274,7 @@ export const fetchNormalLocksByUser = async (address:Address):Promise<LockRespon
     const locks = await cadinuLockContract.read.normalLocksForUser([address])
     return locks.map(lock => processLockResponse(lock)) 
   }catch(e){
-    console.log(e);
-    
+     console.log(e);
   }
 }
 
@@ -306,20 +283,19 @@ export const fetchLpLocksByUser = async (address:Address):Promise<LockResponse[]
     const locks = await cadinuLockContract.read.lpLocksForUser([address])
     return locks.map(lock => processLockResponse(lock)) 
   }catch(e){
-    console.log(e);
-    
+     console.log(e);
   }
 }
 export const fetchCumulativeV3Locks = async (start:bigint,end:bigint)=>{
   try{
-  const [totalNumberOfNfpms, addresses, names] = await cadinuLockV3Contract.read.getNonFungiblesPositionManager([start,end])
+  const [totalNumberOfNfpms, addresses] = await cadinuLockV3Contract.read.getNonFungiblesPositionManager([start,end])
   const nfpmsLockCount =  []
-  var newEnd = end
+  let newEnd = end
   if (end > totalNumberOfNfpms){
     newEnd = totalNumberOfNfpms
   }
-  for(var i = Number(start);i<Number(newEnd);i++){
-    const lockCount = await cadinuLockV3Contract.read.getLockCountForNonFungiblePositionManager([addresses[i]])
+  for(let i = Number(start);i<Number(newEnd);i++){
+    const lockCount = cadinuLockV3Contract.read.getLockCountForNonFungiblePositionManager([addresses[i]])
     const nfpmsLockCountObject = {}
     nfpmsLockCountObject['token'] = addresses[i]
     nfpmsLockCountObject["factory"] = zeroAddress
@@ -329,7 +305,6 @@ export const fetchCumulativeV3Locks = async (start:bigint,end:bigint)=>{
   return nfpmsLockCount
 }catch(e){
   console.log(e);
-  
 }
 }
 export const fetchLocksForNonFungiblePositionManager = async (address:Address) =>{
@@ -362,11 +337,9 @@ export const fetchV3LocksByUser = async (address:Address) =>{
       locks["amount"] =  Number(1)
       alluserLocks.push(locks)
     })
-    
-        return (alluserLocks)
+    return (alluserLocks)
   }catch(e){
-    console.log(e);
-    
+     console.log(e);
   }
 }
 
@@ -384,7 +357,9 @@ export const getTokenSymbol = async (tokenAddress:Address) =>{
     
     return data
   }
+  return ""
 }
+
 export const getTokenName = async (tokenAddress:Address) =>{
   if (bscTokens.bnb.address === tokenAddress){
     return ('WBNB')
@@ -401,6 +376,7 @@ export const getTokenName = async (tokenAddress:Address) =>{
     return data
   }
 }
+
 export const getLpSymbol = async (pairAddress:Address) =>{
   if (isAddress(pairAddress)){
     const token0 = await publicClient({chainId: ChainId.BSC}).readContract({
@@ -428,184 +404,6 @@ export const getValueLocked = async ( tokenAddress:string)=>{
   const data = await ( await fetch(`https://cadinu-locks.cadinu.io/price/${tokenAddress}`)).json()
   return data?.price
   }catch(e){
-    console.log(e);
-    
+     console.log(e);
   }
-}
-
-
-
-export const getLockDetailByAddress = async(tokenAddress: Address)=>{
-  const data = await  publicClient({ chainId: ChainId.BSC }).readContract({
-    address:'0x407993575c91ce7643a4d4cCACc9A98c36eE1BBE',
-    abi : CadinuLockAbi,
-    functionName : "cumulativeLockInfo",
-    args : [tokenAddress]
-  })
-}
-
-
-
-
-
-
-
-
-
-
-
-export interface Message {
-  address: string
-  msg: string
-  sig: string
-}
-
-const STRATEGIES = [
-  { name: 'erc20-balance-of', params: { symbol: 'CBON', address: bscTokens.cbon.address, decimals: 18, max: 300 } },
-]
-const NETWORK = '56'
-
-/**
- * Generates metadata required by snapshot to validate payload
- */
-export const generateMetaData = () => {
-  return {
-    plugins: {},
-    network: 56,
-    strategies: STRATEGIES,
-  }
-}
-
-/**
- * Returns data that is required on all snapshot payloads
- */
-export const generatePayloadData = () => {
-  return {
-    version: SNAPSHOT_VERSION,
-    timestamp: (Date.now() / 1e3).toFixed(),
-    space: PANCAKE_SPACE,
-  }
-}
-
-/**
- * General function to send commands to the snapshot api
- */
-export const sendSnapshotData = async (message: Message) => {
-  const response = await fetch(SNAPSHOT_HUB_API, {
-    method: 'post',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(message),
-  })
-
-  if (!response.ok) {
-    const error = await response.json()
-    throw new Error(error?.error_description)
-  }
-
-  const data = await response.json()
-  return data
-}
-
-export const VOTING_POWER_BLOCK = {
-  v0: 16300686n,
-  v1: 17137653n,
-}
-
-/**
- *  Get voting power by single user for each category
- */
-interface GetVotingPowerType {
-  total: number
-  voter: string
-  poolsBalance?: number
-  cakeBalance?: number
-  cakePoolBalance?: number
-  cakeBnbLpBalance?: number
-  cakeVaultBalance?: number
-  ifoPoolBalance?: number
-  lockedCakeBalance?: number
-  lockedEndTime?: number
-}
-
-const nodeRealProvider = createPublicClient({
-  transport: http(`https://bsc-mainnet.nodereal.io/v1/${process.env.NEXT_PUBLIC_NODE_REAL_API_ETH}`),
-  chain: bsc,
-})
-
-
-const scoreApiUrl = new GraphQLClient('https://hub.snapshot.org/graphql', {
-  fetch,
-})
-
-export const getVotingPower = async (account: Address, proposalId ) =>{
-  console.log("proposalIdGETVP", proposalId);
-  
-  const data = await scoreApiUrl.request(
-  gql`
-  query {
-    vp (
-      voter: "${account}"
-      space: "${PANCAKE_SPACE}"
-      proposal: "${proposalId || '' }"
-    ) {
-      vp
-      vp_by_strategy
-      vp_state
-    } 
-  }
-  `,
-)
-
-return {
-      total: data ? data.vp.vp : 0,
-      voter: account,
-    }
-}
- 
-export const calculateVoteResults = (votes: Vote[]): { [key: string]: Vote[] } => {
-  if (votes) {
-    const result = groupBy(votes, (vote) => vote.proposal.choices[vote.choice - 1])
-    return result
-  }
-  return {}
-}
-
-export const getTotalFromVotes = (votes: Vote[]) => {
-  if (votes) {
-    return votes.reduce((accum, vote) => {
-      let power = parseFloat(vote.metadata?.votingPower)
-
-      if (!power) {
-        power = 0
-      }
-
-      return accum + power
-    }, 0)
-  }
-  return 0
-}
-
-/**
- * Get voting power by a list of voters, only total
- */
-export async function getVotingPowerByCakeStrategy(voters: string[], blockNumber: number) {
-  const strategyResponse = await getScores(PANCAKE_SPACE, STRATEGIES, NETWORK, voters, blockNumber)
-  console.log("{strategyResponse", strategyResponse);
-  
-
-  const result = fromPairs(
-    voters.map((voter) => {
-      const defaultTotal = strategyResponse.reduce(
-        (total: any, scoreList: { [x: string]: any }) => total + (scoreList[voter] ? scoreList[voter] : 0),
-        0,
-      )
-
-      return [voter, defaultTotal]
-    }),
-  )
-
-  return result
 }

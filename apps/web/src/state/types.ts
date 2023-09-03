@@ -455,8 +455,8 @@ export interface LockRecord {
   cycle: number
   cycleReleasePercent: Percent
   unlockedAmount: number
-  isVesting : Boolean
-}[]
+  isVesting : boolean
+}
 
 
 export interface VestingRecord{
@@ -662,7 +662,7 @@ export interface LockV3Response {
   token: Address
   owner: Address
   lockDate: SerializedBigNumber
-  isUnlocked : Boolean
+  isUnlocked : boolean
   description: string
 }
 

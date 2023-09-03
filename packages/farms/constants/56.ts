@@ -14,13 +14,27 @@ export const farmsV3 = defineFarmV3Configs([
   //   feeAmount: FeeAmount.MEDIUM,
   // },
 
-  // {
-  //   pid: 1,
-  //   token0: bscTokens.test1,
-  //   token1: bscTokens.test2,
-  //   lpAddress: '0x307901b515798ED8F89F6696B49E13e99A6381a4',
-  //   feeAmount: FeeAmount.LOWEST,
-  // },
+  {
+    pid: 3,
+    token0: bscTokens.usdt,
+    token1: bscTokens.btcb,
+    lpAddress: '0xC9C8Ee259a61A3611Af050a94524BdA071a2b7eF',
+    feeAmount: FeeAmount.MEDIUM,
+  },
+  {
+    pid: 4,
+    token0: bscTokens.eth,
+    token1: bscTokens.usdt,
+    lpAddress: '0xE16721499C7BDBD5846Bbf2a27fA3b23D3139946',
+    feeAmount: FeeAmount.MEDIUM,
+  },
+  {
+    pid: 5,
+    token0: bscTokens.usdt,
+    token1: bscTokens.bnb,
+    lpAddress: '0x0A743fb2efd7a3fD43C4779350467F1B748d8c84',
+    feeAmount: FeeAmount.MEDIUM,
+  },
   // {
   //   pid: 2,
   //   token0: bscTokens.usdt,

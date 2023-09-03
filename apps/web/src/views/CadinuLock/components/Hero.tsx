@@ -1,6 +1,5 @@
-import { Box, Button, Flex, Heading, ProposalIcon } from '@pancakeswap/uikit'
+import { Box, Button, Flex, Heading, LockIcon } from '@pancakeswap/uikit'
 import styled from 'styled-components'
-import { LockIcon } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import Container from 'components/Layout/Container'
 import Link from 'next/link'

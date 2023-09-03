@@ -17,8 +17,9 @@ const StyledTabMenu = styled.div`
 
 const getIndexFromType = (lockType: CadinuLockType) => {
   switch (lockType) {
-    case CadinuLockType.ALL:
-      return 0
+    default:
+      case CadinuLockType.ALL:
+        return 0
     case CadinuLockType.MYLOCK:
       return 1
   }
@@ -26,8 +27,9 @@ const getIndexFromType = (lockType: CadinuLockType) => {
 
 const getTypeFromIndex = (index: number) => {  
   switch (index) {
-    case 0:
-      return CadinuLockType.ALL
+    default:
+      case 0:
+        return CadinuLockType.ALL
     case 1:
       return CadinuLockType.MYLOCK
   }

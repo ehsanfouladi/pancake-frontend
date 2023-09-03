@@ -1,7 +1,7 @@
 import { Box, Flex, InjectedModalProps, Modal, Button, Spinner } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import useTheme from 'hooks/useTheme'
-import useGetVotingPower from '../hooks/useGetVotingPower'
+
 import DetailsView from './CastVoteModal/DetailsView'
 
 interface VoteDetailsModalProps extends InjectedModalProps {
@@ -10,19 +10,7 @@ interface VoteDetailsModalProps extends InjectedModalProps {
 
 const VoteDetailsModal: React.FC<React.PropsWithChildren<VoteDetailsModalProps>> = ({ block, onDismiss }) => {
   const { t } = useTranslation()
-  const {
-    isLoading,
-    total,
-    // cakeBalance,
-    // cakeVaultBalance,
-    // cakePoolBalance,
-    // poolsBalance,
-    // cakeBnbLpBalance,
-    // ifoPoolBalance,
-    // lockedCakeBalance,
-    // lockedEndTime,
-  } = useGetVotingPower(block)
-  console.log("VP>>>>>>>>>>>>>>>>>>", total);
+  
   
   const { theme } = useTheme()
 
@@ -33,14 +21,11 @@ const VoteDetailsModal: React.FC<React.PropsWithChildren<VoteDetailsModalProps>>
   return (
     <Modal title={t('Voting Power')} onDismiss={handleDismiss} headerBackground={theme.colors.gradientCardHeader}>
       <Box mb="24px" width={['100%', '100%', '100%', '320px']}>
-        {isLoading ? (
           <Flex height="450px" alignItems="center" justifyContent="center">
             <Spinner size={80} />
           </Flex>
-        ) : (
           <>
             <h2>
-              {total}
               {/* // cakeBalance={cakeBalance}
               // cakeVaultBalance={cakeVaultBalance}
               // cakePoolBalance={cakePoolBalance}
@@ -55,7 +40,6 @@ const VoteDetailsModal: React.FC<React.PropsWithChildren<VoteDetailsModalProps>>
               {t('Close')}
             </Button>
           </>
-        )}
       </Box>
     </Modal>
   )

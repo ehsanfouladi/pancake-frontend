@@ -1,12 +1,7 @@
 export const CORS_ALLOW = [
-  /\.pancake\.run$/,
-  /\.pancakeswap\.finance$/,
   /\.cadinu\.io$/,
-  /\.pancakeswap\.com$/,
   /\.cadinu\.io$/,
-  'https://pancakeswap.finance',
   'https://apps.cadinu.io',
-  'https://pancakeswap.com',
   'https://cadinu.io',
   /^http:\/\/localhost(:\d+)?$/,
 ]

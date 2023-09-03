@@ -17,6 +17,9 @@
     "lodash/import-scope": [2, "method"],
     "@next/next/no-img-element": 0,
     "no-sparse-arrays": 0,
+    "dot-notation": "off",
+    "consistent-return":"off",
+    "array-callback-return":"off",
     "react-hooks/exhaustive-deps": [
       "warn",
       {

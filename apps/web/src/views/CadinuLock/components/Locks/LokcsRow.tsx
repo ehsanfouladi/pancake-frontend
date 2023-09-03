@@ -1,28 +1,20 @@
-import { ArrowForwardIcon, Box, IconButton, Flex, Text, NextLinkFromReactRouter, Spinner, Skeleton, SkeletonV2 } from '@pancakeswap/uikit'
-import styled from 'styled-components'
-import { CadinuLockState, Lock } from 'state/types'
-// import { isCoreProposal } from '../../helpers'
-import TimeFrame from './TimeFrame'
-import { ProposalStateTag, ProposalTypeTag } from './tags'
-import {getTokenName, getLpSymbol, getTokenSymbol, getValueLocked} from "../../helpers"
-import { useCallback, useEffect, useState } from 'react'
-import { Address, isAddress, zeroAddress } from 'viem'
-import { bscTokens } from '@pancakeswap/tokens'
-import { erc20ABI, readContracts, useContractRead } from 'wagmi'
-import { lpTokenABI } from 'config/abi/lpTokenAbi'
-import { bigIntToSerializedBigNumber } from '@pancakeswap/utils/bigNumber'
-import { formatRawAmount } from 'utils/formatCurrencyAmount'
 import { pancakePairV2ABI } from '@pancakeswap/sdk'
-import { Contract, Signer } from 'ethers'
-import { publicClient } from 'utils/wagmi'
-import { getCadinuLockv3Address } from 'utils/addressHelpers'
-import { getCadinuLockV3Contract } from 'utils/contractHelpers'
+import { bscTokens } from '@pancakeswap/tokens'
+import { ArrowForwardIcon, Box, IconButton, NextLinkFromReactRouter, Skeleton, SkeletonV2, Text } from '@pancakeswap/uikit'
+import { useCadinuPriceAsBN, useCbonPriceAsBN } from '@pancakeswap/utils/useCakePrice'
+import { useCallback, useEffect, useState } from 'react'
+import { CadinuLockState, Lock } from 'state/types'
+import styled from 'styled-components'
+import { formatRawAmount } from 'utils/formatCurrencyAmount'
+import { Address, isAddress, zeroAddress } from 'viem'
+import { erc20ABI, readContracts, useContractRead } from 'wagmi'
+import { getValueLocked } from "../../helpers"
 
 interface LockRowProps {
   lock: any
   filterState : CadinuLockState
-  isMyLock: Boolean
-  isV3: Boolean
+  isMyLock: boolean
+  lockFilter : CadinuLockState
 }
 
 const StyledLockRow = styled(NextLinkFromReactRouter)`
@@ -37,7 +29,7 @@ const StyledLockRow = styled(NextLinkFromReactRouter)`
   }
 `
 
-const LockRow: React.FC<React.PropsWithChildren<LockRowProps>> = ( {lock, filterState, isMyLock, isV3} ) => {
+const LockRow: React.FC<React.PropsWithChildren<LockRowProps>> = ( {lock, filterState, isMyLock, lockFilter} ) => {
   const lockLink = `/cadinu-lock/locks/${lock.token}`
   const [numberOfNfts, setNumberOfNfts] = useState(0)
   const {data:TokenDecimal, isLoading:isDecimalLoading, isSuccess: isDecimalSuccess} = useContractRead({
@@ -77,9 +69,9 @@ const LockRow: React.FC<React.PropsWithChildren<LockRowProps>> = ( {lock, filter
     )
     
     const tokenContracts = []
-    data?.map((token)=>{
+    data?.map((token)=>
       token.status === "success" && tokenContracts.push({address : token.result, abi:erc20ABI})
-    })
+    )
     const data2 = await readContracts({
       contracts:[
         {
@@ -110,10 +102,10 @@ const LockRow: React.FC<React.PropsWithChildren<LockRowProps>> = ( {lock, filter
       token1Symbol:data2[3].result,
       token1SymbolStatus:data2[3].status}
     const lpName = nameAndSymbols.token0NameStatus === 'success' && nameAndSymbols.token1NameStatus === 'success' ?
-    nameAndSymbols.token0Name + "/" + nameAndSymbols.token1Name
+    `${nameAndSymbols.token0Name}/${nameAndSymbols.token1Name}`
     : "loading..."
     const lpSymbol = nameAndSymbols.token0SymbolStatus === 'success' && nameAndSymbols.token1SymbolStatus === 'success' ?
-    nameAndSymbols.token0Symbol + "/" + nameAndSymbols.token1Symbol
+    `${nameAndSymbols.token0Symbol}/${nameAndSymbols.token1Symbol}`
     : "loading..."
     setLpNameSymbols({name : lpName, symbol: lpSymbol})
     
@@ -127,10 +119,20 @@ const LockRow: React.FC<React.PropsWithChildren<LockRowProps>> = ( {lock, filter
    
   //   setNumberOfNfts(Number(amount))
   // }
-
+  const cadinuPrice = Number(useCadinuPriceAsBN())
+  const cbonPrice = Number(useCbonPriceAsBN())
+  
   const getValue = useCallback(async() =>{ const value = await getValueLocked(lock.token)
+    if (lock.token === bscTokens.cadinu.address){
+      setTotalValue(cadinuPrice)
+        return
+      }
+    if (lock.token === bscTokens.cbon.address){
+        setTotalValue(cbonPrice)
+        return
+      }
     setTotalValue(value)
-  },[])
+  },[lock.token, cbonPrice, cadinuPrice])
   useEffect(()=>{
     if(filterState === CadinuLockState.LIQUIDITY_V2){
       getValue()
@@ -145,7 +147,7 @@ const LockRow: React.FC<React.PropsWithChildren<LockRowProps>> = ( {lock, filter
     return <SkeletonV2 />
   }
   return (
-    <StyledLockRow to={`${lockLink}?isMyLock=${isMyLock}&isV3=${isV3}`}>
+    <StyledLockRow to={`${lockLink}?isMyLock=${isMyLock}&filterState=${lockFilter}`}>
       <Box as="span"   overflow='hidden' style={{ flex: 1 , "whiteSpace": "nowrap"}}>
         {filterState === CadinuLockState.TOKENS ?
         <>

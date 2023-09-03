@@ -1,34 +1,33 @@
-import { Box, Breadcrumbs, Card, Flex, Heading, Input, PaginationButton, Text } from '@pancakeswap/uikit'
-import Link from 'next/link'
 import { useTranslation } from '@pancakeswap/localization'
+import { Box, Breadcrumbs, Card, Flex, Heading, Input, PaginationButton, Text } from '@pancakeswap/uikit'
 import Container from 'components/Layout/Container'
-import { CadinuLockState, CadinuLockType, LockFetchStatus } from 'state/types'
 import { useSessionStorage } from 'hooks/useSessionStorage'
-import {
-    fetchCumulativeLockInfo,
-    fetchCumulativeLpTokenLockInfo,
-    fetchCumulativeNormalTokenLockInfo,
-    fetchCumulativeV3Locks,
-    fetchLocksForNonFungiblePositionManager,
-    fetchLpLocksByUser,
-    fetchNormalLocksByUser,
-    fetchV3LocksByUser,
-    isV3,
-    v3Contracts,
-      } from '../../helpers'
-import LocksLoading from './LocksLoading'
-import TabMenu from './TabMenu'
-import LokcsRow from './LokcsRow'
-import Filters from './Filters'
+import Link from 'next/link'
+import { CadinuLockState, CadinuLockType, LockFetchStatus } from 'state/types'
 import { Address, useAccount, useContractRead } from 'wagmi'
 
-import styled from 'styled-components'
-import { useCallback, useEffect, useState } from 'react'
+
 import { CadinuLockAbi } from 'config/abi/cadinuLock'
+import { useCallback, useEffect, useState } from 'react'
+import styled from 'styled-components'
 import { isAddress, zeroAddress } from 'viem'
 
-import { getCadinuLockContract, getCadinuLockV3Contract } from 'utils/contractHelpers'
 import { CadinuLockV3Abi } from 'config/abi/cadinuLockV3'
+import { getCadinuLockContract, getCadinuLockV3Contract } from 'utils/contractHelpers'
+import {
+  fetchCumulativeLockInfo,
+  fetchCumulativeLpTokenLockInfo,
+  fetchCumulativeNormalTokenLockInfo,
+  fetchCumulativeV3Locks,
+  fetchLocksForNonFungiblePositionManager,
+  fetchLpLocksByUser,
+  fetchNormalLocksByUser,
+  fetchV3LocksByUser, v3Contracts
+} from '../../helpers'
+import Filters from './Filters'
+import LocksLoading from './LocksLoading'
+import LokcsRow from './LokcsRow'
+import TabMenu from './TabMenu'
 
 interface State {
   lockType: CadinuLockType
@@ -64,6 +63,7 @@ const Locks = () => {
 
   const { lockType, filterState, fetchStatus } = state
   const handleLockTypeChange = (newLockType: CadinuLockType) => {
+    setCurrentPage(1)
     setState((prevState) => ({
       ...prevState,
       lockType: newLockType,
@@ -110,7 +110,7 @@ const Locks = () => {
     functionName:"allSupportedNonFungiblePositionManagerCount"
   })
   
-  const getLocksByStateForCurrentPage = useCallback (async (filterState:CadinuLockState, start: bigint, end:bigint)=>{
+  const getLocksByStateForCurrentPage = useCallback (async (start: bigint, end:bigint)=>{
     switch(filterState){
       case CadinuLockState.LIQUIDITY_V2:{
         try{
@@ -178,7 +178,7 @@ const Locks = () => {
 
   useEffect(() => {
     if(!isAddress(value)&&lockType === CadinuLockType.ALL){
-      getLocksByStateForCurrentPage( filterState, BigInt(currentPage*PAGE_SIZE-PAGE_SIZE), BigInt(currentPage*PAGE_SIZE-1))
+      getLocksByStateForCurrentPage(  BigInt(currentPage*PAGE_SIZE-PAGE_SIZE), BigInt(currentPage*PAGE_SIZE-1))
     }
     
   }, [filterState, currentPage, getLocksByStateForCurrentPage, value, lockType])
@@ -200,18 +200,18 @@ const Locks = () => {
     if(data.token === zeroAddress){
       handleLockFetchStatusChange(LockFetchStatus.FAILED)
       setFetchedData([])
-    }else{
+    }
     if (data.factory === zeroAddress){
       handleFilterChange(CadinuLockState.TOKENS)
-    }else{
+      }else{
         handleFilterChange(CadinuLockState.LIQUIDITY_V2)
       }
-    }
+    
     setFetchedData([data])
     }
     },[])
 
-  const getMyLocks = useCallback(async(account:Address, filterState) =>{
+  const getMyLocks = useCallback(async(myAccount:Address) =>{
     if(lockType === CadinuLockType.MYLOCK){
       // if(value){
       //   setValue("")
@@ -220,7 +220,7 @@ const Locks = () => {
       if(filterState===CadinuLockState.TOKENS){
         handleLockFetchStatusChange(LockFetchStatus.PENDING)
         setFetchedData([])
-        const data = await fetchNormalLocksByUser(account as Address)
+        const data = await fetchNormalLocksByUser(myAccount as Address)
         if (data){
           setFetchedData(data)
           handleLockFetchStatusChange(LockFetchStatus.FETCHED)
@@ -257,13 +257,14 @@ const Locks = () => {
           handleLockFetchStatusChange(LockFetchStatus.FETCHED)
 
           if (result){
-            setFetchedData(result ? result : [])
+            setFetchedData(result)
             handleLockFetchStatusChange(LockFetchStatus.FETCHED)
             if (isAddress(value)){
               const newData = fetchedData.filter((lock)=> lock.token === value)
               setFetchedData(newData)
             }
           }else{
+            setFetchedData([])
             handleLockFetchStatusChange(LockFetchStatus.FAILED)
           }
         }
@@ -273,12 +274,12 @@ const Locks = () => {
 
   useEffect(() => {
     if (isAddress(value) &&lockType === CadinuLockType.ALL){
-      searchAddress(value)
+      searchAddress(value as Address)
     }
     if (lockType === CadinuLockType.MYLOCK){
       setFetchedData([])
       if(account){
-        getMyLocks(account, filterState)
+        getMyLocks(account)
       }
     }else{
       setIsMyLock(false)
@@ -322,11 +323,10 @@ const Locks = () => {
           fetchedData && fetchedData.length > 0 &&
           fetchedData.map((lock, index) => {
             return <LokcsRow
-              key={index}
               lock={lock} 
               filterState={filterState} 
               isMyLock={isMyLock}
-              isV3={isV3(lock)}/>
+              lockFilter={filterState}/>
           })}
         {((fetchStatus === LockFetchStatus.FETCHED && fetchedData && fetchedData.length === 0) || fetchStatus === LockFetchStatus.FAILED) &&(
           <Flex alignItems="center" justifyContent="center" p="32px">
@@ -335,7 +335,7 @@ const Locks = () => {
         )}
       </Card>
       {maxPage > 1 &&
-      <PaginationButton showMaxPageText = {true} currentPage={currentPage} maxPage={maxPage} setCurrentPage={setCurrentPage} />
+      <PaginationButton showMaxPageText currentPage={currentPage} maxPage={maxPage} setCurrentPage={setCurrentPage} />
       }
     </Container>
   )
