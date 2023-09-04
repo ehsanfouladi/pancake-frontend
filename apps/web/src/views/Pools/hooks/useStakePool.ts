@@ -10,6 +10,8 @@ const options = {
 }
 
 const sousStake = async (sousChefContract, amount, gasPrice: bigint, decimals = 18) => {
+  console.log("MAN CALL SHODAM");
+  
   return sousChefContract.write.deposit([new BigNumber(amount).times(getFullDecimalMultiplier(decimals)).toString()], {
     ...options,
     gasPrice,
