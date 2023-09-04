@@ -16,10 +16,8 @@ import {
 } from '@pancakeswap/uikit'
 import { ContextApi } from '@pancakeswap/localization'
 import { SUPPORTED_CHAIN_IDS as POOL_SUPPORTED_CHAINS } from '@pancakeswap/pools'
-import { nftsBaseUrl } from 'views/Nft/market/constants'
-import { getPerpetualUrl } from 'utils/getPerpetualUrl'
+
 import { SUPPORT_FARMS, SUPPORT_ONLY_BSC } from 'config/constants/supportChains'
-import { NewIconButton } from 'views/BuyCrypto/components/NewIcon'
 
 export type ConfigMenuDropDownItemsType = DropdownMenuItems & { hideSubNav?: boolean }
 export type ConfigMenuItemsType = Omit<MenuItemsType, 'items'> & { hideSubNav?: boolean; image?: string } & {
@@ -105,8 +103,8 @@ const config: (
           label: t('Pools'),
           href: '/pools',
           supportChainIds: POOL_SUPPORTED_CHAINS,
-          status: { text: t('Soon'), color: 'info' },
-          disabled: true,
+          status: { text: t('New'), color: 'success' },
+          // disabled: true,
         },
       ].map((item) => addMenuItemSupported(item, chainId)),
     },
