@@ -77,7 +77,7 @@ export default function ShowCase() {
       alt: 'Cadinu-Staking',
       desc: " Lock up CBON, CADINU, and other tokens to earn passive rewards and support CADINU's growth journey, along with other promising projects.",
       destination: '/pools',
-      enabled: false,
+      enabled: true,
     },
   ]
 
