@@ -2880,15 +2880,15 @@ const finishedPools = [
   //     tokenPerBlock: '0.6093',
   //   },
 
-  // {
-  //   sousId: 1011,
-  //   stakingToken: bscTokens.cbon,
-  //   earningToken: bscTokens.cadinu,
-  //   contractAddress: '0x464515591ec603aff00c1e037d905ffa86b166ec',
-  //   poolCategory: PoolCategory.CORE,
-  //   tokenPerBlock: '1',
-  //   isFinished: true,
-  // },
+  {
+    sousId: 1011,
+    stakingToken: bscTokens.cbon,
+    earningToken: bscTokens.cadinu,
+    contractAddress: '0x464515591ec603aff00c1e037d905ffa86b166ec',
+    poolCategory: PoolCategory.CORE,
+    tokenPerBlock: '1',
+    isFinished: true,
+  },
 ].map((p) => ({
   ...p,
   isFinished: true,
