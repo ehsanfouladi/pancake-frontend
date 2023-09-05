@@ -25,6 +25,9 @@ const getPathList = (t: ContextApi['t']): PathList => {
       '/remove': { basePath: true, title: t('Remove Liquidity'), image: `${ASSET_CDN}/web/og/liquidity.jpg` },
       '/liquidity': { title: t('Liquidity'), image: `${ASSET_CDN}/web/og/liquidity.jpg` },
       '/find': { title: t('Import Pool') },
+      '/cadinu-lock': { title: t('Lock') },
+      '/cadinu-lock/create': { title: t('Create Lock') },
+      '/presale': { title: t('CBON Presale') },
       '/competition': { title: t('Trading Battle') },
       '/prediction': { title: t('Prediction'), image: `${ASSET_CDN}/web/og/prediction.jpg` },
       '/prediction/leaderboard': { title: t('Leaderboard'), image: `${ASSET_CDN}/web/og/liquidity.jpg` },
@@ -50,7 +53,7 @@ const getPathList = (t: ContextApi['t']): PathList => {
       },
       '/info/tokens': {
         title: `${t('Tokens')} - ${t('Info')}`,
-        description: 'View statistics for Pancakeswap exchanges.',
+        description: 'View statistics for Cadinuswap exchanges.',
         image: `${ASSET_CDN}/web/og/info.jpg`,
       },
       '/nfts': { title: t('NFT Marketplace'), image: `${ASSET_CDN}/web/og/nft.jpg` },
