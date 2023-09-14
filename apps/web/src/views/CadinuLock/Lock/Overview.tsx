@@ -21,7 +21,7 @@ import { LockV3 } from './LockV3'
 const Overview = () => {
   const { query } = useRouter()
   const {tokenId,isMyLock, filterState} = query
-
+  
   const tokenContract = {
     address: tokenId?.toString() as Address,
     abi: erc20ABI,
@@ -195,7 +195,12 @@ const Overview = () => {
     return <Loading />
   }
   if(filterState === CadinuLockState.LIQUIDITY_V3){
-    return <LockV3 tokenId = {tokenId as Address} isMyLock ={isMyLock==='false'? false : true} />
+    if(isMyLock==='true'){
+      const {lockId} = query
+    return <LockV3 tokenId = {tokenId as Address} lockId={lockId as string} isMyLock ={true} />
+
+    }
+    return <LockV3 tokenId = {tokenId as Address} lockId={'null'} isMyLock ={isMyLock==='false'? false : true} />
   }
   return (
     <>

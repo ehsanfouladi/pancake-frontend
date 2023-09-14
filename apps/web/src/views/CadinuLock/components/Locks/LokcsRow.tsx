@@ -148,17 +148,25 @@ const LockRow: React.FC<React.PropsWithChildren<LockRowProps>> = ( {lock, filter
     return <SkeletonV2 />
   }
   return (
-    <StyledLockRow to={`${lockLink}?isMyLock=${isMyLock}&filterState=${lockFilter}`}>
+    <StyledLockRow to={isMyLock && filterState!==CadinuLockState.LIQUIDITY_V3 
+    ? `${lockLink}/${lock.id}?filterState=${lockFilter}`
+      : filterState===CadinuLockState.LIQUIDITY_V3 
+      ? `${lockLink}?isMyLock=${isMyLock}&filterState=${lockFilter}&lockId=${lock.id}`
+    :`${lockLink}?isMyLock=${isMyLock}&filterState=${lockFilter}`}>
       <Box as="span"   overflow='hidden' style={{ flex: 1 , "whiteSpace": "nowrap"}}>
         {filterState === CadinuLockState.TOKENS ?
         <>
         <Text bold  mb="5px" style={{textOverflow:"ellipsis", msTextOverflow:"ellipsis"}}>
           {isNameSuccess ? TokenName:"Loading" } 
         </Text>
-        
         <Text mb="8px">
           {isSymbolSuccess ? TokenSymbol : "Loading"}
         </Text>
+        {isMyLock &&
+          <Text   mb="5px" >
+            Lcok ID: {lock ? lock.id :"Loading" } 
+          </Text>
+        }
         </>
         :
         filterState === CadinuLockState.LIQUIDITY_V2 ?
@@ -176,12 +184,24 @@ const LockRow: React.FC<React.PropsWithChildren<LockRowProps>> = ( {lock, filter
           {lpNameSymbols['symbol']}
         </Text>
         : <SkeletonV2 />}
+        {isMyLock &&
+          <Text   mb="5px" >
+            Lcok ID: {lock ? lock.id :"Loading" } 
+          </Text>
+        }
         </>
         :
         filterState === CadinuLockState.LIQUIDITY_V3 &&(
+          <>
         <Text bold  mb="5px" style={{textOverflow:"ellipsis", msTextOverflow:"ellipsis"}}>
           {isNameSuccess ? TokenName:<Skeleton /> } 
         </Text>
+        {isMyLock &&
+          <Text   mb="5px" >
+            Lcok ID: {lock ? lock.id.toString() :"Loading" } 
+          </Text>
+        }
+        </>
         )
       }
     

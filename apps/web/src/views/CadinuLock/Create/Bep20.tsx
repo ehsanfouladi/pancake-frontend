@@ -45,7 +45,7 @@ import { getCadinuLockAddress } from 'utils/addressHelpers'
 import { useToken } from 'hooks/Tokens'
 import { useApproveCallback, useApproveCallbackFromAmount, useApproveCallbackFromTrade } from 'hooks/useApproveCallback'
 import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
-import { BaseError, decodeFunctionData, getContractError, parseEther } from 'viem'
+import { BaseError, decodeFunctionData, getContractError, parseEther, parseUnits } from 'viem'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { getCadinuContract, getCadinuLockContract } from 'utils/contractHelpers'
@@ -69,6 +69,7 @@ import { ChainId } from '@pancakeswap/sdk'
 import { CadinuLockAbi } from 'config/abi/cadinuLock'
 import { getTransaction } from 'viem/dist/types/actions/public/getTransaction'
 import { getTransactionReceipt } from 'viem/dist/types/actions/public/getTransactionReceipt'
+import { isInteger } from 'lodash'
 
 const Bep20 = ()=>{
   const ToggleWrapper = styled.div`
@@ -85,7 +86,7 @@ const ReferenceElement = styled.div`
         tokenAddress: '',
         title: '',
         owner: '',
-        amount: 0,
+        amount:0,
         tgeDate: null,
         tgeTime: null,
         tgePercent:0,
@@ -124,6 +125,7 @@ const ReferenceElement = styled.div`
         } = state    
     const [priceInCbon,setPriceInCbon] = useState('')
     const token = useToken(state.tokenAddress)
+    
     const cadinuLockContract = useCadinuLockContract()
     const {callWithGasPriceNative} = useCallWithGasPriceNative()
     
@@ -141,11 +143,10 @@ const ReferenceElement = styled.div`
     const { setLastUpdated, allowance } = useCbonApprovalStatus(cadinuLockContract.address)
     const {handleApprove:approveCbon} = useCbonApprove(setLastUpdated, cadinuLockContract.address, 'Cbon approved successfully!')
     
-    
     const { isApproving, isApproved, isConfirming, handleApprove, handleConfirm } = useApproveConfirmTransaction({
       token,
       spender: cadinuLockContract.address,
-      minAmount: parseEther(`${amount}`),
+      minAmount:parseUnits(amount.toString(),token?.decimals) ?  parseUnits(amount.toString(),token?.decimals): 0n,
       onApproveSuccess: async ({ receipt }) => {
         toastSuccess(
           t('Contract enabled - you can now lock your tickets'),
@@ -160,7 +161,7 @@ const ReferenceElement = styled.div`
             ownerIsMe ? account : owner,
             tokenAddress,
             false,
-            parseEther(`${amount}`),
+            parseUnits(amount.toString(),token?.decimals),
             combineDateAndTime(tgeDate, tgeTime),
             BigInt(tgePercent * 10),
             BigInt(cycle * 24 * 3600),
@@ -170,7 +171,7 @@ const ReferenceElement = styled.div`
             ownerIsMe ? account : owner,
             tokenAddress,
             false,
-            parseEther(`${amount}`),
+            parseUnits(amount.toString(),token?.decimals),
             combineDateAndTime(tgeDate, tgeTime),
             BigInt(tgePercent * 10),
             BigInt(cycle * 24 * 3600),
@@ -182,14 +183,14 @@ const ReferenceElement = styled.div`
             ownerIsMe ? account : owner,
             tokenAddress,
             false,
-            parseEther(`${amount}`),
+            parseUnits(amount.toString(),token?.decimals),
             combineDateAndTime(lockUntilDate,lockUntilTime),
             title
           ] : [
             ownerIsMe ? account : owner,
             tokenAddress,
             false,
-            parseEther(`${amount}`),
+            parseUnits(amount.toString(),token?.decimals),
             combineDateAndTime(lockUntilDate,lockUntilTime),
             title
           ]
@@ -269,7 +270,17 @@ const ReferenceElement = styled.div`
   
     const handleChange = (evt: ChangeEvent<HTMLInputElement>) => {
       const { name: inputName, value } = evt.currentTarget
-      updateValue(inputName, value)
+      if(inputName === 'amount'){
+        if(Number(value) !==0 && Number(value) < 1/10**token?.decimals){
+          window.alert(`Input amount for this token cannot be less than ${1/10**token?.decimals} `)
+        }else if(!isInteger(Math.fround(Number(value)* Math.pow(10,token?.decimals)))){
+          window.alert(`Input amount for this token must be of decimals of ${token?.decimals}`)
+        }else{
+          updateValue(inputName, value)
+        }
+      }else{
+        updateValue(inputName, value)
+      }
     }
 
     const handleDateChange = (key: string) => (value: Date) => {
@@ -331,6 +342,7 @@ const ReferenceElement = styled.div`
                 <Input 
                 id="amount" 
                 name="amount" 
+                type='number'
                 placeholder='0'
                 value={amount} 
                 scale="lg" 

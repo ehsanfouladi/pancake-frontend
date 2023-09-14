@@ -116,7 +116,6 @@ export default function BuyCbon({ userIp }: { userIp: string | null }) {
     getTotalCBONPurchased().catch(console.error)
 
     if (isSuccess) {
-      console.log('del ey del')
       setCbonBalance(data?.formatted)
     }
   }, [isSuccess, isBuySuccess, data, getTotalCBONPurchased, getTotalNumberOfPurchases])
@@ -157,7 +156,7 @@ export default function BuyCbon({ userIp }: { userIp: string | null }) {
       </>
     )
   }
-  const getTotalurchased = () => {
+  const getTotalPurchased = () => {
     return (
       <>
         <Balance
@@ -220,7 +219,7 @@ export default function BuyCbon({ userIp }: { userIp: string | null }) {
               <Heading fontSize="12pt">Total Purchased CBON</Heading>
             </Flex>
             <Flex flexDirection="column" mb="18px">
-              {getTotalurchased()}
+              {getTotalPurchased()}
             </Flex>
             <Flex justifyContent={['center', null, null, 'flex-start']}>
               <Heading fontSize="12pt">Total Number of purchases </Heading>

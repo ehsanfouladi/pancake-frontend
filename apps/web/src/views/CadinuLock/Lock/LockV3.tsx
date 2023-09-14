@@ -5,7 +5,7 @@ import { CadinuLockV3Abi } from 'config/abi/cadinuLockV3'
 import { nonfungiblePositionManagerABI } from '@pancakeswap/v3-sdk'
 import { useTranslation } from '@pancakeswap/localization'
 import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
-import { Box, Button, Card, CardBody, CardFooter, CardHeader, Container, Flex, Heading, LinkExternal, Loading, Skeleton, StyledTooltip, Text, TimerIcon,  useTooltip } from '@pancakeswap/uikit'
+import { Box, Button, Card, CardBody, CardFooter, CardHeader, Container, Flex, Heading, LinkExternal, Loading, PaginationButton, Skeleton, StyledTooltip, Text, TimerIcon,  useTooltip } from '@pancakeswap/uikit'
 import { CardWrapper } from '@pancakeswap/uikit/src/widgets/Liquidity'
 import Page from 'views/Page'
 import { fetchLocksForNonFungiblePositionManager } from '../helpers'
@@ -70,7 +70,7 @@ const LockV3ContractMin = {
 }    
 
 
-export const LockV3 = ({tokenId, isMyLock} : {tokenId : Address, isMyLock: boolean}) => {
+export const LockV3 = ({tokenId, isMyLock, lockId} : {tokenId : Address, isMyLock: boolean, lockId:string}) => {
 
   const [state, setState] = useState<State>( {
     nftFetchStatus : NftCardFetchStatus.NOTFETCHED,
@@ -247,7 +247,8 @@ const {
       setFetchedData(data)
       const fetchedNfts = []
       data[0]?.result[1].map(res=> fetchedNfts.push(res))
-      setNfts(fetchedNfts)
+
+      setNfts(fetchedNfts.filter(nft=>nft.lockId === BigInt(lockId)))
       setCardTitle(data[1]?.result)
 
       const Ali = []
@@ -408,13 +409,13 @@ const {
     const makeNftCards = ()=>{
       
         return(
-            nfts.map((nft) =>{
+            nfts.slice((currentPage-1)*PAGE_SIZE,currentPage*PAGE_SIZE).map((nft) =>{
                 if(!nft.error){
                     const thisPosition = positions.length > 0 ? positions.filter(position => position?.nftId === nft.nftId) : []
                     thisPosition.length > 0 && getLpNames([ thisPosition[0]?.token0, thisPosition[0]?.token1],nft.nftId)
                     return(
                         <>
-                        <CardWrapper margin='5px' style={{flexWrap:"wrap"}}>
+                        <CardWrapper margin='5px' style={{flexWrap:"wrap", minWidth:'360px', maxWidth:'28%'}} >
                         <Card>
                             <CardHeader style={{textAlign:'center'}} >
                               <Heading>
@@ -424,7 +425,7 @@ const {
                               : tokenId}
                               </Heading>
                             </CardHeader>
-                          <CardBody >
+                          <CardBody style={{padding:'5px'}}>
                             
                             <Heading
                             style={
@@ -438,41 +439,39 @@ const {
                                 {nft.description.slice(0,30)}
                             </Heading>
                             <Flex
-                                width='95%'
+                                width='100%'
                                 flexDirection='row'
                                 flexWrap="wrap"
+                                alignItems='center'
                                 justifyContent='center'
                                 verticalAlign='center'
                                 >
-                                <Box mt="5px" style={{display:'flex' , flexWrap:'wrap', flexDirection:'row' }} width="90%">
+                                <Box mt="5px" style={{display:'flex' , flexWrap:'wrap', flexDirection:'row' }} width="85%">
                                     <strong style={{flex:'1 1 160px'}}>Lock ID:</strong>
                                     <span >{nft.lockId.toString()}</span>
                                 </Box>
-                                <Box mt="5px" style={{display:'flex' , flexWrap:'wrap', flexDirection:'row' }} width="90%">
+                                <Box mt="5px" style={{display:'flex' , flexWrap:'wrap', flexDirection:'row' }} width="85%">
                                     <strong style={{flex:'1 1 160px'}}>Position Symbol:</strong>
-                                    <span >{lpNameSymbols['symbol'] === "" ? <Skeleton/> : lpNameSymbols.filter(lp=> lp.lockId === nft.nftId)[0].symbol }</span>
+                                    <span >{lpNameSymbols['symbol'] === "" ? <Skeleton/> : lpNameSymbols.filter(lp=> lp.lockId === nft.nftId)[0]?.symbol }</span>
                                 </Box>
-                                <Box mt="5px" style={{display:'flex' , flexWrap:'wrap', flexDirection:'row' }} width="90%">
+                                <Box mt="5px" style={{display:'flex' , flexWrap:'wrap', flexDirection:'row' }} width="85%">
                                     <strong style={{flex:'1 1 160px'}}>Position Fee:</strong>
-                                    <span >{thisPosition.length > 0 ? Number(thisPosition[0]?.fee) : <Skeleton />}</span>
+                                    <span >{thisPosition.length > 0 ? Number(thisPosition[0]?.fee)/10000 : <Skeleton />}</span>
                                 </Box>
-                                <Box mt="5px" style={{display:'flex' , flexWrap:'wrap', flexDirection:'row' }} width="90%">
-                                    <strong style={{flex:'1 1 160px'}}>Position Liquidity:</strong>
-                                    <span >{thisPosition.length > 0 ?  thisPosition[0]?.liquidity?.toString() : <Skeleton/>}</span>
-                                </Box>
-                                <Box mt="5px" style={{display:'flex' , flexWrap:'wrap', flexDirection:'row' }} width="90%">
+                                
+                                <Box mt="5px" style={{display:'flex' , flexWrap:'wrap', flexDirection:'row' }} width="85%">
                                     <strong style={{flex:'1 1 160px'}}>Lock Date:</strong>
                                     <span style={{margin:"3px"}}>
                                         <TimeCountdownDisplay timestamp={Number(nft.lockDate)} />
                                     </span>
                                 </Box>
-                                <Box mt="5px" style={{display:'flex' , flexWrap:'wrap', flexDirection:'row' }} width="90%">
+                                <Box mt="5px" style={{display:'flex' , flexWrap:'wrap', flexDirection:'row' }} width="85%">
                                     <strong style={{flex:'1 1 160px'}}>Unlock Date:</strong>
                                     <span style={{margin:"3px"}}>
                                         <TimeCountdownDisplay timestamp={Number(nft.unlockDate)} />
                                     </span>
                                 </Box>
-                                <Box mt="5px" style={{display:'flex' , flexWrap:'wrap', flexDirection:'row' }} width="90%">
+                                <Box mt="5px" style={{display:'flex' , flexWrap:'wrap', flexDirection:'row' }} width="85%">
                                     <strong style={{flex:'1 1 160px'}}>Owner:</strong>
                                     <LinkExternal href={`https://bscscan.com/address/${nft.owner}`}>
                                         <span >{`${nft.owner.slice(0,6)}...${nft.owner.slice(-4,nft.owner.length)}`}</span>
@@ -527,7 +526,7 @@ const {
       return (
         <>
 
-        <CardWrapper margin='5px' style={{flexWrap:"wrap"}}>
+        <CardWrapper  margin='5px' style={{flexWrap:"wrap", minWidth:'360px', maxWidth:'28%'}}>
         <Card>
           <CardHeader style={{textAlign:'center'}} >
             <Heading>
@@ -622,11 +621,14 @@ const {
   return (
     <>
     <Page>
-    <Container>
-    <Flex flexWrap="wrap" flexDirection='row' justifyContent='space-between'>
+    {/* <Container> */}
+    <Flex flexWrap="wrap" flexDirection='row' justifyContent='center'>
         {nftFetchStatus === NftCardFetchStatus.FETCHED || myNftFetchStatus === NftCardFetchStatus.FETCHED ? makeNftCards() : skeletonCard()}
     </Flex>
-    </Container>
+    {maxPage > 1 &&
+      <PaginationButton showMaxPageText currentPage={currentPage} setCurrentPage={setCurrentPage} maxPage={maxPage} />
+    }
+    {/* </Container> */}
     </Page>
         
     </>

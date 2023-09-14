@@ -83,7 +83,7 @@ const Detail = ()=>{
       address : getCadinuLockContract().address,
       abi:CadinuLockAbi,
       functionName: "unlock",
-      args:[BigInt(Number(id))]
+      args:[ Number(id) ? BigInt(Number(id)) : 0n]
     })
 
     const { isSuccess:unlockSuccess, write:unlock} = useContractWrite(config)
@@ -352,7 +352,7 @@ const Detail = ()=>{
           {
             ...lockContract,
             functionName : 'withdrawableTokens',
-            args:[BigInt(Number(id))]
+            args:[Number(id) ? BigInt(Number(id)) : 0n]
           }
         ]
       })

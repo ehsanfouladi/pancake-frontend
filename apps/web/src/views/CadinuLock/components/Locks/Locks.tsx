@@ -273,57 +273,7 @@ const Locks = () => {
         default:
           break;
       }
-      // if(filterState===CadinuLockState.TOKENS){
-      //   handleLockFetchStatusChange(LockFetchStatus.PENDING)
-      //   setFetchedData([])
-      //   const data = await fetchNormalLocksByUser(myAccount as Address)
-      //   if (data){
-      //     setFetchedData(data)
-      //     handleLockFetchStatusChange(LockFetchStatus.FETCHED)
-      //     if (isAddress(value)){
-      //       const newData = fetchedData.filter((lock)=> lock.token === value)
-      //       setFetchedData(newData)
-      //     }
-      //   }else{
-      //     handleLockFetchStatusChange(LockFetchStatus.FAILED)
-      //   }
-      // }
-      // if (filterState === CadinuLockState.LIQUIDITY_V2){
-      //     handleLockFetchStatusChange(LockFetchStatus.PENDING)
-      //     setFetchedData([])
-      //     const data = await fetchLpLocksByUser(account as Address)
-      //     if (data){
-      //       setFetchedData(data)
-      //       handleLockFetchStatusChange(LockFetchStatus.FETCHED)
-      //       if (isAddress(value)){
-      //         const newData = fetchedData.filter((lock)=> lock.token === value)
-      //         setFetchedData(newData)
-      //       }
-
-      //     }else{
-      //       handleLockFetchStatusChange(LockFetchStatus.FAILED)
-      //     }
-      //   }
-        
-      //   if (filterState === CadinuLockState.LIQUIDITY_V3){
-          
-      //     handleLockFetchStatusChange(LockFetchStatus.PENDING)
-      //     setFetchedData([])
-      //     const result = await fetchV3LocksByUser(account as Address)
-      //     handleLockFetchStatusChange(LockFetchStatus.FETCHED)
-
-      //     if (result){
-      //       setFetchedData(result)
-      //       handleLockFetchStatusChange(LockFetchStatus.FETCHED)
-      //       if (isAddress(value)){
-      //         const newData = fetchedData.filter((lock)=> lock.token === value)
-      //         setFetchedData(newData)
-      //       }
-      //     }else{
-      //       setFetchedData([])
-      //       handleLockFetchStatusChange(LockFetchStatus.FAILED)
-      //     }
-      //   }
+     
       
     }
   },[account, filterState, lockType])
@@ -353,7 +303,7 @@ const Locks = () => {
         </Breadcrumbs>
       </Box>
       <Heading as="h2" scale="xl" mb="32px" id="voting-proposals">
-        {t('Trending Locks')}
+        {t('Locks')}
       </Heading>
     <StyledContainer>
       <StyledInput

@@ -335,7 +335,6 @@ export const fetchLocksForNonFungiblePositionManager = async (address:Address) =
     }
   }
 export const fetchV3LocksByUser = async (address:Address) =>{
-  console.log("HAVIJ");
   try{
    const data = await cadinuLockV3Contract.read.getLocksForUser([address])
     console.log(">>>",data);
@@ -345,6 +344,7 @@ export const fetchV3LocksByUser = async (address:Address) =>{
       locks['token'] = lock.nonFungiblePositionManagerAddress
       locks["factory"] = zeroAddress
       locks["amount"] =  Number(1)
+      locks["id"] = lock.lockId
       alluserLocks.push(locks)
     })
     return (alluserLocks)
