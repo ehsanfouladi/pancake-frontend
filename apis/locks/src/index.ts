@@ -56,7 +56,7 @@ router.get('/v3/getNfts/:user/:positionManager', async ({params})=>{
   }
   const { user, positionManager} = params!
   const nfts = await getNfts(user as Address, positionManager)
-  const balanceOf = await getTotalNumberOfUserNfts(user as Address, positionManager)
+  const balanceOf = await getTotalNumberOfUserNfts(user as Address, positionManager as Address)
   console.log(balanceOf);
   
   

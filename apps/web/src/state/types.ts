@@ -410,6 +410,19 @@ export enum LockFetchStatus {
   NOTFETCHED = 'notFetched'
 }
 
+export enum NftCardFetchStatus {
+  FETCHED = 'fetched',
+  PENDING = 'pending',
+  FAILED = 'failed',
+  NOTFETCHED = 'notFetched'
+}
+export enum NftPositionFetchStatus {
+  FETCHED = 'fetched',
+  PENDING = 'pending',
+  FAILED = 'failed',
+  NOTFETCHED = 'notFetched'
+}
+
 export enum CadinuLockType {
   ALL = 'all',
   MYLOCK = 'myLock'

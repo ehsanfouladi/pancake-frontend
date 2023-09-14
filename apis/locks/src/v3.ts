@@ -27,17 +27,17 @@ const positionManagers = {
 } as Record<string, Address> 
 
 export const V3_SUBGRAPH_CLIENTS = {
-    "pancakeSwap": new GraphQLClient('https://api.thegraph.com/subgraphs/name/pancakeswap/exchange-v3-bsc', { fetch }),
-    "cadinuSwap":new GraphQLClient('https://api.thegraph.com/subgraphs/name/cadinu/exchange-v3-bsc', { fetch }),
-    "uniSwap" :  new GraphQLClient('https://api.thegraph.com/subgraphs/name/ianlapham/uniswap-v3-bsc', { fetch })
+    "0x46A15B0b27311cedF172AB29E4f4766fbE7F4364": new GraphQLClient('https://api.thegraph.com/subgraphs/name/pancakeswap/exchange-v3-bsc', { fetch }),
+    "0x0C26558A7Bf8be790774fc84De8e5229A4dB5BA1":new GraphQLClient('https://api.thegraph.com/subgraphs/name/cadinu/exchange-v3-bsc', { fetch }),
+    "0x7b8A01B39D58278b5DE7e48c8449c9f4F5170613" :  new GraphQLClient('https://api.thegraph.com/subgraphs/name/ianlapham/uniswap-v3-bsc', { fetch })
   } as Record<string, GraphQLClient>
 
 
-export const getTotalNumberOfUserNfts = async (user: Address, positionManager:string) =>{
+export const getTotalNumberOfUserNfts = async (user: Address, positionManager:Address) =>{
 
   const data =  await bscClient.readContract({
     abi:nonfungiblePositionManagerABI,
-    address: positionManagers[positionManager],
+    address: positionManager,
     functionName: "balanceOf",
     args:[`${user}`]
   })

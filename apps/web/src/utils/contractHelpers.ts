@@ -1,4 +1,4 @@
-import { CAKE, CADINU } from '@pancakeswap/tokens'
+import { CAKE, CADINU, CBON } from '@pancakeswap/tokens'
 
 // Addresses
 import {
@@ -147,6 +147,14 @@ export const getCadinuContract = (chainId?: number) => {
   return getContract({
     abi: erc20ABI,
     address: chainId ? CADINU[chainId]?.address : CADINU[ChainId.BSC].address,
+    chainId,
+  })
+}
+
+export const getCbonContract = (chainId?: number) => {
+  return getContract({
+    abi: erc20ABI,
+    address: chainId ? CBON[chainId]?.address : CBON[ChainId.BSC].address,
     chainId,
   })
 }

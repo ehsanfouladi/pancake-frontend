@@ -32,7 +32,7 @@ export const isMyLock = (record: LockRecord , account: Address) => {
 //   '0x0927a5abbd02ed73ba83fc93bd9900b1c2e52348' // apeSwap
 // ]
 const v3Contract = []
-const getv3Contracts = async():Promise<Address[]>=>{
+ const getv3Contracts = async():Promise<Address[]>=>{
   const count = await cadinuLockV3Contract.read.allSupportedNonFungiblePositionManagerCount()
   const promises = await cadinuLockV3Contract.read.getNonFungiblesPositionManager([0n,count])
   const data = await Promise.all(promises)
@@ -40,6 +40,15 @@ const getv3Contracts = async():Promise<Address[]>=>{
   contracts.map(a=>v3Contract.push(a))
   return v3Contract
 }
+
+export const getAllNonFungiblesPositionManagers = async()=>{
+  const count = await cadinuLockV3Contract.read.allSupportedNonFungiblePositionManagerCount()
+  const promises = await cadinuLockV3Contract.read.getNonFungiblesPositionManager([0n,count])
+  const [,v3ContractAddresses, v3Contracts] = await Promise.all(promises)
+ 
+  return {v3Contracts,v3ContractAddresses}
+}
+
 getv3Contracts()
 
 export const v3Contracts = v3Contract
@@ -286,6 +295,7 @@ export const fetchLpLocksByUser = async (address:Address):Promise<LockResponse[]
      console.log(e);
   }
 }
+/* eslint-disable */
 export const fetchCumulativeV3Locks = async (start:bigint,end:bigint)=>{
   try{
   const [totalNumberOfNfpms, addresses] = await cadinuLockV3Contract.read.getNonFungiblesPositionManager([start,end])
@@ -295,7 +305,7 @@ export const fetchCumulativeV3Locks = async (start:bigint,end:bigint)=>{
     newEnd = totalNumberOfNfpms
   }
   for(let i = Number(start);i<Number(newEnd);i++){
-    const lockCount = cadinuLockV3Contract.read.getLockCountForNonFungiblePositionManager([addresses[i]])
+    const lockCount = await cadinuLockV3Contract.read.getLockCountForNonFungiblePositionManager([addresses[i]])
     const nfpmsLockCountObject = {}
     nfpmsLockCountObject['token'] = addresses[i]
     nfpmsLockCountObject["factory"] = zeroAddress

@@ -46,10 +46,12 @@ import {
   getV3AirdropContract,
   getV3MigratorContract,
   getTradingRewardTopTradesContract,
+  getCadinuLockContract,
+  getCadinuLockV3Contract,
 } from 'utils/contractHelpers'
 
 import { ChainId, WNATIVE, pancakePairV2ABI } from '@pancakeswap/sdk'
-import { CADINU, CAKE } from '@pancakeswap/tokens'
+import { CADINU, CAKE, CBON } from '@pancakeswap/tokens'
 import { nonfungiblePositionManagerABI } from '@pancakeswap/v3-sdk'
 import { multicallABI } from 'config/abi/Multicall'
 import { erc20Bytes32ABI } from 'config/abi/erc20_bytes32'
@@ -398,4 +400,15 @@ export const useCadinu = () => {
 
   return useContract(CADINU[chainId].address ?? CADINU[ChainId.BSC].address, erc20ABI)
 }
+export const useCbon = () => {
+  const { chainId } = useActiveChainId()
 
+  return useContract(CBON[chainId].address ?? CBON[ChainId.BSC].address, erc20ABI)
+}
+
+export const useCadinuLockContract = () => {
+  return useContract (getCadinuLockContract().address, getCadinuLockContract().abi)
+}
+export const useCadinuLockV3Contract = () => {
+  return useContract (getCadinuLockV3Contract().address, getCadinuLockV3Contract().abi)
+}

@@ -15,7 +15,7 @@ import { zeroAddress } from 'viem'
 import { TableWrapper } from 'views/Info/components/InfoTables/shared'
 import Page from 'views/Page'
 import { Address, erc20ABI, readContracts, useAccount, useContractReads } from 'wagmi'
-import { fetchLocksByTokenAddress, fetchTotalLockCountForToken, getValueLocked } from '../helpers'
+import { fetchLocksByTokenAddress, fetchLpLocksByUser, fetchNormalLocksByUser, fetchTotalLockCountForToken, getValueLocked } from '../helpers'
 import { LockV3 } from './LockV3'
 
 const Overview = () => {
@@ -55,7 +55,7 @@ const Overview = () => {
       {
         ...lockContract,
         functionName : 'cumulativeLockInfo',
-        args:[tokenId.toString() as Address]
+        args:[tokenId?.toString() as Address]
       }
     ]
   })
@@ -138,13 +138,18 @@ const Overview = () => {
           setMaxPage(Math.ceil(Number(countOfLocksForToken)/PAGE_SIZE))
           const start = BigInt((currentPage-1)*PAGE_SIZE)
           const end = start + BigInt(PAGE_SIZE)
-          const lockDetails = await fetchLocksByTokenAddress(tokenId as Address, start, end)
+          const lockDetails = isMyLock === "false"
+          ? await fetchLocksByTokenAddress(tokenId as Address, start, end)
+          : filterState === CadinuLockState.TOKENS
+          ? await fetchNormalLocksByUser(account)
+          : await fetchLpLocksByUser(account)
           setDetails(lockDetails)
           console.log( lockDetails);
         },[query])
         
   
-            
+  console.log("LOCKS", details);
+  
   const cadinuPrice = Number(useCadinuPriceAsBN())
   const cbonPrice = Number(useCbonPriceAsBN())
   const getTokenValue = useCallback(async()=>{
@@ -172,7 +177,7 @@ const Overview = () => {
       }
     }
   
-  },[cadinuPrice,cbonPrice] )
+  },[cadinuPrice,cbonPrice, isMyLock, filterState] )
 
   const getFormattedTime=(unixTime:number):string =>{
     const tt = new Date(unixTime * 1000);
@@ -183,7 +188,6 @@ const Overview = () => {
   }
   throttle(getFormattedTime,10000)
   
-  console.log("tokenDetails", tokenDetails);
   const[valueLocked, setValueLocked]  = useState(0)
   const { isXs, isSm, isMd } = useMatchBreakpoints()
 
@@ -191,7 +195,7 @@ const Overview = () => {
     return <Loading />
   }
   if(filterState === CadinuLockState.LIQUIDITY_V3){
-    return <LockV3 tokenId = {tokenId} />
+    return <LockV3 tokenId = {tokenId as Address} isMyLock ={isMyLock==='false'? false : true} />
   }
   return (
     <>

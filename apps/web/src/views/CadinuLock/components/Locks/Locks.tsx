@@ -124,11 +124,11 @@ const Locks = () => {
             handleLockFetchStatusChange(LockFetchStatus.FAILED)
             setFetchedData([])
           }
-          break
+          break;
         }catch(e){
           setMaxPage(1)
           setCurrentPage(1)
-          break
+          break;
         }
       }
       default:
@@ -161,6 +161,7 @@ const Locks = () => {
           if(fetched.length > 0){
             setMaxPage(Math.ceil(Number(maxNftLock)&& Number(maxNftLock)/PAGE_SIZE))
             handleLockFetchStatusChange(LockFetchStatus.FETCHED)
+            console.log("liqV3Data>>>>>>",fetched);
             setFetchedData(fetched as [])
           }else{
             handleLockFetchStatusChange(LockFetchStatus.FAILED)
@@ -217,27 +218,28 @@ const Locks = () => {
       //   setValue("")
       // }
       setIsMyLock(true)
-      if(filterState===CadinuLockState.TOKENS){
-        handleLockFetchStatusChange(LockFetchStatus.PENDING)
-        setFetchedData([])
-        const data = await fetchNormalLocksByUser(myAccount as Address)
-        if (data){
-          setFetchedData(data)
-          handleLockFetchStatusChange(LockFetchStatus.FETCHED)
-          if (isAddress(value)){
-            const newData = fetchedData.filter((lock)=> lock.token === value)
-            setFetchedData(newData)
-          }
-        }else{
-          handleLockFetchStatusChange(LockFetchStatus.FAILED)
-        }
-      }
-      if (filterState === CadinuLockState.LIQUIDITY_V2){
+      switch (filterState) {
+        case CadinuLockState.TOKENS:
           handleLockFetchStatusChange(LockFetchStatus.PENDING)
           setFetchedData([])
-          const data = await fetchLpLocksByUser(account as Address)
-          if (data){
-            setFetchedData(data)
+          const tokenData = await fetchNormalLocksByUser(myAccount as Address)
+          if (tokenData){
+            setFetchedData(tokenData)
+            handleLockFetchStatusChange(LockFetchStatus.FETCHED)
+            if (isAddress(value)){
+              const newData = fetchedData.filter((lock)=> lock.token === value)
+              setFetchedData(newData)
+            }
+          }else{
+            handleLockFetchStatusChange(LockFetchStatus.FAILED)
+          }
+          break;
+        case CadinuLockState.LIQUIDITY_V2:
+          handleLockFetchStatusChange(LockFetchStatus.PENDING)
+          setFetchedData([])
+          const liqV2Data = await fetchLpLocksByUser(account as Address)
+          if (liqV2Data){
+            setFetchedData(liqV2Data)
             handleLockFetchStatusChange(LockFetchStatus.FETCHED)
             if (isAddress(value)){
               const newData = fetchedData.filter((lock)=> lock.token === value)
@@ -247,17 +249,17 @@ const Locks = () => {
           }else{
             handleLockFetchStatusChange(LockFetchStatus.FAILED)
           }
-        }
-        
-        if (filterState === CadinuLockState.LIQUIDITY_V3){
-          
+          break;
+        case CadinuLockState.LIQUIDITY_V3:
           handleLockFetchStatusChange(LockFetchStatus.PENDING)
           setFetchedData([])
-          const result = await fetchV3LocksByUser(account as Address)
+          const liqV3Data = await fetchV3LocksByUser(account as Address)
           handleLockFetchStatusChange(LockFetchStatus.FETCHED)
 
-          if (result){
-            setFetchedData(result)
+          if (liqV3Data){
+            setFetchedData(liqV3Data)
+            console.log("liqV3Data>>>>>>",liqV3Data);
+            
             handleLockFetchStatusChange(LockFetchStatus.FETCHED)
             if (isAddress(value)){
               const newData = fetchedData.filter((lock)=> lock.token === value)
@@ -267,10 +269,64 @@ const Locks = () => {
             setFetchedData([])
             handleLockFetchStatusChange(LockFetchStatus.FAILED)
           }
-        }
+          break;
+        default:
+          break;
+      }
+      // if(filterState===CadinuLockState.TOKENS){
+      //   handleLockFetchStatusChange(LockFetchStatus.PENDING)
+      //   setFetchedData([])
+      //   const data = await fetchNormalLocksByUser(myAccount as Address)
+      //   if (data){
+      //     setFetchedData(data)
+      //     handleLockFetchStatusChange(LockFetchStatus.FETCHED)
+      //     if (isAddress(value)){
+      //       const newData = fetchedData.filter((lock)=> lock.token === value)
+      //       setFetchedData(newData)
+      //     }
+      //   }else{
+      //     handleLockFetchStatusChange(LockFetchStatus.FAILED)
+      //   }
+      // }
+      // if (filterState === CadinuLockState.LIQUIDITY_V2){
+      //     handleLockFetchStatusChange(LockFetchStatus.PENDING)
+      //     setFetchedData([])
+      //     const data = await fetchLpLocksByUser(account as Address)
+      //     if (data){
+      //       setFetchedData(data)
+      //       handleLockFetchStatusChange(LockFetchStatus.FETCHED)
+      //       if (isAddress(value)){
+      //         const newData = fetchedData.filter((lock)=> lock.token === value)
+      //         setFetchedData(newData)
+      //       }
+
+      //     }else{
+      //       handleLockFetchStatusChange(LockFetchStatus.FAILED)
+      //     }
+      //   }
+        
+      //   if (filterState === CadinuLockState.LIQUIDITY_V3){
+          
+      //     handleLockFetchStatusChange(LockFetchStatus.PENDING)
+      //     setFetchedData([])
+      //     const result = await fetchV3LocksByUser(account as Address)
+      //     handleLockFetchStatusChange(LockFetchStatus.FETCHED)
+
+      //     if (result){
+      //       setFetchedData(result)
+      //       handleLockFetchStatusChange(LockFetchStatus.FETCHED)
+      //       if (isAddress(value)){
+      //         const newData = fetchedData.filter((lock)=> lock.token === value)
+      //         setFetchedData(newData)
+      //       }
+      //     }else{
+      //       setFetchedData([])
+      //       handleLockFetchStatusChange(LockFetchStatus.FAILED)
+      //     }
+      //   }
       
     }
-  },[account])
+  },[account, filterState, lockType])
 
   useEffect(() => {
     if (isAddress(value) &&lockType === CadinuLockType.ALL){

@@ -33,6 +33,7 @@ const LockRow: React.FC<React.PropsWithChildren<LockRowProps>> = ( {lock, filter
   const lockLink = `/cadinu-lock/locks/${lock.token}`
   const [numberOfNfts, setNumberOfNfts] = useState(0)
   const {data:TokenDecimal, isLoading:isDecimalLoading, isSuccess: isDecimalSuccess} = useContractRead({
+    enabled:filterState!==CadinuLockState.LIQUIDITY_V3,
     abi:erc20ABI,
     address: `${lock.token}` as Address,
     functionName: "decimals"
@@ -141,7 +142,7 @@ const LockRow: React.FC<React.PropsWithChildren<LockRowProps>> = ( {lock, filter
     if (filterState=== CadinuLockState.LIQUIDITY_V3){
       setNumberOfNfts(lock.amount)
     }
-  },[lock])
+  },[lock, filterState])
 
   if(isNameLoading){
     return <SkeletonV2 />

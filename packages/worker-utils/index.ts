@@ -4,6 +4,8 @@ export const CORS_ALLOW = [
   'https://apps.cadinu.io',
   'https://cadinu.io',
   /^http:\/\/localhost(:\d+)?$/,
+  'localhost:3000',
+  'http://localhost:3000'
 ]
 
 function isString(s: any): s is string {
