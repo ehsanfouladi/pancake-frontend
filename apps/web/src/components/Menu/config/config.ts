@@ -89,7 +89,7 @@ const config: (
       href: '/farms',
       icon: EarnIcon,
       fillIcon: EarnFillIcon,
-      image: '/images/decorations/pe2.png',
+      image: '/images/decorations/lottery.png',
       supportChainIds: SUPPORT_FARMS,
       items: [
         {
@@ -149,7 +149,7 @@ const config: (
           label: t('Voting'),
           href: '/voting',
           supportChainIds: SUPPORT_ONLY_BSC,
-          image: '/images/voting/voting-bunny.png',
+          image: '/images/voting/lottery.png',
           status: { text: t('New'), color: 'success' },
         },
       ].map((item) => addMenuItemSupported(item, chainId)),

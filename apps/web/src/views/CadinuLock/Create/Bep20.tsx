@@ -154,7 +154,7 @@ const ReferenceElement = styled.div`
         )
       },
       onConfirm: async () => {
-        const functionName = isVesting ? isPayWithCbon ? 'vestingLockCbon' :'vestingLockByNative' : isPayWithCbon ? 'lockByCbon' :'lockByNative'
+        const functionName = isVesting ? isPayWithCbon ? 'vestingLockByCbon' :'vestingLockByNative' : isPayWithCbon ? 'lockByCbon' :'lockByNative'
         const params = isVesting ? 
         isPayWithCbon ? 
           [

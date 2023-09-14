@@ -1,10 +1,11 @@
 import { SUPPORTED_CHAIN_IDS } from '@pancakeswap/pools'
+import { SUPPORT_ONLY_BSC } from 'config/constants/supportChains'
 
 import Pools from 'views/Pools'
 
 const PoolsPage = () => <Pools />
 
-PoolsPage.chains = SUPPORTED_CHAIN_IDS
+PoolsPage.chains = SUPPORT_ONLY_BSC
 
 export default PoolsPage
 // import { NotFound } from '@pancakeswap/uikit'

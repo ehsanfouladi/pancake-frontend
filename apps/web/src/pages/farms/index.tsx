@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import { SUPPORT_FARMS } from 'config/constants/supportChains'
+import { SUPPORT_FARMS, SUPPORT_ONLY_BSC } from 'config/constants/supportChains'
 import { FarmsV3PageLayout, FarmsV3Context } from 'views/Farms'
 import { FarmV3Card } from 'views/Farms/components/FarmCard/V3/FarmV3Card'
 import { getDisplayApr } from 'views/Farms/components/getDisplayApr'
@@ -70,7 +70,7 @@ const FarmsPage = () => {
 
 FarmsPage.Layout = FarmsV3PageLayout
 
-FarmsPage.chains = SUPPORT_FARMS
+FarmsPage.chains = SUPPORT_ONLY_BSC
 
 export default FarmsPage
 // import { NotFound } from '@pancakeswap/uikit'
