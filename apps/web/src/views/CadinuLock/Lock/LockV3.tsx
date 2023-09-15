@@ -1,20 +1,20 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { Address, erc20ABI, readContracts, useAccount, useContractRead, useContractReads, usePrepareContractWrite, useWaitForTransaction, useWalletClient } from 'wagmi'
-import { getCadinuLockv3Address } from 'utils/addressHelpers'
-import { CadinuLockV3Abi } from 'config/abi/cadinuLockV3'
-import { nonfungiblePositionManagerABI } from '@pancakeswap/v3-sdk'
 import { useTranslation } from '@pancakeswap/localization'
-import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
-import { Box, Button, Card, CardBody, CardFooter, CardHeader, Container, Flex, Heading, LinkExternal, Loading, PaginationButton, Skeleton, StyledTooltip, Text, TimerIcon,  useTooltip } from '@pancakeswap/uikit'
-import { CardWrapper } from '@pancakeswap/uikit/src/widgets/Liquidity'
-import Page from 'views/Page'
-import { fetchLocksForNonFungiblePositionManager } from '../helpers'
-import { publicClient } from 'utils/wagmi'
 import { ChainId } from '@pancakeswap/sdk'
+import { Box, Button, Card, CardBody, CardFooter, CardHeader, Flex, Heading, LinkExternal, PaginationButton, Skeleton, Text, TimerIcon, useTooltip } from '@pancakeswap/uikit'
+import { CardWrapper } from '@pancakeswap/uikit/src/widgets/Liquidity'
+import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
+import { nonfungiblePositionManagerABI } from '@pancakeswap/v3-sdk'
+import { CadinuLockV3Abi } from 'config/abi/cadinuLockV3'
+import isEmpty  from 'lodash/isEmpty'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { NftCardFetchStatus } from 'state/types'
-import { createPublicClient,  http } from 'viem'
+import { getCadinuLockv3Address } from 'utils/addressHelpers'
+import { publicClient } from 'utils/wagmi'
+import { createPublicClient, http } from 'viem'
 import { bsc } from 'viem/chains'
-import { isEmpty } from 'lodash'
+import Page from 'views/Page'
+import { Address, erc20ABI, readContracts, useAccount, useWaitForTransaction, useWalletClient } from 'wagmi'
+import { fetchLocksForNonFungiblePositionManager } from '../helpers'
 
 
 
@@ -121,14 +121,14 @@ export const LockV3 = ({tokenId, isMyLock, lockId} : {tokenId : Address, isMyLoc
   
   const {data : walletClient} =  useWalletClient()
   const [hash,setHash] = useState("")
-  const handleUnlock = async (lockId)=>{
+  const handleUnlock = async (id)=>{
   
       const {request} = await client.simulateContract({
         account,
         address:getCadinuLockv3Address(),
         abi:CadinuLockV3Abi,
         functionName:"unlock",
-        args:[BigInt(lockId)]
+        args:[BigInt(id)]
       })
       const transactionHash = await walletClient.writeContract(request)
       setHash(transactionHash)
@@ -142,7 +142,7 @@ export const LockV3 = ({tokenId, isMyLock, lockId} : {tokenId : Address, isMyLoc
     hash: hash as Address
   })
   
-  const handleCollectFee = async (lockId)=>{
+  const handleCollectFee = async (id)=>{
   
     const {request} = await client.simulateContract({
       account,
@@ -150,7 +150,7 @@ export const LockV3 = ({tokenId, isMyLock, lockId} : {tokenId : Address, isMyLoc
       abi:CadinuLockV3Abi,
       functionName:"collectFee",
       args:[
-        BigInt(lockId),
+        BigInt(id),
         account,
         BigInt('340282366920938463463374607431768211454'),
         BigInt('340282366920938463463374607431768211454')
@@ -267,7 +267,7 @@ const {
   },[currentPage])
 
   
-  const getLpNames = async (tokens:Address[], lockId) =>{
+  const getLpNames = async (tokens:Address[], id) =>{
       const tokenContracts = []
       tokens?.map((token)=>
         token && tokenContracts.push({address : token, abi:erc20ABI})
@@ -294,8 +294,8 @@ const {
       `${nameAndSymbols.token0Symbol}/${nameAndSymbols.token1Symbol}`
       : "loading..."
 
-      const temp = {lockId,symbol: lpSymbol}
-      if(isEmpty(lpNameSymbols.filter(lp=>lp.lockId === lockId))){
+      const temp = {id,symbol: lpSymbol}
+      if(isEmpty(lpNameSymbols.filter(lp=>lp.lockId === id))){
         const tempArray = lpNameSymbols
 
         tempArray.push(temp)
@@ -412,6 +412,7 @@ const {
             nfts.slice((currentPage-1)*PAGE_SIZE,currentPage*PAGE_SIZE).map((nft) =>{
                 if(!nft.error){
                     const thisPosition = positions.length > 0 ? positions.filter(position => position?.nftId === nft.nftId) : []
+                    // eslint-disable-next-line no-unused-expressions
                     thisPosition.length > 0 && getLpNames([ thisPosition[0]?.token0, thisPosition[0]?.token1],nft.nftId)
                     return(
                         <>

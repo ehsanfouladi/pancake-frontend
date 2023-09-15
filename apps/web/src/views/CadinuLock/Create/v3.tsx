@@ -1,24 +1,19 @@
 
-import { useCallback, useEffect, useState } from "react"
-import { getAllNonFungiblesPositionManagers } from "../helpers"
-import Page from "views/Page"
-import { Box, Card, CardBody, CardFooter, CardHeader, CardProps, Flex, Grid, Heading, PageSection, Row, Text, useMatchBreakpoints } from "@pancakeswap/uikit"
+import { CardBody, CardHeader, CardProps, Flex, Heading, PageSection } from "@pancakeswap/uikit"
 import { PageMeta } from "components/Layout/Page"
+import  isEmpty from "lodash/isEmpty"
 import Image from "next/image"
 import Link from "next/link"
-import styled, {css} from "styled-components"
-import CardActions from "views/Farms/components/FarmCard/CardActionsContainer"
-import { cardConfig } from "views/Ifos/components/IfoFoldableCard/IfoPoolCard"
-import CardFlip from "views/Predictions/components/CardFlip"
-import { BodyWrapper } from "views/ShowCase"
-import { isEmpty } from "lodash"
-import { backgroundImage } from "styled-system"
+import { useCallback, useEffect, useState } from "react"
+import styled, { css } from "styled-components"
 import { Address } from "viem"
+import { BodyWrapper } from "views/ShowCase"
+import { getAllNonFungiblesPositionManagers } from "../helpers"
 
 export function AppBody({ children, ...cardProps }: { children: React.ReactNode } & CardProps) {
     return <BodyWrapper {...cardProps}>{children}</BodyWrapper>
   }
-const v3 = ()=>{
+const V3 = ()=>{
 
 const [v3Contracts,setV3Contracts] = useState([] as readonly string[])
 const [nfpAddresses, setNfpAddresses] = useState([]as readonly Address[])
@@ -82,14 +77,7 @@ const CardContent = v3Contracts.map((nfp, index)=>(
       <CreateLockPage>
         <PageSection index={1} hasCurvedDivider={false}>
           <StyledHeading>Select Your Position Manager</StyledHeading>
-          <Flex
-            flexDirection="column"
-            mb="24px"
-            alignItems="center"
-            verticalAlign="center"
-            // backgroundImage="/images/teams/no-team-banner.png"
-          >
-          </Flex>
+         
           <Flex
             width={['328px', '100%']}
             flexWrap="wrap"
@@ -172,4 +160,4 @@ const CardContent = v3Contracts.map((nfp, index)=>(
 //     )
 }
 
-export default v3
+export default V3

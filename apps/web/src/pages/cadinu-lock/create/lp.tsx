@@ -1,3 +1,3 @@
-import v2 from '../../../views/CadinuLock/Create/v2'
+import V2 from '../../../views/CadinuLock/Create/v2'
 
-export default v2
+export default V2

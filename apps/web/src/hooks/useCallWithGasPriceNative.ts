@@ -67,7 +67,7 @@ export function useCallWithGasPriceNative() {
         : _FunctionName extends string
         ? GetFunctionArgs<TAbi, _FunctionName>['args']
         : never,
-      Value = BigInt
+      Value = bigint
       
     >(
       contract: { abi: TAbi; account: Account; chain: Chain; address: Address },

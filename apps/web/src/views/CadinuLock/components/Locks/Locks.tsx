@@ -219,7 +219,7 @@ const Locks = () => {
       // }
       setIsMyLock(true)
       switch (filterState) {
-        case CadinuLockState.TOKENS:
+        case CadinuLockState.TOKENS:{
           handleLockFetchStatusChange(LockFetchStatus.PENDING)
           setFetchedData([])
           const tokenData = await fetchNormalLocksByUser(myAccount as Address)
@@ -233,8 +233,8 @@ const Locks = () => {
           }else{
             handleLockFetchStatusChange(LockFetchStatus.FAILED)
           }
-          break;
-        case CadinuLockState.LIQUIDITY_V2:
+          break;}
+        case CadinuLockState.LIQUIDITY_V2:{
           handleLockFetchStatusChange(LockFetchStatus.PENDING)
           setFetchedData([])
           const liqV2Data = await fetchLpLocksByUser(account as Address)
@@ -249,8 +249,8 @@ const Locks = () => {
           }else{
             handleLockFetchStatusChange(LockFetchStatus.FAILED)
           }
-          break;
-        case CadinuLockState.LIQUIDITY_V3:
+          break;}
+        case CadinuLockState.LIQUIDITY_V3:{
           handleLockFetchStatusChange(LockFetchStatus.PENDING)
           setFetchedData([])
           const liqV3Data = await fetchV3LocksByUser(account as Address)
@@ -269,7 +269,7 @@ const Locks = () => {
             setFetchedData([])
             handleLockFetchStatusChange(LockFetchStatus.FAILED)
           }
-          break;
+          break;}
         default:
           break;
       }

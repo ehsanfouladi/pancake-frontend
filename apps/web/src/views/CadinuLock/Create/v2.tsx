@@ -1,76 +1,46 @@
+import { useTranslation } from '@pancakeswap/localization'
 import {
-    AutoRenewIcon,
-    Box,
-    Breadcrumbs,
-    Button,
-    Card,
-    CardBody,
-    CardHeader,
-    Flex,
-    Heading,
-    Input,
-    LinkExternal,
-    Text,
-    useModal,
-    useToast,
-    ReactMarkdown,
-    Checkbox,
-    Toggle,
-    useTooltip,
-    HelpIcon,
-  } from '@pancakeswap/uikit'
-  import snapshot from '@snapshot-labs/snapshot.js'
-  import isEmpty from 'lodash/isEmpty'
-  import times from 'lodash/times'
-  import { ChangeEvent, FormEvent, useCallback, useEffect, useMemo, useState } from 'react'
-  import { useInitialBlock } from 'state/block/hooks'
-  import { useTranslation } from '@pancakeswap/localization'
-  import truncateHash from '@pancakeswap/utils/truncateHash'
-  import ConnectWalletButton from 'components/ConnectWalletButton'
-  import Container from 'components/Layout/Container'
-  import dynamic from 'next/dynamic'
-  import Link from 'next/link'
-  import { useRouter } from 'next/router'
-  import { getBlockExploreLink } from 'utils'
-  import { DatePicker, DatePickerPortal, TimePicker } from 'views/Voting/components/DatePicker'
-  import { useAccount, useContractReads, useWalletClient } from 'wagmi'
-  import Layout from '../components/Layout'
-  import VoteDetailsModal from '../components/CadinuLockPurchase'
-  import { ADMINS, PANCAKE_SPACE, VOTE_THRESHOLD } from '../config'
-  import { combineDateAndTime, getFormErrors } from './helpers'
-  import { FormErrors, Label, SecondaryLabel } from './styles'
-  import { FormState } from './types'
-import { CurrencyAmount, Percent } from '@pancakeswap/swap-sdk-core';
-import { getCadinuLockAddress } from 'utils/addressHelpers'
-import { useToken } from 'hooks/Tokens'
-import { useApproveCallback, useApproveCallbackFromAmount, useApproveCallbackFromTrade } from 'hooks/useApproveCallback'
-import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
-import { BaseError, decodeFunctionData, getContractError, parseEther } from 'viem'
-import { ToastDescriptionWithTx } from 'components/Toast'
-import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
-import { getCadinuContract, getCadinuLockContract } from 'utils/contractHelpers'
-import { useCadinuLockContract } from 'hooks/useContract'
-import ApproveConfirmButtons, { ButtonArrangement } from 'components/ApproveConfirmButtons'
-import { SwitchButton } from '@pancakeswap/uikit/src/widgets/Swap/SwapWidget'
-import { SwitchUnitsButton } from '@pancakeswap/uikit/src/components/BalanceInput/styles'
-import styled from 'styled-components'
-import { FlipButton } from 'views/Swap/V3Swap/containers/FlipButton'
-import { paymentOptions } from '../components/paymentOptions'
-import { CBON, bscTokens } from '@pancakeswap/tokens'
-import useCakeApprove from 'hooks/useCakeApprove'
-import useCakeApprovalStatus from 'hooks/useCakeApprovalStatus'
+  Box,
+  Breadcrumbs,
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Checkbox,
+  Flex,
+  Heading, Input,
+  LinkExternal, Text, useToast
+} from '@pancakeswap/uikit'
+import truncateHash from '@pancakeswap/utils/truncateHash'
 import BigNumber from 'bignumber.js'
-import useCbonApprove from 'hooks/useCbonApprove'
-import useCbonApprovalStatus from 'hooks/useCbonApprovalStatus'
-import { formatBigInt } from '@pancakeswap/utils/formatBalance'
+import ApproveConfirmButtons, { ButtonArrangement } from 'components/ApproveConfirmButtons'
+import ConnectWalletButton from 'components/ConnectWalletButton'
+import Container from 'components/Layout/Container'
+import { ToastDescriptionWithTx } from 'components/Toast'
+import { useToken } from 'hooks/Tokens'
+import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
 import { useCallWithGasPriceNative } from 'hooks/useCallWithGasPriceNative'
-import { publicClient } from 'utils/wagmi'
-import { ChainId } from '@pancakeswap/sdk'
-import { CadinuLockAbi } from 'config/abi/cadinuLock'
-import { getTransaction } from 'viem/dist/types/actions/public/getTransaction'
-import { getTransactionReceipt } from 'viem/dist/types/actions/public/getTransactionReceipt'
+import useCbonApprovalStatus from 'hooks/useCbonApprovalStatus'
+import useCbonApprove from 'hooks/useCbonApprove'
+import { useCadinuLockContract } from 'hooks/useContract'
+import isEmpty from 'lodash/isEmpty'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from 'react'
+import { useInitialBlock } from 'state/block/hooks'
+import styled from 'styled-components'
+import { getBlockExploreLink } from 'utils'
+import { parseEther } from 'viem'
+import { DatePicker, DatePickerPortal, TimePicker } from 'views/Voting/components/DatePicker'
+import { useAccount } from 'wagmi'
+import Layout from '../components/Layout'
+import { PaymentOptions } from '../components/paymentOptions'
+import { ADMINS } from '../config'
+import { combineDateAndTime, getFormErrors } from './helpers'
+import { FormErrors, Label, SecondaryLabel } from './styles'
+import { FormState } from './types'
 
-const v2 = ()=>{
+const V2 = ()=>{
   const ToggleWrapper = styled.div`
   display: flex;
   align-items: center;
@@ -193,7 +163,8 @@ const ReferenceElement = styled.div`
             combineDateAndTime(lockUntilDate,lockUntilTime),
             title
           ]
-            return await callWithGasPriceNative(
+          // TODO: check with pnpm dev
+            return callWithGasPriceNative(
             cadinuLockContract,
             functionName,
             params,
@@ -212,47 +183,6 @@ const ReferenceElement = styled.div`
         evt.preventDefault()
     }
 
-    // try {
-    //     setIsLoading(true)
-    //     const web3 = {
-    //       getSigner: () => {
-    //         return {
-    //           _signTypedData: (domain, types, message) =>
-    //             signer.signTypedData({
-    //               account,
-    //               domain,
-    //               types,
-    //               message,
-    //               primaryType: 'Proposal',
-    //             }),
-    //         }
-    //       },
-    //     }
-    //     const data: any = await client.proposal(web3 as any, account, {
-    //       space: PANCAKE_SPACE,
-    //       type: 'single-choice',
-    //       title: name,
-    //       body,
-    //       start: combineDateAndTime(startDate, startTime),
-    //       end: combineDateAndTime(endDate, endTime),
-    //       choices: choices
-    //         .filter((choice) => choice.value)
-    //         .map((choice) => {
-    //           return choice.value
-    //         }),
-    //       snapshot,
-    //       discussion: '',
-    //       plugins: JSON.stringify({}),
-    //       app: 'snapshot',
-    //     })
-    //     // Redirect user to newly created proposal page
-    //     push(`/voting/proposal/${data.id}`)
-    //     toastSuccess(t('Proposal created!'))
-    //   } catch (error) {
-    //     toastError(t('Error'), (error as Error)?.message)
-    //     console.error(error)
-    //     setIsLoading(false)
-    //   }
   
     const updateValue = (key: string, value: string | Date) => {
         setState((prevState) => ({
@@ -491,7 +421,7 @@ const ReferenceElement = styled.div`
                 }
                 <hr />
                 <SecondaryLabel style={{textAlign:'center'}}>Payment Method</SecondaryLabel>
-                { paymentOptions({
+                { PaymentOptions({
                   isPayWithCbon,
                   setIsPayWithCbon,
                   cadinuLockContract,
@@ -546,4 +476,4 @@ const ReferenceElement = styled.div`
     </>
     )
 }
-export default v2;
+export default V2;

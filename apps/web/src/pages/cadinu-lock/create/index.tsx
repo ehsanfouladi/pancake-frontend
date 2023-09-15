@@ -71,21 +71,13 @@ ${({ theme }) => theme.mediaQueries.lg} {
         },
     ]
 
-    const [isFlipped, setIsFlipped] = useState(false)
     return (
         <>
         <PageMeta />
       <CreateLockPage>
         <PageSection index={1} hasCurvedDivider={false}>
           <StyledHeading>Cadinu Locks: Select Your Lock Type</StyledHeading>
-          <Flex
-            flexDirection="column"
-            mb="24px"
-            alignItems="center"
-            verticalAlign="center"
-            // backgroundImage="/images/teams/no-team-banner.png"
-          >
-          </Flex>
+         
           <Flex
             width={['328px', '100%']}
             flexWrap="wrap"

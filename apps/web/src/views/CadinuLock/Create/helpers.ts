@@ -1,8 +1,7 @@
 import { ContextApi } from '@pancakeswap/localization'
-import { format, parseISO, isValid } from 'date-fns'
-import { MINIMUM_CHOICES } from '../CreateProposal/Choices'
-import { FormState, Formv3State } from './types'
+import { format, isValid, parseISO } from 'date-fns'
 import { isAddress } from 'views/V3Info/utils'
+import { FormState, Formv3State } from './types'
 
 export const combineDateAndTime = (date: Date, time: Date) => {
   if (!isValid(date) || !isValid(time)) {

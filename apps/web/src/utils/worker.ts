@@ -4,7 +4,7 @@ import type { FetchChunkResult } from 'state/multicall/fetchChunk'
 class WorkerProxy {
   id = 0
 
-  // eslint-disable-next-line no-useless-constructor
+  // eslint-disable-next-line no-useless-constructor, no-empty-function
   constructor(protected worker: Worker) {}
 
   public postMessage = async <T>(message: any) => {

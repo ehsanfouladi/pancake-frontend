@@ -1,11 +1,10 @@
-import { useTranslation } from '@pancakeswap/localization'
 import { baseColors } from '@pancakeswap/ui/tokens/colors'
 import { Box, Flex, Text, Toggle } from '@pancakeswap/uikit'
 import { useCallback, useEffect } from 'react'
 import styled from 'styled-components'
 import { formatRawAmount } from 'utils/formatCurrencyAmount'
 
-export const paymentOptions = ({
+export const PaymentOptions = ({
   isPayWithCbon, setIsPayWithCbon, cadinuLockContract,priceInCbon,setPriceInCbon,priceInNative,setPriceInNative
 }) => {
   const ToggleWrapper = styled.div`
@@ -14,7 +13,6 @@ export const paymentOptions = ({
   textAlign: center;
   justify-content: center
 `
-  const { t } = useTranslation()
   const getPriceInCbon = useCallback(async()=>{
     const price = await cadinuLockContract.read.priceInCbon()
     const formattedPrice = formatRawAmount(price.toString(), 18, 10)
