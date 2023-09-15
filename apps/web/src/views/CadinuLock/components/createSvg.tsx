@@ -50,7 +50,9 @@ export interface ObjectWithProperties {
 }
 
 // Define a React component that takes an object as nft and returns an SVG image
-const ObjectSVG = ({nft, selectedNft}) => {
+const ObjectSVG = ({nft,
+  //  selectedNft
+  }) => {
   // Define some variables for the layout and spacing
   const padding =8 ; 
   // Return a JSX element that renders the SVG image
@@ -72,7 +74,7 @@ const ObjectSVG = ({nft, selectedNft}) => {
         <Box mb='5px'>
         <strong style={{marginBottom:'5px'}}> Fee Tier:</strong>
 
-        <Text >{nft.pool.feeTier}</Text>
+        <Text >{(nft.pool.feeTier)/10000}</Text>
         </Box>
         </CardBody>
     </Card>

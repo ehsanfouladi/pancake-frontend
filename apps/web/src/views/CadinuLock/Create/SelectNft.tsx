@@ -20,7 +20,7 @@ import isEmpty from "lodash/isEmpty"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import NotFoundPage from "pages/create-profile"
-import { ChangeEvent, FormEvent, useEffect, useState } from "react"
+import { ChangeEvent, FormEvent, useCallback, useEffect, useMemo, useState } from "react"
 import styled, { css } from "styled-components"
 import { getBlockExploreLink } from "utils"
 import { getCadinuLockv3Address } from "utils/addressHelpers"
@@ -28,15 +28,56 @@ import { Address, parseEther } from "viem"
 import { AppBody } from "views/ShowCase"
 import { useAccount, useContractWrite, usePrepareContractWrite } from "wagmi"
 import { DatePicker, TimePicker } from "../components/DatePicker"
-import ObjectSVG, { ObjectWithProperties } from "../components/createSvg"
 import { PaymentOptions } from "../components/paymentOptions"
 import { combineDateAndTime, getv3FormErrors } from "./helpers"
 import { FormErrors, SecondaryLabel } from "./styles"
 import { Formv3State } from "./types"
+import { useInitialBlock } from "state/block/hooks"
 
-const SelectNft = ()=>{
-
-  const Layout = styled.div`
+export interface ObjectWithProperties {
+  id: string;
+  liquidity: string;
+  pool: {
+    token0: {
+      name: string;
+      symbol: string;
+      decimals: string;
+      id: string;
+    };
+    token1: {
+      id: string;
+      name: string;
+      decimals: string;
+      symbol: string;
+    };
+    feeTier: string;
+    liquidity: string;
+    id: string;
+    sqrtPrice: string;
+    tick: string;
+    totalValueLockedToken0: string;
+    totalValueLockedToken1: string;
+  };
+  tickLower: {
+    id: string;
+  };
+  tickUpper: {
+    id: string;
+  };
+  token0: {
+    id: string;
+    name: string;
+    symbol: string;
+    decimals: string;
+  };
+  token1: {
+    id: string;
+    name: string;
+    symbol: string;
+    decimals: string;
+  };
+}
+const Layout = styled.div`
   align-items: start;
   display: grid;
   grid-gap: 32px;
@@ -66,18 +107,8 @@ const SelectNft = ()=>{
     
   `
 
-  const StyledCard = styled(AppBody)`
-  ${({ theme }) => theme.mediaQueries.lg} {
-    ${
-        css`
-            &:hover {
-              cursor: pointer;
-              opacity: 0.6;
-              transform : scale(1.05);
-            }`
-        }
-    }
-  `
+const SelectNft = ()=>{
+
   const {query} = useRouter()
   const {nfp} = query
   const PAGE_SIZE = 12;
@@ -86,9 +117,8 @@ const SelectNft = ()=>{
   const [userAllNfts, setUserAllNfts] = useState([])
   const [selectedNft, setSelectedNft] = useState('')
   const [maxNumberOfNfts,setMaxNumberOfNfts] = useState(1)
-  const [fetchSuccess, setFetchSuccess]=useState(false)
   const [state, setState] = useState<Formv3State>(() => ({
-      nftId: 0,
+      nftId: '',
       title: '',
       owner: '',
       lockUntilDate: null,
@@ -116,8 +146,6 @@ const SelectNft = ()=>{
       } = state    
   
   const cadinuLockContract = useCadinuLockV3Contract()
-  const {callWithGasPriceNative} = useCallWithGasPriceNative()
-  
   const { setLastUpdated, allowance } = useCbonApprovalStatus(cadinuLockContract.address)
   const { setLastUpdated:setNftLastUpdated, isApproved:isNftApproved } = useNftApprovalStatus(
     cadinuLockContract.address,nfp,selectedNft
@@ -126,7 +154,7 @@ const SelectNft = ()=>{
     setLastUpdated, cadinuLockContract.address, 'Cbon approved successfully!'
     )
   const {handleApprove:approveNft, pendingTx:isApproving} = useNftApprove(
-    setLastUpdated, cadinuLockContract.address, 'Cbon approved successfully!',selectedNft, nfp
+    setNftLastUpdated, cadinuLockContract.address, 'Position approved successfully!',selectedNft, nfp
     )
   
   const formErrors = getv3FormErrors(state, t,ownerIsMe)
@@ -158,9 +186,8 @@ const SelectNft = ()=>{
     updateValue(key, value)
   }
 
-  const fetchUserNfts = async ()=>{
+  const fetchUserNfts = useCallback(async ()=>{
       try{
-          setFetchSuccess(false)
           const userNfts = await (
               await fetch(`https://cadinu-locks.cadinu.io/v3/getNfts/${account}/${nfp}`)
               ).json()
@@ -168,16 +195,12 @@ const SelectNft = ()=>{
           setUserAllNfts(userNfts?.nfts?.positions)
           setMaxNumberOfNfts(userNfts?.balanceOf)
           
-          setFetchSuccess(true)
       }catch(e){
           console.log(e);
-          setFetchSuccess(false)
       }
       
-  }
+  },[account,nfp])
   useEffect(()=>{
-    console.log('userAllNfts',userAllNfts);
-    
       if(isEmpty(userAllNfts) && nfp && account){
           fetchUserNfts()
       }
@@ -186,7 +209,52 @@ const SelectNft = ()=>{
           
   },[account,nfp])
 
+
+
+  const showUserNfts = 
+    // console.log('show nft refreshe');
+    userAllNfts.slice((currentPage-1)*PAGE_SIZE, currentPage*PAGE_SIZE).map((nft)=>(
+      <>
+        <Card
+        key={nft.id}
+        m='24px'
+        style={{
+          height:'200px',
+          width:'200px',
+          cursor:'pointer',
+          border:nftId === nft.id ? 'solid': 'none',
+          borderWidth:'2px', borderColor:'#AA4A44'
+          }}
+        borderBackground={nftId === nft.id ? '#AA4A44': ''}
+        onClick={()=>updateValue('nftId',nft.id)}
+        >
+            <CardHeader style={{textAlign:'center', height:'36px', paddingTop:'12 px'}}>
+            <strong style={{marginTop:'5px'}}>{nft.token0.symbol}/{nft.token1.symbol}</strong>
+            </CardHeader>
+            <CardBody style={{textAlign:'center' ,padding:'5px'}}>
+            <Box mb='5px'>
+            <Text >Position ID: {nft.id}</Text>
+            </Box>
+                <Box mb='5px'>
+            <strong style={{marginBottom:'5px'}}> Liquidity:</strong>
+            <Text>{nft.liquidity}</Text>
+                </Box>
+                
+            <Box mb='5px'>
+            <strong style={{marginBottom:'5px'}}> Fee Tier:</strong>
+    
+            <Text >{(nft.pool.feeTier)/10000}</Text>
+            </Box>
+            </CardBody>
+        </Card>
+      </>
+    )
+    )
+  console.log('refreshed', fieldsState);
+  
+
   const {config, isSuccess, isLoading} = usePrepareContractWrite({
+    enabled: isEmpty(formErrors) && selectedNft!=='' && isNftApproved,
     address : getCadinuLockv3Address(),
     abi: CadinuLockV3Abi,
     functionName: isPayWithCbon ? 'lockByCbon': 'lockByNative',
@@ -212,9 +280,7 @@ const SelectNft = ()=>{
         )
       }
   },[isLockSuccess])
-
-  console.log('formErrors', formErrors);
-
+  
 return (
   <>
     <PageMeta />
@@ -230,9 +296,9 @@ return (
           </Breadcrumbs>
         </Box>
           <StyledHeading>Select Your Position</StyledHeading>
-        <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit}>
           <Layout>
-            {account ?
+           {account ?
             <Flex
               width={['328px', '100%']}
               flexWrap="wrap"
@@ -242,17 +308,7 @@ return (
               justifyContent="center"
               position="relative"
             >
-              {userAllNfts.slice((currentPage-1)*PAGE_SIZE, currentPage*PAGE_SIZE).map((nft)=>(
-                <>
-                <Box onClick={()=>setSelectedNft(nft.id)} >
-                <ObjectSVG 
-                nft={nft as ObjectWithProperties}
-                selectedNft={selectedNft}
-                />
-                </Box>
-                
-                </>))
-                }
+              {showUserNfts}
                 {maxPage > 1 &&
                 <PaginationButton showMaxPageText currentPage={currentPage} setCurrentPage={setCurrentPage} maxPage={maxPage} /> 
                 }
@@ -271,6 +327,8 @@ return (
 
                 )
                 }
+                <> 
+
             <Card mt='20px'>
               <CardHeader>
                 <Heading as="h3" scale="md">
@@ -279,23 +337,26 @@ return (
               </CardHeader>
               <CardBody>
                   <>
-                  <Box mb="24px">
-              <SecondaryLabel htmlFor="title">{t('Title')}</SecondaryLabel>
-              <Input 
-              id="title" 
-              name="title" 
-              placeholder='Your Lock Title'
-              value={title} 
-              scale="sm" 
-              onChange={handleChange} 
-              required 
-              />
-              {formErrors.title && fieldsState.title && <FormErrors errors={formErrors.title} />}
-            </Box>
+              <Box mb="24px">
+                <SecondaryLabel htmlFor="title">{t('Title')}</SecondaryLabel>
+                <Input 
+                id="title" 
+                key='title'
+                name="title" 
+                placeholder='Your Lock Title'
+                value={title} 
+                scale="sm" 
+                onChange={handleChange} 
+                // autoFocus
+                required 
+                />
+                {formErrors.title && fieldsState.title && <FormErrors errors={formErrors.title} />}
+              </Box>
                 <Box mb="24px">
-                  <SecondaryLabel>{t('Lock Until Date')}</SecondaryLabel>
+                  <SecondaryLabel  htmlFor="lockUntilDate">{t('Lock Until Date')}</SecondaryLabel>
                   <DatePicker
                     name="lockUntilDate"
+                    key='lockUntilDate'
                     onChange={handleDateChange('lockUntilDate')}
                     selected={lockUntilDate}
                     placeholderText="YYYY/MM/DD"
@@ -303,9 +364,10 @@ return (
                   {formErrors.lockUntilDate && fieldsState.lockUntilDate && <FormErrors errors={formErrors.lockUntilDate} />}
                 </Box>
                 <Box mb="24px">
-                  <SecondaryLabel>{t('Lock Until Time')}</SecondaryLabel>
+                  <SecondaryLabel htmlFor="lockUntilTime">{t('Lock Until Time')}</SecondaryLabel>
                   <TimePicker
                     name="lockUntilTime"
+                    key='lockUntilTime'
                     onChange={handleDateChange('lockUntilTime')}
                     selected={lockUntilTime}
                     placeholderText="00:00"
@@ -313,14 +375,15 @@ return (
                   {formErrors.lockUntilTime && fieldsState.lockUntilTime && <FormErrors errors={formErrors.lockUntilTime} />}
                 </Box>
                 <Box mb="24px">
-                  <SecondaryLabel>{t('Nonfungible Position Manager Token ID:')}</SecondaryLabel>
+                  <SecondaryLabel htmlFor="nftId">{t('Nonfungible Position Manager Token ID:')}</SecondaryLabel>
                   <Input 
                   id="nftId" 
-                  name="nftId" 
+                  key='nftId'
+                  name="nftId"
                   placeholder='0'
-                  value={selectedNft} 
+                  value={nftId} 
                   scale="sm" 
-                  onChange={(e)=>setSelectedNft(e.target.value)} 
+                  onChange={handleChange} 
                   required />
                   {formErrors.nftId && fieldsState.nftId && <FormErrors errors={formErrors.nftId} />}
                 </Box>
@@ -397,7 +460,7 @@ return (
                   <>
                   
                   <ApproveConfirmButtons
-                    isApproveDisabled={isNftApproved}
+                    isApproveDisabled={isNftApproved || !selectedNft}
                     isApproving={isApproving}
                     isConfirmDisabled={!isEmpty(formErrors) && !isSuccess}
                     isConfirming={isLockLoading}
@@ -405,7 +468,7 @@ return (
                     onConfirm={handleLock}
                     buttonArrangement={ButtonArrangement.SEQUENTIAL}
                     confirmLabel={t('Lock')}
-                    confirmId="LockInstant"
+                    confirmId="LockV3Instant"
           />
                 
                   </>
@@ -414,6 +477,7 @@ return (
                 )}
               </CardBody>
             </Card>
+        </>
           </Layout>
         </form>
         </PageSection>

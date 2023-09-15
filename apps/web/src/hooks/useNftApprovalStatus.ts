@@ -10,13 +10,12 @@ export const useNftApprovalStatus = (spender, address, nftId) => {
       address,
       abi:nonfungiblePositionManagerABI,
     }),
-    enabled: Boolean(account && spender),
+    enabled: Boolean(account && spender && nftId),
     functionName: 'getApproved',
     args: [nftId],
     watch: true,
-  })
-  console.log('useApproveData>>>>',data);
-  
+
+  })  
   return {
     isApproved: data === spender,
     setLastUpdated: refetch,

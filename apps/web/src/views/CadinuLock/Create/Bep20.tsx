@@ -99,17 +99,6 @@ const ReferenceElement = styled.div`
     
     const cadinuLockContract = useCadinuLockContract()
     const {callWithGasPriceNative} = useCallWithGasPriceNative()
-    
-    // const a = useApproveCallbackFromAmount(
-    //   {
-    //     token: bscTokens.cbon,
-    //     minAmount:BigInt(Number(priceInCbon)),
-    //     targetAmount: BigInt(Number(priceInCbon)),
-    //     spender: cadinuLockContract.address,
-    //     addToTransaction: true,
-    //     onApproveSuccess :
-    //   }
-    //   )
     const [returnedId, setReturnedId] = useState("")
     const { setLastUpdated, allowance } = useCbonApprovalStatus(cadinuLockContract.address)
     const {handleApprove:approveCbon} = useCbonApprove(setLastUpdated, cadinuLockContract.address, 'Cbon approved successfully!')
@@ -185,47 +174,6 @@ const ReferenceElement = styled.div`
         evt.preventDefault()
     }
 
-    // try {
-    //     setIsLoading(true)
-    //     const web3 = {
-    //       getSigner: () => {
-    //         return {
-    //           _signTypedData: (domain, types, message) =>
-    //             signer.signTypedData({
-    //               account,
-    //               domain,
-    //               types,
-    //               message,
-    //               primaryType: 'Proposal',
-    //             }),
-    //         }
-    //       },
-    //     }
-    //     const data: any = await client.proposal(web3 as any, account, {
-    //       space: PANCAKE_SPACE,
-    //       type: 'single-choice',
-    //       title: name,
-    //       body,
-    //       start: combineDateAndTime(startDate, startTime),
-    //       end: combineDateAndTime(endDate, endTime),
-    //       choices: choices
-    //         .filter((choice) => choice.value)
-    //         .map((choice) => {
-    //           return choice.value
-    //         }),
-    //       snapshot,
-    //       discussion: '',
-    //       plugins: JSON.stringify({}),
-    //       app: 'snapshot',
-    //     })
-    //     // Redirect user to newly created proposal page
-    //     push(`/voting/proposal/${data.id}`)
-    //     toastSuccess(t('Proposal created!'))
-    //   } catch (error) {
-    //     toastError(t('Error'), (error as Error)?.message)
-    //     console.error(error)
-    //     setIsLoading(false)
-    //   }
   
     const updateValue = (key: string, value: string | Date) => {
         setState((prevState) => ({

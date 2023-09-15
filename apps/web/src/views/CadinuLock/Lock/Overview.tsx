@@ -11,7 +11,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { CadinuLockState } from 'state/types'
 import { getCadinuLockAddress } from 'utils/addressHelpers'
 import { formatRawAmount } from 'utils/formatCurrencyAmount'
-import { zeroAddress } from 'viem'
+import { formatUnits, zeroAddress } from 'viem'
 import { TableWrapper } from 'views/Info/components/InfoTables/shared'
 import Page from 'views/Page'
 import { Address, erc20ABI, readContracts, useAccount, useContractReads } from 'wagmi'
@@ -59,6 +59,9 @@ const Overview = () => {
       }
     ]
   })
+
+  console.log('tokenDetails', tokenDetails);
+  
 
   const [lpNameSymbols,setLpNameSymbols] = useState({})
   const getLpNames = async () =>{
@@ -226,11 +229,14 @@ const Overview = () => {
             </Box>
             <Box mt="25px" style={{display:'flex' , flexWrap:'wrap', flexDirection:'row'}} width="90%">
             <strong style={{flex:'1 1 160px'}}>Total lock Amount:</strong>
-            <span > ~{isSuccess && tokenDetails[3].status ==='success' ? `${formatRawAmount(Number(tokenDetails[3].result[2]).toString(), Number(tokenDetails[2].result), 12)} ${tokenDetails[1].result}` : "..."}</span>
+            <span >
+               ~{isSuccess && tokenDetails[3].status ==='success' 
+               ? `${formatUnits(tokenDetails[3].result[2], Number(tokenDetails[2].result))} ${tokenDetails[1].result}` : "..."}</span>
             </Box>
             <Box mt="25px" style={{display:'flex' , flexWrap:'wrap', flexDirection:'row'}} width="90%">
             <strong style={{flex:'1 1 160px'}}>Total lock Value:</strong>
-            <span > {isSuccess && valueLocked!==0 && tokenDetails[3].status ==='success' ?`$${(Number(formatRawAmount(Number(tokenDetails[3].result[2]).toString(), Number(tokenDetails[2].result), 12))*valueLocked).toFixed(7)}` : "unknown"}</span>
+            <span > {isSuccess && valueLocked!==0 && tokenDetails[3].status ==='success' 
+            ?`$${(Number(formatUnits(tokenDetails[3].result[2], Number(tokenDetails[2].result)))*valueLocked).toFixed(7)}` : "unknown"}</span>
             </Box>
           </Flex>)
           : filterState === CadinuLockState.LIQUIDITY_V2 && (
@@ -299,11 +305,11 @@ const Overview = () => {
           <Td>{
           isSuccess && tokenDetails[2].status ==='success'
 
-            ? Number(formatRawAmount(
-              (
+            ? Number(formatUnits(
+              BigInt(
                 Number(lock.amount) - Number(lock.unlockedAmount)
-              ).toString(),
-               Number(tokenDetails[2].result), 12)).toLocaleString(
+              ),
+               Number(tokenDetails[2].result))).toLocaleString(
                 undefined,{maximumFractionDigits: 18}
               ) 
             : "..."} </Td>

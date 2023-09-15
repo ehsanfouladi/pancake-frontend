@@ -16,7 +16,7 @@ export interface FormState {
 
 export interface Formv3State {
 
-  nftId: number
+  nftId: string
   owner : string
   title : string
   lockUntilDate: Date | null

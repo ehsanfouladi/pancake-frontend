@@ -1,6 +1,6 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { ChainId } from '@pancakeswap/sdk'
-import { Box, Button, Card, CardBody, CardFooter, CardHeader, Flex, Heading, LinkExternal, PaginationButton, Skeleton, Text, TimerIcon, useTooltip } from '@pancakeswap/uikit'
+import { Box, Breadcrumbs, Button, Card, CardBody, CardFooter, CardHeader, Container, Flex, Heading, LinkExternal, PaginationButton, Skeleton, Text, TimerIcon, useTooltip } from '@pancakeswap/uikit'
 import { CardWrapper } from '@pancakeswap/uikit/src/widgets/Liquidity'
 import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
 import { nonfungiblePositionManagerABI } from '@pancakeswap/v3-sdk'
@@ -15,6 +15,7 @@ import { bsc } from 'viem/chains'
 import Page from 'views/Page'
 import { Address, erc20ABI, readContracts, useAccount, useWaitForTransaction, useWalletClient } from 'wagmi'
 import { fetchLocksForNonFungiblePositionManager } from '../helpers'
+import Link from 'next/link'
 
 
 
@@ -416,6 +417,7 @@ const {
                     thisPosition.length > 0 && getLpNames([ thisPosition[0]?.token0, thisPosition[0]?.token1],nft.nftId)
                     return(
                         <>
+                        
                         <CardWrapper margin='5px' style={{flexWrap:"wrap", minWidth:'360px', maxWidth:'28%'}} >
                         <Card>
                             <CardHeader style={{textAlign:'center'}} >
@@ -453,7 +455,7 @@ const {
                                 </Box>
                                 <Box mt="5px" style={{display:'flex' , flexWrap:'wrap', flexDirection:'row' }} width="85%">
                                     <strong style={{flex:'1 1 160px'}}>Position Symbol:</strong>
-                                    <span >{lpNameSymbols['symbol'] === "" ? <Skeleton/> : lpNameSymbols.filter(lp=> lp.lockId === nft.nftId)[0]?.symbol }</span>
+                                    <span >{lpNameSymbols['symbol'] === "" ? <Skeleton/> : lpNameSymbols.filter(lp=> lp.id === nft.nftId)[0]?.symbol.toString() }</span>
                                 </Box>
                                 <Box mt="5px" style={{display:'flex' , flexWrap:'wrap', flexDirection:'row' }} width="85%">
                                     <strong style={{flex:'1 1 160px'}}>Position Fee:</strong>
@@ -622,14 +624,21 @@ const {
   return (
     <>
     <Page>
-    {/* <Container> */}
+    <Container>
+    <Box mb='48px'>
+    <Breadcrumbs>
+      <Link href="/">Home</Link>
+      <Link href="/cadinu-lock">Cadinu Lock</Link>
+      <Text>Position Locks</Text>
+    </Breadcrumbs>
+    </Box>
     <Flex flexWrap="wrap" flexDirection='row' justifyContent='center'>
         {nftFetchStatus === NftCardFetchStatus.FETCHED || myNftFetchStatus === NftCardFetchStatus.FETCHED ? makeNftCards() : skeletonCard()}
     </Flex>
     {maxPage > 1 &&
       <PaginationButton showMaxPageText currentPage={currentPage} setCurrentPage={setCurrentPage} maxPage={maxPage} />
     }
-    {/* </Container> */}
+    </Container>
     </Page>
         
     </>
