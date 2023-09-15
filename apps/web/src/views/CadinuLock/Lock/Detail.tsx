@@ -63,14 +63,6 @@ const Detail = ()=>{
       setDetail(details)
     },[id])
 
-
-    
-    
-    const getTokenValue = useCallback(async()=>{
-    
-      
-    },[id, cbonPrice,cadinuPrice, detail])
-
     const {config} = usePrepareContractWrite({
       address : getCadinuLockContract().address,
       abi:CadinuLockAbi,
