@@ -153,8 +153,8 @@ const Overview = () => {
   
   console.log("LOCKS", details);
   
-  const cadinuPrice = Number(useCadinuPriceAsBN())
-  const cbonPrice = Number(useCbonPriceAsBN())
+  const cadinuPrice = useCadinuPriceAsBN().toString()
+  const cbonPrice = useCbonPriceAsBN().toString()
   const getTokenValue = useCallback(async()=>{
     if (tokenId === bscTokens.cadinu.address){
       setValueLocked(cadinuPrice)
@@ -175,7 +175,7 @@ const Overview = () => {
       if(filterState === CadinuLockState.LIQUIDITY_V2){
         getLpNames()
       }
-      if(!valueLocked || valueLocked===0 ){
+      if(!valueLocked || valueLocked==='' ){
         getTokenValue()
       }
     }
@@ -191,7 +191,7 @@ const Overview = () => {
   }
   throttle(getFormattedTime,10000)
   
-  const[valueLocked, setValueLocked]  = useState(0)
+  const[valueLocked, setValueLocked]  = useState('')
   const { isXs, isSm, isMd } = useMatchBreakpoints()
 
   if(!tokenId){
@@ -235,8 +235,8 @@ const Overview = () => {
             </Box>
             <Box mt="25px" style={{display:'flex' , flexWrap:'wrap', flexDirection:'row'}} width="90%">
             <strong style={{flex:'1 1 160px'}}>Total lock Value:</strong>
-            <span > {isSuccess && valueLocked!==0 && tokenDetails[3].status ==='success' 
-            ?`$${(Number(formatUnits(tokenDetails[3].result[2], Number(tokenDetails[2].result)))*valueLocked).toFixed(7)}` : "unknown"}</span>
+            <span > {isSuccess && valueLocked!=='' && tokenDetails[3].status ==='success' 
+            ?`$${(Number(formatUnits(tokenDetails[3].result[2], Number(tokenDetails[2].result)))*Number(valueLocked)).toFixed(7)}` : "unknown"}</span>
             </Box>
           </Flex>)
           : filterState === CadinuLockState.LIQUIDITY_V2 && (
@@ -258,7 +258,7 @@ const Overview = () => {
             </Box>
             <Box mt="25px" style={{display:'flex' , flexWrap:'wrap', flexDirection:'row'}} width="90%">
             <strong style={{flex:'1 1 160px'}}>Total lock Value:</strong>
-            <span > { valueLocked!==0 && tokenDetails[3].status ==='success' ?`$${(Number(formatRawAmount(Number(tokenDetails[3].result[2]).toString(), Number(tokenDetails[2].result), 12))*valueLocked).toFixed(7)}` : "unknown"}</span>
+            <span > { valueLocked!=='' && tokenDetails[3].status ==='success' ?`$${(Number(formatRawAmount(Number(tokenDetails[3].result[2]).toString(), Number(tokenDetails[2].result), 12))*Number(valueLocked)).toFixed(7)}` : "unknown"}</span>
             </Box>
           </Flex>
           )}

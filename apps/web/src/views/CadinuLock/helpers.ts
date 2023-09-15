@@ -8,6 +8,7 @@ import { CadinuLockState, CadinuLockType, ComulativeLockResponse, LockRecord, Lo
 import { getCadinuLockContract, getCadinuLockV3Contract } from 'utils/contractHelpers'
 import { publicClient } from "utils/wagmi"
 import { Address, erc20ABI } from 'wagmi'
+import { useCallback } from 'react'
 
 
 const cadinuLockContract = getCadinuLockContract()
@@ -409,7 +410,7 @@ export const getLpSymbol = async (pairAddress:Address) =>{
   }
 }
 
-export const getValueLocked = async ( tokenAddress:string)=>{
+export const getValueLocked = async ( tokenAddress:string):Promise<string>=>{
   try{
   const data = await ( await fetch(`https://cadinu-locks.cadinu.io/price/${tokenAddress}`)).json()
   return data?.price

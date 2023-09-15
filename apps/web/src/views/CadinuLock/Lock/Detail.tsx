@@ -30,7 +30,7 @@ import { CadinuLockState } from "state/types"
 import { getCadinuLockAddress } from "utils/addressHelpers"
 import { getCadinuLockContract } from "utils/contractHelpers"
 import { formatRawAmount } from "utils/formatCurrencyAmount"
-import { Address } from "viem"
+import { Address, formatUnits } from "viem"
 import { TableWrapper } from "views/Info/components/InfoTables/shared"
 import Page from "views/Page"
 import { erc20ABI, readContracts, useAccount, useContractReads, useContractWrite, usePrepareContractWrite } from "wagmi"
@@ -50,7 +50,7 @@ const Detail = ()=>{
     const [detail, setDetail] = useState(null)
     const [currentPage, setCurrentPage]= useState(1)
     const [maxPage, setMaxPage] = useState(1)
-    const[valueLocked, setValueLocked]  = useState(0)
+    const[valueLocked, setValueLocked]  = useState('')
     const PAGE_SIZE = 5
     const { isXs, isSm, isMd } = useMatchBreakpoints()
             
@@ -67,17 +67,9 @@ const Detail = ()=>{
     
     
     const getTokenValue = useCallback(async()=>{
-      if (detail?.token === bscTokens.cadinu.address){
-            setValueLocked(Number(cadinuPrice))
-        if (detail?.token === bscTokens.cbon.address){
-            setValueLocked(Number(cbonPrice))
-        }
-      }else{
-          const value = await getValueLocked(detail?.token as Address)
-          setValueLocked(value)
-        }
+    
       
-    },[id, cbonPrice,cadinuPrice])
+    },[id, cbonPrice,cadinuPrice, detail])
 
     const {config} = usePrepareContractWrite({
       address : getCadinuLockContract().address,
@@ -365,10 +357,16 @@ const Detail = ()=>{
       if(detail && filterState===CadinuLockState.LIQUIDITY_V2){
         getLpNames()
       }
-        if(valueLocked===undefined||valueLocked===0){
-          getTokenValue()       
-          
-        }
+      if(valueLocked===undefined||valueLocked===''){
+        if (detail?.token === bscTokens.cadinu.address){
+          setValueLocked(cadinuPrice)
+      if (detail?.token === bscTokens.cbon.address){
+          setValueLocked(cbonPrice)
+      }
+    }else{
+        const value = getValueLocked(detail?.token as Address).then(res=>setValueLocked(res))
+      }     
+      }
     },[
       cadinuPrice,
       cbonPrice,
@@ -417,11 +415,11 @@ const Detail = ()=>{
             </Box>
             <Box mt="25px" style={{display:'flex' , flexWrap:'wrap', flexDirection:'row'}} width="90%">
             <strong style={{flex:'1 1 160px'}}>Total Amount Locked:</strong>
-            <span > {isSuccess && tokenDetails[3].status ==='success' ? `~${formatRawAmount(Number(tokenDetails[3].result[2]).toString(), Number(tokenDetails[2].result), 12)}  ${tokenDetails[1].result}` : "..."}</span>
+            <span > {isSuccess && tokenDetails[3].status ==='success' ? `~${formatUnits(tokenDetails[3].result[2], Number(tokenDetails[2].result))}  ${tokenDetails[1].result}` : "..."}</span>
             </Box>
             <Box mt="25px" style={{display:'flex' , flexWrap:'wrap', flexDirection:'row'}} width="90%">
             <strong style={{flex:'1 1 160px'}}>Total lock Value:</strong>
-            <span > {isSuccess && valueLocked!==0 ?`$${(Number(formatRawAmount(Number(tokenDetails[3].result[2]).toString(), Number(tokenDetails[2].result), 12))*valueLocked).toFixed(7)}` : "unknown"}</span>
+            <span > {isSuccess && valueLocked!=='' ?`$${(Number(formatUnits(tokenDetails[3].result[2], Number(tokenDetails[2].result)))*Number(valueLocked)).toFixed(7)}` : "unknown"}</span>
             </Box>
           </Flex>
           ):(
@@ -439,11 +437,11 @@ const Detail = ()=>{
               </Box>
               <Box mt="25px" style={{display:'flex' , flexWrap:'wrap', flexDirection:'row'}} width="90%">
               <strong style={{flex:'1 1 160px'}}>Total Amount Locked:</strong>
-              <span > ~{isSuccess && tokenDetails[3].status ==='success' ? `${formatRawAmount(Number(tokenDetails[3].result[2]).toString(), Number(tokenDetails[2].result), 12)} ${tokenDetails[1].result}` : "..."}</span>
+              <span > ~{isSuccess && tokenDetails[3].status ==='success' ? `${formatUnits(tokenDetails[3].result[2], Number(tokenDetails[2].result))} ${tokenDetails[1].result}` : "..."}</span>
               </Box>
               <Box mt="25px" style={{display:'flex' , flexWrap:'wrap', flexDirection:'row'}} width="90%">
               <strong style={{flex:'1 1 160px'}}>Total lock Value:</strong>
-              <span > {isSuccess && valueLocked!==0 ?`$${(Number(formatRawAmount(Number(tokenDetails[3].result[2]).toString(), Number(tokenDetails[2].result), 12))*valueLocked).toFixed(7)}` : "unknown"}</span>
+              <span > {isSuccess && valueLocked!=='' ?`$${(Number(formatUnits(tokenDetails[3].result[2], Number(tokenDetails[2].result)))*Number(valueLocked)).toFixed(7)}` : "unknown"}</span>
               </Box>
             </Flex>
           )}
@@ -465,12 +463,12 @@ const Detail = ()=>{
             </Box>
             <Box mt="25px" style={{display:'flex' , flexWrap:'wrap', flexDirection:'row'}} width="90%">
             <strong style={{flex:'1 1 160px'}}>Amount Locked:</strong>
-            <span > {isSuccess && (`${formatRawAmount(Number(detail?.amount).toString(), Number(tokenDetails[2].result), 12)} ${tokenDetails[1].result}`)} </span>
+            <span > {isSuccess && (`${formatUnits (detail?.amount, Number(tokenDetails[2].result))} ${tokenDetails[1].result}`)} </span>
 
             </Box>
             <Box mt="25px" style={{display:'flex' , flexWrap:'wrap', flexDirection:'row'}} width="90%">
             <strong style={{flex:'1 1 160px'}}>Value Locked:</strong>
-            <span > {isSuccess && valueLocked!==0  ?`$${(Number(formatRawAmount(Number(detail?.amount).toString(), Number(tokenDetails[2].result), 12))*valueLocked).toFixed(7)}` : "unknown"}</span>
+            <span > {isSuccess && valueLocked!==''  ?`$${(Number(formatUnits(detail?.amount, Number(tokenDetails[2].result)))*Number(valueLocked)).toFixed(7)}` : "unknown"}</span>
             </Box>
             <Box mt="25px" style={{display:'flex' , flexWrap:'wrap', flexDirection:'row'}} width="90%">
             <strong style={{flex:'1 1 160px'}}>Owner:</strong>
@@ -496,12 +494,12 @@ const Detail = ()=>{
               )}
             <Box mt="25px" style={{display:'flex' , flexWrap:'wrap', flexDirection:'row'}} width="90%">
             <strong style={{flex:'1 1 160px'}}>Unlocked Amount:</strong>
-            <span > {isSuccess && (formatRawAmount(Number(detail?.unlockedAmount).toString(), Number(tokenDetails[2].result), 12))}</span>
+            <span > {isSuccess && (formatUnits(detail?.unlockedAmount, Number(tokenDetails[2].result)))}</span>
 
             </Box>
             <Box mt="25px" style={{display:'flex' , flexWrap:'wrap', flexDirection:'row'}} width="90%">
             <strong style={{flex:'1 1 160px'}}> Withdrawable Amount:</strong>
-            <span > {isSuccess && (`${formatRawAmount(Number(tokenDetails[4].result).toString(), Number(tokenDetails[2].result), 12)} ${tokenDetails[1].result}`)}</span>
+            <span > {isSuccess && (`${formatUnits(tokenDetails[4].result, Number(tokenDetails[2].result))} ${tokenDetails[1].result}`)}</span>
             </Box>
               {isSuccess && tokenDetails[4].status === "success" && Number(tokenDetails[4].result) !== 0 &&
                detail.owner === account && (

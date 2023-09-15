@@ -451,9 +451,9 @@ return (
 
                 {account ? (
                   <>
-                  
+                  {fieldsState.nftId ?
                   <ApproveConfirmButtons
-                    isApproveDisabled={isNftApproved || !selectedNft}
+                    isApproveDisabled={isNftApproved}
                     isApproving={isApproving}
                     isConfirmDisabled={!isEmpty(formErrors) && !isSuccess}
                     isConfirming={isLockLoading}
@@ -462,7 +462,10 @@ return (
                     buttonArrangement={ButtonArrangement.SEQUENTIAL}
                     confirmLabel={t('Lock')}
                     confirmId="LockV3Instant"
-          />
+          /> :
+                <Text textTransform='uppercase' textAlign='center'> Select or Input Your Token ID </Text> 
+              
+          }
                 
                   </>
                 ) : (
