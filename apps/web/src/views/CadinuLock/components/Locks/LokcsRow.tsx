@@ -113,15 +113,15 @@ const LockRow: React.FC<React.PropsWithChildren<LockRowProps>> = ( {lock, filter
   }
 
 
-  const [totalValue,setTotalValue] = useState(0)
+  const [totalValue,setTotalValue] = useState('')
 
 
   // const getNumberOfNfts = (amount) => {
    
   //   setNumberOfNfts(Number(amount))
   // }
-  const cadinuPrice = Number(useCadinuPriceAsBN())
-  const cbonPrice = Number(useCbonPriceAsBN())
+  const cadinuPrice = useCadinuPriceAsBN().toString()
+  const cbonPrice = useCbonPriceAsBN().toString()
   
   const getValue = useCallback(async() =>{ const value = await getValueLocked(lock.token)
     if (lock.token === bscTokens.cadinu.address){
