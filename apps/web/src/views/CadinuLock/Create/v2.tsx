@@ -28,6 +28,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from 'react'
 import { useInitialBlock } from 'state/block/hooks'
+import { CadinuLockState } from 'state/types'
 import styled from 'styled-components'
 import { getBlockExploreLink } from 'utils'
 import { parseEther } from 'viem'
@@ -39,7 +40,6 @@ import { ADMINS } from '../config'
 import { combineDateAndTime, getFormErrors } from './helpers'
 import { FormErrors, Label, SecondaryLabel } from './styles'
 import { FormState } from './types'
-import { CadinuLockState } from 'state/types'
 
 const V2 = ()=>{
   const ToggleWrapper = styled.div`

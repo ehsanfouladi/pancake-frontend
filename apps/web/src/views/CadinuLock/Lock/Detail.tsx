@@ -25,6 +25,7 @@ import {
 import getTimePeriods from "@pancakeswap/utils/getTimePeriods"
 import { useCadinuPrice, useCbonPrice } from "@pancakeswap/utils/useCakePrice"
 import { CadinuLockAbi } from "config/abi/cadinuLock"
+import Link from "next/link"
 import { useRouter } from "next/router"
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { CadinuLockState } from "state/types"
@@ -36,7 +37,6 @@ import { TableWrapper } from "views/Info/components/InfoTables/shared"
 import Page from "views/Page"
 import { erc20ABI, readContracts, useAccount, useContractReads, useContractWrite, usePrepareContractWrite } from "wagmi"
 import { fetchLcokById, getValueLocked } from "../helpers"
-import Link from "next/link"
 
 interface EndTimeTooltipComponentProps {
   endTime: number;
@@ -71,16 +71,16 @@ const Detail = ()=>{
       functionName: "unlock",
       args:[ Number(id) ? BigInt(Number(id)) : 0n]
     })
-
+    const {
+      t,
+      currentLanguage: { locale },
+    } = useTranslation();
     const { isSuccess:unlockSuccess, write:unlock} = useContractWrite(config)
     
     const EndTimeTooltipComponent: React.FC<React.PropsWithChildren<EndTimeTooltipComponentProps>> = ({
       endTime,
     }) => {
-      const {
-        t,
-        currentLanguage: { locale },
-      } = useTranslation();
+     
       return (
         <>
           <Text bold>{t("Unlock Time")}:</Text>
@@ -97,7 +97,6 @@ const Detail = ()=>{
         </>
       );
     }
-
     function TimeCountdownDisplay({
       timestamp,
       getNow = () => Date.now(),
@@ -105,7 +104,7 @@ const Detail = ()=>{
       timestamp: number;
       getNow?: () => number;
     }) {
-      const { t } = useTranslation();
+      
     
       const currentDate = getNow() / 1000;
       const poolTimeRemaining = Math.abs(timestamp - currentDate);
@@ -370,7 +369,7 @@ const Detail = ()=>{
       detail,
       unlockSuccess,
     ])
-    const {t} = useTranslation()
+    
     
     const getFormattedTime=(unixTime:number):string =>{
       

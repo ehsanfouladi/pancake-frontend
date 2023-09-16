@@ -233,7 +233,7 @@ const SelectNft = ()=>{
             <CardHeader style={{textAlign:'center', height:'36px', padding:'12px'}}
             >
             
-            <strong style={{padding:'5px'}}>{nfpName ? nfpName : 'Position Details'} # {nft.id}</strong>
+            <strong style={{padding:'5px'}}>{isNfpNameSuccess ? nfpName : 'Position Details'} # {nft.id}</strong>
             </CardHeader>
             <CardBody style={{textAlign:'center' ,padding:'5px'}}>
             <Box my='10px'>
@@ -241,12 +241,6 @@ const SelectNft = ()=>{
       
               <Text mt='5px' > {nft.token0.symbol}/{nft.token1.symbol}</Text>
             </Box>
-           
-           
-                {/* <Box mb='5px'>
-            <strong style={{marginBottom:'5px'}}> Liquidity:</strong>
-            <Text>{nft.liquidity}</Text>
-                </Box> */}
                 
             <Box mb='5px'>
             <strong style={{marginBottom:'5px'}}> Fee Tier:</strong>
