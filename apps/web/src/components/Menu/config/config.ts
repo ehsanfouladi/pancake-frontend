@@ -153,6 +153,13 @@ const config: (
           status: { text: t('New'), color: 'success' },
         },
         {
+          label: t('Presale'),
+          href: '/pre-sale',
+          supportChainIds: SUPPORT_ONLY_BSC,
+          image: '/images/voting/lottery.png',
+          status: { text: t('New'), color: 'success' },
+        },
+        {
           label: t('Lock'),
           href: '/cadinu-lock',
           supportChainIds: SUPPORT_ONLY_BSC,

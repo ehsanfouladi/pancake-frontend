@@ -16,12 +16,21 @@ import Link from 'next/link'
 import styled from 'styled-components'
 import PreSaleBanner from './preSaleBanner'
 import styles from './showcaseStyles.module.css'
+import { css } from 'styled-components'
 
 export const BodyWrapper = styled(Card)`
   border-radius: 40px;
   max-width: 380px;
   width: 326px;
   z-index: 1;
+  ${
+    css`
+        &:hover {
+          cursor: pointer;
+          opacity: 0.6;
+          transform : scale(1.05);
+        }`
+    }
 `
 
 export function AppBody({ children, ...cardProps }: { children: React.ReactNode } & CardProps) {
@@ -160,19 +169,19 @@ export default function ShowCase() {
       <ShowCasePage>
         <PageSection index={1} background="linear-gradient(135deg, #4c57a3 0%, #899dcf 100%)" hasCurvedDivider={false}>
           <StyledHeading>Cadinu Apps: The Ultimate Crypto Platform for Games and Apps</StyledHeading>
-          <Flex
+          {/* <Flex
             flexDirection="column"
             mb="24px"
             alignItems="center"
             verticalAlign="center"
             // backgroundImage="/images/teams/no-team-banner.png"
-          >
-            <Link href="/pre-sale">
+          > */}
+            {/* <Link href="/pre-sale">
               <Box position="relative" pb="56px">
                 <PreSaleBanner />
               </Box>
             </Link>
-          </Flex>
+          </Flex> */}
           <Flex
             width={['328px', '100%']}
             flexWrap="wrap"

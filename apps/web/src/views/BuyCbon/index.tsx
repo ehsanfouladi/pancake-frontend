@@ -1,5 +1,5 @@
 import { bscTokens } from '@pancakeswap/tokens'
-import { Balance, Card, CardBody, CardHeader, Flex, Heading, PageSection } from '@pancakeswap/uikit'
+import { Balance, Box, Card, CardBody, CardHeader, Flex, Heading, PageSection, Text } from '@pancakeswap/uikit'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import BigNumber from 'bignumber.js'
 import { AppBody } from 'components/App'
@@ -12,13 +12,15 @@ import { getPreSaleCbonContract } from 'utils/contractHelpers'
 import { createPublicClient, http } from 'viem'
 import { bsc } from 'viem/chains'
 import { CryptoFormView } from 'views/BuyCbon/types'
-import { Heading2Text } from 'views/TradingCompetition/components/CompetitionHeadingText'
+import Heading1Text, { Heading2Text } from 'views/TradingCompetition/components/CompetitionHeadingText'
 import { useAccount, useBalance } from 'wagmi'
 import Page from '../Page'
 import { BuyCbonForm } from './containers/BuyCbonForm'
 import usePriceQuotes from './hooks/usePriceQuoter'
 import { AppWrapper, StyledBuyCbonContainer } from './styles'
 import HowToPlay from './HowToPlay'
+import Link from 'next/link'
+import PreSaleBanner from './components/PreSaleBanner'
 
 const Grid = styled.div`
   display: grid;
@@ -43,6 +45,7 @@ const StyledCard = styled(Card)`
 `
 
 export default function BuyCbon({ userIp }: { userIp: string | null }) {
+
   const CenterWrapper = styled.div`
     position: absolute;
     left: 48.5%;
@@ -177,40 +180,89 @@ export default function BuyCbon({ userIp }: { userIp: string | null }) {
 
   return (
     <Page>
-      <StyledBuyCbonContainer>
-        <AppWrapper>
           <Flex verticalAlign="center" alignItems="center" flexDirection="column" mb="15px">
             <Heading2Text
               style={{
                 fontSize: '4vw',
               }}
-            >
-              Introducing the Revolutionary New Token
+              >
+              Introducing  New Token Presale Platform
             </Heading2Text>
             <Heading2Text
               style={{
                 fontSize: '4vw',
               }}
-            >
+              >
               {' '}
-              Now On PreSale{' '}
+              Now On Cadinu Apps{' '}
             </Heading2Text>
           </Flex>
-          <AppBody>
+              
+          <Flex
+            flexDirection="column"
+            mt="24px"
+            alignItems="center"
+            justifyContent='center'
+            alignContent='center'
+            verticalAlign="center"
+            maxWidth='80%'
+            // backgroundImage="/images/teams/no-team-banner.png"
+            >
+            <Link href="/pre-sale">
+              <Box position="relative" pb="56px">
+                <PreSaleBanner />
+              </Box>
+            </Link>
+          </Flex>
+            {/* <AppWrapper> */}
+          {/* <AppBody>
             <BuyCbonForm
-              setModalView={setModalView}
-              modalView={modalView}
-              buyCbonState={buyCbonState}
-              fetchQuotes={fetchQuotes}
-              setIsBuySuccess={setIsBuySuccess}
+            setModalView={setModalView}
+            modalView={modalView}
+            buyCbonState={buyCbonState}
+            fetchQuotes={fetchQuotes}
+            setIsBuySuccess={setIsBuySuccess}
             />
-          </AppBody>
-        </AppWrapper>
+          </AppBody> */}
+        {/* </AppWrapper> */}
+        <style>{`.decorated{
+              margin-top:5px;
+              margin-bottom:5px;
+              text-align: center;
+              }
+              .decorated > span{
+              position: relative;
+              display: inline-block;
+
+              }
+              .decorated > span:before, .decorated > span:after{
+              content: '';
+              position: absolute;
+              top: 50%;
+              border-bottom: 2px solid;
+              border-color: black;
+              width: 20vw;
+              margin: 0 12px;
+              }
+              .decorated > span:before{
+              right: 100%;
+              }
+              .decorated > span:after{
+              left: 100%;
+            }`}
+        </style>
+        <h2 className="decorated">
+          <span>
+            Former Presales
+          </span>
+        </h2>
+        
+          <StyledBuyCbonContainer>
       </StyledBuyCbonContainer>
       <StyledCard my="50px">
         <CardHeader p="16px 24px">
           <Flex justifyContent="space-between">
-            <Heading mr="12px">PreSale Information</Heading>
+            <Heading mr="12px">CBON PreSale Information (sold out)</Heading>
           </Flex>
         </CardHeader>
         <CardBody>
@@ -236,9 +288,9 @@ export default function BuyCbon({ userIp }: { userIp: string | null }) {
           </Grid>
         </CardBody>
       </StyledCard>
-      <PageSection dividerPosition="top" hasCurvedDivider={false} index={2}>
+      {/* <PageSection dividerPosition="top" hasCurvedDivider={false} index={2}>
         <HowToPlay />
-      </PageSection>
+      </PageSection> */}
     </Page>
   )
 }
