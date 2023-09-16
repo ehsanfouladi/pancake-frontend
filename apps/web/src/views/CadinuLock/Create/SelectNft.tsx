@@ -246,8 +246,8 @@ const SelectNft = ()=>{
   console.log('refreshed', fieldsState);
   
 
-  const {config, isSuccess, isLoading} = usePrepareContractWrite({
-    enabled: isEmpty(formErrors) && selectedNft!=='' && isNftApproved,
+  const {config, isSuccess, isLoading, isError} = usePrepareContractWrite({
+    enabled: isEmpty(formErrors)  && isNftApproved,
     address : getCadinuLockv3Address(),
     abi: CadinuLockV3Abi,
     functionName: isPayWithCbon ? 'lockByCbon': 'lockByNative',
@@ -258,12 +258,19 @@ const SelectNft = ()=>{
       combineDateAndTime(lockUntilDate,lockUntilTime),
       title
     ],
-    value: isPayWithCbon ? 0n : parseEther(priceInNative)
+    value: isPayWithCbon ? 0n : parseEther(priceInNative),
+    onError: (error)=>{
+      console.log(error);
+      
+    }
   })
 
-  const {data,isLoading:isLockLoading,isSuccess:isLockSuccess,write:handleLock} = useContractWrite(
+  const {data,isLoading:isLockLoading,isSuccess:isLockSuccess,error,write:handleLock} = useContractWrite(
     config
     )
+
+  console.log(error);
+  
 
   useEffect(()=>{
     if(isLockSuccess && data.hash){
