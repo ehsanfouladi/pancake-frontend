@@ -228,10 +228,10 @@ const SelectNft = ()=>{
             <Box mb='5px'>
             <Text >Position ID: {nft.id}</Text>
             </Box>
-                <Box mb='5px'>
+                {/* <Box mb='5px'>
             <strong style={{marginBottom:'5px'}}> Liquidity:</strong>
             <Text>{nft.liquidity}</Text>
-                </Box>
+                </Box> */}
                 
             <Box mb='5px'>
             <strong style={{marginBottom:'5px'}}> Fee Tier:</strong>
