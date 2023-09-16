@@ -41,6 +41,7 @@ import { PaymentOptions } from '../components/paymentOptions'
 import { combineDateAndTime, getFormErrors } from './helpers'
 import { FormErrors, Label, SecondaryLabel } from './styles'
 import { FormState } from './types'
+import { CadinuLockState } from 'state/types'
 
 const Bep20 = ()=>{
   const ToggleWrapper = styled.div`
@@ -166,7 +167,7 @@ const ReferenceElement = styled.div`
       onSuccess: async ({ receipt }) => {
         toastSuccess(t('Lock Created!'), <ToastDescriptionWithTx txHash={receipt.transactionHash} />)
         console.log('receipt', receipt);
-        push(`/cadinu-lock/${tokenAddress}`)
+        push(`/cadinu-lock/locks/${tokenAddress}?isMyLock=true&filterState=${CadinuLockState.TOKENS}`)
       },
     })
     const formErrors = getFormErrors(state, t, isVesting, ownerIsMe)

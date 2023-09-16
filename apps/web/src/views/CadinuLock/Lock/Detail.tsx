@@ -3,6 +3,7 @@ import { pancakePairV2ABI } from "@pancakeswap/sdk"
 import { bscTokens } from "@pancakeswap/tokens"
 import {
   Box,
+  Breadcrumbs,
   Button,
   Card,
   CardBody,
@@ -35,6 +36,7 @@ import { TableWrapper } from "views/Info/components/InfoTables/shared"
 import Page from "views/Page"
 import { erc20ABI, readContracts, useAccount, useContractReads, useContractWrite, usePrepareContractWrite } from "wagmi"
 import { fetchLcokById, getValueLocked } from "../helpers"
+import Link from "next/link"
 
 interface EndTimeTooltipComponentProps {
   endTime: number;
@@ -368,6 +370,7 @@ const Detail = ()=>{
       detail,
       unlockSuccess,
     ])
+    const {t} = useTranslation()
     
     const getFormattedTime=(unixTime:number):string =>{
       
@@ -381,10 +384,17 @@ const Detail = ()=>{
       // _.throttle(getFormattedTime,10000)
       if(!id ){ return (<Loading />)}
       return (
-
+    
       
     <Page >
     <Container>
+    <Box mb="24px" >
+          <Breadcrumbs>
+            <Link href="/">{t('Home')}</Link>
+            <Link href="/cadinu-lock">{t('Cadinu Lock')}</Link>
+            <Text>{t('Lock Details')}</Text>
+          </Breadcrumbs>
+        </Box>
       <Card>
         <CardHeader style={{textAlign:"center"}}>
           <Heading>Token Info</Heading>

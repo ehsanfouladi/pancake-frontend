@@ -1,7 +1,7 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { pancakePairV2ABI } from '@pancakeswap/sdk'
 import { bscTokens } from '@pancakeswap/tokens'
-import { Box, Card, CardBody, CardHeader, Container, Flex, Heading, LinkExternal, Loading, PaginationButton, Skeleton, Table, Td, Th, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { Box, Breadcrumbs, Card, CardBody, CardHeader, Container, Flex, Heading, LinkExternal, Loading, PaginationButton, Skeleton, Table, Td, Text, Th, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { useCadinuPriceAsBN, useCbonPriceAsBN } from '@pancakeswap/utils/useCakePrice'
 import { CadinuLockAbi } from 'config/abi/cadinuLock'
 import throttle from 'lodash/throttle'
@@ -209,6 +209,13 @@ const Overview = () => {
     <>
     <Page>
     <Container>
+    <Box mb="24px" >
+          <Breadcrumbs>
+            <Link href="/">{t('Home')}</Link>
+            <Link href="/cadinu-lock">{t('Cadinu Lock')}</Link>
+            <Text>{t('Locks Overview')}</Text>
+          </Breadcrumbs>
+        </Box>
       <Card>
         <CardHeader style={{textAlign:"center"}}>
           <Heading>Lock Details</Heading>

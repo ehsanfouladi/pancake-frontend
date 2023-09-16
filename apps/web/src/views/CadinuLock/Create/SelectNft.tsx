@@ -19,8 +19,8 @@ import { ChangeEvent, FormEvent, useCallback, useEffect, useState } from "react"
 import styled from "styled-components"
 import { getBlockExploreLink } from "utils"
 import { getCadinuLockv3Address } from "utils/addressHelpers"
-import { Address, parseEther } from "viem"
-import { useAccount, useContractWrite, usePrepareContractWrite } from "wagmi"
+import { Address, isAddress, parseEther } from "viem"
+import { useAccount, useContractRead, useContractWrite, usePrepareContractWrite } from "wagmi"
 import { DatePicker, TimePicker } from "../components/DatePicker"
 import { PaymentOptions } from "../components/paymentOptions"
 import { combineDateAndTime, getv3FormErrors } from "./helpers"
@@ -193,6 +193,14 @@ const SelectNft = ()=>{
       }
       
   },[account,nfp])
+
+  const {data:nfpName, isSuccess:isNfpNameSuccess} = useContractRead({
+    enabled: isAddress(nfp as Address),
+    address: getCadinuLockv3Address(),
+    abi: CadinuLockV3Abi,
+    functionName: 'nonFungiblePositionManagerName',
+    args:[nfp as Address]
+  })
   useEffect(()=>{
       if(isEmpty(userAllNfts) && nfp && account){
           fetchUserNfts()
@@ -210,9 +218,10 @@ const SelectNft = ()=>{
       <>
         <Card
         key={nft.id}
-        m='24px'
+        mx='24px'
+        mt='20px'
         style={{
-          height:'200px',
+          height:'170px',
           width:'200px',
           cursor:'pointer',
           border:nftId === nft.id ? 'solid': 'none',
@@ -221,13 +230,19 @@ const SelectNft = ()=>{
         borderBackground={nftId === nft.id ? '#AA4A44': ''}
         onClick={()=>updateValue('nftId',nft.id)}
         >
-            <CardHeader style={{textAlign:'center', height:'36px', paddingTop:'12 px'}}>
-            <strong style={{marginTop:'5px'}}>{nft.token0.symbol}/{nft.token1.symbol}</strong>
+            <CardHeader style={{textAlign:'center', height:'36px', padding:'12px'}}
+            >
+            
+            <strong style={{padding:'5px'}}>{nfpName ? nfpName : 'Position Details'} # {nft.id}</strong>
             </CardHeader>
             <CardBody style={{textAlign:'center' ,padding:'5px'}}>
-            <Box mb='5px'>
-            <Text >Position ID: {nft.id}</Text>
+            <Box my='10px'>
+              <strong style={{marginBottom:'5px'}}> Symbols:</strong>
+      
+              <Text mt='5px' > {nft.token0.symbol}/{nft.token1.symbol}</Text>
             </Box>
+           
+           
                 {/* <Box mb='5px'>
             <strong style={{marginBottom:'5px'}}> Liquidity:</strong>
             <Text>{nft.liquidity}</Text>
@@ -269,7 +284,7 @@ const SelectNft = ()=>{
     config
     )
 
-  console.log(error);
+  console.log(userAllNfts);
   
 
   useEffect(()=>{
@@ -301,12 +316,14 @@ return (
            {account ?
             <Flex
               width={['328px', '100%']}
-              flexWrap="wrap"
+              flexWrap='wrap'
               maxWidth="100%"
-              height="100%"
-              alignItems="center"
-              justifyContent="center"
-              position="relative"
+              // height="100%"
+              // justifyContent="space-between"
+
+              
+              // alignItems="center"
+              // position="relative"
             >
               {showUserNfts}
                 {maxPage > 1 &&
