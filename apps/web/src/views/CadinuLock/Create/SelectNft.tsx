@@ -224,10 +224,11 @@ const SelectNft = ()=>{
           height:'170px',
           width:'200px',
           cursor:'pointer',
-          border:nftId === nft.id ? 'solid': 'none',
-          borderWidth:'2px', borderColor:'#AA4A44'
+          border:nftId === nft.id ? '3px solid #7c4064 ': 'none',
+          // borderColor:nftId === nft.id ?'#2ac7d6': '',
+          backgroundColor:nftId === nft.id ? '#7c4064': ''
           }}
-        borderBackground={nftId === nft.id ? '#AA4A44': ''}
+        // borderBackground={nftId === nft.id ? '#AA4A44': ''}
         onClick={()=>updateValue('nftId',nft.id)}
         >
             <CardHeader style={{textAlign:'center', height:'36px', padding:'12px'}}

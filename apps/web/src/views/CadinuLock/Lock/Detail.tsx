@@ -31,10 +31,12 @@ import { useCallback, useEffect, useMemo, useState } from "react"
 import { CadinuLockState } from "state/types"
 import { getCadinuLockAddress } from "utils/addressHelpers"
 import { getCadinuLockContract } from "utils/contractHelpers"
-import { formatRawAmount } from "utils/formatCurrencyAmount"
 import { Address, formatUnits } from "viem"
 import { TableWrapper } from "views/Info/components/InfoTables/shared"
 import Page from "views/Page"
+import { formatRoundTime } from "views/Predictions/helpers"
+import useCountdown from "views/Predictions/hooks/useCountdown"
+import TimeText from "views/TradingReward/components/TopTraders/YourTradingReward/TimeText"
 import { erc20ABI, readContracts, useAccount, useContractReads, useContractWrite, usePrepareContractWrite } from "wagmi"
 import { fetchLcokById, getValueLocked } from "../helpers"
 
@@ -312,7 +314,7 @@ const Detail = ()=>{
     
   }
 
-    const {data:tokenDetails,isSuccess} = useContractReads({
+    const {data: tokenDetails,isSuccess} = useContractReads({
         enabled:(detail?.token && detail.id),
         watch:false,
         cacheTime:10000,
@@ -369,19 +371,17 @@ const Detail = ()=>{
       detail,
       unlockSuccess,
     ])
-    
+
+    const { secondsRemaining } = useCountdown(Number(detail?.tgeDate))
+    const timeUntil = getTimePeriods(secondsRemaining)
+    const countdown = formatRoundTime(secondsRemaining)
     
     const getFormattedTime=(unixTime:number):string =>{
-      
         const tt = new Date(unixTime * 1000);
-        
-        // t.setSeconds(unixTime/1000)
-    
-        
         return `${tt.toDateString()} ${tt.toLocaleTimeString()}` 
       }
-      // _.throttle(getFormattedTime,10000)
-      if(!id ){ return (<Loading />)}
+
+    if(!id ){ return (<Loading />)}
       return (
     
       
@@ -493,6 +493,8 @@ const Detail = ()=>{
             <span > {detail?.tgeBps/100}%</span>
             </Box>
               )}
+            { detail && (Number(detail?.cycle)!==0) && 
+            <>
             <Box mt="25px" style={{display:'flex' , flexWrap:'wrap', flexDirection:'row'}} width="90%">
             <strong style={{flex:'1 1 160px'}}>Unlocked Amount:</strong>
             <span > {isSuccess && (formatUnits(detail?.unlockedAmount, Number(tokenDetails[2].result)))}</span>
@@ -502,14 +504,35 @@ const Detail = ()=>{
             <strong style={{flex:'1 1 160px'}}> Withdrawable Amount:</strong>
             <span > {isSuccess && (`${formatUnits(tokenDetails[4].result, Number(tokenDetails[2].result))} ${tokenDetails[1].result}`)}</span>
             </Box>
-              {isSuccess && tokenDetails[4].status === "success" && Number(tokenDetails[4].result) !== 0 &&
-               detail.owner === account && (
+            </>
+            }
+              
             <Row justifyContent='center' mt='16px'>
-                <Button p="0"  verticalAlign='center' width='50%' onClick={()=>unlock?.()}>
-                    Unlock Now
+                <Button p="0"  verticalAlign='center' width='50%' onClick={()=>unlock?.()} 
+                  disabled={
+                    !isSuccess 
+                    || (detail && detail.tgeDate > Date.now()/1e3)
+                    || tokenDetails[4].status !== "success" 
+                    || (detail && (Number(detail?.cycle)!==0) && Number(tokenDetails[4].result) === 0)
+                    || detail.owner !== account}
+                >{
+                  detail?.owner !== account 
+                  ? <Text>Only Owner Can Unlock</Text>
+                  : detail && (Number(detail?.cycle)!==0) && Number(tokenDetails?.[4].result) === 0 
+                  ? <Text>No Unlock Amount</Text> 
+                  : detail && detail.tgeDate > Date.now()/1e3
+                  ? (<Text>
+                    {t('Unlock in')}
+                          {timeUntil.months ? <TimeText text={`${timeUntil.months}${t('m')}`} /> : null}
+                          {timeUntil.days ? <TimeText text={`${timeUntil.days}${t('d')}`} /> : null}
+                          <TimeText text={`${countdown}`} />
+
+                    
+                     </Text> )
+                  : 'Unlock Now'
+                }
                 </Button>
             </Row>
-            )}
           </Flex>
         </CardBody>
       </Card>

@@ -1,5 +1,4 @@
 import {
-  Box,
   Card,
   CardBody,
   CardFooter,
@@ -8,15 +7,13 @@ import {
   Flex,
   Heading,
   PageSection,
-  Tag,
+  Tag
 } from '@pancakeswap/uikit'
 import { PageMeta } from 'components/Layout/Page'
 import Image from 'next/image'
 import Link from 'next/link'
-import styled from 'styled-components'
-import PreSaleBanner from './preSaleBanner'
+import styled, { css } from 'styled-components'
 import styles from './showcaseStyles.module.css'
-import { css } from 'styled-components'
 
 export const BodyWrapper = styled(Card)`
   border-radius: 40px;

@@ -1,9 +1,9 @@
 import { bscTokens } from '@pancakeswap/tokens'
-import { Balance, Box, Card, CardBody, CardHeader, Flex, Heading, PageSection, Text } from '@pancakeswap/uikit'
+import { Balance, Box, Card, CardBody, CardHeader, Flex, Heading } from '@pancakeswap/uikit'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import BigNumber from 'bignumber.js'
-import { AppBody } from 'components/App'
 import { preSaleCbonAbi } from 'config/abi/preSaleCbon'
+import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { useBuyCbonActionHandlers, useBuyCbonState, useDefaultsFromURLSearch } from 'state/buyCbon/hooks'
 import { Field } from 'state/swap/actions'
@@ -12,15 +12,12 @@ import { getPreSaleCbonContract } from 'utils/contractHelpers'
 import { createPublicClient, http } from 'viem'
 import { bsc } from 'viem/chains'
 import { CryptoFormView } from 'views/BuyCbon/types'
-import Heading1Text, { Heading2Text } from 'views/TradingCompetition/components/CompetitionHeadingText'
+import { Heading2Text } from 'views/TradingCompetition/components/CompetitionHeadingText'
 import { useAccount, useBalance } from 'wagmi'
 import Page from '../Page'
-import { BuyCbonForm } from './containers/BuyCbonForm'
-import usePriceQuotes from './hooks/usePriceQuoter'
-import { AppWrapper, StyledBuyCbonContainer } from './styles'
-import HowToPlay from './HowToPlay'
-import Link from 'next/link'
 import PreSaleBanner from './components/PreSaleBanner'
+import usePriceQuotes from './hooks/usePriceQuoter'
+import { StyledBuyCbonContainer } from './styles'
 
 const Grid = styled.div`
   display: grid;
@@ -256,9 +253,6 @@ export default function BuyCbon({ userIp }: { userIp: string | null }) {
             Former Presales
           </span>
         </h2>
-        
-          <StyledBuyCbonContainer>
-      </StyledBuyCbonContainer>
       <StyledCard my="50px">
         <CardHeader p="16px 24px">
           <Flex justifyContent="space-between">
