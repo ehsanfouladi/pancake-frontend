@@ -217,6 +217,9 @@ const ReferenceElement = styled.div`
         }))
       }
     }, [initialBlock, setState])
+
+    console.log('formErrors', formErrors);
+    
   
     return (
     <>

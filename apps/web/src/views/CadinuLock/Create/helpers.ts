@@ -53,15 +53,15 @@ export const getFormErrors = (formData: FormState, t: ContextApi['t'], isVesting
   }
 
 
-  if (!isValid(lockUntilDate)) {
+  if (!isVesting &&!isValid(lockUntilDate)) {
     errors.lockUntilDate = [t('Please select a valid date')]
   }
 
-  if (!isValid(lockUntilTime)) {
+  if (!isVesting && !isValid(lockUntilTime)) {
     errors.lockUntilTime = [t('Please select a valid time')]
   }
 
-  if (combineDateAndTime(lockUntilDate,lockUntilTime) < Date.now()/1e3){
+  if (!isVesting && combineDateAndTime(lockUntilDate,lockUntilTime) < Date.now()/1e3){
     errors.lockUntilTime = [t('Unlock date and time cannot be in past.')]
   }
 
