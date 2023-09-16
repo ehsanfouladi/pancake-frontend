@@ -373,12 +373,12 @@ const Detail = ()=>{
     
     const getFormattedTime=(unixTime:number):string =>{
       
-        const t = new Date(unixTime * 1000);
+        const tt = new Date(unixTime * 1000);
         
         // t.setSeconds(unixTime/1000)
     
         
-        return `${t.toDateString()} ${t.toLocaleTimeString()}` 
+        return `${tt.toDateString()} ${tt.toLocaleTimeString()}` 
       }
       // _.throttle(getFormattedTime,10000)
       if(!id ){ return (<Loading />)}
