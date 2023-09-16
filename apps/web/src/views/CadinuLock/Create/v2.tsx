@@ -132,9 +132,9 @@ const ReferenceElement = styled.div`
             true,
             parseEther(`${amount}`),
             combineDateAndTime(tgeDate, tgeTime),
-            BigInt(tgePercent * 10),
+            BigInt(tgePercent * 100),
             BigInt(cycle * 24 * 3600),
-            BigInt(cycleReleasePercent * 10),
+            BigInt(cycleReleasePercent * 100),
             title
           ] : [
             ownerIsMe ? account : owner,
@@ -142,9 +142,9 @@ const ReferenceElement = styled.div`
             true,
             parseEther(`${amount}`),
             combineDateAndTime(tgeDate, tgeTime),
-            BigInt(tgePercent * 10),
+            BigInt(tgePercent * 100),
             BigInt(cycle * 24 * 3600),
-            BigInt(cycleReleasePercent * 10),
+            BigInt(cycleReleasePercent * 100),
             title
           ] 
           : isPayWithCbon ? 
