@@ -253,7 +253,7 @@ const SelectNft = ()=>{
     functionName: isPayWithCbon ? 'lockByCbon': 'lockByNative',
     args: [
       ownerIsMe? account as Address: owner as Address,
-      BigInt(selectedNft),
+      BigInt(nftId),
       nfp as Address,
       combineDateAndTime(lockUntilDate,lockUntilTime),
       title

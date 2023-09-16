@@ -20,7 +20,7 @@ const Footer = () => {
         <Flex alignItems="center" justifyContent="space-between">
           <Box pr="32px">
             <Heading as="h2" scale="lg" mb="16px">
-              {t('Got a question?')}
+              {t('Cadinu Lock')}
             </Heading>
             <Text as="p">
               {t('Introducing Cadinu Lock, the ultimate solution for securing your tokens, liquidities and NFT positions (liquidity V3).')}
