@@ -143,14 +143,14 @@ const Detail = ()=>{
       const vestingTable = []
 
       const bpsToAmount = (bps:number) =>{
-        const totalAmount = isSuccess && (formatRawAmount(Number(detail?.amount).toString(), Number(tokenDetails[2].result), 18))
+        const totalAmount = isSuccess && (formatUnits(detail?.amount, Number(tokenDetails[2].result)))
         const tgeAmount = bps/100 * Number(totalAmount) / 100
         return tgeAmount.toLocaleString(undefined,{maximumFractionDigits: 18})
       }
       if(detail){
         const {tgeBps, tgeDate, cycle, cycleBps:CRP} = detail
         if (currentPage === 1){
-          const firstRow = {
+          const firstRow = { 
             id: 0,
             unlockTime: getFormattedTime(tgeDate),
             unlockedAmount: `${bpsToAmount(tgeBps)} (${tgeBps/100}%)`,

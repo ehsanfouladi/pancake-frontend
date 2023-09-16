@@ -79,6 +79,14 @@ export default function ShowCase() {
       destination: '/pools',
       enabled: true,
     },
+    {
+      title: 'Lock',
+      image: '/images/cadinu-apps/cadinu-Lock.png',
+      alt: 'Cadinu-Lock',
+      desc: " Secure your tokens, liquidity V2 (LP) and liquidity V3 (NFT Position) with Cadinu Lock. Protect your assets from unauthorized access and manipulation. Choose peace of mind today.",
+      destination: '/cadinu-lock',
+      enabled: true,
+    },
   ]
 
   const StyledHeading = styled(Heading)`

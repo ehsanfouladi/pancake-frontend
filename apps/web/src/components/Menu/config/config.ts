@@ -152,6 +152,13 @@ const config: (
           image: '/images/voting/lottery.png',
           status: { text: t('New'), color: 'success' },
         },
+        {
+          label: t('Lock'),
+          href: '/cadinu-lock',
+          supportChainIds: SUPPORT_ONLY_BSC,
+          image: '/images/voting/lottery.png',
+          status: { text: t('New'), color: 'success' },
+        },
       ].map((item) => addMenuItemSupported(item, chainId)),
     },
   ].map((item) => addMenuItemSupported(item, chainId))
