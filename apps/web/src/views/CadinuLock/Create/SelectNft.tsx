@@ -141,13 +141,13 @@ const SelectNft = ()=>{
   const cadinuLockContract = useCadinuLockV3Contract()
   const { setLastUpdated, allowance } = useCbonApprovalStatus(cadinuLockContract.address)
   const { setLastUpdated:setNftLastUpdated, isApproved:isNftApproved } = useNftApprovalStatus(
-    cadinuLockContract.address,nfp,selectedNft
+    cadinuLockContract.address,nfp,nftId
     )
   const {handleApprove:approveCbon} = useCbonApprove(
     setLastUpdated, cadinuLockContract.address, 'Cbon approved successfully!'
     )
   const {handleApprove:approveNft, pendingTx:isApproving} = useNftApprove(
-    setNftLastUpdated, cadinuLockContract.address, 'Position approved successfully!',selectedNft, nfp
+    setNftLastUpdated, cadinuLockContract.address, 'Position approved successfully!',nftId, nfp
     )
   
   const formErrors = getv3FormErrors(state, t,ownerIsMe)
