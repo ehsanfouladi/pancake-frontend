@@ -23,17 +23,21 @@ const Footer = () => {
               {t('Got a question?')}
             </Heading>
             <Text as="p">
-              {t('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ')}
+              {t('Introducing Cadinu Lock, the ultimate solution for securing your tokens, liquidities and NFT positions (liquidity V3).')}
             </Text>
             <Text as="p" mb="16px">
               {t(
-                "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ",
+                "With Cadinu Lock, you can now have complete peace of mind knowing that your valuable assets are protected from any unauthorized access or manipulation. This innovative product offers a seamless and user-friendly interface, allowing you to effortlessly lock and safeguard your digital assets with just a few clicks. Whether you're a seasoned trader, token holder or a liquidity provider, Cadinu Lock ensures that your investments remain safe and secure.",
               )}
             </Text>
-
-            <Link href="https://cadinu.io" passHref prefetch={false}>
+            <Text as="p" mb="16px">
+              {t(
+                "Don't compromise on the security of your assets – choose Cadinu Lock today and unlock a worry-free experience in the world of decentralized finance.",
+              )}
+            </Text>
+            {/* <Link href="https://cadinu.io" passHref prefetch={false}>
               <Button startIcon={<MoreIcon color="currentColor" width="24px" />}>{t('Read More')}</Button>
-            </Link>
+            </Link> */}
           </Box>
           {/* <DesktopImage src="/images/voting/voting-bunny.png" width={173} height={234} /> */}
         </Flex>
