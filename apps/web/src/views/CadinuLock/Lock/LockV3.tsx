@@ -210,7 +210,17 @@ const {
         data[0]?.result.map(res=>
           fetchedNfts.push(res)
           )
+          console.log('fetchedNfts',fetchedNfts);
+      
+          if(lockId!==null && lockId!=='undefined'){
+            console.log('>>>>>',lockId);
+            
+            const temp = fetchedNfts.filter(nft=>nft.lockId === BigInt(Number(lockId)))
+            setNfts(temp)
+          }else{
           setNfts(fetchedNfts)
+
+          }
           setCardTitle(data[1]?.result)
           const Ali = []
           fetchedNfts.map(async (nft)=>  {
@@ -249,7 +259,10 @@ const {
       const fetchedNfts = []
       data[0]?.result[1].map(res=> fetchedNfts.push(res))
 
-      setNfts(fetchedNfts.filter(nft=>nft.lockId === BigInt(lockId)))
+      console.log('fetchedNfts',fetchedNfts);
+      
+
+      setNfts(fetchedNfts.filter(nft=>nft.lockId === Number(lockId)))
       setCardTitle(data[1]?.result)
 
       const Ali = []

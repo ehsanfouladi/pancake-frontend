@@ -197,13 +197,14 @@ const Overview = () => {
   if(!tokenId){
     return <Loading />
   }
+  const {lockId} = query
   if(filterState === CadinuLockState.LIQUIDITY_V3){
     if(isMyLock==='true'){
-      const {lockId} = query
+      
     return <LockV3 tokenId = {tokenId as Address} lockId={lockId as string} isMyLock />
 
     }
-    return <LockV3 tokenId = {tokenId as Address} lockId='null' isMyLock ={false} />
+    return <LockV3 tokenId = {tokenId as Address}  isMyLock ={false} lockId={lockId ? lockId as string : null} />
   }
   return (
     <>
