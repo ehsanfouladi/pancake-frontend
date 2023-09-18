@@ -491,7 +491,7 @@ const {
                                 verticalAlign='center'
 
                                 >
-                                <Text>Unlcok Your Asset or Collect Fee</Text>
+                                <Text>Unlock Your Asset or Collect Fee</Text>
                                 <Button width="40%" mt="5px" mx='5px' disabled={
                                     nft.isUnlocked 
                                     || !account 
