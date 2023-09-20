@@ -1,36 +1,33 @@
+import { useTranslation } from '@pancakeswap/localization'
+import { ChainId, WNATIVE } from '@pancakeswap/sdk'
 import {
   Box,
   Button,
+  CopyAddress,
   Flex,
+  FlexGap,
+  InfoIcon,
   InjectedModalProps,
   LinkExternal,
   Message,
   Skeleton,
   Text,
-  CopyAddress,
-  FlexGap,
-  useTooltip,
   TooltipText,
-  InfoIcon,
+  useTooltip,
 } from '@pancakeswap/uikit'
-import { ChainId, WNATIVE } from '@pancakeswap/sdk'
+import { ChainLogo } from 'components/Logo/ChainLogo'
 import { FetchStatus } from 'config/constants/types'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import { useTranslation } from '@pancakeswap/localization'
 import useAuth from 'hooks/useAuth'
 import useNativeCurrency from 'hooks/useNativeCurrency'
 import useTokenBalance, { useBSCCadinuBalance, useBSCCbonBalance } from 'hooks/useTokenBalance'
-import { ChainLogo } from 'components/Logo/ChainLogo'
-
-import { getBlockExploreLink, getBlockExploreName } from 'utils'
-import { getFullDisplayBalance, formatBigInt } from '@pancakeswap/utils/formatBalance'
-import { useBalance } from 'wagmi'
-import { useDomainNameForAddress } from 'hooks/useDomain'
-import { isMobile } from 'react-device-detect'
-import { useState } from 'react'
+import { formatBigInt, getFullDisplayBalance } from '@pancakeswap/utils/formatBalance'
 import InternalLink from 'components/Links'
-import CakeBenefitsCard from './CakeBenefitsCard'
-import { bscTokens } from '@pancakeswap/tokens'
+import { useDomainNameForAddress } from 'hooks/useDomain'
+import { useState } from 'react'
+import { isMobile } from 'react-device-detect'
+import { getBlockExploreLink, getBlockExploreName } from 'utils'
+import { useBalance } from 'wagmi'
 
 const COLORS = {
   ETH: '#627EEA',
