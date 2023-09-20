@@ -29,7 +29,8 @@ const positionManagers = {
 export const V3_SUBGRAPH_CLIENTS = {
     "0x46A15B0b27311cedF172AB29E4f4766fbE7F4364": new GraphQLClient('https://api.thegraph.com/subgraphs/name/pancakeswap/exchange-v3-bsc', { fetch }),
     "0x0C26558A7Bf8be790774fc84De8e5229A4dB5BA1":new GraphQLClient('https://api.thegraph.com/subgraphs/name/cadinu/exchange-v3-bsc', { fetch }),
-    "0x7b8A01B39D58278b5DE7e48c8449c9f4F5170613" :  new GraphQLClient('https://api.thegraph.com/subgraphs/name/ianlapham/uniswap-v3-bsc', { fetch })
+    // "0x7b8A01B39D58278b5DE7e48c8449c9f4F5170613" :  new GraphQLClient('https://api.thegraph.com/subgraphs/name/ianlapham/uniswap-v3-bsc', { fetch })
+    "0x7b8A01B39D58278b5DE7e48c8449c9f4F5170613" :  new GraphQLClient('https://api.thegraph.com/subgraphs/name/m-ali-manouchehri/v3-subgraph-bsc', { fetch })
   } as Record<string, GraphQLClient>
 
 

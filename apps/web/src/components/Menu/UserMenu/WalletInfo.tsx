@@ -19,7 +19,7 @@ import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useTranslation } from '@pancakeswap/localization'
 import useAuth from 'hooks/useAuth'
 import useNativeCurrency from 'hooks/useNativeCurrency'
-import useTokenBalance, { useBSCCadinuBalance } from 'hooks/useTokenBalance'
+import useTokenBalance, { useBSCCadinuBalance, useBSCCbonBalance } from 'hooks/useTokenBalance'
 import { ChainLogo } from 'components/Logo/ChainLogo'
 
 import { getBlockExploreLink, getBlockExploreName } from 'utils'
@@ -30,6 +30,7 @@ import { isMobile } from 'react-device-detect'
 import { useState } from 'react'
 import InternalLink from 'components/Links'
 import CakeBenefitsCard from './CakeBenefitsCard'
+import { bscTokens } from '@pancakeswap/tokens'
 
 const COLORS = {
   ETH: '#627EEA',
@@ -55,6 +56,7 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ hasLowNativeBalance, onDismiss 
   const { balance: wNativeBalance, fetchStatus: wNativeFetchStatus } = useTokenBalance(wNativeToken?.address)
   const { balance: wBNBBalance, fetchStatus: wBNBFetchStatus } = useTokenBalance(wBNBToken?.address, true)
   const { balance: cadinuBalance, fetchStatus: cadinuFetchStatus } = useBSCCadinuBalance()
+  const { balance: cbonBalance, fetchStatus: cbonFetchStatus } = useBSCCbonBalance()
   const [mobileTooltipShow, setMobileTooltipShow] = useState(false)
   const { logout } = useAuth()
 
@@ -203,6 +205,14 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ hasLowNativeBalance, onDismiss 
             <Skeleton height="22px" width="60px" />
           ) : (
             <Text>{formatBigInt(cadinuBalance, 3)}</Text>
+          )}
+        </Flex>
+        <Flex alignItems="center" justifyContent="space-between">
+          <Text color="textSubtle">{t('CBON Balance')}</Text>
+          {cadinuFetchStatus !== FetchStatus.Fetched ? (
+            <Skeleton height="22px" width="60px" />
+          ) : (
+            <Text>{formatBigInt(cbonBalance, 3)}</Text>
           )}
         </Flex>
       </Box>

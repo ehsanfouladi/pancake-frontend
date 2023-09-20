@@ -1,5 +1,5 @@
 import { ChainId } from '@pancakeswap/sdk'
-import { CAKE, CADINU } from '@pancakeswap/tokens'
+import { CAKE, CADINU, CBON } from '@pancakeswap/tokens'
 
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import BigNumber from 'bignumber.js'
@@ -53,4 +53,9 @@ export const useBSCCadinuBalance = () => {
   return { balance: BigInt(balance.toString()), fetchStatus }
 }
 
+export const useBSCCbonBalance = () => {
+  const { balance, fetchStatus } = useTokenBalance(CBON[ChainId.BSC]?.address, true)
+
+  return { balance: BigInt(balance.toString()), fetchStatus }
+}
 export default useTokenBalance

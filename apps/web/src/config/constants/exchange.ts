@@ -41,7 +41,7 @@ export const CHAIN_REFRESH_TIME = {
 export const SUGGESTED_BASES: ChainTokenList = {
   [ChainId.ETHEREUM]: [USDC[ChainId.ETHEREUM], USDT[ChainId.ETHEREUM], WNATIVE[ChainId.ETHEREUM], WBTC_ETH],
   [ChainId.GOERLI]: [USDC[ChainId.GOERLI], WNATIVE[ChainId.GOERLI], BUSD[ChainId.GOERLI]],
-  [ChainId.BSC]: [bscTokens.usdt, bscTokens.cadinu, bscTokens.btcb],
+  [ChainId.BSC]: [ bscTokens.cadinu, bscTokens.cbon, bscTokens.usdt, bscTokens.btcb],
   [ChainId.BSC_TESTNET]: [bscTestnetTokens.wbnb, bscTestnetTokens.cake, bscTestnetTokens.busd],
   [ChainId.ARBITRUM_ONE]: [arbitrumTokens.weth, arbitrumTokens.usdt, arbitrumTokens.usdc],
   [ChainId.ARBITRUM_GOERLI]: [arbitrumGoerliTokens.weth, arbitrumGoerliTokens.usdc],
@@ -56,7 +56,7 @@ export const SUGGESTED_BASES: ChainTokenList = {
 export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
   [ChainId.ETHEREUM]: [USDC[ChainId.ETHEREUM], WNATIVE[ChainId.ETHEREUM], USDT[ChainId.ETHEREUM], WBTC_ETH],
   [ChainId.GOERLI]: [USDC[ChainId.GOERLI], WNATIVE[ChainId.GOERLI], BUSD[ChainId.GOERLI]],
-  [ChainId.BSC]: [bscTokens.wbnb, bscTokens.cadinu, bscTokens.busd, bscTokens.usdt, bscTokens.dai],
+  [ChainId.BSC]: [bscTokens.wbnb, bscTokens.cadinu, bscTokens.cbon, bscTokens.busd, bscTokens.usdt, bscTokens.dai],
   [ChainId.BSC_TESTNET]: [bscTestnetTokens.wbnb, bscTestnetTokens.cake, bscTestnetTokens.busd],
   [ChainId.ARBITRUM_ONE]: [arbitrumTokens.weth, arbitrumTokens.usdt, arbitrumTokens.usdc],
   [ChainId.ARBITRUM_GOERLI]: [arbitrumGoerliTokens.weth, arbitrumGoerliTokens.usdc],
@@ -75,6 +75,7 @@ export const PINNED_PAIRS: { readonly [chainId in ChainId]?: [Token, Token][] } 
   ],
   [ChainId.BSC]: [
     [bscTokens.cadinu, bscTokens.wbnb],
+    [bscTokens.cadinu, bscTokens.cbon],
     [bscTokens.busd, bscTokens.usdt],
     [bscTokens.dai, bscTokens.usdt],
   ],
