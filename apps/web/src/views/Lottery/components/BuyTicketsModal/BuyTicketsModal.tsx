@@ -310,7 +310,8 @@ const BuyTicketsModal: React.FC<React.PropsWithChildren<BuyTicketsModalProps>> =
           <Text mr="4px" bold>
             {t('Tickets')}
           </Text>
-          <Ticket />
+          <img src="/images/lottery/cadinu_ticket_3.svg" width="45px" height="50px" alt="" />
+          {/* <Ticket /> */}
         </Flex>
       </Flex>
       <BalanceInput
@@ -449,7 +450,7 @@ const BuyTicketsModal: React.FC<React.PropsWithChildren<BuyTicketsModalProps>> =
 
         <Text mt="24px" fontSize="12px" color="textSubtle">
           {t(
-            '"Buy Instantly" chooses random numbers, with no duplicates among your tickets. Prices are set before each round starts, equal to $5 at that time. Purchases are final.',
+            '"Buy Instantly" chooses random numbers, with no duplicates among your tickets. Prices are set before each round starts, equal to $3 at that time. Purchases are final.',
           )}
         </Text>
       </Flex>
