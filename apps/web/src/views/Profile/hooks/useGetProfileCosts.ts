@@ -47,9 +47,9 @@ const useGetProfileCosts = () => {
         })
 
         setCosts({
-          numberCakeToReactivate,
-          numberCakeToRegister,
-          numberCakeToUpdate,
+          numberCakeToReactivate: 0n,
+          numberCakeToRegister: 0n,
+          numberCakeToUpdate: 0n,
         })
         setIsLoading(false)
       } catch (error) {

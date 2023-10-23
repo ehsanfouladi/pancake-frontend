@@ -1,10 +1,9 @@
+import { ContextApi, useTranslation } from '@pancakeswap/localization'
 import { InjectedModalProps, Modal } from '@pancakeswap/uikit'
-import { useTranslation, ContextApi } from '@pancakeswap/localization'
-import useEditProfile, { Views } from './reducer'
-import StartView from './StartView'
-import PauseProfileView from './PauseProfileView'
 import ChangeProfilePicView from './ChangeProfilePicView'
-import ApproveCakeView from './ApproveCakeView'
+import PauseProfileView from './PauseProfileView'
+import StartView from './StartView'
+import useEditProfile, { Views } from './reducer'
 
 interface EditProfileModalProps extends InjectedModalProps {
   onSuccess?: () => void
@@ -18,15 +17,15 @@ const viewTitle = (t: ContextApi['t'], currentView: Views) => {
       return t('Change Profile Pic')
     case Views.REMOVE:
       return t('Remove Profile Pic')
-    case Views.APPROVE:
-      return t('Enable CAKE')
+    // case Views.APPROVE:
+    //   return t('Enable CAKE')
     default:
       return ''
   }
 }
 
 const EditProfileModal: React.FC<React.PropsWithChildren<EditProfileModalProps>> = ({ onDismiss, onSuccess }) => {
-  const { currentView, goToChange, goToRemove, goToApprove, goPrevious } = useEditProfile()
+  const { currentView, goToChange, goToRemove, goPrevious } = useEditProfile()
   const { t } = useTranslation()
 
   const isStartView = currentView === Views.START
@@ -42,11 +41,11 @@ const EditProfileModal: React.FC<React.PropsWithChildren<EditProfileModalProps>>
     >
       <div style={{ maxWidth: '400px' }}>
         {currentView === Views.START && (
-          <StartView goToApprove={goToApprove} goToChange={goToChange} goToRemove={goToRemove} onDismiss={onDismiss} />
+          <StartView goToChange={goToChange} goToRemove={goToRemove} onDismiss={onDismiss} />
         )}
         {currentView === Views.REMOVE && <PauseProfileView onDismiss={onDismiss} onSuccess={onSuccess} />}
         {currentView === Views.CHANGE && <ChangeProfilePicView onDismiss={onDismiss} onSuccess={onSuccess} />}
-        {currentView === Views.APPROVE && <ApproveCakeView goToChange={goToChange} onDismiss={onDismiss} />}
+        {/* {currentView === Views.APPROVE && <ApproveCakeView goToChange={goToChange} onDismiss={onDismiss} />} */}
       </div>
     </Modal>
   )

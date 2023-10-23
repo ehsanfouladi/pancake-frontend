@@ -1,6 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Box, Button, InjectedModalProps, Skeleton, Text, useToast } from '@pancakeswap/uikit'
-import { useAccount, useWalletClient } from 'wagmi'
 import ApproveConfirmButtons from 'components/ApproveConfirmButtons'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
@@ -10,9 +9,10 @@ import { useMemo, useState } from 'react'
 import { useApprovalNfts } from 'state/nftMarket/hooks'
 import { NftLocation } from 'state/nftMarket/types'
 import { useProfile } from 'state/profile/hooks'
-import { getPancakeProfileAddress } from 'utils/addressHelpers'
+import { getCadinuProfileAddress } from 'utils/addressHelpers'
 import { getErc721Contract } from 'utils/contractHelpers'
 import SelectionCard from 'views/ProfileCreation/SelectionCard'
+import { useAccount, useWalletClient } from 'wagmi'
 import { useNftsForAddress } from '../../../Nft/market/hooks/useNftsForAddress'
 
 interface ChangeProfilePicPageProps extends InjectedModalProps {
@@ -38,9 +38,10 @@ const ChangeProfilePicPage: React.FC<React.PropsWithChildren<ChangeProfilePicPag
   const nftsInWallet = useMemo(() => nfts.filter((nft) => nft.location === NftLocation.WALLET), [nfts])
 
   const { data } = useApprovalNfts(nftsInWallet)
+  
 
   const isAlreadyApproved = useMemo(() => {
-    return data ? !!data[selectedNft.tokenId] : false
+    return data ? !!data[`${selectedNft.collectionAddress}#${selectedNft.tokenId}`] : false
   }, [data, selectedNft.tokenId])
 
   const { isApproving, isApproved, isConfirmed, isConfirming, handleApprove, handleConfirm } =
@@ -49,22 +50,22 @@ const ChangeProfilePicPage: React.FC<React.PropsWithChildren<ChangeProfilePicPag
         if (!selectedNft.tokenId) return true
         const contract = getErc721Contract(selectedNft.collectionAddress, signer)
         const approvedAddress = await contract.read.getApproved([selectedNft.tokenId])
-        return approvedAddress !== getPancakeProfileAddress()
+        return approvedAddress !== getCadinuProfileAddress()
       },
       onApprove: () => {
         const contract = getErc721Contract(selectedNft.collectionAddress, signer)
 
-        return callWithGasPrice(contract, 'approve', [getPancakeProfileAddress(), selectedNft.tokenId])
+        return callWithGasPrice(contract, 'approve', [getCadinuProfileAddress(), selectedNft.tokenId])
       },
       onConfirm: () => {
         if (!profile.isActive) {
           return callWithGasPrice(profileContract, 'reactivateProfile', [
             selectedNft.collectionAddress,
-            selectedNft.tokenId,
+            BigInt(selectedNft.tokenId),
           ])
         }
+        return callWithGasPrice(profileContract, 'updateProfile', [selectedNft.collectionAddress, BigInt(selectedNft.tokenId)])
 
-        return callWithGasPrice(profileContract, 'updateProfile', [selectedNft.collectionAddress, selectedNft.tokenId])
       },
       onSuccess: async ({ receipt }) => {
         // Re-fetch profile
@@ -99,11 +100,12 @@ const ChangeProfilePicPage: React.FC<React.PropsWithChildren<ChangeProfilePicPag
                 key={`${walletNft.collectionAddress}#${walletNft.tokenId}`}
                 value={walletNft.tokenId}
                 image={walletNft.image.thumbnail}
-                isChecked={walletNft.tokenId === selectedNft.tokenId}
+                isChecked={walletNft.collectionAddress === selectedNft.collectionAddress &&
+                  walletNft.tokenId === selectedNft.tokenId  }
                 onChange={handleChange}
                 disabled={isApproving || isConfirming || isConfirmed}
               >
-                <Text bold>{walletNft.name}</Text>
+                <Text bold>{walletNft.name} #{walletNft.tokenId}</Text>
               </SelectionCard>
             )
           })}
@@ -114,7 +116,7 @@ const ChangeProfilePicPage: React.FC<React.PropsWithChildren<ChangeProfilePicPag
             {t('Sorry! You don’t have any eligible Collectibles in your wallet to use!')}
           </Text>
           <Text as="p" color="textSubtle" mb="24px">
-            {t('Make sure you have a Pancake Collectible in your wallet and try again!')}
+            {t('Make sure you have a Cadinu Collectible in your wallet and try again!')}
           </Text>
         </>
       )}

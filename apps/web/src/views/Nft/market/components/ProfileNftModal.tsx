@@ -1,12 +1,12 @@
-import { InjectedModalProps, Modal, Flex, Text, Button, useModal, Grid, LinkExternal } from '@pancakeswap/uikit'
-import useTheme from 'hooks/useTheme'
-import styled from 'styled-components'
-import { NftToken } from 'state/nftMarket/types'
 import { useTranslation } from '@pancakeswap/localization'
+import { Button, Flex, Grid, InjectedModalProps, LinkExternal, Modal, Text, useModal } from '@pancakeswap/uikit'
+import useTheme from 'hooks/useTheme'
+import { NftToken } from 'state/nftMarket/types'
+import styled from 'styled-components'
 import { getBscScanLinkForNft, isAddress } from 'utils'
-import { HorizontalDivider, RoundedImage } from './BuySellModals/shared/styles'
 import EditProfileModal from '../../../Profile/components/EditProfileModal'
-import { nftsBaseUrl, pancakeBunniesAddress } from '../constants'
+import { pancakeBunniesAddress } from '../constants'
+import { RoundedImage } from './BuySellModals/shared/styles'
 
 export const StyledModal = styled(Modal)`
   & > div:last-child {
@@ -51,14 +51,14 @@ const ProfileNftModal: React.FC<React.PropsWithChildren<ProfileNftModalProps>> =
             </Text>
           </Flex>
           <Flex justifyContent="space-between" flex="3">
-            <LinkExternal
+            {/* <LinkExternal
               p="0px"
               height="16px"
               href={`${nftsBaseUrl}/collections/${nft.collectionAddress}/${itemPageUrlId}`}
             >
               {t('View Item')}
             </LinkExternal>
-            <HorizontalDivider />
+            <HorizontalDivider /> */}
             <LinkExternal
               isBscScan
               p="0px"
@@ -70,7 +70,7 @@ const ProfileNftModal: React.FC<React.PropsWithChildren<ProfileNftModalProps>> =
           </Flex>
         </Flex>
         <TextWrapper p="24px 16px" flexDirection="column">
-          <Text mb="16px">{t("You're using this NFT as your Pancake Profile picture")}</Text>
+          <Text mb="16px">{t("You're using this NFT as your Cadinu Profile picture")}</Text>
           <Text color="textSubtle" mb="16px" fontSize="14px">
             {t(
               'Removing it will suspend your profile, and you won’t be able to earn points, participate in team activities, or be eligible for new NFT drops.',

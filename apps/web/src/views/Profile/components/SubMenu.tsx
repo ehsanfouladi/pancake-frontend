@@ -13,10 +13,10 @@ const SubMenuComponent: React.FC<React.PropsWithChildren> = () => {
       label: t('Items'),
       href: `/profile/${accountAddress}`,
     },
-    {
-      label: t('Activity'),
-      href: `/profile/${accountAddress}/activity`,
-    },
+    // {
+    //   label: t('Activity'),
+    //   href: `/profile/${accountAddress}/activity`,
+    // },
   ]
 
   return <BaseSubMenu items={ItemsConfig} activeItem={asPath} justifyContent="flex-start" mb="18px" />

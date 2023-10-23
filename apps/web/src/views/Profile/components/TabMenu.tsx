@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react'
 import { useTranslation } from '@pancakeswap/localization'
-import styled from 'styled-components'
 import { Flex, NextLinkFromReactRouter } from '@pancakeswap/uikit'
 import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
+import styled from 'styled-components'
 
 const Tab = styled.button<{ $active: boolean }>`
   display: inline-flex;
@@ -27,20 +27,30 @@ const TabMenu = () => {
   const { pathname, query } = useRouter()
   const { accountAddress } = query
   const [achievementsActive, setIsAchievementsActive] = useState(pathname.includes('achievements'))
+  const [referralActive, setIsReferralActive] = useState(pathname.includes('referral'))
 
   useEffect(() => {
     setIsAchievementsActive(pathname.includes('achievements'))
+    setIsReferralActive(pathname.includes('referral'))
   }, [pathname])
 
   return (
     <Flex>
       <Tab
         onClick={() => setIsAchievementsActive(false)}
-        $active={!achievementsActive}
+        $active={!achievementsActive && !referralActive}
         as={NextLinkFromReactRouter}
         to={`/profile/${accountAddress}`}
       >
         NFTs
+      </Tab>
+      <Tab
+        onClick={() => setIsReferralActive(true)}
+        $active={referralActive}
+        as={NextLinkFromReactRouter}
+        to={`/profile/${accountAddress}/referral`}
+      >
+        {t('Referral Status')}
       </Tab>
       <Tab
         onClick={() => setIsAchievementsActive(true)}
@@ -50,6 +60,7 @@ const TabMenu = () => {
       >
         {t('Achievements')}
       </Tab>
+      
     </Flex>
   )
 }

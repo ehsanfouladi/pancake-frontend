@@ -1,13 +1,18 @@
-import { CAKE, CADINU, CBON } from '@pancakeswap/tokens'
+import { CADINU, CAKE, CBON } from '@pancakeswap/tokens'
 
 // Addresses
 import {
+  getAffiliateProgramAddress,
   getBCakeFarmBoosterAddress,
   getBCakeFarmBoosterProxyFactoryAddress,
   getBCakeFarmBoosterV3Address,
   getBunnyFactoryAddress,
+  getCadinuLockAddress,
+  getCadinuLockv3Address,
+  getCadinuProfileAddress,
   getCakeFlexibleSideVaultAddress,
   getCakeVaultAddress,
+  getClaimAddress,
   getCrossFarmingReceiverAddress,
   getCrossFarmingSenderAddress,
   getFarmAuctionAddress,
@@ -16,11 +21,10 @@ import {
   getMasterChefV3Address,
   getNftMarketAddress,
   getNftSaleAddress,
-  getNonBscVaultAddress,
-  getPancakeProfileAddress,
-  getPancakeSquadAddress,
+  getNonBscVaultAddress, getPancakeSquadAddress,
   getPointCenterIfoAddress,
   getPotteryDrawAddress,
+  getPreSaleCbonAddress,
   getPredictionsV1Address,
   getStableSwapNativeHelperAddress,
   getTradingCompetitionAddressEaster,
@@ -28,14 +32,9 @@ import {
   getTradingCompetitionAddressMoD,
   getTradingCompetitionAddressMobox,
   getTradingRewardAddress,
-  getV3AirdropAddress,
-  getV3MigratorAddress,
-  getAffiliateProgramAddress,
   getTradingRewardTopTradesAddress,
-  getClaimAddress,
-  getPreSaleCbonAddress,
-  getCadinuLockAddress,
-  getCadinuLockv3Address,
+  getV3AirdropAddress,
+  getV3MigratorAddress
 } from 'utils/addressHelpers'
 
 // ABI
@@ -49,7 +48,7 @@ import { predictionsV1ABI } from 'config/abi/predictionsV1'
 import { stableSwapNativeHelperABI } from 'config/abi/stableSwapNativeHelper'
 
 
-import {claimADAbi} from 'config/abi/claimAD'
+import { claimADAbi } from 'config/abi/claimAD'
 
 import {
   cakeFlexibleSideVaultV2ABI,
@@ -66,6 +65,10 @@ import { bCakeFarmBoosterProxyFactoryABI } from 'config/abi/bCakeFarmBoosterProx
 import { bCakeFarmBoosterV3ABI } from 'config/abi/bCakeFarmBoosterV3'
 import { bCakeProxyABI } from 'config/abi/bCakeProxy'
 import { bunnyFactoryABI } from 'config/abi/bunnyFactory'
+import { CadinuLevelNftsAbi } from 'config/abi/cadinuLevelNfts'
+import { CadinuLockAbi } from 'config/abi/cadinuLock'
+import { CadinuLockV3Abi } from 'config/abi/cadinuLockV3'
+import { cadinuProfileAbi } from 'config/abi/cadinuProfile'
 import { chainlinkOracleABI } from 'config/abi/chainlinkOracle'
 import { crossFarmingReceiverABI } from 'config/abi/crossFarmingReceiver'
 import { farmAuctionABI } from 'config/abi/farmAuction'
@@ -73,10 +76,10 @@ import { lotteryV2ABI } from 'config/abi/lotteryV2'
 import { lpTokenABI } from 'config/abi/lpTokenAbi'
 import { masterChefV2ABI } from 'config/abi/masterchefV2'
 import { nftMarketABI } from 'config/abi/nftMarket'
-import { pancakeProfileABI } from 'config/abi/pancakeProfile'
 import { pancakeSquadABI } from 'config/abi/pancakeSquad'
 import { potteryDrawABI } from 'config/abi/potteryDrawAbi'
 import { potteryVaultABI } from 'config/abi/potteryVaultAbi'
+import { preSaleCbonAbi } from 'config/abi/preSaleCbon'
 import { predictionsV2ABI } from 'config/abi/predictionsV2'
 import { tradingCompetitionEasterABI } from 'config/abi/tradingCompetitionEaster'
 import { tradingCompetitionFanTokenABI } from 'config/abi/tradingCompetitionFanToken'
@@ -88,9 +91,6 @@ import { v3MigratorABI } from 'config/abi/v3Migrator'
 import { getViemClients, viemClients } from 'utils/viem'
 import { Abi, PublicClient, WalletClient, getContract as viemGetContract } from 'viem'
 import { Address, erc20ABI, erc721ABI } from 'wagmi'
-import { preSaleCbonAbi } from 'config/abi/preSaleCbon'
-import { CadinuLockAbi} from 'config/abi/cadinuLock'
-import { CadinuLockV3Abi } from 'config/abi/cadinuLockV3'
 
 export const getContract = <TAbi extends Abi | unknown[], TWalletClient extends WalletClient>({
   abi,
@@ -160,7 +160,7 @@ export const getCbonContract = (chainId?: number) => {
 }
 
 export const getProfileContract = (signer?: WalletClient) => {
-  return getContract({ abi: pancakeProfileABI, address: getPancakeProfileAddress(), signer })
+  return getContract({ abi: cadinuProfileAbi, address: getCadinuProfileAddress(), signer })
 }
 
 export const getBunnyFactoryContract = (signer?: WalletClient) => {
@@ -438,4 +438,8 @@ export const getCadinuLockContract = (signer?: WalletClient) => {
 
 export const getCadinuLockV3Contract = (signer?: WalletClient) => {
   return getContract({ abi: CadinuLockV3Abi, address: getCadinuLockv3Address(), signer })
+}
+
+export const getCadinuLevelNftContract = (address: Address, signer?: WalletClient) => {
+  return getContract({ abi: CadinuLevelNftsAbi, address, signer })
 }

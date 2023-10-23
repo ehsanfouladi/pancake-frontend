@@ -1,17 +1,17 @@
-import { isAddress } from 'utils'
-import { useAtom } from 'jotai'
 import { TFetchStatus } from 'config/constants/types'
-import { getPancakeProfileAddress } from 'utils/addressHelpers'
+import { useAtom } from 'jotai'
+import isEmpty from 'lodash/isEmpty'
+import shuffle from 'lodash/shuffle'
 import useSWR from 'swr'
 import useSWRImmutable from 'swr/immutable'
-import isEmpty from 'lodash/isEmpty'
-import { useContractReads, erc721ABI } from 'wagmi'
-import shuffle from 'lodash/shuffle'
+import { isAddress } from 'utils'
+import { getCadinuProfileAddress } from 'utils/addressHelpers'
+import { erc721ABI, useContractReads } from 'wagmi'
 
 import fromPairs from 'lodash/fromPairs'
-import { ApiCollections, NftToken, Collection, NftAttribute, MarketEvent } from './types'
+import { nftMarketActivityFiltersAtom, nftMarketFiltersAtom, tryVideoNftMediaAtom } from './atoms'
 import { getCollection, getCollections } from './helpers'
-import { nftMarketActivityFiltersAtom, tryVideoNftMediaAtom, nftMarketFiltersAtom } from './atoms'
+import { ApiCollections, Collection, MarketEvent, NftAttribute, NftToken } from './types'
 
 const DEFAULT_NFT_ORDERING = { field: 'currentAskPrice', direction: 'asc' as 'asc' | 'desc' }
 const DEFAULT_NFT_ACTIVITY_FILTER = { typeFilters: [], collectionFilters: [] }
@@ -46,6 +46,7 @@ export const useGetShuffledCollections = (): { data: Collection[]; status: TFetc
 }
 
 export const useApprovalNfts = (nftsInWallet: NftToken[]) => {
+  
   const { data } = useContractReads({
     contracts: nftsInWallet.map(
       (f) =>
@@ -59,14 +60,14 @@ export const useApprovalNfts = (nftsInWallet: NftToken[]) => {
     watch: true,
   })
 
-  const profileAddress = getPancakeProfileAddress()
-
+  const profileAddress = getCadinuProfileAddress()
+  
   const approvedTokenIds = Array.isArray(data)
     ? fromPairs(
         data
           .flat()
           .map((result, index) => [
-            nftsInWallet[index].tokenId,
+            `${nftsInWallet[index].collectionAddress}#${nftsInWallet[index].tokenId}`,
             profileAddress.toLowerCase() === result.result.toLowerCase(),
           ]),
       )

@@ -14,6 +14,8 @@ export const useNftsForAddress = (account: string, profile: Profile, isProfileFe
   const { data: collections } = useGetCollections()
 
   const { nfts, isLoading, refresh } = useCollectionsNftsForAddress(account, profile, isProfileFetching, collections)
+  console.log('nftsssss', nfts);
+  
   return { nfts, isLoading, refresh }
 }
 
@@ -25,6 +27,8 @@ export const useCollectionsNftsForAddress = (
 ) => {
   const resetLaggyRef = useRef(null)
   const previousAccount = usePreviousValue(account)
+  console.log('collections', collections);
+  
 
   if (resetLaggyRef.current && previousAccount !== account) {
     resetLaggyRef.current()
@@ -35,11 +39,11 @@ export const useCollectionsNftsForAddress = (
 
   const profileNftWithCollectionAddress = useMemo(() => {
     if (hasProfileNft) {
-      return {
-        tokenId: profileNftTokenId,
-        collectionAddress: getAddress(profileNftCollectionAddress),
-        nftLocation: NftLocation.PROFILE,
-      }
+        return {
+          tokenId: profileNftTokenId,
+          collectionAddress: getAddress(profileNftCollectionAddress),
+          nftLocation: NftLocation.PROFILE,
+        }
     }
     return null
   }, [profileNftTokenId, profileNftCollectionAddress, hasProfileNft])

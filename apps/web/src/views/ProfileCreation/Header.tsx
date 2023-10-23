@@ -1,7 +1,7 @@
+import { TranslateFunction, useTranslation } from '@pancakeswap/localization'
+import { Breadcrumbs, Button, Heading, Link, Text } from '@pancakeswap/uikit'
 import { useContext } from 'react'
 import styled from 'styled-components'
-import { Breadcrumbs, Heading, Text, Link, Button } from '@pancakeswap/uikit'
-import { useTranslation, TranslateFunction } from '@pancakeswap/localization'
 import { ProfileCreationContext } from './contexts/ProfileCreationProvider'
 
 const Wrapper = styled.div`
@@ -14,7 +14,6 @@ const Wrapper = styled.div`
 const steps = (t: TranslateFunction) => [
   t('Get Starter Collectible'),
   t('Set Profile Picture'),
-  t('Join Team'),
   t('Set Name'),
 ]
 
@@ -31,7 +30,7 @@ const Header: React.FC<React.PropsWithChildren> = () => {
         {t('Show off your stats and collectibles with your unique profile')}
       </Heading>
       <Text color="textSubtle" mb="8px">
-        {t('Total cost: 1.5 CAKE')}
+        {t('Total cost: 110000000 CBON')}
       </Text>
       <Link href="/profile">
         <Button mb="24px" scale="sm" variant="secondary">

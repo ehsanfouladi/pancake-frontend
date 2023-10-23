@@ -98,7 +98,7 @@ const Filters: React.FC<React.PropsWithChildren<FiltersProps>> = ({ address, att
   const nftFilters = useGetNftFilters(address)
 
   const attrsByType: Record<string, NftAttribute[]> = attributes ? groupBy(attributes, (attr) => attr.traitType) : null
-  const uniqueTraitTypes = attrsByType ? Object.keys(attrsByType) : []
+  const uniquetraitTypes = attrsByType ? Object.keys(attrsByType) : []
 
   return (
     <GridContainer>
@@ -118,7 +118,7 @@ const Filters: React.FC<React.PropsWithChildren<FiltersProps>> = ({ address, att
         <SortSelect collectionAddress={address} />
       </SortByControls>
       <ScrollableFlexContainer>
-        {uniqueTraitTypes.map((traitType) => {
+        {uniquetraitTypes.map((traitType) => {
           const attrs = attrsByType[traitType]
           const items: Item[] = attrs.map((attr) => ({
             label: capitalize(attr.value as string),

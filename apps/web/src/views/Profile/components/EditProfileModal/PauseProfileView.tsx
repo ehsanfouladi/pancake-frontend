@@ -1,13 +1,12 @@
-import { useState } from 'react'
-import { AutoRenewIcon, Button, Checkbox, Flex, InjectedModalProps, Text, useToast } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import useGetProfileCosts from 'views/Profile/hooks/useGetProfileCosts'
-import { useProfile } from 'state/profile/hooks'
-import { formatBigInt } from '@pancakeswap/utils/formatBalance'
-import { useProfileContract } from 'hooks/useContract'
+import { AutoRenewIcon, Button, Checkbox, Flex, InjectedModalProps, Text, useToast } from '@pancakeswap/uikit'
+import { ToastDescriptionWithTx } from 'components/Toast'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import useCatchTxError from 'hooks/useCatchTxError'
-import { ToastDescriptionWithTx } from 'components/Toast'
+import { useProfileContract } from 'hooks/useContract'
+import { useState } from 'react'
+import { useProfile } from 'state/profile/hooks'
+import useGetProfileCosts from 'views/Profile/hooks/useGetProfileCosts'
 
 interface PauseProfilePageProps extends InjectedModalProps {
   onSuccess?: () => void
@@ -20,7 +19,7 @@ const PauseProfilePage: React.FC<React.PropsWithChildren<PauseProfilePageProps>>
     costs: { numberCakeToReactivate },
   } = useGetProfileCosts()
   const { t } = useTranslation()
-  const pancakeProfileContract = useProfileContract()
+  const cadinuProfileContract = useProfileContract()
   const { callWithGasPrice } = useCallWithGasPrice()
   const { toastSuccess } = useToast()
   const { fetchWithCatchTxError, loading: isConfirming } = useCatchTxError()
@@ -29,7 +28,7 @@ const PauseProfilePage: React.FC<React.PropsWithChildren<PauseProfilePageProps>>
 
   const handleDeactivateProfile = async () => {
     const receipt = await fetchWithCatchTxError(() => {
-      return callWithGasPrice(pancakeProfileContract, 'pauseProfile')
+      return callWithGasPrice(cadinuProfileContract, 'pauseProfile')
     })
     if (receipt?.status) {
       // Re-fetch profile
@@ -54,9 +53,9 @@ const PauseProfilePage: React.FC<React.PropsWithChildren<PauseProfilePageProps>>
           "While your profile is suspended, you won't be able to earn points, but your achievements and points will stay associated with your profile",
         )}
       </Text>
-      <Text as="p" color="textSubtle" mb="24px">
+      {/* <Text as="p" color="textSubtle" mb="24px">
         {t('Cost to reactivate in the future: %cost% CAKE', { cost: formatBigInt(numberCakeToReactivate) })}
-      </Text>
+      </Text> */}
       <label htmlFor="acknowledgement" style={{ cursor: 'pointer', display: 'block', marginBottom: '24px' }}>
         <Flex alignItems="center">
           <Checkbox id="acknowledgement" checked={isAcknowledged} onChange={handleChange} scale="sm" />

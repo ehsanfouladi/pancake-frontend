@@ -4,7 +4,7 @@ const useGetUsernameWithVisibility = (username: string) => {
   const [userUsernameVisibility, setUserUsernameVisibility] = useUserUsernameVisibility()
 
   return {
-    usernameWithVisibility: username && (userUsernameVisibility ? username : '🐰🐰🐰🐰🐰🐰'),
+    usernameWithVisibility: username && (userUsernameVisibility ? username : '🐶🐶🐶🐶🐶'),
     userUsernameVisibility,
     setUserUsernameVisibility,
   }

@@ -1,33 +1,29 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { ChainId } from '@pancakeswap/sdk'
 import {
-  AutoRenewIcon,
-  Button,
+  AutoRenewIcon, Button,
   Card,
   CardBody,
-  Heading,
-  NextLinkFromReactRouter,
+  Flex,
+  Heading, NextLinkFromReactRouter,
+  OptionProps, Select,
   Skeleton,
   Text,
-  useToast,
+  useToast
 } from '@pancakeswap/uikit'
-import { pancakeProfileABI } from 'config/abi/pancakeProfile'
+import { CadinuLevelNftsAbi } from 'config/abi/cadinuLevelNfts'
+import { cadinuProfileAbi } from 'config/abi/cadinuProfile'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import useCatchTxError from 'hooks/useCatchTxError'
-import { useContext, useEffect, useState } from 'react'
-import { NftLocation } from 'state/nftMarket/types'
-import { useProfile } from 'state/profile/hooks'
+import { useCallback, useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { getPancakeProfileAddress } from 'utils/addressHelpers'
-import { getErc721Contract, getProfileContract } from 'utils/contractHelpers'
-import { publicClient } from 'utils/wagmi'
-import { ContractFunctionResult } from 'viem'
-import { nftsBaseUrl } from 'views/Nft/market/constants'
-import { useAccount, useWalletClient } from 'wagmi'
-import { useNftsForAddress } from '../Nft/market/hooks/useNftsForAddress'
-import { ProfileCreationContext } from './contexts/ProfileCreationProvider'
+import { getCadinuProfileAddress } from 'utils/addressHelpers'
+import { getErc721Contract } from 'utils/contractHelpers'
+import { Address } from 'viem'
+import { readContracts, useAccount, useContractRead, useWalletClient } from 'wagmi'
 import NextStepButton from './NextStepButton'
 import SelectionCard from './SelectionCard'
+import { ProfileCreationContext } from './contexts/ProfileCreationProvider'
+import { getNftImage } from './helper'
 
 const Link = styled(NextLinkFromReactRouter)`
   color: ${({ theme }) => theme.colors.primary};
@@ -35,61 +31,77 @@ const Link = styled(NextLinkFromReactRouter)`
 
 const NftWrapper = styled.div`
   margin-bottom: 24px;
+  
 `
 
 const ProfilePicture: React.FC = () => {
   const { address: account } = useAccount()
   const [isApproved, setIsApproved] = useState(false)
-  const [isProfileNftsLoading, setIsProfileNftsLoading] = useState(true)
-  const [userProfileCreationNfts, setUserProfileCreationNfts] = useState(null)
   const { selectedNft, actions } = useContext(ProfileCreationContext)
+  const [level, setLevel] = useState<number>(1)
+  const [nftData, setNftData] = useState(null)
+  const [myNfts, setMyNfts] = useState({})
 
-  const { isLoading: isProfileLoading, profile } = useProfile()
-  const { nfts, isLoading: isUserNftLoading } = useNftsForAddress(account, profile, isProfileLoading)
+ const handleLevelChange = useCallback((option: OptionProps): void => {
+    setLevel(Number(option.value))
+  }, [])
+
+  
+  const {data: CIAAddresses} = useContractRead({
+    abi : cadinuProfileAbi,
+    address: getCadinuProfileAddress(),
+    functionName: 'getNftAddressesForLevel',
+    args: [BigInt(level)], 
+    watch: false
+  })
+
+  const getNftDatas = useCallback(async()=>{
+    if (CIAAddresses.length !== 0){
+      const nftDataTemp = {}
+      const myNftAdresses = {}
+      CIAAddresses.map( async (nftAddress)=>{
+        const nftContract = {
+          abi: CadinuLevelNftsAbi,
+          address: nftAddress,
+        }
+        const data = await  readContracts({
+          contracts :[
+            {
+            ...nftContract,
+            functionName: 'tokenURI',
+            args: [BigInt(1)]
+          },
+          {
+            ...nftContract,
+            functionName:'tokensOfOwner',
+            args:[account]
+          }
+
+          ]
+        })
+        if(data[1].result && data[1].result.length > 0){
+          myNftAdresses[`${nftAddress}`] ={}
+          myNftAdresses[`${nftAddress}`].tokenId = data[1].result
+        }
+        console.log('myNftAdresses',myNftAdresses);
+        nftDataTemp[`${nftAddress}`] = {}
+        nftDataTemp[`${nftAddress}`].data = {}
+        nftDataTemp[`${nftAddress}`].url = data[0].result
+        if (data[0].status==='success'){
+          nftDataTemp[`${nftAddress}`].data = await(await fetch(nftDataTemp[`${nftAddress}`].url)).json()
+        }
+        
+      });
+    setNftData(nftDataTemp)
+    setMyNfts(myNftAdresses)
+    }
+  }, CIAAddresses)
 
   useEffect(() => {
-    const fetchUserPancakeCollectibles = async () => {
-      try {
-        const nftsByCollection = Array.from(
-          nfts.reduce((acc, value) => {
-            acc.add(value.collectionAddress)
-            return acc
-          }, new Set<string>()),
-        )
-
-        if (nftsByCollection.length > 0) {
-          const profileContract = getProfileContract()
-          const nftRole = await profileContract.read.NFT_ROLE()
-          const collectionRoles = (await publicClient({ chainId: ChainId.BSC }).multicall({
-            contracts: nftsByCollection.map((collectionAddress) => {
-              return {
-                abi: pancakeProfileABI,
-                address: getPancakeProfileAddress(),
-                functionName: 'hasRole',
-                args: [nftRole, collectionAddress],
-              }
-            }),
-            allowFailure: false,
-          })) as ContractFunctionResult<typeof pancakeProfileABI, 'hasRole'>[]
-
-          setUserProfileCreationNfts(
-            nfts.filter((nft) => collectionRoles[nftsByCollection.indexOf(nft.collectionAddress)]),
-          )
-        } else {
-          setUserProfileCreationNfts(null)
-        }
-      } catch (e) {
-        console.error(e)
-        setUserProfileCreationNfts(null)
-      } finally {
-        setIsProfileNftsLoading(false)
-      }
+    if(!nftData){
+      getNftDatas()
     }
-    if (!isUserNftLoading) {
-      setIsProfileNftsLoading(true)
-      fetchUserPancakeCollectibles()
-    }
-  }, [nfts, isUserNftLoading])
+  },[nftData])
 
   const { t } = useTranslation()
   const { toastSuccess } = useToast()
@@ -100,37 +112,35 @@ const ProfilePicture: React.FC = () => {
   const handleApprove = async () => {
     const contract = getErc721Contract(selectedNft.collectionAddress, walletClient)
     const receipt = await fetchWithCatchTxError(() => {
-      return callWithGasPrice(contract, 'approve', [getPancakeProfileAddress(), BigInt(selectedNft.tokenId)])
+      return callWithGasPrice(contract, 'approve', [getCadinuProfileAddress(), BigInt(selectedNft.tokenId)])
     })
     if (receipt?.status) {
       toastSuccess(t('Enabled'), t('Please progress to the next step.'))
       setIsApproved(true)
     }
   }
-
-  if (!userProfileCreationNfts?.length && !isProfileNftsLoading) {
-    return (
-      <>
-        <Heading scale="xl" mb="24px">
-          {t('Oops!')}
-        </Heading>
-        <Text bold fontSize="20px" mb="24px">
-          {t('We couldn’t find any Pancake Collectibles in your wallet.')}
-        </Text>
-        <Text as="p" mb="24px">
-          {t('Only approved Pancake Collectibles can be used.')}
-          <Link to={`${nftsBaseUrl}/profile/pancake-collectibles`} style={{ marginLeft: '4px' }}>
-            {t('See the list >')}
-          </Link>
-        </Text>
-        <Text as="p">
-          {t(
-            'You need a Pancake Collectible to finish setting up your profile. If you sold or transferred your starter collectible to another wallet, you’ll need to get it back or acquire a new one somehow. You can’t make a new starter with this wallet address.',
-          )}
-        </Text>
-      </>
-    )
-  }
+  // const getNftImage = (nft) =>{
+  //   switch (nft){
+  //     case '0xbe548336c849aa2B7415A62702c5F3D5f64D9F7e':
+  //       return 'images/nfts/cadinu_nft_artist_250.png'
+  //       break;
+  //     case '0xcB6165e1fFA6426B5bB596ec806Cae3c356ad366':
+  //       return 'images/nfts/cadinu_nft_business_250.png'
+  //       break;
+  //     case '0xC0Dda5d8706ccE72487438Ea4Af5dc03Ef6B12a2':
+  //       return 'images/nfts/cadinu_nft_cowboy_250.png'
+  //       break;
+  //     case '0xc24397e0766CC7E52Ce0D281bef590e644226312':
+  //       return 'images/nfts/cadinu_nft_loyalty_250.png'
+  //       break;
+  //       case '0xeFe7b3853e05C6f39f2c57fe4566cb0A6bc640Cd':
+  //         return 'images/nfts/cadinu_nft_futuristic_250.png'
+  //         break;
+  //         case '0x933834fe626BDD84A4F7a4Db96132a1029a80fbd':
+  //           return 'images/nfts/cadinu_nft_hunter_250.png'
+  //       break;
+  //   }  
+  // }
 
   return (
     <>
@@ -149,27 +159,82 @@ const ProfilePicture: React.FC = () => {
             {t('Choose a profile picture from the eligible collectibles (NFT) in your wallet, shown below.')}
           </Text>
           <Text as="p" color="textSubtle" mb="24px">
-            {t('Only approved Pancake Collectibles can be used.')}
-            <Link to={`${nftsBaseUrl}/collections`} style={{ marginLeft: '4px' }}>
-              {t('See the list >')}
-            </Link>
+            {t('Only approved Cadinu Identity Art NFTs can be used.')}
           </Text>
+          <Select 
+          mb='15px'
+          placeHolderText ='Select Level'
+          options={[
+            {
+              label: t('Level 1'),
+              value: '1',
+            },
+            // {
+            //   label: t('Level 2'),
+            //   value: '2',
+            // },
+            // {
+            //   label: t('Level 3'),
+            //   value: '3',
+            // },
+            // {
+            //   label: t('Level 4'),
+            //   value: '4',
+            // },
+            // {
+            //   label: t('Level 5'),
+            //   value: '5',
+            // },
+            // {
+            //   label: t('Level 6'),
+            //   value: '6',
+            // },
+            // {
+            //   label: t('Level 7'),
+            //   value: '7',
+            // },
+            // {
+            //   label: t('Level 8'),
+            //   value: '8',
+            // },
+            // {
+            //   label: t('Level 9'),
+            //   value: '9',
+            // },
+            // {
+            //   label: t('Level 10'),
+            //   value: '10',
+            // },
+          ]}
+          onOptionChange={handleLevelChange}
+          />
           <NftWrapper>
-            {userProfileCreationNfts?.length ? (
-              userProfileCreationNfts
-                .filter((walletNft) => walletNft.location === NftLocation.WALLET)
+            {Object.keys(myNfts).length ? (
+              Object.keys(myNfts)
+                // .filter((walletNft) => walletNft.location === NftLocation.WALLET)
                 .map((walletNft) => {
-                  return (
-                    <SelectionCard
-                      name="profilePicture"
-                      key={`${walletNft.collectionAddress}#${walletNft.tokenId}`}
-                      value={walletNft.tokenId}
-                      image={walletNft.image.thumbnail}
-                      isChecked={walletNft.tokenId === selectedNft.tokenId}
-                      onChange={(value: string) => actions.setSelectedNft(value, walletNft.collectionAddress)}
-                    >
-                      <Text bold>{walletNft.name}</Text>
+                 return (
+                  myNfts[walletNft].tokenId.map(tokenId=>{
+                    return(
+                      <SelectionCard
+                  name="profilePicture"
+                  key={`${walletNft}#${tokenId}`}
+                  value={walletNft}
+                  image={getNftImage(walletNft)}
+                  isChecked={walletNft === selectedNft.collectionAddress}
+                  onChange={(value: string) => actions.setSelectedNft(tokenId.toString(), value as Address)}
+                  >
+                      <Flex flexDirection='row' verticalAlign='center' width='100%' flexWrap='wrap' maxHeight='80px' >
+                        <>
+                        <Text bold style={{position:'inherit'}}>{nftData[walletNft] 
+                        ?`${nftData[walletNft].data.name} #${tokenId}`
+                        : ''}
+                        </Text>
+                      </>
+                        </Flex>
                     </SelectionCard>
+                        )
+                      })
                   )
                 })
             ) : (

@@ -1,10 +1,10 @@
 import { createContext, useEffect, useMemo, useReducer } from 'react'
-import { Address, useAccount } from 'wagmi'
 import { getBunnyFactoryContract } from 'utils/contractHelpers'
-import { MINT_COST, REGISTER_COST, ALLOWANCE_MULTIPLIER } from '../config'
-import { Actions, State, ContextType } from './types'
+import { Address, useAccount } from 'wagmi'
+import { ALLOWANCE_MULTIPLIER, MINT_COST } from '../config'
+import { Actions, ContextType, State } from './types'
 
-const totalCost = MINT_COST + REGISTER_COST
+const totalCost = MINT_COST 
 const allowance = totalCost * ALLOWANCE_MULTIPLIER
 
 const initialState: State = {

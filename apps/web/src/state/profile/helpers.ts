@@ -1,12 +1,12 @@
-import { Profile } from 'state/types'
-import { pancakeProfileABI } from 'config/abi/pancakeProfile'
-import { API_PROFILE } from 'config/constants/endpoints'
-import { getTeam } from 'state/teams/helpers'
-import { NftToken } from 'state/nftMarket/types'
-import { getNftApi } from 'state/nftMarket/helpers'
-import { getPancakeProfileAddress } from 'utils/addressHelpers'
-import { publicClient } from 'utils/wagmi'
 import { ChainId } from '@pancakeswap/sdk'
+import { cadinuProfileAbi } from 'config/abi/cadinuProfile'
+import { API_PROFILE } from 'config/constants/endpoints'
+import { getNftApi } from 'state/nftMarket/helpers'
+import { NftToken } from 'state/nftMarket/types'
+import { getTeam } from 'state/teams/helpers'
+import { Profile } from 'state/types'
+import { getCadinuProfileAddress } from 'utils/addressHelpers'
+import { publicClient } from 'utils/wagmi'
 import { Address } from 'wagmi'
 
 export interface GetProfileResponse {
@@ -29,13 +29,14 @@ const transformProfileResponse = (profileResponse): Partial<Profile> => {
 
 export const getUsername = async (address: string): Promise<string> => {
   try {
-    const response = await fetch(`${API_PROFILE}/api/users/${address.toLowerCase()}`)
+    const response = await fetch(`${API_PROFILE}/api/user/${address.toLowerCase()}`)
 
     if (!response.ok) {
       return ''
     }
 
     const { username = '' } = await response.json()
+    
 
     return username
   } catch (error) {
@@ -50,14 +51,14 @@ export const getProfile = async (address: string): Promise<GetProfileResponse> =
     const profileCallsResult = await client.multicall({
       contracts: [
         {
-          address: getPancakeProfileAddress(),
-          abi: pancakeProfileABI,
-          functionName: 'hasRegistered',
+          address: getCadinuProfileAddress(),
+          abi: cadinuProfileAbi,
+          functionName: 'isRegistered',
           args: [address as Address],
         },
         {
-          address: getPancakeProfileAddress(),
-          abi: pancakeProfileABI,
+          address: getCadinuProfileAddress(),
+          abi: cadinuProfileAbi,
           functionName: 'getUserProfile',
           args: [address as Address],
         },

@@ -1,30 +1,30 @@
+import { useTranslation } from '@pancakeswap/localization'
 import {
+  Box,
+  Button,
   Flex,
+  Grid,
+  Heading,
   IconButton,
   LinkExternal,
-  Button,
-  useModal,
-  Grid,
-  Box,
-  Heading,
+  NextLinkFromReactRouter as ReactRouterLink,
   VisibilityOff,
   VisibilityOn,
-  NextLinkFromReactRouter as ReactRouterLink,
+  useModal,
 } from '@pancakeswap/uikit'
-import { useTranslation } from '@pancakeswap/localization'
-import { getBlockExploreLink, isAddress } from 'utils'
 import { formatNumber } from '@pancakeswap/utils/formatBalance'
 import truncateHash from '@pancakeswap/utils/truncateHash'
-import { Achievement, Profile } from 'state/types'
-import { useAccount } from 'wagmi'
-import { useMemo } from 'react'
-import useGetUsernameWithVisibility from 'hooks/useUsernameWithVisibility'
 import { useDomainNameForAddress } from 'hooks/useDomain'
-import EditProfileAvatar from './EditProfileAvatar'
+import useGetUsernameWithVisibility from 'hooks/useUsernameWithVisibility'
+import { useMemo } from 'react'
+import { Achievement, Profile } from 'state/types'
+import { getBlockExploreLink, isAddress } from 'utils'
+import { useAccount } from 'wagmi'
 import BannerHeader from '../../Nft/market/components/BannerHeader'
-import StatBox, { StatBoxItem } from '../../Nft/market/components/StatBox'
-import EditProfileModal from './EditProfileModal'
 import AvatarImage from '../../Nft/market/components/BannerHeader/AvatarImage'
+import StatBox, { StatBoxItem } from '../../Nft/market/components/StatBox'
+import EditProfileAvatar from './EditProfileAvatar'
+import EditProfileModal from './EditProfileModal'
 
 interface HeaderProps {
   accountPath: string
@@ -87,11 +87,11 @@ const ProfileHeader: React.FC<React.PropsWithChildren<HeaderProps>> = ({
     const imagePath = '/images/teams'
     switch (profileTeamId) {
       case 1:
-        return `${imagePath}/storm-banner.png`
+        return `${imagePath}/global-banner.png`
       case 2:
-        return `${imagePath}/flippers-banner.png`
+        return `${imagePath}/global-banner.png`
       case 3:
-        return `${imagePath}/cakers-banner.png`
+        return `${imagePath}/global-banner.png`
       default:
         break
     }
@@ -206,7 +206,7 @@ const ProfileHeader: React.FC<React.PropsWithChildren<HeaderProps>> = ({
           <StatBox>
             <StatBoxItem title={t('NFT Collected')} stat={numNftCollected} />
             <StatBoxItem title={t('Points')} stat={numPoints} />
-            <StatBoxItem title={t('Achievements')} stat={numAchievements} />
+            {/* <StatBoxItem title={t('Achievements')} stat={numAchievements} /> */}
           </StatBox>
         </Box>
       </Grid>

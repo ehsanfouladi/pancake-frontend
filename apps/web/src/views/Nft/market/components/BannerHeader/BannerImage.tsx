@@ -14,7 +14,7 @@ const StyledBannerImageWrapper = styled.div`
   }
 
   ${({ theme }) => theme.mediaQueries.md} {
-    height: 256px;
+    height: 300px;
   }
 `
 

@@ -1,4 +1,4 @@
-import { formatUnits } from 'viem'
+import { useDebounce } from '@pancakeswap/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 import {
   AutoRenewIcon,
@@ -9,25 +9,26 @@ import {
   CheckmarkIcon,
   Flex,
   Heading,
-  Input as UIKitInput,
   Skeleton,
   Text,
+  Input as UIKitInput,
+  WarningIcon,
   useModal,
   useToast,
-  WarningIcon,
 } from '@pancakeswap/uikit'
-import { useDebounce } from '@pancakeswap/hooks'
 import { useSignMessage } from '@pancakeswap/wagmi'
 import { API_PROFILE } from 'config/constants/endpoints'
 import { FetchStatus } from 'config/constants/types'
 import { formatDistance, parseISO } from 'date-fns'
+import { useSessionStorage } from 'hooks/useSessionStorage'
 import { useBSCCakeBalance } from 'hooks/useTokenBalance'
 import { ChangeEvent, useEffect, useRef, useState } from 'react'
+import { UserData } from 'state/types'
 import styled from 'styled-components'
 import fetchWithTimeout from 'utils/fetchWithTimeout'
 import { useAccount } from 'wagmi'
-import { REGISTER_COST, USERNAME_MAX_LENGTH, USERNAME_MIN_LENGTH } from './config'
 import ConfirmProfileCreationModal from './ConfirmProfileCreationModal'
+import { REGISTER_COST, USERNAME_MAX_LENGTH, USERNAME_MIN_LENGTH } from './config'
 import useProfileCreation from './contexts/hook'
 
 enum ExistingUserState {
@@ -78,6 +79,10 @@ const UserName: React.FC<React.PropsWithChildren> = () => {
 
   const [usernameToCheck, setUsernameToCheck] = useState<string>(undefined)
   const debouncedUsernameToCheck = useDebounce(usernameToCheck, 200)
+  const [state, setState] = useSessionStorage<UserData>('userData', {
+    username : '',
+    token: ''
+  })
 
   useEffect(() => {
     const fetchUsernameToCheck = async (abortSignal) => {
@@ -88,17 +93,22 @@ const UserName: React.FC<React.PropsWithChildren> = () => {
           setMessage('')
           fetchAbortSignal.current = null
         } else {
-          const res = await fetchWithTimeout(`${API_PROFILE}/api/users/valid/${debouncedUsernameToCheck}`, {
+          const res = await fetchWithTimeout(`${API_PROFILE}/api/user/valid/${debouncedUsernameToCheck}`, {
             method: 'get',
             signal: abortSignal,
             timeout: 30000,
           })
+          
 
           fetchAbortSignal.current = null
 
           if (res.ok) {
-            setIsValid(true)
+            const data = await res.json()
+            setIsValid(data.valid)
             setMessage('')
+            if (!data.valid){
+              setMessage('Username is invalid.')
+            }
           } else {
             const data = await res.json()
             setIsValid(false)
@@ -136,13 +146,13 @@ const UserName: React.FC<React.PropsWithChildren> = () => {
       setIsLoading(true)
 
       const signature = await signMessageAsync({ message: userName })
-      const response = await fetch(`${API_PROFILE}/api/users/register`, {
+      const response = await fetch(`${API_PROFILE}/api/user/create/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          address: account,
+          account,
           username: userName,
           signature,
         }),
@@ -150,6 +160,19 @@ const UserName: React.FC<React.PropsWithChildren> = () => {
 
       if (response.ok) {
         setExistingUserState(ExistingUserState.CREATED)
+        const data = await fetch(`${API_PROFILE}/api/user/login/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            account,
+            username: userName,
+            signature,
+          }),
+        })
+        const userData = await data.json()
+        setState({username: userName, token: userData.token})
       } else {
         const data = await response.json()
         toastError(t('Error'), data?.error?.message)
@@ -211,7 +234,7 @@ const UserName: React.FC<React.PropsWithChildren> = () => {
               'Your name must be at least 3 and at most 15 standard letters and numbers long. You can’t change this once you click Confirm.',
             )}
           </Text>
-          {existingUserState === ExistingUserState.IDLE ? (
+          {existingUserState === ExistingUserState.NEW ? (
             <Skeleton height="40px" width="240px" />
           ) : (
             <InputWrap>
@@ -260,11 +283,7 @@ const UserName: React.FC<React.PropsWithChildren> = () => {
       >
         {t('Complete Profile')}
       </Button>
-      {!hasMinimumCakeRequired && (
-        <Text color="failure" mt="16px">
-          {t('A minimum of %num% CAKE is required', { num: formatUnits(REGISTER_COST, 18) })}
-        </Text>
-      )}
+
     </>
   )
 }

@@ -1,14 +1,14 @@
 // import { GetStaticProps, InferGetStaticPropsType } from 'next'
 // // eslint-disable-next-line camelcase
-// import { unstable_serialize, SWRConfig } from 'swr'
-// import { getCollections } from 'state/nftMarket/helpers'
-// import PancakeCollectiblesPageRouter from 'views/Profile/components/PancakeCollectiblesPageRouter'
+// import { ChainId } from '@pancakeswap/sdk'
 // import { pancakeProfileABI } from 'config/abi/pancakeProfile'
+// import { getCollections } from 'state/nftMarket/helpers'
+// import { SWRConfig, unstable_serialize } from 'swr'
+// import { getPancakeProfileAddress } from 'utils/addressHelpers'
 // import { getProfileContract } from 'utils/contractHelpers'
 // import { viemServerClients } from 'utils/viem.server'
-// import { ChainId } from '@pancakeswap/sdk'
 // import { ContractFunctionResult } from 'viem'
-// import { getPancakeProfileAddress } from 'utils/addressHelpers'
+// import PancakeCollectiblesPageRouter from 'views/Profile/components/PancakeCollectiblesPageRouter'
 
 // const PancakeCollectiblesPage = ({ fallback = {} }: InferGetStaticPropsType<typeof getStaticProps>) => {
 //   return (

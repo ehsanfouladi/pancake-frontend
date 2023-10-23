@@ -1,16 +1,16 @@
-import { useCallback } from 'react'
-import { useRouter } from 'next/router'
-import { isAddress } from 'utils'
-import { useAchievementsForAddress, useProfileForAddress } from 'state/profile/hooks'
+import { useTranslation } from '@pancakeswap/localization'
 import { Box, Flex, Text } from '@pancakeswap/uikit'
 import Page from 'components/Layout/Page'
-import { useTranslation } from '@pancakeswap/localization'
+import { useRouter } from 'next/router'
+import { useCallback } from 'react'
+import { useAchievementsForAddress, useProfileForAddress } from 'state/profile/hooks'
 import styled from 'styled-components'
-import MarketPageHeader from '../Nft/market/components/MarketPageHeader'
-import ProfileHeader from './components/ProfileHeader'
+import { isAddress } from 'utils'
 import NoNftsImage from '../Nft/market/components/Activity/NoNftsImage'
-import TabMenu from './components/TabMenu'
+import MarketPageHeader from '../Nft/market/components/MarketPageHeader'
 import { useNftsForAddress } from '../Nft/market/hooks/useNftsForAddress'
+import ProfileHeader from './components/ProfileHeader'
+import TabMenu from './components/TabMenu'
 
 const TabMenuWrapper = styled(Box)`
   position: absolute;
@@ -29,7 +29,6 @@ const NftProfile: React.FC<React.PropsWithChildren<unknown>> = ({ children }) =>
   const { t } = useTranslation()
 
   const invalidAddress = !accountAddress || isAddress(accountAddress) === false
-
   const {
     profile,
     isValidating: isProfileValidating,
@@ -41,6 +40,7 @@ const NftProfile: React.FC<React.PropsWithChildren<unknown>> = ({ children }) =>
     revalidateOnReconnect: true,
   })
   const { achievements, isFetching: isAchievementsFetching } = useAchievementsForAddress(accountAddress)
+
   const {
     nfts: userNfts,
     isLoading: isNftLoading,
@@ -52,6 +52,62 @@ const NftProfile: React.FC<React.PropsWithChildren<unknown>> = ({ children }) =>
     refreshUserNfts()
   }, [refreshProfile, refreshUserNfts])
 
+  // const {data: numberOfLevels, isSuccess: isNumberOfLevelsSuccess } = useContractRead({
+  //     abi : cadinuProfileAbi,
+  //     address: getCadinuProfileAddress(),
+  //     functionName: 'numberOfLevels', 
+  //     watch: false
+  //   })
+  // const getCiaAddresses =  async(level:number)=>{
+  //   const profileContract ={
+  //     abi:cadinuProfileAbi,
+  //     address: getCadinuProfileAddress()
+  //   }
+  //   const data =  await readContracts({
+  //     contracts:[
+  //       {
+  //         ...profileContract,
+  //         functionName:'getNftAddressesForLevel',
+  //         args:[BigInt(level)]
+  //       }
+  //     ]
+  //   })
+  //   return data[0].result
+  // }
+  //   const getNftDatas = useCallback(async()=>{
+  //     const myNftAdresses = {}
+  //     for (var i=0;i<numberOfLevels;i++){
+  //       const CIAAddresses = await getCiaAddresses(i+1)
+  //       if (CIAAddresses.length !== 0){
+
+  //     }
+  //       CIAAddresses.map( async (nftAddress)=>{
+  //         const nftContract = {
+  //           abi: CadinuLevelNftsAbi,
+  //           address: nftAddress,
+  //         }
+  //         const data = await  readContracts({
+  //           contracts :[
+  //           {
+  //             ...nftContract,
+  //             functionName:'tokensOfOwner',
+  //             args:[accountAddress as Address]
+  //           }
+  
+  //           ]
+  //         })
+  //         if(data[0].result && data[0].result.length > 0){
+  //           myNftAdresses[`${nftAddress}`] ={}
+  //           myNftAdresses[`${nftAddress}`].tokenId = data[0].result
+  //         }
+  //       });
+  //     setMyNfts(myNftAdresses)
+  //     }
+  //   }, [])
+  // useEffect(() => {
+  //   getNftDatas()
+  // }, [accountAddress, numberOfLevels])
+  
   if (invalidAddress) {
     return (
       <>
@@ -77,7 +133,7 @@ const NftProfile: React.FC<React.PropsWithChildren<unknown>> = ({ children }) =>
       </>
     )
   }
-
+  
   return (
     <>
       <MarketPageHeader position="relative">

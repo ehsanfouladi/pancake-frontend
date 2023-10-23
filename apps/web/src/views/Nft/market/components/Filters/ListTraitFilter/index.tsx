@@ -21,7 +21,7 @@ import styled from 'styled-components'
 import { Item } from './types'
 import { FilterButton, ListOrderState, SearchWrapper } from '../ListFilter/styles'
 import { TraitItemRow } from './styles'
-
+/* eslint-disable camelcase */
 interface ListTraitFilterProps {
   title?: string
   traitType: string

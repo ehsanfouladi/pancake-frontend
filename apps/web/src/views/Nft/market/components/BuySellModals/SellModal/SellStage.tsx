@@ -1,10 +1,10 @@
-import { Flex, Grid, Text, Button, BinanceIcon, LinkExternal, useModal } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import { nftsBaseUrl, pancakeBunniesAddress } from 'views/Nft/market/constants'
+import { BinanceIcon, Button, Flex, Grid, LinkExternal, Text, useModal } from '@pancakeswap/uikit'
 import { NftToken } from 'state/nftMarket/types'
-import { getBscScanLinkForNft, isAddress } from 'utils'
-import EditProfileModal from 'views/Profile/components/EditProfileModal'
 import { useProfile } from 'state/profile/hooks'
+import { getBscScanLinkForNft, isAddress } from 'utils'
+import { nftsBaseUrl, pancakeBunniesAddress } from 'views/Nft/market/constants'
+import EditProfileModal from 'views/Profile/components/EditProfileModal'
 import { Divider, HorizontalDivider, RoundedImage } from '../shared/styles'
 
 interface SellStageProps {
@@ -84,9 +84,9 @@ const SellStage: React.FC<React.PropsWithChildren<SellStageProps>> = ({
       </Flex>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
-        <Button mb="8px" onClick={continueToNextStage}>
+        {/* <Button mb="8px" onClick={continueToNextStage}>
           {t('Sell')}
-        </Button>
+        </Button> */}
         <Button mb="8px" variant="secondary" onClick={continueToTransferStage}>
           {t('Transfer')}
         </Button>

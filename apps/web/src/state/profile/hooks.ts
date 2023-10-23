@@ -1,12 +1,12 @@
-import { useAccount } from 'wagmi'
-import { getAchievements } from 'state/achievements/helpers'
 import { useTranslation } from '@pancakeswap/localization'
 import { FetchStatus } from 'config/constants/types'
-import useSWR, { KeyedMutator } from 'swr'
 import { localStorageMiddleware } from 'hooks/useSWRContract'
+import { getAchievements } from 'state/achievements/helpers'
+import useSWR, { KeyedMutator } from 'swr'
 import useSWRImmutable from 'swr/immutable'
-import { getProfile, GetProfileResponse } from './helpers'
+import { useAccount } from 'wagmi'
 import { Profile } from '../types'
+import { getProfile, GetProfileResponse } from './helpers'
 
 export const useProfileForAddress = (
   address: string,
@@ -65,6 +65,7 @@ export const useProfile = (): {
   const { data, status, mutate } = useSWRImmutable(account ? [account, 'profile'] : null, () => getProfile(account), {
     use: [localStorageMiddleware],
   })
+
 
   const { profile, hasRegistered } = data ?? ({ profile: null, hasRegistered: false } as GetProfileResponse)
 

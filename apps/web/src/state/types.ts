@@ -1,17 +1,17 @@
-import { parseEther } from 'viem'
 import { SerializedFarmsState } from '@pancakeswap/farms'
-import { Percent, SerializedToken, Token } from '@pancakeswap/sdk'
 import { SerializedPoolWithInfo } from '@pancakeswap/pools'
-import { Address } from 'wagmi'
+import { Percent, SerializedToken, Token } from '@pancakeswap/sdk'
 import BigNumber from 'bignumber.js'
 import {
   CampaignType,
-  TFetchStatus,
   LotteryStatus,
   LotteryTicket,
+  TFetchStatus,
   Team,
   TranslatableText,
 } from 'config/constants/types'
+import { parseEther } from 'viem'
+import { Address } from 'wagmi'
 import { NftToken } from './nftMarket/types'
 
 export enum GAS_PRICE {
@@ -173,6 +173,7 @@ export interface Achievement {
   badge: string
   points: number
 }
+
 
 // Predictions
 
@@ -686,6 +687,11 @@ export interface ComulativeLockResponse {
 }
 
 // Global state
+
+export interface UserData {
+  username: string
+  token: string
+}
 
 export interface State {
   farms: SerializedFarmsState

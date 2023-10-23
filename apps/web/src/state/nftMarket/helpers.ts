@@ -1,9 +1,10 @@
+import { ChainId } from '@pancakeswap/sdk'
 import { formatBigInt } from '@pancakeswap/utils/formatBalance'
 import { erc721CollectionABI } from 'config/abi/erc721collection'
+import { nftMarketABI } from 'config/abi/nftMarket'
 import { NOT_ON_SALE_SELLER } from 'config/constants'
 import { API_NFT, GRAPH_API_NFTMARKET } from 'config/constants/endpoints'
 import { COLLECTIONS_WITH_WALLET_OF_OWNER } from 'config/constants/nftsCollections'
-import DELIST_COLLECTIONS from 'config/constants/nftsCollections/delist'
 import { gql, request } from 'graphql-request'
 import fromPairs from 'lodash/fromPairs'
 import groupBy from 'lodash/groupBy'
@@ -12,13 +13,11 @@ import range from 'lodash/range'
 import lodashSize from 'lodash/size'
 import { stringify } from 'querystring'
 import { isAddress } from 'utils'
-import { Address } from 'wagmi'
 import { getNftMarketAddress } from 'utils/addressHelpers'
 import { getNftMarketContract } from 'utils/contractHelpers'
 import { publicClient } from 'utils/wagmi'
-import { ChainId } from '@pancakeswap/sdk'
-import { nftMarketABI } from 'config/abi/nftMarket'
 import { pancakeBunniesAddress } from 'views/Nft/market/constants'
+import { Address } from 'wagmi'
 import { baseNftFields, baseTransactionFields, collectionBaseFields } from './queries'
 import {
   ApiCollection,
@@ -146,7 +145,7 @@ export const getCollection = async (collectionAddress: string): Promise<Record<s
  * Fetch static data from a collection using the API
  * @returns
  */
-export const getCollectionApi = async (collectionAddress: string): Promise<ApiCollection> => {
+export const  getCollectionApi = async (collectionAddress: string): Promise<ApiCollection> => {
   const res = await fetch(`${API_NFT}/collections/${collectionAddress}`)
   if (res.ok) {
     const json = await res.json()
@@ -168,8 +167,9 @@ export const getNftsFromCollectionApi = async (
   size = 100,
   page = 1,
 ): Promise<ApiResponseCollectionTokens> => {
-  const isPBCollection = isAddress(collectionAddress) === pancakeBunniesAddress
-  const requestPath = `${API_NFT}/collections/${collectionAddress}/tokens${
+  const isPBCollection = true
+
+  const requestPath = `${API_NFT}/collection/${collectionAddress}/tokens${
     !isPBCollection ? `?page=${page}&size=${size}` : ``
   }`
 
@@ -205,10 +205,14 @@ export const getNftApi = async (
   collectionAddress: string,
   tokenId: string,
 ): Promise<ApiResponseSpecificToken['data']> => {
-  const res = await fetch(`${API_NFT}/collections/${collectionAddress}/tokens/${tokenId}`)
+  const res = await fetch(`${API_NFT}/collection/${collectionAddress}/tokens/${tokenId}`)
+  console.log('res',res);
+  
   if (res.ok) {
     const json = await res.json()
-    return json.data
+    console.log('NFT', json);
+    
+    return json
   }
 
   console.error(`API: Can't fetch NFT token ${tokenId} in ${collectionAddress}`, res.status)
@@ -1089,8 +1093,10 @@ export const getNftLocationForMarketNft = (
   tokenIdsInWallet: string[],
   tokenIdsForSale: string[],
   profileNftId?: string,
+  collectionAddress? : string,
+  profileNftAddress? : string
 ): NftLocation => {
-  if (tokenId === profileNftId) {
+  if (tokenId === profileNftId && collectionAddress===profileNftAddress) {
     return NftLocation.PROFILE
   }
   if (tokenIdsForSale.includes(tokenId)) {
@@ -1158,6 +1164,7 @@ export const combineNftMarketAndMetadata = (
   tokenIdsInWallet: string[],
   tokenIdsForSale: string[],
   profileNftId?: string,
+  profileNftAddress?: string,
 ): NftToken[] => {
   const completeNftData = nftsWithMetadata.map<NftToken>((nft) => {
     // Get metadata object
@@ -1175,7 +1182,7 @@ export const combineNftMarketAndMetadata = (
           marketNft.tokenId === nft.tokenId,
       )
     }
-    const location = getNftLocationForMarketNft(nft.tokenId, tokenIdsInWallet, tokenIdsForSale, profileNftId)
+    const location = getNftLocationForMarketNft(nft.tokenId, tokenIdsInWallet, tokenIdsForSale, profileNftId, profileNftAddress, nft.collectionAddress)
     return { ...nft, marketData, location }
   })
   return completeNftData
@@ -1227,7 +1234,7 @@ export const getCompleteAccountNftData = async (
   profileNftWithCollectionAddress?: TokenIdWithCollectionAddress,
 ): Promise<NftToken[]> => {
   // Add delist collections to allow user reclaim their NFTs
-  const collectionsWithDelist = { ...collections, ...DELIST_COLLECTIONS }
+  const collectionsWithDelist = { ...collections }
 
   const [walletNftIdsWithCollectionAddress, onChainForSaleNfts] = await Promise.all([
     fetchWalletTokenIdsForCollections(account, collectionsWithDelist),
@@ -1272,6 +1279,7 @@ export const getCompleteAccountNftData = async (
     walletTokenIds,
     tokenIdsForSale,
     profileNftWithCollectionAddress?.tokenId,
+    profileNftWithCollectionAddress?.collectionAddress,
   )
 
   return completeNftData

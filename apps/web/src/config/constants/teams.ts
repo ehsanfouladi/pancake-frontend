@@ -4,8 +4,8 @@ import { Team } from './types'
 const teams: Team[] = [
   {
     id: 1,
-    name: 'Syrup Storm',
-    description: "The storm's a-comin! Watch out! These bulls are stampeding in a syrupy surge!",
+    name: 'Cadinu Army',
+    description: "Cadinu Army Team",
     images: {
       lg: 'syrup-storm-lg.png',
       md: 'syrup-storm-md.png',

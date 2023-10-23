@@ -1,66 +1,173 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Card, CardBody, Heading, Text, useToast } from '@pancakeswap/uikit'
+import { bscTokens } from '@pancakeswap/tokens'
+import { Box, Card, CardBody, Checkbox, Flex, Heading, Input, OptionProps, Select, Text, WarningIcon, useToast } from '@pancakeswap/uikit'
+import { InfoBox } from '@pancakeswap/uikit/src/components/LiquidityChartRangeInput/InfoBox'
 import ApproveConfirmButtons from 'components/ApproveConfirmButtons'
+import { CadinuLevelNftsAbi } from 'config/abi/cadinuLevelNfts'
+import { cadinuProfileAbi } from 'config/abi/cadinuProfile'
 import { FetchStatus } from 'config/constants/types'
-import { formatUnits } from 'viem'
 import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { useBunnyFactory } from 'hooks/useContract'
-import { useBSCCakeBalance } from 'hooks/useTokenBalance'
-import { useEffect, useState } from 'react'
-import { getNftsFromCollectionApi } from 'state/nftMarket/helpers'
+import { useSessionStorage } from 'hooks/useSessionStorage'
+import { useBSCCbonBalance } from 'hooks/useTokenBalance'
+import { useRouter } from 'next/router'
+import { useCallback, useEffect, useState } from 'react'
 import { ApiSingleTokenData } from 'state/nftMarket/types'
-import { getBunnyFactoryAddress } from 'utils/addressHelpers'
-import { bscTokens } from '@pancakeswap/tokens'
-import { pancakeBunniesAddress } from 'views/Nft/market/constants'
-import { MINT_COST, STARTER_NFT_BUNNY_IDS } from './config'
-import useProfileCreation from './contexts/hook'
+import { getCadinuProfileAddress } from 'utils/addressHelpers'
+import { getCadinuLevelNftContract } from 'utils/contractHelpers'
+import { Address, formatUnits, isAddress, zeroAddress } from 'viem'
+import { readContracts, useAccount, useContractRead } from 'wagmi'
 import NextStepButton from './NextStepButton'
 import SelectionCard from './SelectionCard'
+import TabMenu from './TabMenu'
+import { MINT_COST } from './config'
+import useProfileCreation from './contexts/hook'
+import { getNftImage } from './helper'
 
+export enum NftType {
+  ALL = 'all',
+  MYNFTS = 'myNFTs'
+}
 interface MintNftData extends ApiSingleTokenData {
-  bunnyId?: string
+  dogId?: string
+}
+interface State {
+  nftType: NftType
 }
 
 const Mint: React.FC<React.PropsWithChildren> = () => {
-  const [selectedBunnyId, setSelectedBunnyId] = useState<string>('')
-  const [starterNfts, setStarterNfts] = useState<MintNftData[]>([])
+  const {address: account} = useAccount()
+  const {query} = useRouter()
+  const ref = query.ref && isAddress(query.ref as Address) ? query.ref : zeroAddress
+  const [state, setState] = useSessionStorage<State>('nft-filter', {
+    nftType: NftType.ALL,
+  })
+  const { nftType } = state
+  const handleNftTypeChange = (newNftType: NftType) => {
+    setState((prevState) => ({
+      ...prevState,
+      nftType: newNftType,
+  }))
+}
+
+  const [selectedDogId, setSelectedDogId] = useState<Address>(ref as Address)
+  // const [starterNfts, setStarterNfts] = useState<MintNftData[]>([])
+  const [nftData, setNftData] = useState(null)
+  const [myNfts, setMyNfts] = useState([])
+  const [nftContract, setNftContract] = useState(null)
+  const [level, setLevel] = useState<number>(1)
+  const [priceInCbon, setPriceInCbon] = useState<bigint>(0n)
+
+  const [targetAddress,setTargetAddress] = useState<Address>(account)
+  const [buyForOthers,setBuyForOthers] = useState<boolean>(false)
+  const [haveReferral,setHaveReferral] = useState<boolean>(isAddress(ref as Address) &&  ref!==zeroAddress)
+
+  const [numberToBuy, setNumberToBuy] = useState<string>('1')
+  const [referralAddress,setReferralAddress] = useState<Address>(query.ref && isAddress(query.ref as Address) && query.ref!== zeroAddress ? query.ref as Address : zeroAddress )
+
   const { actions, allowance } = useProfileCreation()
   const { toastSuccess } = useToast()
 
   const bunnyFactoryContract = useBunnyFactory()
   const { t } = useTranslation()
-  const { balance: cakeBalance, fetchStatus } = useBSCCakeBalance()
-  const hasMinimumCakeRequired = fetchStatus === FetchStatus.Fetched && cakeBalance >= MINT_COST
+  // const { balance: cakeBalance, fetchStatus } = useBSCCakeBalance()
+  const {balance : cbonBalance, fetchStatus} = useBSCCbonBalance()
+  const hasMinimumCbonRequired = fetchStatus === FetchStatus.Fetched && cbonBalance >= MINT_COST
   const { callWithGasPrice } = useCallWithGasPrice()
+  
+  const {data: CIAAddresses} = useContractRead({
+    abi : cadinuProfileAbi,
+    address: getCadinuProfileAddress(),
+    functionName: 'getNftAddressesForLevel',
+    args: [BigInt(level)],
+    watch:false
+  })
 
-  useEffect(() => {
-    const getStarterNfts = async () => {
-      const response = await getNftsFromCollectionApi(pancakeBunniesAddress)
-      if (!response) return
-      const { data: allPbTokens } = response
-      const nfts = STARTER_NFT_BUNNY_IDS.map((bunnyId) => {
-        if (allPbTokens && allPbTokens[bunnyId]) {
-          return { ...allPbTokens[bunnyId], bunnyId }
+  const getNftDatas = useCallback(async()=>{
+    if (CIAAddresses && CIAAddresses.length !== 0){
+      const nftDataTemp = {}
+      const myNftAdresses = []
+      CIAAddresses.map( async (nftAddress)=>{
+        const tempNftContract = {
+          abi: CadinuLevelNftsAbi,
+          address: nftAddress,
         }
-        return undefined
-      })
-      setStarterNfts(nfts)
+        const data = await  readContracts({
+          contracts :[
+            {
+            ...tempNftContract,
+            functionName: 'tokenURI',
+            args: [BigInt(1)]
+          },
+          {
+            ...tempNftContract,
+            functionName:'tokensOfOwner',
+            args:[account]
+          },
+          {
+            ...tempNftContract,
+            functionName:'priceInCbon',
+          }
+
+          ]
+        })
+        if(data[2].status==='success'){
+          setPriceInCbon(data[2].result)
+        }
+        if(data[1].result && data[1].result.length > 0){
+          myNftAdresses.push(nftAddress)
+          console.log("data1",data[1])
+        }
+        nftDataTemp[`${nftAddress}`] = {}
+        nftDataTemp[`${nftAddress}`].data = {}
+        nftDataTemp[`${nftAddress}`].url = data[0].result
+        if (data[0].status==='success'){
+          nftDataTemp[`${nftAddress}`].data = await(await fetch(nftDataTemp[`${nftAddress}`].url)).json()
+        }
+        // nftDataTemp[nftAddress.toString()]['data'] = {}
+
+      });
+    setNftData(nftDataTemp)
+    setMyNfts(myNftAdresses)
+    
     }
-    if (starterNfts.length === 0) {
-      getStarterNfts()
+  }, CIAAddresses)
+
+  
+
+  const handleLevelChange = useCallback((option: OptionProps): void => {
+    setLevel(Number(option.value))
+  }, [])
+
+  useEffect(()=>{
+    const contract = getCadinuLevelNftContract(selectedDogId)
+    setNftContract(contract)
+    getNftDatas()
+    if (ref && isAddress(ref as Address)){
+      setHaveReferral(true)
     }
-  }, [starterNfts])
+    
+  },[selectedDogId,ref])
 
   const { isApproving, isApproved, isConfirmed, isConfirming, handleApprove, handleConfirm } =
     useApproveConfirmTransaction({
-      token: bscTokens.cake,
-      spender: getBunnyFactoryAddress(),
+      token: bscTokens.cbon,
+      spender: selectedDogId,
       minAmount: MINT_COST,
       targetAmount: allowance,
       onConfirm: () => {
-        return callWithGasPrice(bunnyFactoryContract, 'mintNFT', [BigInt(selectedBunnyId)])
+        return callWithGasPrice(
+          nftContract,
+          'buyNFTs',
+          [
+            buyForOthers ? targetAddress : account, 
+            BigInt(numberToBuy),
+            haveReferral ? referralAddress : zeroAddress
+          ]
+          )
       },
+      
       onApproveSuccess: () => {
         toastSuccess(t('Enabled'), t("Press 'confirm' to mint this NFT"))
       },
@@ -72,16 +179,18 @@ const Mint: React.FC<React.PropsWithChildren> = () => {
 
   return (
     <>
+    
       <Text fontSize="20px" color="textSubtle" bold>
         {t('Step %num%', { num: 1 })}
       </Text>
       <Heading as="h3" scale="xl" mb="24px">
         {t('Get Starter Collectible')}
       </Heading>
-      <Text as="p">{t('Every profile starts by making a “starter” collectible (NFT).')}</Text>
-      <Text as="p">{t('This starter will also become your first profile picture.')}</Text>
+      <Text as="p">{t("Every profile starts by minting a Cadinu Identity Arts' NFT.")}</Text>
+      
+      <Text as="p">{t('This NFT will also become your first profile picture.')}</Text>
       <Text as="p" mb="24px">
-        {t('You can change your profile pic later if you get another approved Pancake Collectible.')}
+        {t('You can change your profile pic later if you get another approved Cadinu Identity Arts NFT.')}
       </Text>
       <Card mb="24px">
         <CardBody>
@@ -91,42 +200,190 @@ const Mint: React.FC<React.PropsWithChildren> = () => {
           <Text as="p" color="textSubtle">
             {t('Choose wisely: you can only ever make one starter collectible!')}
           </Text>
-          <Text as="p" mb="24px" color="textSubtle">
-            {t('Cost: %num% CAKE', { num: formatUnits(MINT_COST, 18) })}
+          <Text as="p" color="textSubtle">
+            {t('Cost: %num% CBON', { num: formatUnits(priceInCbon, 18) })}
           </Text>
-          {starterNfts.map((nft) => {
-            const handleChange = (value: string) => setSelectedBunnyId(value)
-
-            return (
-              <SelectionCard
-                key={nft?.name}
+          <Text as='p' mb="24px" color="textSubtle">{t('If you have a referral address, you can enjoy a 10% discount on your purchase.')}</Text>
+          {nftType === NftType.ALL && (<>
+          <Flex justifyContent='start' m='1.5%'>
+        <Box width="100%" verticalAlign='center'>
+        <Box mt='8px' ml='-5px'>
+      <Checkbox
+      id='haveRef'
+      type='checkbox'
+      defaultChecked={
+        haveReferral
+      }
+      onChange={()=>setHaveReferral(!haveReferral)}
+      scale='sm'
+      />
+        <label htmlFor='haveRef' style={{fontWeight:'bold', marginLeft:'5px'}}>
+        {/* <Text my='5px' bold> */}
+         Have Referral? 
+        {/* </Text> */}
+      </label>
+    </Box>
+    {haveReferral && referralAddress !== zeroAddress &&
+    <>
+    {/* eslint-disable-next-line jsx-a11y/label-has-associated-control, jsx-a11y/label-has-for */}
+      <label htmlFor='refAddress' ><Text my='5px' bold>Referral Address:</Text></label>
+      <Input
+      id='refAddress'
+      value={referralAddress}
+      onChange={(e)=>setReferralAddress(e.target.value as Address)}
+      />
+    </>
+    }
+   {/* <Box mt='8px' ml='-5px'>
+      <Checkbox
+      type='checkbox'
+      defaultChecked={false}
+      onChange={()=>setBuyForOthers(!buyForOthers)}
+      scale='sm'
+      />
+      <label style={{fontWeight:'bold', marginLeft:'5px'}}>
+          Buy NFT for someone else?
+      </label>
+    </Box> */}
+      {/* {buyForOthers &&
+      <>
+      <label >
+        <Text my='5px' bold>Target Address:</Text>
+      </label>
+      <Input
+        value={targetAddress}
+        onChange={(e)=>setTargetAddress(e.target.value as Address)}
+        >
+      </Input>
+      </>
+      } */}
+    
+    </Box>
+    </Flex>
+    </>
+    )}
+    <Select 
+    placeHolderText ='Select Level'
+    options={[
+      {
+        label: t('Level 1'),
+        value: '1',
+      },
+      // {
+      //   label: t('Level 2'),
+      //   value: '2',
+      // },
+      // {
+      //   label: t('Level 3'),
+      //   value: '3',
+      // },
+      // {
+      //   label: t('Level 4'),
+      //   value: '4',
+      // },
+      // {
+      //   label: t('Level 5'),
+      //   value: '5',
+      // },
+      // {
+      //   label: t('Level 6'),
+      //   value: '6',
+      // },
+      // {
+      //   label: t('Level 7'),
+      //   value: '7',
+      // },
+      // {
+      //   label: t('Level 8'),
+      //   value: '8',
+      // },
+      // {
+      //   label: t('Level 9'),
+      //   value: '9',
+      // },
+      // {
+      //   label: t('Level 10'),
+      //   value: '10',
+      // },
+    ]}
+    onOptionChange={handleLevelChange}
+    />
+    
+    
+      <TabMenu nftType={nftType} onTypeChange={handleNftTypeChange} account={account}/>
+          {nftType===NftType.ALL && nftData && CIAAddresses.map((nft) => {
+            const handleChange = (value: Address) => setSelectedDogId(value)
+            
+              return (
+                <SelectionCard
+                key={nftData[nft]?.data.name}
                 name="mintStarter"
-                value={nft?.bunnyId}
-                image={nft?.image.thumbnail}
-                isChecked={selectedBunnyId === nft?.bunnyId}
+                value={nft}
+                image={getNftImage(nft)}
+                isChecked={selectedDogId === nft}
                 onChange={handleChange}
-                disabled={isApproving || isConfirming || isConfirmed || !hasMinimumCakeRequired}
-              >
-                <Text bold>{nft?.name}</Text>
+                disabled={isApproving || isConfirming || isConfirmed || !hasMinimumCbonRequired}
+                >
+                  {/* <Grid style={{ gap: '16px' }} maxWidth="360px" > */}
+                <Flex flexDirection='row' width='100%' flexWrap='wrap'>
+                <Text bold>{nftData[nft] ? nftData[nft].data.name: ''}</Text>
+                {selectedDogId === nft && <>
+                <Input
+                value={numberToBuy}
+                onChange={(e)=>setNumberToBuy(e.target.value)}
+                type='number'
+                placeholder='Number of NFTs to purchase'
+                scale='sm'
+                />
+                </>}
+                </Flex>
+                {/* </Grid> */}
               </SelectionCard>
-            )
+              )
+            
           })}
-          {!hasMinimumCakeRequired && (
+        {nftType===NftType.MYNFTS && nftData &&( myNfts.length >0 ?(
+          myNfts.map((nft) => {
+            const handleChange = (value: Address) => setSelectedDogId(value)
+            
+              return (
+                <SelectionCard
+                key={nftData[nft]?.data.name}
+                name="mintStarter"
+                value={nft}
+                image={getNftImage(nft)}
+                isChecked={selectedDogId === nft}
+                onChange={handleChange}
+                disabled={isApproving || isConfirming || isConfirmed }
+                >
+                <Text bold>{nftData[nft] ? nftData[nft].data.name: ''}</Text>
+              </SelectionCard>
+              )
+            
+          }
+        )
+      ):
+        (
+          <InfoBox message="You Don't Have Any Nfts" icon={<WarningIcon />} />
+        ))}
+          {!hasMinimumCbonRequired && (
             <Text color="failure" mb="16px">
-              {t('A minimum of %num% CAKE is required', { num: formatUnits(MINT_COST, 18) })}
+              {t('A minimum of %num% CBON is required', { num: formatUnits(priceInCbon, 18) })}
             </Text>
+            
           )}
+          {nftType===NftType.ALL && 
           <ApproveConfirmButtons
-            isApproveDisabled={selectedBunnyId === null || isConfirmed || isConfirming || isApproved}
+            isApproveDisabled={selectedDogId === null || isConfirmed || isConfirming || isApproved}
             isApproving={isApproving}
-            isConfirmDisabled={!isApproved || isConfirmed || !hasMinimumCakeRequired}
+            isConfirmDisabled={!isApproved || isConfirmed || !hasMinimumCbonRequired}
             isConfirming={isConfirming}
             onApprove={handleApprove}
             onConfirm={handleConfirm}
-          />
+          />}
         </CardBody>
       </Card>
-      <NextStepButton onClick={actions.nextStep} disabled={!isConfirmed}>
+      <NextStepButton onClick={actions.nextStep} disabled={myNfts.length === 0 && !isConfirmed}>
         {t('Next Step')}
       </NextStepButton>
     </>

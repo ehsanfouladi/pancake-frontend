@@ -241,5 +241,11 @@ export default {
   },
   cadinuLockV3:{
     56: '0x9626aeA51924e1fE519164B47f971f0810e60Bc0',
+  },
+  cadinuProfile:{
+    56: '0xE78Ca4DaEACD4aD88F5873cf188625F5DD05781C'
+  },
+  cadinuReferral:{
+    56: '0x1eD1fF95046ca1d8219D1400E8CB6DcB22902aC5'
   }
 } as const satisfies Record<string, Record<number, `0x${string}`>>

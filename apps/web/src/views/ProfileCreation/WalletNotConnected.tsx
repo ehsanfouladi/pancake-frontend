@@ -4,6 +4,7 @@ import ConnectWalletButton from 'components/ConnectWalletButton'
 
 const WalletNotConnected = () => {
   const { t } = useTranslation()
+  
 
   return (
     <div>

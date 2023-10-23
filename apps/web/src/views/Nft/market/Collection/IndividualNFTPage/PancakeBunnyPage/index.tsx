@@ -72,7 +72,7 @@ const IndividualPancakeBunnyPageBase: React.FC<React.PropsWithChildren<Individua
           {
             traitType: 'bunnyId',
             value: bunnyId,
-            displayType: null,
+            // displayType: null,
           },
         ],
       })

@@ -26,7 +26,8 @@ export const getLotteryV2Address = () => {
 export const getPancakeProfileAddress = () => {
   return getAddressFromMap(addresses.pancakeProfile)
 }
-export const getPancakeBunniesAddress = () => {
+export const 
+getPancakeBunniesAddress = () => {
   return getAddressFromMap(addresses.pancakeBunnies)
 }
 export const getBunnyFactoryAddress = () => {
@@ -155,3 +156,13 @@ export const getCadinuLockAddress = (chainId?: number) => {
 export const getCadinuLockv3Address = (chainId?: number) => {
   return getAddressFromMap(addresses.cadinuLockV3, chainId)
 }
+export const getCadinuProfileAddress = () => {
+  return getAddressFromMap(addresses.cadinuProfile)
+}
+export const getCadinuReferralAddress = () => {
+  return getAddressFromMap(addresses.cadinuReferral)
+}
+// export const 
+// getCadinuCIAsAddress = () => {
+//   return getAddressFromMap(addresses.cadinuCIAs)
+// }
