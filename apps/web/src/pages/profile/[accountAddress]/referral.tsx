@@ -176,7 +176,7 @@ const NftProfileAchievementsPage = () => {
                 { referralAchievements ? 
                 `${formatEther(referralAchievements?.referralData[3])}
                 CBON ~
-                ${(Number(formatEther(referralAchievements?.referralData[3]))* Number(cbonPrice)).toLocaleString('en', { maximumFractionDigits: 10 })}  USD`
+                ${(Number(formatEther(referralAchievements?.referralData[3]))* Number(cbonPrice)).toLocaleString('en', { maximumFractionDigits: 2 })}  USD`
                 : '-'}
               </Text>
             </div>
@@ -194,7 +194,7 @@ const NftProfileAchievementsPage = () => {
               {referralAchievements ?
                 `${formatEther(referralAchievements?.referralData[4])}
                 CBON ~
-                ${(Number(formatEther(referralAchievements?.referralData[4]))* Number(cbonPrice)).toLocaleString('en', { maximumFractionDigits: 10 })}  USD`
+                ${(Number(formatEther(referralAchievements?.referralData[4]))* Number(cbonPrice)).toLocaleString('en', { maximumFractionDigits: 2 })}  USD`
                :'-' }
               </Text>
               <Button
@@ -254,7 +254,7 @@ const NftProfileAchievementsPage = () => {
         Your Referral Link: 
         </Heading>
         <Flex verticalAlign='center' m='20px'>
-          <Text color='secondary'>
+          <Text color='secondary' overflow='clip'>
             {`https://apps.cadinu.io/create-profile?ref=${account}`}
           </Text>
           <CopyButton 

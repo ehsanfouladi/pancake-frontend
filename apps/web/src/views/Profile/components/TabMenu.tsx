@@ -50,7 +50,7 @@ const TabMenu = () => {
         as={NextLinkFromReactRouter}
         to={`/profile/${accountAddress}/referral`}
       >
-        {t('Referral Status')}
+        {t('Referral')}
       </Tab>
       <Tab
         onClick={() => setIsAchievementsActive(true)}
@@ -60,7 +60,6 @@ const TabMenu = () => {
       >
         {t('Achievements')}
       </Tab>
-      
     </Flex>
   )
 }

@@ -7,6 +7,7 @@ import { useRouter } from 'next/router'
 import Header from './Header'
 import ProfileCreationProvider from './contexts/ProfileCreationProvider'
 import Steps from './Steps'
+import WalletNotConnected from './WalletNotConnected'
 
 const ProfileCreation = () => {
   const { address: account } = useAccount()
@@ -15,9 +16,20 @@ const ProfileCreation = () => {
 
   useEffect(() => {
     if (account && hasProfile) {
-      router.push(`/profile/${account.toLowerCase()}`)
+      router.push(`/buy-nft`)
     }
   }, [account, hasProfile, router])
+  
+  if (!account) {
+    return(
+      <ProfileCreationProvider>
+        <Page>
+          <Header />
+          <WalletNotConnected />
+        </Page>
+      </ProfileCreationProvider>
+      )
+  }
 
   if (!isInitialized || isLoading) {
     return <PageLoader />
