@@ -383,7 +383,9 @@ const Mint: React.FC<React.PropsWithChildren> = () => {
           />}
         </CardBody>
       </Card>
-      <NextStepButton onClick={actions.nextStep} disabled={myNfts.length === 0 && !isConfirmed}>
+      <NextStepButton onClick={actions.nextStep} disabled={
+        myNfts.length === 0 && !isConfirmed
+        }>
         {t('Next Step')}
       </NextStepButton>
     </>

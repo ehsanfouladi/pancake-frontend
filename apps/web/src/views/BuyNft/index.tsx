@@ -82,7 +82,7 @@ const Mint: React.FC<React.PropsWithChildren> = () => {
     address: getCadinuProfileAddress(),
     functionName: 'getNftAddressesForLevel',
     args: [BigInt(level)],
-    watch:false
+    // watch:false
   })
 
   const getNftDatas = useCallback(async()=>{
@@ -371,7 +371,7 @@ const Mint: React.FC<React.PropsWithChildren> = () => {
         (
           <InfoBox message="You Don't Have Any Nfts" icon={<WarningIcon />} />
         ))}
-          {!hasMinimumCbonRequired && (
+          {!hasMinimumCbonRequired && priceInCbon && (
             <Text color="failure" mb="16px">
               {t('A minimum of %num% CBON is required', { num: formatUnits(priceInCbon, 18) })}
             </Text>
