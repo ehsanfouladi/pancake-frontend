@@ -52,7 +52,7 @@ const ProfilePicture: React.FC = () => {
     address: getCadinuProfileAddress(),
     functionName: 'getNftAddressesForLevel',
     args: [BigInt(level)], 
-    // watch: false
+    watch: true
   })
 
   const getNftDatas = useCallback(async()=>{
