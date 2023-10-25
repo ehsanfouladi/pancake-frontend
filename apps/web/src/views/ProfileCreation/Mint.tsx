@@ -39,7 +39,7 @@ interface State {
 const Mint: React.FC<React.PropsWithChildren> = () => {
   const {address: account} = useAccount()
   const {query} = useRouter()
-  const ref = query.ref && isAddress(query.ref as Address) ? query.ref : zeroAddress
+  const ref = query.ref && isAddress(query.ref as Address) ? query.ref : undefined
   const [state, setState] = useSessionStorage<State>('nft-filter', {
     nftType: NftType.ALL,
   })
@@ -61,17 +61,14 @@ const Mint: React.FC<React.PropsWithChildren> = () => {
 
   const [targetAddress,setTargetAddress] = useState<Address>(account)
   const [buyForOthers,setBuyForOthers] = useState<boolean>(false)
-  const [haveReferral,setHaveReferral] = useState<boolean>(isAddress(ref as Address) &&  ref!==zeroAddress)
+  const [haveReferral,setHaveReferral] = useState<boolean>(ref && isAddress(ref as Address))
 
   const [numberToBuy, setNumberToBuy] = useState<string>('1')
   const [referralAddress,setReferralAddress] = useState<Address>(query.ref && isAddress(query.ref as Address) && query.ref!== zeroAddress ? query.ref as Address : zeroAddress )
 
   const { actions, allowance } = useProfileCreation()
   const { toastSuccess } = useToast()
-
-  const bunnyFactoryContract = useBunnyFactory()
   const { t } = useTranslation()
-  // const { balance: cakeBalance, fetchStatus } = useBSCCakeBalance()
   const {balance : cbonBalance, fetchStatus} = useBSCCbonBalance()
   const hasMinimumCbonRequired = fetchStatus === FetchStatus.Fetched && cbonBalance >= MINT_COST
   const { callWithGasPrice } = useCallWithGasPrice()
@@ -81,7 +78,7 @@ const Mint: React.FC<React.PropsWithChildren> = () => {
     address: getCadinuProfileAddress(),
     functionName: 'getNftAddressesForLevel',
     args: [BigInt(level)],
-    watch:false
+    watch:true
   })
 
   const getNftDatas = useCallback(async()=>{
@@ -146,6 +143,9 @@ const Mint: React.FC<React.PropsWithChildren> = () => {
     getNftDatas()
     if (ref && isAddress(ref as Address)){
       setHaveReferral(true)
+    }
+    if(!ref){
+      setHaveReferral(false)
     }
     
   },[selectedDogId,ref])

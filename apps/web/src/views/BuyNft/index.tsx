@@ -13,12 +13,11 @@ import { useBunnyFactory } from 'hooks/useContract'
 import { useSessionStorage } from 'hooks/useSessionStorage'
 import { useBSCCbonBalance } from 'hooks/useTokenBalance'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import { useCallback, useEffect, useState } from 'react'
 import { ApiSingleTokenData } from 'state/nftMarket/types'
 import { getCadinuProfileAddress } from 'utils/addressHelpers'
 import { getCadinuLevelNftContract } from 'utils/contractHelpers'
-import { Address, formatUnits, isAddress, zeroAddress } from 'viem'
+import { Address, formatUnits, zeroAddress } from 'viem'
 import ProfileCreationProvider from 'views/ProfileCreation/contexts/ProfileCreationProvider'
 import { readContracts, useAccount, useContractRead } from 'wagmi'
 import SelectionCard from '../ProfileCreation/SelectionCard'
@@ -70,7 +69,6 @@ const Mint: React.FC<React.PropsWithChildren> = () => {
 //   const { actions, allowance } = useProfileCreation()
   const { toastSuccess } = useToast()
 
-  const bunnyFactoryContract = useBunnyFactory()
   const { t } = useTranslation()
   // const { balance: cakeBalance, fetchStatus } = useBSCCakeBalance()
   const {balance : cbonBalance, fetchStatus} = useBSCCbonBalance()
@@ -82,7 +80,7 @@ const Mint: React.FC<React.PropsWithChildren> = () => {
     address: getCadinuProfileAddress(),
     functionName: 'getNftAddressesForLevel',
     args: [BigInt(level)],
-    // watch:false
+    watch:true
   })
 
   const getNftDatas = useCallback(async()=>{
@@ -169,7 +167,7 @@ const Mint: React.FC<React.PropsWithChildren> = () => {
         toastSuccess(t('Enabled'), t("Press 'confirm' to mint this NFT"))
       },
       onSuccess: () => {
-        toastSuccess(t('Success'), t('You have minted your starter NFT'))
+        toastSuccess(t('Success'), t('You have minted your NFT'))
         // actions.nextStep()
       },
     })
