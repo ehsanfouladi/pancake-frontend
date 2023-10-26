@@ -65,8 +65,6 @@ export const useProfile = (): {
   const { data, status, mutate } = useSWRImmutable(account ? [account, 'profile'] : null, () => getProfile(account), {
     use: [localStorageMiddleware],
   })
-  console.log('data',data, 'status',status, 'mutate', mutate);
-  
 
   const { profile, hasRegistered } = data ?? ({ profile: null, hasRegistered: false } as GetProfileResponse)
 

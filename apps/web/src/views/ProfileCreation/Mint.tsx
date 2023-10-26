@@ -129,7 +129,7 @@ const Mint: React.FC<React.PropsWithChildren> = () => {
     setMyNfts(myNftAdresses)
     
     }
-  }, CIAAddresses)
+  }, [CIAAddresses, level])
 
   
 
@@ -148,7 +148,7 @@ const Mint: React.FC<React.PropsWithChildren> = () => {
       setHaveReferral(false)
     }
     
-  },[selectedDogId,ref])
+  },[selectedDogId,ref, level])
 
   const { isApproving, isApproved, isConfirmed, isConfirming, handleApprove, handleConfirm } =
     useApproveConfirmTransaction({
@@ -269,10 +269,10 @@ const Mint: React.FC<React.PropsWithChildren> = () => {
         label: t('Level 1'),
         value: '1',
       },
-      // {
-      //   label: t('Level 2'),
-      //   value: '2',
-      // },
+      {
+        label: t('Level 2'),
+        value: '2',
+      },
       // {
       //   label: t('Level 3'),
       //   value: '3',
@@ -311,7 +311,7 @@ const Mint: React.FC<React.PropsWithChildren> = () => {
     
     
       <TabMenu nftType={nftType} onTypeChange={handleNftTypeChange} account={account}/>
-          {nftType===NftType.ALL && nftData && CIAAddresses.map((nft) => {
+          {nftType===NftType.ALL && nftData && CIAAddresses && CIAAddresses.map((nft) => {
             const handleChange = (value: Address) => setSelectedDogId(value)
             
               return (

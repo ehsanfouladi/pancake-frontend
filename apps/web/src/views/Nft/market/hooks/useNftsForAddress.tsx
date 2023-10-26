@@ -14,7 +14,6 @@ export const useNftsForAddress = (account: string, profile: Profile, isProfileFe
   const { data: collections } = useGetCollections()
 
   const { nfts, isLoading, refresh } = useCollectionsNftsForAddress(account, profile, isProfileFetching, collections)
-  console.log('nftsssss', nfts);
   
   return { nfts, isLoading, refresh }
 }
@@ -27,7 +26,6 @@ export const useCollectionsNftsForAddress = (
 ) => {
   const resetLaggyRef = useRef(null)
   const previousAccount = usePreviousValue(account)
-  console.log('collections', collections);
   
 
   if (resetLaggyRef.current && previousAccount !== account) {

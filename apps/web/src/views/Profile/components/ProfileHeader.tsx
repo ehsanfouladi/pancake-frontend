@@ -8,6 +8,7 @@ import {
   IconButton,
   LinkExternal,
   NextLinkFromReactRouter as ReactRouterLink,
+  Text,
   VisibilityOff,
   VisibilityOn,
   useModal,
@@ -25,6 +26,7 @@ import AvatarImage from '../../Nft/market/components/BannerHeader/AvatarImage'
 import StatBox, { StatBoxItem } from '../../Nft/market/components/StatBox'
 import EditProfileAvatar from './EditProfileAvatar'
 import EditProfileModal from './EditProfileModal'
+import Link from 'next/link'
 
 interface HeaderProps {
   accountPath: string
@@ -202,12 +204,21 @@ const ProfileHeader: React.FC<React.PropsWithChildren<HeaderProps>> = ({
           </Heading>
           {description}
         </Box>
-        <Box>
+        <Box display='inline-flex' verticalAlign='center'>
+          
           <StatBox>
             <StatBoxItem title={t('NFT Collected')} stat={numNftCollected} />
             <StatBoxItem title={t('Points')} stat={numPoints} />
             {/* <StatBoxItem title={t('Achievements')} stat={numAchievements} /> */}
           </StatBox>
+          <Box  m='5px' width='35%'>
+            <Link href='/buy-nft'>
+              <Button
+                scale='md' >
+                  <Text color='white' bold>Buy NFT</Text>
+              </Button>
+            </Link>
+          </Box>
         </Box>
       </Grid>
     </>

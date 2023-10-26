@@ -22,7 +22,7 @@ import ProfileCreationProvider from 'views/ProfileCreation/contexts/ProfileCreat
 import { readContracts, useAccount, useContractRead } from 'wagmi'
 import SelectionCard from '../ProfileCreation/SelectionCard'
 import TabMenu from '../ProfileCreation/TabMenu'
-import { MINT_COST } from '../ProfileCreation/config'
+// import { MINT_COST } from '../ProfileCreation/config'
 import { getNftImage } from '../ProfileCreation/helper'
 
 export enum NftType {
@@ -72,7 +72,7 @@ const Mint: React.FC<React.PropsWithChildren> = () => {
   const { t } = useTranslation()
   // const { balance: cakeBalance, fetchStatus } = useBSCCakeBalance()
   const {balance : cbonBalance, fetchStatus} = useBSCCbonBalance()
-  const hasMinimumCbonRequired = fetchStatus === FetchStatus.Fetched && cbonBalance >= MINT_COST
+  const hasMinimumCbonRequired = fetchStatus === FetchStatus.Fetched && cbonBalance >= priceInCbon
   const { callWithGasPrice } = useCallWithGasPrice()
   
   const {data: CIAAddresses} = useContractRead({
@@ -143,14 +143,14 @@ const Mint: React.FC<React.PropsWithChildren> = () => {
     const contract = getCadinuLevelNftContract(selectedDogId)
     setNftContract(contract)
     getNftDatas()
-  },[selectedDogId])
+  },[selectedDogId, level])
 
   const { isApproving, isApproved, isConfirmed, isConfirming, handleApprove, handleConfirm } =
     useApproveConfirmTransaction({
       token: bscTokens.cbon,
       spender: selectedDogId,
-      minAmount: MINT_COST,
-      targetAmount: MINT_COST,
+      minAmount: priceInCbon,
+      targetAmount: priceInCbon,
       onConfirm: () => {
         return callWithGasPrice(
           nftContract,
@@ -272,10 +272,10 @@ const Mint: React.FC<React.PropsWithChildren> = () => {
         label: t('Level 1'),
         value: '1',
       },
-      // {
-      //   label: t('Level 2'),
-      //   value: '2',
-      // },
+      {
+        label: t('Level 2'),
+        value: '2',
+      },
       // {
       //   label: t('Level 3'),
       //   value: '3',

@@ -16,7 +16,7 @@ const ProfileCreation = () => {
 
   useEffect(() => {
     if (account && hasProfile) {
-      router.push(`/buy-nft`)
+      router.push(`/profile/${account}`)
     }
   }, [account, hasProfile, router])
   

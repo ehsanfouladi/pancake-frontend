@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
-import { nftsBaseUrl } from 'views/Nft/market/constants'
+// import { nftsBaseUrl } from 'views/Nft/market/constants'
 import { useAccount } from 'wagmi'
 
 const ProfilePage = () => {
@@ -11,7 +11,7 @@ const ProfilePage = () => {
     if (account) {
       router.push(`/profile/${account.toLowerCase()}`)
     } else {
-      router.push(nftsBaseUrl)
+      router.push('/create-profile')
     }
   }, [account, router])
 
