@@ -1,6 +1,6 @@
 export const getNftImage = (collectionAddress) =>{
     switch (collectionAddress){
-        //level 1
+        // level 1
         case '0xbe548336c849aa2B7415A62702c5F3D5f64D9F7e':
             return 'images/nfts/level1/cadinu_nft_artist_250.png'
             break;
@@ -20,7 +20,7 @@ export const getNftImage = (collectionAddress) =>{
         case '0x933834fe626BDD84A4F7a4Db96132a1029a80fbd':
             return 'images/nfts/level1/cadinu_nft_hunter_250.png'
             break;
-        //level 2
+        // level 2
         case '0x1E10dFcc623c44891c88C1ec4D54C9bCb0ffB78c':
             return 'images/nfts/level2/cadinu_nft_artist_250.PNG'
             break
