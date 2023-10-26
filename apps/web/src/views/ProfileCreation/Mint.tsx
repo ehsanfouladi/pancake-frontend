@@ -8,7 +8,6 @@ import { cadinuProfileAbi } from 'config/abi/cadinuProfile'
 import { FetchStatus } from 'config/constants/types'
 import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
-import { useBunnyFactory } from 'hooks/useContract'
 import { useSessionStorage } from 'hooks/useSessionStorage'
 import { useBSCCbonBalance } from 'hooks/useTokenBalance'
 import { useRouter } from 'next/router'
@@ -140,7 +139,6 @@ const Mint: React.FC<React.PropsWithChildren> = () => {
   useEffect(()=>{
     const contract = getCadinuLevelNftContract(selectedDogId)
     setNftContract(contract)
-    getNftDatas()
     if (ref && isAddress(ref as Address)){
       setHaveReferral(true)
     }
@@ -149,6 +147,10 @@ const Mint: React.FC<React.PropsWithChildren> = () => {
     }
     
   },[selectedDogId,ref, level])
+
+  useEffect(()=>{
+      getNftDatas()
+  }, [CIAAddresses, level])
 
   const { isApproving, isApproved, isConfirmed, isConfirming, handleApprove, handleConfirm } =
     useApproveConfirmTransaction({

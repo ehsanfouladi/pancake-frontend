@@ -1,6 +1,6 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { bscTokens } from '@pancakeswap/tokens'
-import { Box, Button, Card, CardBody, Checkbox, Flex, Heading, Input, OptionProps, Select, Text, WarningIcon, useToast } from '@pancakeswap/uikit'
+import { Box, Button, Card, CardBody, Checkbox, Flex, Heading, Input, OptionProps, Select, Skeleton, SkeletonV2, Text, WarningIcon, useToast } from '@pancakeswap/uikit'
 import { InfoBox } from '@pancakeswap/uikit/src/components/LiquidityChartRangeInput/InfoBox'
 import ApproveConfirmButtons from 'components/ApproveConfirmButtons'
 import Page from 'components/Layout/Page'
@@ -9,7 +9,6 @@ import { cadinuProfileAbi } from 'config/abi/cadinuProfile'
 import { FetchStatus } from 'config/constants/types'
 import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
-import { useBunnyFactory } from 'hooks/useContract'
 import { useSessionStorage } from 'hooks/useSessionStorage'
 import { useBSCCbonBalance } from 'hooks/useTokenBalance'
 import Link from 'next/link'
@@ -55,6 +54,7 @@ const Mint: React.FC<React.PropsWithChildren> = () => {
   // const [starterNfts, setStarterNfts] = useState<MintNftData[]>([])
   const [nftData, setNftData] = useState(null)
   const [myNfts, setMyNfts] = useState([])
+  const [isNftLoading, setIsNftLoading] = useState<boolean>(false)
   const [nftContract, setNftContract] = useState(null)
   const [level, setLevel] = useState<number>(1)
   const [priceInCbon, setPriceInCbon] = useState<bigint>(0n)
@@ -87,6 +87,7 @@ const Mint: React.FC<React.PropsWithChildren> = () => {
     if (CIAAddresses && CIAAddresses.length !== 0){
       const nftDataTemp = {}
       const myNftAdresses = []
+      setIsNftLoading(true)
       CIAAddresses.map( async (nftAddress)=>{
         const tempNftContract = {
           abi: CadinuLevelNftsAbi,
@@ -129,6 +130,7 @@ const Mint: React.FC<React.PropsWithChildren> = () => {
       });
     setNftData(nftDataTemp)
     setMyNfts(myNftAdresses)
+    setIsNftLoading(false)
     
     }
   }, CIAAddresses)
@@ -142,8 +144,13 @@ const Mint: React.FC<React.PropsWithChildren> = () => {
   useEffect(()=>{
     const contract = getCadinuLevelNftContract(selectedDogId)
     setNftContract(contract)
-    getNftDatas()
+    
   },[selectedDogId, level])
+
+
+  useEffect(()=>{
+      getNftDatas()
+  }, [CIAAddresses, ])
 
   const { isApproving, isApproved, isConfirmed, isConfirming, handleApprove, handleConfirm } =
     useApproveConfirmTransaction({
@@ -329,7 +336,7 @@ const Mint: React.FC<React.PropsWithChildren> = () => {
                 >
                   {/* <Grid style={{ gap: '16px' }} maxWidth="360px" > */}
                 <Flex flexDirection='row' width='100%' flexWrap='wrap'>
-                <Text bold>{nftData[nft] ? nftData[nft].data.name: ''}</Text>
+                {nftData[nft] && nftData[nft].data.name ? <Text bold> {nftData[nft].data.name} </Text> : <SkeletonV2 />}
                 {selectedDogId === nft && <>
                 <Input
                 value={numberToBuy}
@@ -350,17 +357,17 @@ const Mint: React.FC<React.PropsWithChildren> = () => {
             const handleChange = (value: Address) => setSelectedDogId(value)
             
               return (
-                <SelectionCard
-                key={nftData[nft]?.data.name}
-                name="mintStarter"
-                value={nft}
-                image={getNftImage(nft)}
-                isChecked={selectedDogId === nft}
-                onChange={handleChange}
-                disabled={isApproving || isConfirming || isConfirmed }
-                >
-                <Text bold>{nftData[nft] ? nftData[nft].data.name: ''}</Text>
-              </SelectionCard>
+                  <SelectionCard
+                    key={nftData[nft]?.data.name}
+                    name="mintStarter"
+                    value={nft}
+                    image={getNftImage(nft)}
+                    isChecked={selectedDogId === nft}
+                    onChange={handleChange}
+                    disabled={isApproving || isConfirming || isConfirmed }
+                    >
+                    <Text bold>{nftData[nft] ? nftData[nft].data.name: <Skeleton />}</Text>
+                  </SelectionCard>
               )
             
           }
