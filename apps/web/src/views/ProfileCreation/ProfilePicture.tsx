@@ -95,13 +95,11 @@ const ProfilePicture: React.FC = () => {
     setNftData(nftDataTemp)
     setMyNfts(myNftAdresses)
     }
-  }, CIAAddresses)
+  }, [CIAAddresses])
 
   useEffect(() => {
-    if(!nftData){
       getNftDatas()
-    }
-  },[nftData])
+  },[CIAAddresses, level])
 
   const { t } = useTranslation()
   const { toastSuccess } = useToast()
@@ -147,10 +145,10 @@ const ProfilePicture: React.FC = () => {
               label: t('Level 1'),
               value: '1',
             },
-            // {
-            //   label: t('Level 2'),
-            //   value: '2',
-            // },
+            {
+              label: t('Level 2'),
+              value: '2',
+            },
             // {
             //   label: t('Level 3'),
             //   value: '3',
