@@ -17,6 +17,7 @@ import { formatNumber } from '@pancakeswap/utils/formatBalance'
 import truncateHash from '@pancakeswap/utils/truncateHash'
 import { useDomainNameForAddress } from 'hooks/useDomain'
 import useGetUsernameWithVisibility from 'hooks/useUsernameWithVisibility'
+import Link from 'next/link'
 import { useMemo } from 'react'
 import { Achievement, Profile } from 'state/types'
 import { getBlockExploreLink, isAddress } from 'utils'
@@ -26,7 +27,6 @@ import AvatarImage from '../../Nft/market/components/BannerHeader/AvatarImage'
 import StatBox, { StatBoxItem } from '../../Nft/market/components/StatBox'
 import EditProfileAvatar from './EditProfileAvatar'
 import EditProfileModal from './EditProfileModal'
-import Link from 'next/link'
 
 interface HeaderProps {
   accountPath: string
