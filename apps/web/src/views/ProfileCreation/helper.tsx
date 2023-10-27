@@ -22,22 +22,22 @@ export const getNftImage = (collectionAddress) =>{
             break;
         // level 2
         case '0x1E10dFcc623c44891c88C1ec4D54C9bCb0ffB78c':
-            return 'images/nfts/level2/cadinu_nft_artist_250.PNG'
+            return 'images/nfts/level2/cadinu_nft_artist_250.png'
             break
         case '0x1f8ABe5f9C4a30da159F0Bae4d1ACbbfa02E60E8':
-            return 'images/nfts/level2/cadinu_nft_business_250.PNG'
+            return 'images/nfts/level2/cadinu_nft_business_250.png'
             break
         case '0xaa27345f2c310394D96580A9AaBCEcf5CA19350a':
-            return 'images/nfts/level2/cadinu_nft_cowboy_250.PNG'
+            return 'images/nfts/level2/cadinu_nft_cowboy_250.png'
             break
         case '0x2523918D98518E324834Fad150077Dff3331C9c7':
-            return 'images/nfts/level2/cadinu_nft_loyalty_250.PNG'
+            return 'images/nfts/level2/cadinu_nft_loyalty_250.png'
             break
         case '0x67bFFaDA0EAE97ed78b5ad1Ed763f2613cDC857D':
-            return 'images/nfts/level2/cadinu_nft_futuristic_250.PNG'
+            return 'images/nfts/level2/cadinu_nft_futuristic_250.png'
             break
         case '0xd725793b8a42607600d14075e1945E59D8C30E34':
-            return 'images/nfts/level2/cadinu_nft_hunter_250.PNG'
+            return 'images/nfts/level2/cadinu_nft_hunter_250.png'
             break
 
     }  

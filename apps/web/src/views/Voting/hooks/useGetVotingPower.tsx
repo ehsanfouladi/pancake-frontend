@@ -1,10 +1,10 @@
 import { ChainId } from '@pancakeswap/sdk'
-import { useAccount, Address } from 'wagmi'
+import { bscTokens } from '@pancakeswap/tokens'
 import { FetchStatus } from 'config/constants/types'
 import useSWRImmutable from 'swr/immutable'
 import { getActivePools } from 'utils/calls'
-import { bscTokens } from '@pancakeswap/tokens'
 import { publicClient } from 'utils/wagmi'
+import { Address, useAccount } from 'wagmi'
 import { getVotingPower } from '../helpers'
 
 interface State {

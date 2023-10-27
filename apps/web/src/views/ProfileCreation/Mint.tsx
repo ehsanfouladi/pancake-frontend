@@ -5,6 +5,7 @@ import { InfoBox } from '@pancakeswap/uikit/src/components/LiquidityChartRangeIn
 import ApproveConfirmButtons from 'components/ApproveConfirmButtons'
 import { CadinuLevelNftsAbi } from 'config/abi/cadinuLevelNfts'
 import { cadinuProfileAbi } from 'config/abi/cadinuProfile'
+import { cadinuReferralAbi } from 'config/abi/cadinuReferral'
 import { FetchStatus } from 'config/constants/types'
 import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
@@ -13,7 +14,7 @@ import { useBSCCbonBalance } from 'hooks/useTokenBalance'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useState } from 'react'
 import { ApiSingleTokenData } from 'state/nftMarket/types'
-import { getCadinuProfileAddress } from 'utils/addressHelpers'
+import { getCadinuProfileAddress, getCadinuReferralAddress } from 'utils/addressHelpers'
 import { getCadinuLevelNftContract } from 'utils/contractHelpers'
 import { Address, formatUnits, isAddress, zeroAddress } from 'viem'
 import { readContracts, useAccount, useContractRead } from 'wagmi'
@@ -78,6 +79,13 @@ const Mint: React.FC<React.PropsWithChildren> = () => {
     functionName: 'getNftAddressesForLevel',
     args: [BigInt(level)],
     watch:true
+  })
+
+  const {data: referredTo} = useContractRead({
+    address: getCadinuReferralAddress(),
+    abi: cadinuReferralAbi,
+    functionName : 'referredTo',
+    args:[account]
   })
 
   const getNftDatas = useCallback(async()=>{
@@ -228,12 +236,17 @@ const Mint: React.FC<React.PropsWithChildren> = () => {
     {haveReferral  &&
     <>
     {/* eslint-disable-next-line jsx-a11y/label-has-associated-control, jsx-a11y/label-has-for */}
-      <label htmlFor='refAddress' ><Text my='5px' bold>Referral Address:</Text></label>
-      <Input
+    <Input
       id='refAddress'
-      value={referralAddress}
+      disabled={referredTo && referredTo!==zeroAddress}
+      value={referredTo && referredTo!==zeroAddress ? referredTo : referralAddress}
       onChange={(e)=>setReferralAddress(e.target.value as Address)}
       />
+      {referredTo && referredTo!==zeroAddress && haveReferral &&
+        <Flex flex='flex-inline' mb='15px'>
+        <WarningIcon color='warning'/> <Text color='warning'>Once you set your referral address you can not change it.</Text>
+        </Flex>
+      }
     </>
     }
    {/* <Box mt='8px' ml='-5px'>
