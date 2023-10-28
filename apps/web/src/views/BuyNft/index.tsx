@@ -1,11 +1,12 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { bscTokens } from '@pancakeswap/tokens'
-import { Box, Button, Card, CardBody, Checkbox, Flex, Heading, Input, OptionProps, Select, Skeleton, SkeletonV2, Text, WarningIcon, useToast } from '@pancakeswap/uikit'
+import { Box, Button, Card, CardBody, Checkbox, Flex, Heading, Input, LinkExternal, OptionProps, Select, Skeleton, SkeletonV2, Text, WarningIcon, useToast } from '@pancakeswap/uikit'
 import { InfoBox } from '@pancakeswap/uikit/src/components/LiquidityChartRangeInput/InfoBox'
 import ApproveConfirmButtons from 'components/ApproveConfirmButtons'
 import Page from 'components/Layout/Page'
 import { CadinuLevelNftsAbi } from 'config/abi/cadinuLevelNfts'
 import { cadinuProfileAbi } from 'config/abi/cadinuProfile'
+import { cadinuReferralAbi } from 'config/abi/cadinuReferral'
 import { FetchStatus } from 'config/constants/types'
 import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
@@ -17,10 +18,9 @@ import { ApiSingleTokenData } from 'state/nftMarket/types'
 import { getCadinuProfileAddress, getCadinuReferralAddress } from 'utils/addressHelpers'
 import { getCadinuLevelNftContract } from 'utils/contractHelpers'
 import { Address, formatUnits, zeroAddress } from 'viem'
+import WalletNotConnected from 'views/ProfileCreation/WalletNotConnected'
 import ProfileCreationProvider from 'views/ProfileCreation/contexts/ProfileCreationProvider'
 import { readContracts, useAccount, useContractRead } from 'wagmi'
-import { cadinuReferralAbi } from 'config/abi/cadinuReferral'
-import WalletNotConnected from 'views/ProfileCreation/WalletNotConnected'
 import SelectionCard from '../ProfileCreation/SelectionCard'
 import TabMenu from '../ProfileCreation/TabMenu'
 import { getNftImage } from '../ProfileCreation/helper'
@@ -385,14 +385,19 @@ const Mint: React.FC<React.PropsWithChildren> = () => {
           <InfoBox message="You Don't Have Any Nfts" icon={<WarningIcon />} />
         ))}
           {!hasMinimumCbonRequired && priceInCbon && (
-            <Text color="failure" mb="16px">
+            <>
+            <Text color="failure" >
               {t('A minimum of %num% CBON is required', { num: formatUnits(priceInCbon, 18) })}
             </Text>
+            <LinkExternal mb="16px" href='https://apps.cadinu.io/swap?inputCurrency=0x55d398326f99059fF775485246999027B3197955&outputCurrency=0x6e64fCF15Be3eB71C3d42AcF44D85bB119b2D98b'>
+              Get CBON
+            </LinkExternal>
+            </>
             
           )}
           {nftType===NftType.ALL && 
           <ApproveConfirmButtons
-            isApproveDisabled={selectedDogId === null || isConfirmed || isConfirming || isApproved}
+            isApproveDisabled={selectedDogId === null || isConfirmed || isConfirming || isApproved || !hasMinimumCbonRequired}
             isApproving={isApproving}
             isConfirmDisabled={!isApproved || isConfirmed || !hasMinimumCbonRequired}
             isConfirming={isConfirming}

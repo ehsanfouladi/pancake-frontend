@@ -96,7 +96,7 @@ const UserMenu = () => {
   if (account) {
     return (
       <UIKitUserMenu
-          account={account}
+          account={domainName || account}
           avatarSrc={avatarSrc}
           text={userMenuText}
           variant={userMenuVariable}

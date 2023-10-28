@@ -117,7 +117,7 @@ const NftProfileAchievementsPage = () => {
         type: 'participation',
         address: accountAddress,
         title: 'Number Of Nfts',
-        description: "Number of Cadinu Identity Arts' NFTs you own.",
+        description: "Number of Cadinu Identity Arts' NFTs you've purchased.",
         badge: 'numberOfNFTs.png',
         points: referralAchievements ? Number(referralAchievements.referralData[0]) : 0
       },

@@ -1,6 +1,6 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { bscTokens } from '@pancakeswap/tokens'
-import { Box, Card, CardBody, Checkbox, Flex, Heading, Input, OptionProps, Select, Text, WarningIcon, useToast } from '@pancakeswap/uikit'
+import { Box, Card, CardBody, Checkbox, Flex, Heading, Input, LinkExternal, OptionProps, Select, Text, WarningIcon, useToast } from '@pancakeswap/uikit'
 import { InfoBox } from '@pancakeswap/uikit/src/components/LiquidityChartRangeInput/InfoBox'
 import ApproveConfirmButtons from 'components/ApproveConfirmButtons'
 import { CadinuLevelNftsAbi } from 'config/abi/cadinuLevelNfts'
@@ -382,14 +382,20 @@ const Mint: React.FC<React.PropsWithChildren> = () => {
           <InfoBox message="You Don't Have Any Nfts" icon={<WarningIcon />} />
         ))}
           {!hasMinimumCbonRequired && (
-            <Text color="failure" mb="16px">
+            <>
+            <Text color="failure" >
               {t('A minimum of %num% CBON is required', { num: formatUnits(priceInCbon, 18) })}
             </Text>
+            <LinkExternal
+             mb="16px" href='https://apps.cadinu.io/swap?inputCurrency=0x55d398326f99059fF775485246999027B3197955&outputCurrency=0x6e64fCF15Be3eB71C3d42AcF44D85bB119b2D98b'>
+              Get CBON
+            </LinkExternal>
+            </>
             
           )}
           {nftType===NftType.ALL && 
           <ApproveConfirmButtons
-            isApproveDisabled={selectedDogId === null || isConfirmed || isConfirming || isApproved}
+            isApproveDisabled={selectedDogId === null || isConfirmed || isConfirming || isApproved || !hasMinimumCbonRequired}
             isApproving={isApproving}
             isConfirmDisabled={!isApproved || isConfirmed || !hasMinimumCbonRequired}
             isConfirming={isConfirming}
