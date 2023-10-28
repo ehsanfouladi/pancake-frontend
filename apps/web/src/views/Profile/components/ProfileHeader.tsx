@@ -89,11 +89,11 @@ const ProfileHeader: React.FC<React.PropsWithChildren<HeaderProps>> = ({
     const imagePath = '/images/teams'
     switch (profileTeamId) {
       case 1:
-        return `${imagePath}/global-banner.png`
+        return `${imagePath}/global-banner.jpg`
       case 2:
-        return `${imagePath}/global-banner.png`
+        return `${imagePath}/global-banner.jpg`
       case 3:
-        return `${imagePath}/global-banner.png`
+        return `${imagePath}/global-banner.jpg`
       default:
         break
     }
