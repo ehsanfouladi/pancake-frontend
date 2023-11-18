@@ -12,7 +12,7 @@ const DesktopResult: React.FC<React.PropsWithChildren<DesktopResultProps>> = ({ 
   return (
     <tr>
       <Td>
-        <Link href={`trading-reward/top-traders/${competition._id}`}>
+        <Link href={`trading-competition/top-traders/${competition._id}`}>
         <Text bold color="secondary">
           {`#${competition._id}`}
         </Text>

@@ -11,12 +11,12 @@ const UpcomingCompetitions = () => {
 const BACKGROUND_COLOR = 'radial-gradient(55.22% 134.13% at 57.59% 0%, #60EFFF 0%, #45CAFF 33.21%, #0061FF 79.02%)'
 
 
-const StyledBackground = styled(Flex)<{ showBackgroundColor: boolean }>`
+const StyledBackground = styled(Flex)`
   position: relative;
   flex-direction: column;
   padding-top: 0px;
   margin-bottom: 48px;
-  background: ${({ showBackgroundColor }) => (showBackgroundColor ? BACKGROUND_COLOR : '')};
+  background: ${BACKGROUND_COLOR};
   z-index: 0;
 
   ${({ theme }) => theme.mediaQueries.lg} {
@@ -70,7 +70,7 @@ const StyledHeading = styled(Text)`
   const {data, isLoading} = useSWR(`${COMPETITION_API_URL}/upcoming-competitions`,fetcher )
 
   return (
-    <StyledBackground showBackgroundColor={true} justifyContent='center' >
+    <StyledBackground  justifyContent='center' >
       <StyledHeading data-text={t('Upcoming Competitions')}
       
       >{t('Upcoming Competitions')}</StyledHeading>

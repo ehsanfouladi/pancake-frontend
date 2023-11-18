@@ -10,9 +10,9 @@ const SubMenu: React.FC<React.PropsWithChildren> = () => {
   
   const subMenuItems = useMemo(() => {
     return [
-      { label: t('Live'), href: '/trading-reward/top-traders/live#submenu' },
-      { label: t('Finished'), href: '/trading-reward/top-traders/finished#submenu' },
-      { label: t('Upcoming'), href: '/trading-reward/top-traders/upcoming#submenu' },
+      { label: t('Live'), href: '/trading-competition/top-traders/live#submenu' },
+      { label: t('Finished'), href: '/trading-competition/top-traders/finished#submenu' },
+      { label: t('Upcoming'), href: '/trading-competition/top-traders/upcoming#submenu' },
     ]
   }, [t])
 

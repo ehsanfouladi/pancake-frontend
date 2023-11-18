@@ -52,62 +52,6 @@ const NftProfile: React.FC<React.PropsWithChildren<unknown>> = ({ children }) =>
     refreshUserNfts()
   }, [refreshProfile, refreshUserNfts])
 
-  // const {data: numberOfLevels, isSuccess: isNumberOfLevelsSuccess } = useContractRead({
-  //     abi : cadinuProfileAbi,
-  //     address: getCadinuProfileAddress(),
-  //     functionName: 'numberOfLevels', 
-  //     watch: false
-  //   })
-  // const getCiaAddresses =  async(level:number)=>{
-  //   const profileContract ={
-  //     abi:cadinuProfileAbi,
-  //     address: getCadinuProfileAddress()
-  //   }
-  //   const data =  await readContracts({
-  //     contracts:[
-  //       {
-  //         ...profileContract,
-  //         functionName:'getNftAddressesForLevel',
-  //         args:[BigInt(level)]
-  //       }
-  //     ]
-  //   })
-  //   return data[0].result
-  // }
-  //   const getNftDatas = useCallback(async()=>{
-  //     const myNftAdresses = {}
-  //     for (var i=0;i<numberOfLevels;i++){
-  //       const CIAAddresses = await getCiaAddresses(i+1)
-  //       if (CIAAddresses.length !== 0){
-
-  //     }
-  //       CIAAddresses.map( async (nftAddress)=>{
-  //         const nftContract = {
-  //           abi: CadinuLevelNftsAbi,
-  //           address: nftAddress,
-  //         }
-  //         const data = await  readContracts({
-  //           contracts :[
-  //           {
-  //             ...nftContract,
-  //             functionName:'tokensOfOwner',
-  //             args:[accountAddress as Address]
-  //           }
-  
-  //           ]
-  //         })
-  //         if(data[0].result && data[0].result.length > 0){
-  //           myNftAdresses[`${nftAddress}`] ={}
-  //           myNftAdresses[`${nftAddress}`].tokenId = data[0].result
-  //         }
-  //       });
-  //     setMyNfts(myNftAdresses)
-  //     }
-  //   }, [])
-  // useEffect(() => {
-  //   getNftDatas()
-  // }, [accountAddress, numberOfLevels])
-  
   if (invalidAddress) {
     return (
       <>

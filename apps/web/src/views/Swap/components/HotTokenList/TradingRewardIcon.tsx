@@ -15,7 +15,7 @@ const TradingRewardIcon = ({ pairs }: TradingRewardIconProps) => {
   const handleClick = (e) => {
     e.stopPropagation()
     e.preventDefault()
-    router.push('/trading-reward')
+    router.push('/trading-competition')
   }
 
   const { targetRef, tooltip, tooltipVisible } = useTooltip(

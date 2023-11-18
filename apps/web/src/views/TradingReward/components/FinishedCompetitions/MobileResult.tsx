@@ -24,7 +24,7 @@ const MobileResult: React.FC<React.PropsWithChildren<MobileResultProps>> = ({ co
   return (
     <StyledMobileRow p="16px">
       <Flex justifyContent="space-between" mb="16px">
-      <Link href={`trading-reward/top-traders/${competition._id}`}>
+      <Link href={`trading-competition/top-traders/${competition._id}`}>
         <Text fontWeight="bold" color="secondary" mr="auto">
           {`#${competition._id}`}
         </Text>

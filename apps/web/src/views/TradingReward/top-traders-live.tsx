@@ -13,12 +13,12 @@ const LiveCompetitions = () => {
 
 const BACKGROUND_COLOR = 'radial-gradient(55.22% 134.13% at 57.59% 0%, #F5DF8E 0%, #FCC631 33.21%, #FF9D00 79.02%)'
 
-const StyledBackground = styled(Flex)<{ showBackgroundColor: boolean }>`
+const StyledBackground = styled(Flex)`
   position: relative;
   flex-direction: column;
   padding-top: 48px;
   margin-bottom: 0;
-  background: ${({ showBackgroundColor }) => (showBackgroundColor ? BACKGROUND_COLOR : '')};
+  background: ${BACKGROUND_COLOR};
   z-index: 0;
 
   ${({ theme }) => theme.mediaQueries.lg} {
@@ -116,7 +116,7 @@ const StyledHeading = styled(Text)`
   
   
   return (
-    <StyledBackground showBackgroundColor={true} justifyContent='center' >
+    <StyledBackground justifyContent='center' >
       <StyledHeading data-text={t('Live Competitions')}>{t('Live Competitions')}</StyledHeading>
       <Flex flexDirection={isMobile ? 'column' : 'row'}
       width={['328px', '100%']}
@@ -131,7 +131,7 @@ const StyledHeading = styled(Text)`
           <IfoSkeletonCardDetails />
         )}
         {data && data.competitions.map(competition=>(
-          <Link href={`trading-reward/top-traders/${competition._id}`}>
+          <Link href={`trading-competition/top-traders/${competition._id}`}>
           <Card ribbon={competition.isBoosted && <CardRibbon text='Boosted' ribbonPosition="right" />}
           m='15px' 
           style={{

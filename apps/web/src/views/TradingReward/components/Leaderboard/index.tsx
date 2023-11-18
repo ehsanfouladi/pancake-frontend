@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Box, Card, CardBody, Grid, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { Box, Button, Card, CardBody, Flex, Grid, LinkExternal, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import Container from 'components/Layout/Container'
 import { format } from 'date-fns'
 import isEmpty from 'lodash/isEmpty'
@@ -11,6 +11,10 @@ import { RankListDetail } from 'views/TradingReward/hooks/useRankList'
 import LeaderBoardDesktopView from './DesktopView'
 import LeaderBoardMobileView from './MobileView'
 import RankingCard from './RankingCard'
+import { TruncatedText } from 'views/Swap/components/styleds'
+import truncateHash from '@pancakeswap/utils/truncateHash'
+import { Address, readContracts } from 'wagmi'
+import { lpTokenABI } from 'config/abi/lpTokenAbi'
 
 
 const Leaderboard = () => {
@@ -110,6 +114,46 @@ const Leaderboard = () => {
       setCurrentPage(value)
     }
   }
+  const handleClick = async (poolAddress: string, exchangeName)=>{
+
+    const res = await  readContracts({
+      contracts:[
+        {
+          address: poolAddress as Address,
+          abi: lpTokenABI,
+          functionName: 'token0'
+        },
+        {
+          address: poolAddress as Address,
+          abi: lpTokenABI,
+          functionName: 'token1'
+        },
+      ]
+    })
+
+    let url =''
+    switch(exchangeName){
+      case 'cadinuSwap':
+        default:
+        (url = `https://apps.cadinu.io/swap?inputCurrency=${res[0].result}&outputCurrency=${
+          res[1].result
+        }`)
+        break;
+      case 'pancakeSwap':
+        (url = `https://pancake.finance/swap?inputCurrency=${res[0].result}&outputCurrency=${
+          res[1].result
+        }`)
+        break;
+      case 'uniSwap':
+        (url = 'https://app.uniswap.org/swap?chain=bnb')
+        break;
+      }
+      
+      router.push(url)
+      
+    }
+  
+
 
   return (
     <Box id="leaderboard" position="relative" style={{ zIndex: 1 }} mt="104px">
@@ -141,6 +185,24 @@ const Leaderboard = () => {
         <Text bold>Total Prize:</Text>
         <Text >{currentCompetition.rewardAmount} CBON</Text>
         </Grid>
+        <Grid
+          gridGap={['16px', null, null, null, null, '24px']}
+          gridTemplateColumns={['1fr', null, null, null, null, 'repeat(4, 1fr)']}
+        > 
+        <Text bold>Pool Address:</Text>
+        <LinkExternal href={`https://bscscan.com/address/${currentCompetition.poolAddress}`}>
+        <Text >{truncateHash(currentCompetition.poolAddress)}</Text>
+        </LinkExternal>
+        <Text bold>Pair:</Text>
+        <Text >{currentCompetition.token0}/{currentCompetition.token1}</Text>
+        </Grid>
+        <Flex flexDirection='row' justifyContent='right'>
+        <Button 
+          scale='sm'
+          disabled={currentCompetition.endTime < Date.now() / 1000}
+          onClick={()=>handleClick(currentCompetition.poolAddress , currentCompetition.exchangeName)}
+        >Trade Now</Button>
+        </Flex>
           </CardBody>
         </Card>
         </Container>
