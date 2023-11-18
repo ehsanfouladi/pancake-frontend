@@ -249,6 +249,6 @@ export default {
     56: '0x1eD1fF95046ca1d8219D1400E8CB6DcB22902aC5'
   },
   cadinuTradingCompetition:{
-    56: '0x36Ac902eDAE2b615F12621a92A8B42f50B1756d2'
+    56: '0x4a30205174643E43D7a670331b4c23Aa2013CC0E'
   }
 } as const satisfies Record<string, Record<number, `0x${string}`>>

@@ -104,7 +104,7 @@ const IncreaseReward = ()=>{
     const handleFormSubmit = async (e)=>{
         e.preventDefault()
       }
-    if(account && account.toLowerCase() !== competitionDetails[0].result?.toLowerCase()){
+    if(competitionDetails && account && account.toLowerCase() !== competitionDetails[0].result?.toLowerCase()){
         return (<NotFound />)
     }
     if(!account){

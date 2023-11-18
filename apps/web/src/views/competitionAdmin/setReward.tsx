@@ -57,7 +57,7 @@ const CompetitionAdmin = ()=>{
       watch:true
     })
     useEffect(()=>{
-        if (competitionDetails[1].status==='success' && numberOfWinners === 0){
+        if (competitionDetails && competitionDetails[1].status==='success' && numberOfWinners === 0){
           setNumberOfWinners(Number(competitionDetails[1]?.result?.['3']))
           setState((prevState)=>({
             ...prevState,
@@ -132,8 +132,8 @@ const CompetitionAdmin = ()=>{
     useApproveConfirmTransaction({
       token: bscTokens.cbon,
       spender: getCadinuTradingCompetitionAddress(),
-      minAmount: competitionDetails[1]?.result?.['4'],
-      targetAmount: competitionDetails[1]?.result?.['4'],
+      minAmount: competitionDetails?.[1]?.result?.['4'],
+      targetAmount: competitionDetails?.[1]?.result?.['4'],
       onConfirm: () => {
         return callWithGasPrice(
           tradingCompetiionContract,
@@ -156,7 +156,7 @@ const CompetitionAdmin = ()=>{
     })
 
 
-    if(account && account.toLowerCase() !== competitionDetails[0].result?.toLowerCase()){
+    if(competitionDetails && account && account.toLowerCase() !== competitionDetails[0].result?.toLowerCase()){
         return (<NotFound />)
     }
     if(!account){
@@ -170,7 +170,7 @@ const CompetitionAdmin = ()=>{
         <Page>
           <Container>
             <PageSection index={1}>
-             {competitionDetails[1].status==='success' && (
+             {competitionDetails && competitionDetails[1].status==='success' && (
               <>
               <Layout>
               <Box ml='25px'>
@@ -245,9 +245,9 @@ const CompetitionAdmin = ()=>{
                 </Layout>
               </form> 
               <ApproveConfirmButtons
-                isApproveDisabled={ isConfirmed || isConfirming || isApproved }
+                isApproveDisabled={ isConfirmed || isConfirming || isApproved || !competitionDetails}
                 isApproving={isApproving}
-                isConfirmDisabled={!isApproved || isConfirmed }
+                isConfirmDisabled={!isApproved || isConfirmed || !competitionDetails}
                 isConfirming={isConfirming}
                 onApprove={handleApprove}
                 onConfirm={handleConfirm}

@@ -116,7 +116,7 @@ const StyledHeading = styled(Text)`
   
   
   return (
-    <StyledBackground showBackgroundColor={!!account} justifyContent='center' >
+    <StyledBackground showBackgroundColor={true} justifyContent='center' >
       <StyledHeading data-text={t('Live Competitions')}>{t('Live Competitions')}</StyledHeading>
       <Flex flexDirection={isMobile ? 'column' : 'row'}
       width={['328px', '100%']}
@@ -146,7 +146,7 @@ const StyledHeading = styled(Text)`
             
         <CardHeader style={{textAlign:'center'}} >
           
-          <Text>Competition ID #{competition._id}</Text>
+          <Text>ID #{competition._id}</Text>
         </CardHeader>
         <CardBody style={{backgroundColor: 'rgba(255, 255, 255, 0.9)'}}>
           <Box>

@@ -1,4 +1,4 @@
-import { Box, Button, Container, Heading, Input, NotFound, PageSection, useToast } from "@pancakeswap/uikit"
+import { Box, Button, Container, Flex, Heading, Input, NotFound, PageSection, useToast } from "@pancakeswap/uikit"
 import { ToastDescriptionWithTx } from "components/Toast"
 import { cadinuTradingCompetition } from "config/abi/cadinuTradingCompetition"
 import { ChangeEvent, useEffect, useState } from "react"
@@ -14,6 +14,7 @@ import { DatePicker } from "views/Voting/components/DatePicker"
 import { useAccount, useContractReads, useContractWrite, usePrepareContractWrite, useSignMessage, useWaitForTransaction } from "wagmi"
 import { parseEther } from 'viem'
 import { COMPETITION_API_URL } from "views/TradingReward/constants"
+import Link from "next/link"
 
 interface FormState {
     id : number
@@ -33,6 +34,7 @@ interface FormState {
 const CompetitionAdmin = ()=>{
     const {address:account} = useAccount()
     const { toastError, toastSuccess } = useToast()
+    const [rewardId, setRewardId] = useState('')
 
     const contract = {
       address:getCadinuTradingCompetitionAddress(),
@@ -156,7 +158,7 @@ const CompetitionAdmin = ()=>{
         updateValue(key, value)
       }
     
-    if(account && account.toLowerCase() !== competitionDetails[0]?.result?.toLowerCase()){
+    if(competitionDetails && account && account.toLowerCase() !== competitionDetails[0]?.result?.toLowerCase()){
         return (<NotFound />)
     }
     if(!account){
@@ -169,6 +171,30 @@ const CompetitionAdmin = ()=>{
     return (
         <Page>
           <Container>
+              <Input
+                value={rewardId}
+                onChange={e=>setRewardId(e.target.value)}
+                type="text"
+                placeholder="competition ID"
+                />
+            <Flex flexDirection='row'>
+                <Link href={`competitions/set-reward/${rewardId}`}>
+                <Button m='15px'
+                  scale="sm"
+                  disabled={rewardId===''}
+                >
+                  Set Reward
+                </Button>
+                </Link>
+                <Link href={`competitions/increase-reward/${rewardId}`}>
+                <Button m='15px' 
+                  scale="sm"
+                  disabled={rewardId===''}
+                >
+                  Increase Reward
+                </Button>
+                </Link>
+                </Flex>
             <PageSection index={1}>
               <Heading>Create New Competition</Heading>
             </PageSection>

@@ -1,8 +1,10 @@
+import { Flex } from '@pancakeswap/uikit'
 import { useRouter } from 'next/router'
 import { useProfileForAddress } from 'state/profile/hooks'
 import { Achievement } from 'state/types'
 import { NftProfileLayout } from 'views/Profile'
 import Achievements from 'views/Profile/components/Achievements'
+import { UserRewardCard } from 'views/TradingReward/components/UserRewardCard'
 
 const NftProfileAchievementsPage = () => {
   const accountAddress = useRouter().query.accountAddress as string
@@ -26,12 +28,18 @@ const refresh = ()=>{
 }
 
   return (
-    <Achievements
+    <>
+    <Flex flexWrap='wrap' flexDirection='row' justifyContent='space-between'>
+    <UserRewardCard />
+    
+    {/* <Achievements
       achievements={achievements}
       isLoading={isAchievementFetching}
       points={profile?.points}
       onSuccess={refresh}
-    />
+    /> */}
+    </Flex>
+    </>
   )
 }
 

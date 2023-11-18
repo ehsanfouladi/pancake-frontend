@@ -70,7 +70,7 @@ const StyledHeading = styled(Text)`
   const {data, isLoading} = useSWR(`${COMPETITION_API_URL}/upcoming-competitions`,fetcher )
 
   return (
-    <StyledBackground showBackgroundColor={!!account} justifyContent='center' >
+    <StyledBackground showBackgroundColor={true} justifyContent='center' >
       <StyledHeading data-text={t('Upcoming Competitions')}
       
       >{t('Upcoming Competitions')}</StyledHeading>
