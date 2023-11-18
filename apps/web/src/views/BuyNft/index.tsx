@@ -29,9 +29,7 @@ export enum NftType {
   ALL = 'all',
   MYNFTS = 'myNFTs'
 }
-interface MintNftData extends ApiSingleTokenData {
-  dogId?: string
-}
+
 interface State {
   nftType: NftType
 }
@@ -56,7 +54,6 @@ const Mint: React.FC<React.PropsWithChildren> = () => {
   // const [starterNfts, setStarterNfts] = useState<MintNftData[]>([])
   const [nftData, setNftData] = useState(null)
   const [myNfts, setMyNfts] = useState([])
-  const [isNftLoading, setIsNftLoading] = useState<boolean>(false)
   const [nftContract, setNftContract] = useState(null)
   const [level, setLevel] = useState<number>(1)
   const [priceInCbon, setPriceInCbon] = useState<bigint>(0n)
@@ -97,7 +94,6 @@ const Mint: React.FC<React.PropsWithChildren> = () => {
     if (CIAAddresses && CIAAddresses.length !== 0){
       const nftDataTemp = {}
       const myNftAdresses = []
-      setIsNftLoading(true)
       CIAAddresses.map( async (nftAddress)=>{
         const tempNftContract = {
           abi: CadinuLevelNftsAbi,
@@ -140,10 +136,9 @@ const Mint: React.FC<React.PropsWithChildren> = () => {
       });
     setNftData(nftDataTemp)
     setMyNfts(myNftAdresses)
-    setIsNftLoading(false)
     
     }
-  }, CIAAddresses)
+  }, [CIAAddresses, account])
 
   
 

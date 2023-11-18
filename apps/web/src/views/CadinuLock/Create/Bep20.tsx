@@ -44,16 +44,6 @@ import { FormErrors, Label, SecondaryLabel } from './styles'
 import { FormState } from './types'
 
 const Bep20 = ()=>{
-  const ToggleWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  textAlign: center;
-  justify-content: center
-
-`
-const ReferenceElement = styled.div`
-  display: inline-block;
-`;
     const [state, setState] = useState<FormState>(() => ({
         tokenAddress: '',
         title: '',
@@ -79,7 +69,7 @@ const ReferenceElement = styled.div`
     const { address: account } = useAccount()
     const initialBlock = useInitialBlock()
     const { push } = useRouter()
-    const { toastSuccess, toastError } = useToast()
+    const { toastSuccess } = useToast()
     
     // eslint-disable-next-line @typescript-eslint/no-shadow
     const {

@@ -8,7 +8,6 @@ import { CadinuLockState, CadinuLockType, ComulativeLockResponse, LockRecord, Lo
 import { getCadinuLockContract, getCadinuLockV3Contract } from 'utils/contractHelpers'
 import { publicClient } from "utils/wagmi"
 import { Address, erc20ABI } from 'wagmi'
-import { useCallback } from 'react'
 
 
 const cadinuLockContract = getCadinuLockContract()
@@ -247,7 +246,6 @@ export const fetchCumulativeLpTokenLockInfo =async (start:bigint, end:bigint)=>{
         args:[start,end]
       }]
     })
-    console.log("V2 Cadinu",data);
     
         return ({result : data[0].result,status: data[0].status})
   }catch(e){
@@ -327,7 +325,6 @@ export const fetchLocksForNonFungiblePositionManager = async (address:Address) =
       nfpmLockObject["factory"] = zeroAddress
       nfpmLockObject["amount"] =  Number(count)
       // Number(locks.length)
-      console.log("helperCount", count);
       
       nfpmLock.push(nfpmLockObject)
       return nfpmLock
@@ -338,7 +335,6 @@ export const fetchLocksForNonFungiblePositionManager = async (address:Address) =
 export const fetchV3LocksByUser = async (address:Address) =>{
   try{
    const data = await cadinuLockV3Contract.read.getLocksForUser([address])
-    console.log(">>>",data);
     const alluserLocks = []
     data.map((lock)=>{
       const locks = {}
@@ -364,7 +360,6 @@ export const getTokenSymbol = async (tokenAddress:Address) =>{
       abi : erc20ABI,
       functionName : "symbol"
     })
-    console.log("symbol",data);
     
     return data
   }
@@ -382,7 +377,6 @@ export const getTokenName = async (tokenAddress:Address) =>{
       abi : erc20ABI,
       functionName : "name"
     })
-    console.log("name",data);
     
     return data
   }
@@ -400,7 +394,6 @@ export const getLpSymbol = async (pairAddress:Address) =>{
       abi : pancakePairV2ABI,
       functionName : "token1"
     })
-    console.log("symbol lp",token0);
     const token0Symbol = await (getTokenSymbol(token0))
     const token0Name = await (getTokenName(token0))
     const token1Symbol = await(getTokenSymbol(token1))

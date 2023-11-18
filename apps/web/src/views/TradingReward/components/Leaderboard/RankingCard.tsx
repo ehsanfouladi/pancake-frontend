@@ -1,26 +1,23 @@
+import { useTranslation } from '@pancakeswap/localization'
 import {
   Box,
   Card,
   CardBody,
   CardRibbon,
   Flex,
-  ProfileAvatar,
   LaurelLeftIcon,
   LaurelRightIcon,
-  Text,
+  ProfileAvatar,
   SubMenu,
+  Text,
 } from '@pancakeswap/uikit'
-import styled from 'styled-components'
-import { useTranslation } from '@pancakeswap/localization'
-import { RankListDetail } from 'views/TradingReward/hooks/useRankList'
 import { formatNumber } from '@pancakeswap/utils/formatBalance'
-import { useProfileForAddress } from 'state/profile/hooks'
-import { useDomainNameForAddress } from 'hooks/useDomain'
 import truncateHash from '@pancakeswap/utils/truncateHash'
+import { useDomainNameForAddress } from 'hooks/useDomain'
 import { usePriceCakeUSD } from 'state/farms/hooks'
-import { useMemo } from 'react'
-import BigNumber from 'bignumber.js'
-import Image from 'next/image'
+import { useProfileForAddress } from 'state/profile/hooks'
+import styled from 'styled-components'
+import { RankListDetail } from 'views/TradingReward/hooks/useRankList'
 
 interface RankingCardProps {
   rank: 1 | 2 | 3
@@ -54,15 +51,15 @@ const RankingCard: React.FC<React.PropsWithChildren<RankingCardProps>> = ({ rank
   const { profile, isLoading: isProfileLoading } = useProfileForAddress(user.origin)
   const { domainName, avatar } = useDomainNameForAddress(user.origin, !profile && !isProfileLoading)
 
-  const cakeAmount = useMemo(
-    () => new BigNumber(user?.estimateRewardUSD).div(cakePriceBusd).toNumber(),
-    [cakePriceBusd, user?.estimateRewardUSD],
-  )
+  // const cakeAmount = useMemo(
+  //   () => new BigNumber(user?.estimateRewardUSD).div(cakePriceBusd).toNumber(),
+  //   [cakePriceBusd, user?.estimateRewardUSD],
+  // )
 
   return (
     <Flex flexDirection="column">
       <Box display={['none', 'none', 'none', 'none', 'none', 'block']} position="relative" bottom="-50px" margin="auto">
-        <Image src={`/images/trading-reward/${getRankingColor(rank)}.png`} alt={`${rank}`} width={300} height={300} />
+        {/* <Image src={`/images/trading-reward/${getRankingColor(rank)}.png`} alt={`${rank}`} width={300} height={300} /> */}
       </Box>
       <Box
         display={['block', 'block', 'block', 'block', 'block', 'none']}
@@ -70,9 +67,9 @@ const RankingCard: React.FC<React.PropsWithChildren<RankingCardProps>> = ({ rank
         bottom="-30px"
         margin="auto"
       >
-        {rank === 1 && (
+        {/* {rank === 1 && (
           <Image src="/images/trading-reward/gold-mobile.png" alt={`mobile-${rank}`} width={286} height={286} />
-        )}
+        )} */}
       </Box>
       <Card ribbon={<CardRibbon variantColor={rankColor} text={`#${rank}`} ribbonPosition="left" />}>
         <CardBody p="24px">
@@ -101,11 +98,11 @@ const RankingCard: React.FC<React.PropsWithChildren<RankingCardProps>> = ({ rank
             </Text>
             <Box>
               <Text textAlign="right" bold color="text" fontSize="20px" lineHeight="110%">
-                {`$${formatNumber(user.estimateRewardUSD)}`}
+                {`${formatNumber(user?.estimatedReward)} CBON`}
               </Text>
-              <Text textAlign="right" color="textSubtle" fontSize="12px">
-                {`~${formatNumber(cakeAmount)} CAKE`}
-              </Text>
+              {/* <Text textAlign="right" color="textSubtle" fontSize="12px">
+                {`${formatNumber(cakeAmount)} CAKE`}
+              </Text> */}
             </Box>
           </Flex>
           <Flex justifyContent="space-between">
@@ -113,7 +110,7 @@ const RankingCard: React.FC<React.PropsWithChildren<RankingCardProps>> = ({ rank
               {t('Trading Volume')}
             </Text>
             <Text textAlign="right" bold color="text" fontSize="20px">
-              {`$${formatNumber(user.volume)}`}
+              {`$${formatNumber(user?.amountUSD)}`}
             </Text>
           </Flex>
         </CardBody>

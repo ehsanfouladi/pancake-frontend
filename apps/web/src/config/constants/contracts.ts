@@ -247,5 +247,8 @@ export default {
   },
   cadinuReferral:{
     56: '0x1eD1fF95046ca1d8219D1400E8CB6DcB22902aC5'
+  },
+  cadinuTradingCompetition:{
+    56: '0x36Ac902eDAE2b615F12621a92A8B42f50B1756d2'
   }
 } as const satisfies Record<string, Record<number, `0x${string}`>>

@@ -4,15 +4,12 @@ import {
   SwapIcon,
   SwapFillIcon,
   EarnFillIcon,
-  PancakeProtectorIcon,
   EarnIcon,
   TrophyIcon,
   TrophyFillIcon,
   NftIcon,
-  NftFillIcon,
   MoreIcon,
   DropdownMenuItems,
-  PlayCircleOutlineIcon,
 } from '@pancakeswap/uikit'
 import { ContextApi } from '@pancakeswap/localization'
 import { SUPPORTED_CHAIN_IDS as POOL_SUPPORTED_CHAINS } from '@pancakeswap/pools'

@@ -55,9 +55,9 @@ const Questions = () => {
               </StyledListText>
               <StyledListText color="textSubtle">
                 {t(
-                  'Please ensure your trade is routed through the trading pairs eligible for trading rewards.Check out',
+                  'Please ensure your trade is routed through the trading pairs eligible for trading rewards',
                 )}
-                <Link
+                {/* <Link
                   style={{ display: 'inline-block' }}
                   external
                   href="https://docs.pancakeswap.finance/products/pancakeswap-exchange/fees-and-routes#check-the-fee-rate-and-fee-amount-that-is-currently-applied"
@@ -65,19 +65,19 @@ const Questions = () => {
                   <Text color="primary" ml="4px" as="span">
                     {t('this tutorial')}
                   </Text>
-                </Link>
-                <Text color="textSubtle" ml="4px" as="span">
+                </Link> */}
+                {/* <Text color="textSubtle" ml="4px" as="span">
                   {t('for how to view your trading routes')}
-                </Text>
+                </Text> */}
               </StyledListText>
-              <StyledListText color="textSubtle">
+              {/* <StyledListText color="textSubtle">
                 {t(
                   'If you are trading on Ethereum, please use the same wallet address eligible for the trading reward program',
                 )}
-              </StyledListText>
-              <StyledListText color="textSubtle">
+              </StyledListText> */}
+              {/* <StyledListText color="textSubtle">
                 {t('If your trading volume within a pair is too small, you may not be eligible to claim any rewards')}
-              </StyledListText>
+              </StyledListText> */}
               <StyledListText color="textSubtle">
                 {t(
                   'Using third-party trading aggregators may result in trades being routed through other liquidity providers and not being tracked',
@@ -87,11 +87,11 @@ const Questions = () => {
             <FoldableText title={t('Why I traded a lot but only received a very small amount of rewards')} mt="24px">
               <StyledListText color="textSubtle">
                 {t(
-                  'The amount of the trading reward is based on the trading fee paid in those trades.If your trades are routed through pairs with a low fee tier, for example, 0.01%, you are paying a very small fee for your trade. Therefore the number of rewards will become lower accordingly.',
+                  'The amount of the trading reward is based on user trade volume divided by total trading volume of the given pair. If your trade volume is low in comparison to others the number of rewards will become lower accordingly.',
                 )}
               </StyledListText>
             </FoldableText>
-            <FoldableText
+            {/* <FoldableText
               title={t('My address was previously eligible. Why is it showing not eligible now?')}
               mt="24px"
             >
@@ -105,7 +105,7 @@ const Questions = () => {
                   'You may need to extend your locked CAKE staking position. Please follow the instructions on the page.',
                 )}
               </StyledListText>
-            </FoldableText>
+            </FoldableText> */}
           </StyledCardBody>
         </Card>
       </Wrapper>

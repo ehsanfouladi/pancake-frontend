@@ -1,7 +1,7 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { PaginationButton, Box, Text } from '@pancakeswap/uikit'
-import { RankListDetail } from 'views/TradingReward/hooks/useRankList'
+import { Box, PaginationButton, Text } from '@pancakeswap/uikit'
 import MobileResult, { StyledMobileRow } from 'views/TradingReward/components/Leaderboard/MobileResult'
+import { RankListDetail } from 'views/TradingReward/hooks/useRankList'
 
 interface LeaderBoardMobileViewProps {
   data: RankListDetail[]
@@ -38,8 +38,8 @@ const LeaderBoardMobileView: React.FC<React.PropsWithChildren<LeaderBoardMobileV
             </StyledMobileRow>
           ) : (
             <>
-              {data.map((rank) => (
-                <MobileResult key={rank.rank} rank={rank} />
+              {data.map((rank, index) => (
+                <MobileResult key={rank.origin} rank={rank} index={index} />
               ))}
             </>
           )}

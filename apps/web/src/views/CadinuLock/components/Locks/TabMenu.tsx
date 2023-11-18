@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { TabMenu as UIKitTabMenu, Tab, Flex, VerifiedIcon, LockIcon,  ChevronDownIcon } from '@pancakeswap/uikit'
+import { TabMenu as UIKitTabMenu, Tab, Flex, LockIcon,  ChevronDownIcon } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { CadinuLockType } from 'state/types'
 import { Address } from 'viem'

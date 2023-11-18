@@ -15,7 +15,6 @@ import {
   useModal,
 } from '@pancakeswap/uikit'
 import { PositionDetails } from '@pancakeswap/farms'
-import { isStableSwapSupported } from '@pancakeswap/smart-router/evm'
 import NextLink from 'next/link'
 import styled from 'styled-components'
 import { AppBody, AppHeader } from 'components/App'
@@ -35,7 +34,6 @@ import useStableConfig, {
 import { useMemo, useState } from 'react'
 import { V2PairCard } from 'views/AddLiquidityV3/components/V2PairCard'
 import { StablePairCard } from 'views/AddLiquidityV3/components/StablePairCard'
-import FarmV3MigrationBanner from 'views/Home/components/Banners/FarmV3MigrationBanner'
 import TransactionsModal from 'components/App/Transactions/TransactionsModal'
 import { LiquidityCardRow } from 'components/LiquidityCardRow'
 import atomWithStorageWithErrorCatch from 'utils/atomWithStorageWithErrorCatch'

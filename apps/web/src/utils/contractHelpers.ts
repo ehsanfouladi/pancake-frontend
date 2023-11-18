@@ -91,6 +91,7 @@ import { v3MigratorABI } from 'config/abi/v3Migrator'
 import { getViemClients, viemClients } from 'utils/viem'
 import { Abi, PublicClient, WalletClient, getContract as viemGetContract } from 'viem'
 import { Address, erc20ABI, erc721ABI } from 'wagmi'
+import { cadinuTradingCompetition } from 'config/abi/cadinuTradingCompetition'
 
 export const getContract = <TAbi extends Abi | unknown[], TWalletClient extends WalletClient>({
   abi,
@@ -442,4 +443,8 @@ export const getCadinuLockV3Contract = (signer?: WalletClient) => {
 
 export const getCadinuLevelNftContract = (address: Address, signer?: WalletClient) => {
   return getContract({ abi: CadinuLevelNftsAbi, address, signer })
+}
+
+export const getCadinuTradingCompetitionContract = (address: Address, signer?: WalletClient) => {
+  return getContract({ abi: cadinuTradingCompetition, address, signer })
 }

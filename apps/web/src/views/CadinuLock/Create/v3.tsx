@@ -61,7 +61,6 @@ ${({ theme }) => theme.mediaQueries.lg} {
         }
     }
 `
-const CardContentTemp = []
 const CardContent = v3Contracts.map((nfp, index)=>(
         {
             'title': nfp.split(/(?=[A-Z])/).join(" "),

@@ -20,7 +20,6 @@ import {useAccount, useContractWrite, usePrepareContractWrite, useWaitForTransac
 import { useTranslation } from '@pancakeswap/localization'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import {getClaimContract} from "../../../utils/contractHelpers";
-import {getClaimAddress} from "../../../utils/addressHelpers";
 
 
 

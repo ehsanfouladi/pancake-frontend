@@ -1,32 +1,30 @@
-import { useMemo } from 'react'
-import BigNumber from 'bignumber.js'
-import { Text, Flex, Td, ProfileAvatar } from '@pancakeswap/uikit'
-import { RankListDetail } from 'views/TradingReward/hooks/useRankList'
+import { Flex, ProfileAvatar, Td, Text } from '@pancakeswap/uikit'
 import { formatNumber } from '@pancakeswap/utils/formatBalance'
-import { useProfileForAddress } from 'state/profile/hooks'
-import { useDomainNameForAddress } from 'hooks/useDomain'
 import truncateHash from '@pancakeswap/utils/truncateHash'
-import { usePriceCakeUSD } from 'state/farms/hooks'
+import { useDomainNameForAddress } from 'hooks/useDomain'
+import { useProfileForAddress } from 'state/profile/hooks'
+import { RankListDetail } from 'views/TradingReward/hooks/useRankList'
 
 interface DesktopResultProps {
   rank: RankListDetail
+  index: number
 }
 
-const DesktopResult: React.FC<React.PropsWithChildren<DesktopResultProps>> = ({ rank }) => {
-  const cakePriceBusd = usePriceCakeUSD()
+const DesktopResult: React.FC<React.PropsWithChildren<DesktopResultProps>> = ({ rank, index }) => {
+  
   const { profile, isLoading: isProfileLoading } = useProfileForAddress(rank.origin)
   const { domainName, avatar } = useDomainNameForAddress(rank.origin, !profile && !isProfileLoading)
 
-  const cakeAmount = useMemo(
-    () => new BigNumber(rank?.estimateRewardUSD).div(cakePriceBusd).toNumber(),
-    [cakePriceBusd, rank?.estimateRewardUSD],
-  )
+  // const cakeAmount = useMemo(
+  //   () => new BigNumber(rank?.estimatedReward).times(cakePriceBusd).toNumber(),
+  //   [cakePriceBusd, rank?.estimateRewardUSD],
+  // )
 
   return (
     <tr>
       <Td>
         <Text bold color="secondary">
-          {`#${rank.rank}`}
+          {`#${index + 1}`}
         </Text>
       </Td>
       <Td textAlign="left">
@@ -38,12 +36,12 @@ const DesktopResult: React.FC<React.PropsWithChildren<DesktopResultProps>> = ({ 
         </Flex>
       </Td>
       <Td textAlign="left">
-        <Text bold>{`$${formatNumber(rank.volume)}`}</Text>
+        <Text bold>{`$${formatNumber(rank?.amountUSD)}`}</Text>
       </Td>
       <Td textAlign="right">
-        <Text bold>{`$${formatNumber(rank.estimateRewardUSD)}`}</Text>
+        <Text bold>{rank?.estimatedReward ? `${formatNumber(rank?.estimatedReward)} CBON` : '-'}</Text>
         <Text fontSize={12} color="textSubtle">
-          {`~${formatNumber(cakeAmount)} CAKE`}
+          {/* {`~${formatNumber(cakeAmount)} CAKE`} */}
         </Text>
       </Td>
     </tr>

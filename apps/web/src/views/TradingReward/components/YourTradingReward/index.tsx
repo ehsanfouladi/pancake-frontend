@@ -1,19 +1,21 @@
-import { useMemo } from 'react'
-import styled from 'styled-components'
-import { Box, Flex, Text, Skeleton } from '@pancakeswap/uikit'
-import { useAccount } from 'wagmi'
 import { useTranslation } from '@pancakeswap/localization'
+import { Box, Card, Flex, Skeleton, Text } from '@pancakeswap/uikit'
+import { formatNumber } from '@pancakeswap/utils/formatBalance'
 import BigNumber from 'bignumber.js'
+import { GreyCard } from 'components/Card'
+import { useMemo } from 'react'
+import { useCakeVault, useFetchIfo as useCakeVaultPool } from 'state/pools/hooks'
 import { useProfile } from 'state/profile/hooks'
 import { DeserializedLockedCakeVault } from 'state/types'
-import { getVaultPosition, VaultPosition } from 'utils/cakePool'
-import { useCakeVault, useFetchIfo as useCakeVaultPool } from 'state/pools/hooks'
+import styled from 'styled-components'
+import { VaultPosition, getVaultPosition } from 'utils/cakePool'
+import { floatingStarsLeft, floatingStarsRight } from 'views/Lottery/components/Hero'
+import NoConnected from 'views/TradingReward/components/YourTradingReward/NoConnected'
+import RewardPeriod from 'views/TradingReward/components/YourTradingReward/RewardPeriod'
 import { Incentives, Qualification, RewardInfo } from 'views/TradingReward/hooks/useAllTradingRewardPair'
 import { UserCampaignInfoDetail } from 'views/TradingReward/hooks/useAllUserCampaignInfo'
-import NoConnected from 'views/TradingReward/components/YourTradingReward/NoConnected'
-import { floatingStarsLeft, floatingStarsRight } from 'views/Lottery/components/Hero'
-import NoProfile from 'views/TradingReward/components/YourTradingReward/NoProfile'
-import RewardPeriod from 'views/TradingReward/components/YourTradingReward/RewardPeriod'
+import { useAccount } from 'wagmi'
+import ComingSoon from './ComingSoon'
 
 const BACKGROUND_COLOR = 'radial-gradient(55.22% 134.13% at 57.59% 0%, #F5DF8E 0%, #FCC631 33.21%, #FF9D00 79.02%)'
 
@@ -213,16 +215,88 @@ const YourTradingReward: React.FC<React.PropsWithChildren<YourTradingRewardProps
         </Container>
       )}
 
-      {!isFetching && account && !profile?.isActive && (
+      {/* {!isFetching && account && !profile?.isActive && (
         <Container showBackgroundColor maxWidth={716}>
           <BaseContainer showBackgroundColor>
             <NoProfile />
           </BaseContainer>
         </Container>
-      )}
+      )} */}
 
-      {!isFetching && account && profile?.isActive && (
+      {!isFetching && account && (
         <Container showBackgroundColor>
+          <Flex
+            padding="0 16px"
+            width={['100%', '100%', '100%', '100%', '900px']}
+            margin={['32px auto 61px auto']}
+            justifyContent="space-between"
+            flexDirection={['column', 'column', 'column', 'row']}
+          >
+            <Box width={['100%', '100%', '100%', '48.5%']} mb={['24px', '24px', '24px', '0']}>
+              <Card style={{ width: '100%' }}>
+                <Box padding={['24px']}>
+                  <Text bold textAlign="right" mb="24px">
+                    {t('Current Period')}
+                  </Text>
+                  {!true ? (
+                    <ComingSoon />
+                    ):(
+                      <GreyCard>
+                        <Text textTransform="uppercase" fontSize="12px" color="secondary" bold mb="4px">
+                          {t('Your Current trading rewards')}
+                        </Text>
+                        <Text bold fontSize="40px">{`$${formatNumber(0)}`}</Text>
+                        <Text fontSize="14px" color="textSubtle">{`~${formatNumber(0)} CBON`}</Text>
+                        {/* <Text fontSize="12px" color="textSubtle" mt="4px">
+                          {t('Available for claiming')}
+                          {timeRemaining > 0 ? (
+                            <Text bold fontSize="12px" color="textSubtle" as="span" ml="4px">
+                              {t('in')}
+                              {timeUntil.months ? (
+                                <Text bold fontSize="12px" color="textSubtle" as="span" ml="4px">
+                                  {`${timeUntil.months}${t('m')}`}
+                                </Text>
+                              ) : null}
+                              {timeUntil.days ? (
+                                <Text bold fontSize="12px" color="textSubtle" as="span" ml="4px">
+                                  {`${timeUntil.days}${t('d')}`}
+                                </Text>
+                              ) : null}
+                              {timeUntil.days || timeUntil.hours ? (
+                                <Text bold fontSize="12px" color="textSubtle" as="span" ml="4px">
+                                  {`${timeUntil.hours}${t('h')}`}
+                                </Text>
+                              ) : null}
+                              <Text bold fontSize="12px" color="textSubtle" as="span" ml="4px">
+                                {`${timeUntil.minutes}${t('m')}`}
+                              </Text>
+                            </Text>
+                          ) : null}
+                          <Text fontSize="12px" color="textSubtle" ml="4px" as="span">
+                            {t('(at ~%date%)', { date: timeFormat(locale, campaignClaimTime ?? 0) })}
+                          </Text>
+                        </Text>
+                        {additionalAmount >= 0.01 && (
+                          <Message variant="warning" mt="10px">
+                            <MessageText>
+                              <Text as="span">{t('An additional amount of reward of')}</Text>
+                              <Text as="span" bold m="0 4px">{`~$${formatNumber(additionalAmount)}`}</Text>
+                              <Text as="span" mr="4px">
+                                {t('can not be claim due to the max reward cap.')}
+                              </Text>
+                              <Text as="span" bold>
+                                {t('Lock more CAKE to keep earning.')}
+                              </Text>
+                            </MessageText>
+                          </Message>
+                        )} */}
+                      </GreyCard>
+                    )
+                  }
+                </Box>
+              </Card>
+            </Box>
+          </Flex>   
           <RewardPeriod
             userData={userData}
             campaignIds={campaignIds}
@@ -242,13 +316,13 @@ const YourTradingReward: React.FC<React.PropsWithChildren<YourTradingRewardProps
         </Container>
       )}
 
-      <Decorations showBackgroundColor={!!account}>
+      {/* <Decorations showBackgroundColor={!!account}>
         <img src="/images/trading-reward/left-bunny.png" width="93px" height="242px" alt="left-bunny" />
         <img src="/images/trading-reward/right-bunny.png" width="161px" height="161px" alt="right-bunny" />
         <img src="/images/trading-reward/love-butter.png" width="306px" height="306px" alt="love-butter" />
         <img src="/images/trading-reward/butter.png" width="195px" height="191px" alt="butter" />
         <img src="/images/trading-reward/coin.png" width="183px" height="119px" alt="coin" />
-      </Decorations>
+      </Decorations> */}
     </StyledBackground>
   )
 }

@@ -32,10 +32,7 @@ const CenterWrapper = styled.div`
 // the quote provider won't return a quote. Therefore, we restrict the fiat currency input to a maximum of 2 decimals.
 
 export function BuyCbonForm({
-  setModalView,
-  modalView,
   buyCbonState,
-  fetchQuotes,
   setIsBuySuccess,
 }: {
   setModalView: Dispatch<SetStateAction<CryptoFormView>>
@@ -98,7 +95,7 @@ export function BuyCbonForm({
   const { data: preSaleData, write: preSale } = useContractWrite({
     ...config,
   })
-  const { isLoading, isSuccess } = useWaitForTransaction({
+  const { isSuccess } = useWaitForTransaction({
     hash: preSaleData?.hash,
     // confirmations: 3
   })

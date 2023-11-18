@@ -94,6 +94,7 @@ const UserName: React.FC<React.PropsWithChildren> = () => {
           fetchAbortSignal.current = null
         } else {
           const res = await fetchWithTimeout(`${API_PROFILE}/api/user/valid/${debouncedUsernameToCheck}`, {
+
             method: 'get',
             signal: abortSignal,
             timeout: 30000,
@@ -111,8 +112,10 @@ const UserName: React.FC<React.PropsWithChildren> = () => {
             }
           } else {
             const data = await res.json()
+            console.log('error>>>',data);
+            
             setIsValid(false)
-            setMessage(data?.error?.message)
+            setMessage(data)
           }
         }
       } catch (e) {
@@ -190,8 +193,10 @@ const UserName: React.FC<React.PropsWithChildren> = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await fetch(`${API_PROFILE}/api/users/${account}`)
+        const response = await fetch(`${API_PROFILE}/api/user/${account}`)
         const data = await response.json()
+        console.log('already',data);
+        
 
         if (response.ok) {
           const dateCreated = formatDistance(parseISO(data.created_at), new Date())
@@ -231,7 +236,7 @@ const UserName: React.FC<React.PropsWithChildren> = () => {
           </Heading>
           <Text as="p" color="textSubtle" mb="24px">
             {t(
-              'Your name must be at least 3 and at most 15 standard letters and numbers long. You can’t change this once you click Confirm.',
+              'Your name must be at least 3 and at most 15 standard letters, ".", "_" and numbers long. You can’t change this once you click Confirm.',
             )}
           </Text>
           {existingUserState === ExistingUserState.NEW ? (

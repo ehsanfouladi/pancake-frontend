@@ -3,6 +3,7 @@ import styled from "styled-components";
 import BunnyPlaceholder from "../Svg/Icons/BunnyPlaceholder";
 import BackgroundImage from "./BackgroundImage";
 import { BackgroundImageProps } from "./types";
+import Image from "next/image";
 
 const StyledProfileAvatar = styled(BackgroundImage)`
   border-radius: 50%;
@@ -14,7 +15,11 @@ const StyledBunnyPlaceholder = styled(BunnyPlaceholder)`
 `;
 
 const ProfileAvatar: React.FC<React.PropsWithChildren<BackgroundImageProps>> = (props) => (
-  <StyledProfileAvatar loadingPlaceholder={<StyledBunnyPlaceholder />} {...props} />
+  <StyledProfileAvatar loadingPlaceholder={<Image 
+    src='/images/nfts/no-profile-md.png' 
+    alt="no cadinu profile" 
+    height={64} 
+    width={64}/>} {...props} />
 );
 
 export default ProfileAvatar;

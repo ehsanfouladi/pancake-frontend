@@ -26,10 +26,6 @@ const Overview = () => {
     address: tokenId?.toString() as Address,
     abi: erc20ABI,
   }
-  const lpContract = {
-    address : tokenId?.toString() as Address,
-    abi: pancakePairV2ABI,
-  }
   const lockContract = {
     address: getCadinuLockAddress(),
     abi: CadinuLockAbi,
@@ -60,7 +56,6 @@ const Overview = () => {
     ]
   })
 
-  console.log('tokenDetails', tokenDetails);
   
 
   const [lpNameSymbols,setLpNameSymbols] = useState({})
@@ -147,11 +142,9 @@ const Overview = () => {
           ? await fetchNormalLocksByUser(account)
           : await fetchLpLocksByUser(account)
           setDetails(lockDetails)
-          console.log( lockDetails);
         },[query])
         
   
-  console.log("LOCKS", details);
   
   const cadinuPrice = useCadinuPriceAsBN().toString()
   const cbonPrice = useCbonPriceAsBN().toString()

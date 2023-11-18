@@ -1,4 +1,3 @@
-import { SUPPORTED_CHAIN_IDS } from '@pancakeswap/pools'
 import { ChainId } from '@pancakeswap/sdk'
 
 import Pools from 'views/Pools'

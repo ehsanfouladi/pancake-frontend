@@ -1,12 +1,10 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Box, Modal, useToast } from '@pancakeswap/uikit'
+import { useToast } from '@pancakeswap/uikit'
 import { useAccount, useWalletClient } from 'wagmi'
 import snapshot from '@snapshot-labs/snapshot.js'
 import useTheme from 'hooks/useTheme'
 import { useState } from 'react'
 import { PANCAKE_SPACE } from 'views/Voting/config'
-import DetailsView from './DetailsView'
-import MainView from './MainView'
 import { CastVoteModalProps, ConfirmVoteView } from './types'
 
 const hub = 'https://hub.snapshot.org'

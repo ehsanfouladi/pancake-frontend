@@ -2,7 +2,6 @@ import { Box, Flex, InjectedModalProps, Modal, Button, Spinner } from '@pancakes
 import { useTranslation } from '@pancakeswap/localization'
 import useTheme from 'hooks/useTheme'
 
-import DetailsView from './CastVoteModal/DetailsView'
 
 interface VoteDetailsModalProps extends InjectedModalProps {
   block: number

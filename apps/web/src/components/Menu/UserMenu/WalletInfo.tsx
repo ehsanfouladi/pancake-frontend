@@ -53,7 +53,7 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ hasLowNativeBalance, onDismiss 
   const { balance: wNativeBalance, fetchStatus: wNativeFetchStatus } = useTokenBalance(wNativeToken?.address)
   const { balance: wBNBBalance, fetchStatus: wBNBFetchStatus } = useTokenBalance(wBNBToken?.address, true)
   const { balance: cadinuBalance, fetchStatus: cadinuFetchStatus } = useBSCCadinuBalance()
-  const { balance: cbonBalance, fetchStatus: cbonFetchStatus } = useBSCCbonBalance()
+  const { balance: cbonBalance } = useBSCCbonBalance()
   const [mobileTooltipShow, setMobileTooltipShow] = useState(false)
   const { logout } = useAuth()
 

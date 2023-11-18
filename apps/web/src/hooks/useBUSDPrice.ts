@@ -173,6 +173,13 @@ export function useStablecoinPrice(
     enableLlama,
     trade,
     hideIfPriceImpactTooHigh,
+    cadinuPrice,
+    cbonPrice,
+    isCake,
+    isCbon,
+    enableLlama,
+    enabled,
+    priceFromLlama,
   ])
 
   return price

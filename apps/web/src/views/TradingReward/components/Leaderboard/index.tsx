@@ -1,36 +1,109 @@
-import { useState, useEffect } from 'react'
-import { Box, Grid, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
+import { Box, Card, CardBody, Grid, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import Container from 'components/Layout/Container'
-import { timeFormat } from 'views/TradingReward/utils/timeFormat'
-import { Incentives } from 'views/TradingReward/hooks/useAllTradingRewardPair'
-import { useRankList, MAX_PER_PAGE } from 'views/TradingReward/hooks/useRankList'
+import { format } from 'date-fns'
+import isEmpty from 'lodash/isEmpty'
+import { useRouter } from 'next/router'
+import { useCallback, useEffect, useState } from 'react'
+import useSWR from 'swr'
+import { COMPETITION_API_URL } from 'views/TradingReward/constants'
+import { RankListDetail } from 'views/TradingReward/hooks/useRankList'
 import LeaderBoardDesktopView from './DesktopView'
 import LeaderBoardMobileView from './MobileView'
 import RankingCard from './RankingCard'
 
-interface LeaderboardProps {
-  campaignId: string
-  incentives: Incentives
-}
 
-const Leaderboard: React.FC<React.PropsWithChildren<LeaderboardProps>> = ({ campaignId, incentives }) => {
+const Leaderboard = () => {
   const {
     t,
     currentLanguage: { locale },
   } = useTranslation()
+  const router = useRouter()
+  const competitionId = router.query.competitionId
   const { isDesktop } = useMatchBreakpoints()
   const [currentPage, setCurrentPage] = useState(1)
   const [maxPage, setMaxPages] = useState(1)
-  const { total, topTradersArr, topThreeTraders, isLoading } = useRankList({ campaignId, currentPage })
-  const [first, second, third] = topThreeTraders
+  const [first, setFirst] = useState<RankListDetail | null>()
+  const [second, setSecond] = useState<RankListDetail | null>()
+  const [third, setThird] = useState<RankListDetail | null>()
+  const [numberOfWinners, setNumberOfWinners] = useState(0)
+  const [totalVolume, setTotalVolume] = useState(0)
+  const [topTraders, setTopTraders] = useState<RankListDetail[]>()
 
-  useEffect(() => {
-    if (total > 0) {
-      const max = Math.ceil(total / MAX_PER_PAGE)
-      setMaxPages(max)
+
+  const fetcher = async (url: string) => {
+    const res = await fetch(url)
+    
+    if (!res.ok) {
+      const error = new Error('An error occurred while fetching the data.')
+      throw error
     }
-  }, [total])
+   
+    return res.json()
+  }
+  
+
+  const {data, error, isLoading} = useSWR( ()=>
+    `${COMPETITION_API_URL}/top-traders?competitionId=${competitionId}`, fetcher 
+    )
+  const {data:currentCompetition} = useSWR( ()=>
+    `${COMPETITION_API_URL}/${competitionId}`, fetcher )
+
+  const estimateRewards = useCallback(() =>{
+    const winners = []
+    if(currentCompetition && data && totalVolume){
+
+      data.map((trader:RankListDetail,index:number)=>{
+        const reward = (trader.amountUSD / totalVolume) * currentCompetition.rewardAmount
+        winners.push({
+          'origin': trader.origin,
+          'amountUSD': Number(trader.amountUSD),
+          'estimatedReward': index < numberOfWinners ? reward : 0
+        })
+      })
+
+      setTopTraders(winners)
+    }
+  },[numberOfWinners, data, currentCompetition, totalVolume])
+  
+
+  useEffect(()=>{
+    if (currentCompetition && numberOfWinners === 0){
+      setNumberOfWinners(currentCompetition?.numberOfWinners)
+    }
+    
+    if(data && data.length > 0 && numberOfWinners && totalVolume===0){
+      let total = 0
+      data.map((trader:RankListDetail,index:number)=>{
+        if(index<numberOfWinners){
+          total += Number(trader.amountUSD)
+        }
+      })
+
+      // if(data.length >= numberOfWinners){
+      //   for(var i=0; i<numberOfWinners; i++){
+      //     total += Number(data[i].amountUSD)
+      //   }
+      // }else{
+      //   for(var i=0; i<data.length; i++){
+      //     total += Number(data[i].amountUSD)
+      //   }
+      // }
+      setTotalVolume(total)
+    }
+  }, [data, numberOfWinners, currentCompetition])
+  
+
+  useEffect(()=>{
+    if(isEmpty(topTraders) && totalVolume!==0 && data && data.length>0){
+      estimateRewards()
+    }
+    if (topTraders){
+      setFirst(topTraders ? topTraders[0] : null)
+      setSecond(topTraders ? topTraders[1] : null)
+      setThird(topTraders ? topTraders[2] : null)
+    }
+  },[currentCompetition,data,totalVolume, topTraders])
 
   const handleClickPagination = (value: number) => {
     if (!isLoading) {
@@ -40,16 +113,46 @@ const Leaderboard: React.FC<React.PropsWithChildren<LeaderboardProps>> = ({ camp
 
   return (
     <Box id="leaderboard" position="relative" style={{ zIndex: 1 }} mt="104px">
+      {currentCompetition &&(
+
+      
+      <Box mb='24px'>
+        <Text textAlign="center" color='gold' mb="16px" fontSize={['40px']} bold lineHeight="110%">
+          {t(`Competition #${competitionId}`)}
+        </Text>
+        <Container>
+        <Card>
+          <CardBody>
+          <Grid
+          gridGap={['16px', null, null, null, null, '24px']}
+          gridTemplateColumns={['1fr', null, null, null, null, 'repeat(4, 1fr)']}
+        > 
+        <Text bold>Start Time:</Text>
+        <Text >{format(new Date(Number(currentCompetition.startTime)*1000), 'yyyy/MM/dd HH:mm')}</Text>
+        <Text bold>End Time:</Text>
+        <Text >{format(new Date(Number(currentCompetition.endTime)*1000), 'yyyy/MM/dd HH:mm')}</Text>
+        </Grid>
+        <Grid
+          gridGap={['16px', null, null, null, null, '24px']}
+          gridTemplateColumns={['1fr', null, null, null, null, 'repeat(4, 1fr)']}
+        > 
+        <Text bold>Number of Winners:</Text>
+        <Text >{currentCompetition.numberOfWinners}</Text>
+        <Text bold>Total Prize:</Text>
+        <Text >{currentCompetition.rewardAmount} CBON</Text>
+        </Grid>
+          </CardBody>
+        </Card>
+        </Container>
+      </Box>
+      )}
       <Box>
         <Text textAlign="center" color="secondary" mb="16px" fontSize={['40px']} bold lineHeight="110%">
           {t('Leaderboard')}
         </Text>
-        <Text textAlign="center" bold color="textSubtle">{`${timeFormat(
-          locale,
-          incentives?.campaignStart,
-        )} - ${timeFormat(locale, incentives?.campaignClaimTime)}`}</Text>
-        <Text textAlign="center" bold color="textSubtle">
-          {t('Top #50 Winners')}
+
+        <Text textAlign="center" bold color="textSubtle" mb='15px'>
+          {t('Top Winners')}
         </Text>
       </Box>
       <Container mb="16px">
@@ -57,29 +160,46 @@ const Leaderboard: React.FC<React.PropsWithChildren<LeaderboardProps>> = ({ camp
           gridGap={['16px', null, null, null, null, '24px']}
           gridTemplateColumns={['1fr', null, null, null, null, 'repeat(3, 1fr)']}
         >
-          {first && <RankingCard rank={1} user={first} />}
-          {second && <RankingCard rank={2} user={second} />}
-          {third && <RankingCard rank={3} user={third} />}
+          {first && <RankingCard rank={1} user={first as RankListDetail} />}
+          {second && <RankingCard rank={2} user={second as RankListDetail} />}
+          {third && <RankingCard rank={3} user={third as RankListDetail} />}
         </Grid>
       </Container>
       <Box maxWidth={1200} m="auto">
-        {isDesktop ? (
+        { !isEmpty(topTraders) && isDesktop ? (
           <LeaderBoardDesktopView
-            data={topTradersArr}
+            data={topTraders?.slice(3,topTraders.length)}
             maxPage={maxPage}
             isLoading={isLoading}
             currentPage={currentPage}
             setCurrentPage={handleClickPagination}
           />
-        ) : (
+        ) : !isEmpty(topTraders) ? (
           <LeaderBoardMobileView
-            data={topTradersArr}
+            data={topTraders?.slice(3,topTraders.length)}
             maxPage={maxPage}
             isLoading={isLoading}
             currentPage={currentPage}
             setCurrentPage={handleClickPagination}
           />
-        )}
+        ) : isDesktop ? (
+            <LeaderBoardDesktopView
+              data={[]}
+              maxPage={1}
+              isLoading={isLoading}
+              currentPage={currentPage}
+              setCurrentPage={handleClickPagination}
+            />
+          ) :  (
+            <LeaderBoardMobileView
+              data={[]}
+              maxPage={1}
+              isLoading={isLoading}
+              currentPage={currentPage}
+              setCurrentPage={handleClickPagination}
+            />
+        )
+      }
       </Box>
     </Box>
   )

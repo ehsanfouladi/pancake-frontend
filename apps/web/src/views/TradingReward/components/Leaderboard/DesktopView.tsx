@@ -1,7 +1,7 @@
-import { PaginationButton, Card, Table, Th, Td } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import { RankListDetail } from 'views/TradingReward/hooks/useRankList'
+import { Card, PaginationButton, Table, Td, Th } from '@pancakeswap/uikit'
 import DesktopResult from 'views/TradingReward/components/Leaderboard/DesktopResult'
+import { RankListDetail } from 'views/TradingReward/hooks/useRankList'
 
 interface LeaderBoardDesktopViewProps {
   data: RankListDetail[]
@@ -48,8 +48,8 @@ const LeaderBoardDesktopView: React.FC<React.PropsWithChildren<LeaderBoardDeskto
                 </tr>
               ) : (
                 <>
-                  {data.map((rank) => (
-                    <DesktopResult key={rank.rank} rank={rank} />
+                  {data.map((rank,index) => (
+                    <DesktopResult key={rank.origin} rank={rank} index={index +3} />
                   ))}
                 </>
               )}

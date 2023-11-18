@@ -127,7 +127,7 @@ const SelectNft = ()=>{
   const { t } = useTranslation()
   const { address: account } = useAccount()
   const { push } = useRouter()
-  const { toastSuccess, toastError } = useToast()
+  const { toastSuccess } = useToast()
   
   // eslint-disable-next-line @typescript-eslint/no-shadow
   const {
@@ -256,7 +256,7 @@ const SelectNft = ()=>{
   console.log('refreshed', fieldsState);
   
 
-  const {config, isSuccess, isLoading, isError} = usePrepareContractWrite({
+  const {config, isSuccess} = usePrepareContractWrite({
     enabled: isEmpty(formErrors)  && isNftApproved,
     address : getCadinuLockv3Address(),
     abi: CadinuLockV3Abi,
@@ -275,7 +275,7 @@ const SelectNft = ()=>{
     }
   })
 
-  const {data,isLoading:isLockLoading,isSuccess:isLockSuccess,error,write:handleLock} = useContractWrite(
+  const {data,isLoading:isLockLoading,isSuccess:isLockSuccess,write:handleLock} = useContractWrite(
     config
     )
 

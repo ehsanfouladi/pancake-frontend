@@ -18,5 +18,5 @@
     "**/config/abi/types/",
     "**/abis/types/*.ts"
   ],
-  "include": ["next-env.d.ts", "./src/**/*.ts", "./src/**/*.tsx"]
+  "include": ["next-env.d.ts", "./src/**/*.ts", "./src/**/*.tsx", "src/views/TradingReward/components/FinishedCompetitions"]
 }

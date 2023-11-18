@@ -6,6 +6,7 @@ import { floatingStarsLeft, floatingStarsRight } from 'views/Lottery/components/
 import Image from 'next/image'
 import bunnyImage from '../../../../public/images/trading-reward/trading-reward-banner-bunny.png'
 
+
 const Container = styled(Box)<{ backgroundColor: string }>`
   padding: 47px 16px 38px 16px;
   background: ${({ backgroundColor }) => backgroundColor};
@@ -128,8 +129,8 @@ const TradingRewardBanner = () => {
         <img src="/images/trading-reward/star1.png" width="43px" height="43px" alt="star1" />
         <img src="/images/trading-reward/star2.png" width="71px" height="71px" alt="star2" />
         <img src="/images/trading-reward/star3.png" width="36px" height="36px" alt="star3" />
-        <img src="/images/trading-reward/butter-1.png" width="186px" height="168px" alt="butter1" />
-        <img src="/images/trading-reward/butter-2.png" width="167px" height="261px" alt="butter2" />
+        {/* <img src="/images/trading-reward/butter-1.png" width="186px" height="168px" alt="butter1" />
+        <img src="/images/trading-reward/butter-2.png" width="167px" height="261px" alt="butter2" /> */}
       </Decorations>
       <Flex
         position="relative"
@@ -150,13 +151,13 @@ const TradingRewardBanner = () => {
           <Text bold fontSize={['40px', '40px', '40px', '60px']} color="secondary" lineHeight="110%">
             {t('Trading Reward')}
           </Text>
-          <Flex mb="16px" flexWrap="wrap">
+          {/* <Flex mb="16px" flexWrap="wrap">
             <Text bold fontSize="40px" color="secondary" as="span" ml="4px" lineHeight="110%">
               {t('10% trading rebate to be earned!')}
             </Text>
-          </Flex>
+          </Flex> */}
           <Text bold mb="32px" maxWidth="404px" lineHeight="26.4px" fontSize={['16px', '16px', '16px', '24px']}>
-            {t('Earn CAKE while trading your favorite tokens on PancakeSwap.')}
+            {t('Earn CBON while trading your favorite tokens.')}
           </Text>
           <Flex alignSelf={['center', 'center', 'center', 'auto']}>
             <NextLinkFromReactRouter to="/swap?showTradingReward=true">
@@ -174,7 +175,7 @@ const TradingRewardBanner = () => {
           height={['272px', '272px', '272px', '563px']}
           m={['auto', 'auto', 'auto', 'auto', 'auto', '0 0 0 auto']}
         >
-          <Image src={bunnyImage} alt="banner-image" />
+          {/* <Image src={bunnyImage} alt="banner-image" /> */}
         </Box>
       </Flex>
     </Container>

@@ -1,10 +1,10 @@
-// import TradingReward from '../../views/TradingReward'
+import TradingReward from '../../views/TradingReward'
 
-// export default TradingReward
-import { NotFound } from '@pancakeswap/uikit'
+export default TradingReward
+// import { NotFound } from '@pancakeswap/uikit'
 
-const NotFoundPage = () => <NotFound />
+// const NotFoundPage = () => <NotFound />
 
-NotFoundPage.chains = []
+// NotFoundPage.chains = []
 
-export default NotFoundPage
+// export default NotFoundPage

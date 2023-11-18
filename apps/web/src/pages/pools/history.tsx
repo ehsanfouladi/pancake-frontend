@@ -1,4 +1,3 @@
-import { SUPPORTED_CHAIN_IDS } from '@pancakeswap/pools'
 import { SUPPORT_ONLY_BSC } from 'config/constants/supportChains'
 
 import Pools from 'views/Pools'

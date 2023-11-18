@@ -1,13 +1,8 @@
-import { Box, Card, CardBody, CardFooter, CardHeader, CardProps, Flex, Grid, Heading, PageSection, Row, Text, useMatchBreakpoints } from "@pancakeswap/uikit"
+import { CardBody, CardFooter, CardHeader, CardProps, Flex, Heading, PageSection } from "@pancakeswap/uikit"
 import { PageMeta } from "components/Layout/Page"
 import Image from "next/image"
 import Link from "next/link"
-import { useState } from "react"
 import styled, {css} from "styled-components"
-import CardActions from "views/Farms/components/FarmCard/CardActionsContainer"
-import { cardConfig } from "views/Ifos/components/IfoFoldableCard/IfoPoolCard"
-import Page from "views/Page"
-import CardFlip from "views/Predictions/components/CardFlip"
 import { BodyWrapper } from "views/ShowCase"
 
 export function AppBody({ children, ...cardProps }: { children: React.ReactNode } & CardProps) {

@@ -69,7 +69,7 @@ export const getFormErrors = (formData: FormState, t: ContextApi['t'], isVesting
 }
 
 export const getv3FormErrors = (formv3Data: Formv3State, t: ContextApi['t'], isOwnerMe: boolean)=>{
-  const { owner,nftId,title,lockUntilDate,lockUntilTime} = formv3Data
+  const { owner,title,lockUntilDate,lockUntilTime} = formv3Data
   const errors: { [key: string]: string[] } = {}
 
   

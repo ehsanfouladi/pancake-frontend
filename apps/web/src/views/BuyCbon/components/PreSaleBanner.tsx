@@ -6,12 +6,9 @@ import {
   NextLinkFromReactRouter,
   Text,
   useMatchBreakpoints,
-  OpenNewIcon,
   ArrowForwardIcon,
-  LogoIcon,
 } from '@pancakeswap/uikit'
 import { ASSET_CDN } from 'config/constants/endpoints'
-import Image from 'next/legacy/image'
 import styled, { css } from 'styled-components'
 import * as S from './BannerStyle'
 

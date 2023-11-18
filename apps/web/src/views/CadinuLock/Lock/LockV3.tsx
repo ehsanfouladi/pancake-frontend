@@ -210,10 +210,8 @@ const {
         data[0]?.result.map(res=>
           fetchedNfts.push(res)
           )
-          console.log('fetchedNfts',fetchedNfts);
       
           if(lockId!==null && lockId!=='undefined'){
-            console.log('>>>>>',lockId);
             
             const temp = fetchedNfts.filter(nft=>nft.lockId === BigInt(Number(lockId)))
             setNfts(temp)

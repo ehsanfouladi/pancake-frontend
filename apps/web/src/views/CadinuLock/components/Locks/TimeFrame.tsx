@@ -1,7 +1,6 @@
 import { Text } from '@pancakeswap/uikit'
 import { toDate, format } from 'date-fns'
 import { useTranslation } from '@pancakeswap/localization'
-import { CadinuLockState } from 'state/types'
 
 interface TimeFrameProps {
   startDate: number

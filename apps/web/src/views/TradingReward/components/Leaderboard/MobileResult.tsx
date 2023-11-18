@@ -1,14 +1,11 @@
-import styled from 'styled-components'
-import { Box, Text, Flex, ProfileAvatar } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import { RankListDetail } from 'views/TradingReward/hooks/useRankList'
+import { Box, Flex, ProfileAvatar, Text } from '@pancakeswap/uikit'
 import { formatNumber } from '@pancakeswap/utils/formatBalance'
-import { useProfileForAddress } from 'state/profile/hooks'
-import { useDomainNameForAddress } from 'hooks/useDomain'
 import truncateHash from '@pancakeswap/utils/truncateHash'
-import { usePriceCakeUSD } from 'state/farms/hooks'
-import { useMemo } from 'react'
-import BigNumber from 'bignumber.js'
+import { useDomainNameForAddress } from 'hooks/useDomain'
+import { useProfileForAddress } from 'state/profile/hooks'
+import styled from 'styled-components'
+import { RankListDetail } from 'views/TradingReward/hooks/useRankList'
 
 export const StyledMobileRow = styled(Box)`
   background-color: ${({ theme }) => theme.card.background};
@@ -21,24 +18,25 @@ export const StyledMobileRow = styled(Box)`
 
 interface MobileResultProps {
   rank: RankListDetail
+  index: number
 }
 
-const MobileResult: React.FC<React.PropsWithChildren<MobileResultProps>> = ({ rank }) => {
+const MobileResult: React.FC<React.PropsWithChildren<MobileResultProps>> = ({ rank, index }) => {
   const { t } = useTranslation()
-  const cakePriceBusd = usePriceCakeUSD()
+  // const cakePriceBusd = usePriceCakeUSD()
   const { profile, isLoading: isProfileLoading } = useProfileForAddress(rank.origin)
   const { domainName, avatar } = useDomainNameForAddress(rank.origin, !profile && !isProfileLoading)
 
-  const cakeAmount = useMemo(
-    () => new BigNumber(rank?.estimateRewardUSD).div(cakePriceBusd).toNumber(),
-    [cakePriceBusd, rank?.estimateRewardUSD],
-  )
+  // const cakeAmount = useMemo(
+  //   () => new BigNumber(rank?.estimateRewardUSD).div(cakePriceBusd).toNumber(),
+  //   [cakePriceBusd, rank?.estimateRewardUSD],
+  // )
 
   return (
     <StyledMobileRow p="16px">
       <Flex justifyContent="space-between" mb="16px">
         <Text fontWeight="bold" color="secondary" mr="auto">
-          {`#${rank.rank}`}
+          {`#${index + 1}`}
         </Text>
         <Flex width="100%" justifyContent="flex-end">
           <Text color="primary" fontWeight="bold" style={{ alignSelf: 'center' }} mr="8px">
@@ -53,11 +51,11 @@ const MobileResult: React.FC<React.PropsWithChildren<MobileResultProps>> = ({ ra
         </Text>
         <Box>
           <Text bold textAlign="right">
-            {`$${formatNumber(rank.estimateRewardUSD)}`}
+            {`$${formatNumber(rank.estimatedReward)} CBON`}
           </Text>
-          <Text fontSize="12px" color="textSubtle" textAlign="right" lineHeight="110%">
-            {`~${formatNumber(cakeAmount)} CAKE`}
-          </Text>
+          {/* <Text fontSize="12px" color="textSubtle" textAlign="right" lineHeight="110%">
+            {`~${formatNumber(cakeAmount)} CAKE`} */}
+          {/* </Text> */}
         </Box>
       </Flex>
       <Flex justifyContent="space-between" alignItems="center">
@@ -65,7 +63,7 @@ const MobileResult: React.FC<React.PropsWithChildren<MobileResultProps>> = ({ ra
           {t('Trading Volume')}
         </Text>
         <Text fontWeight="bold" textAlign="right">
-          {`$${formatNumber(rank.volume)}`}
+          {`$${formatNumber(rank.amountUSD)}`}
         </Text>
       </Flex>
     </StyledMobileRow>

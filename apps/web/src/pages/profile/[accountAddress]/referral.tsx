@@ -100,7 +100,6 @@ const NftProfileAchievementsPage = () => {
     ]),
     )
     : null  
-    console.log('DATA', referralAchievements);
 
     const achievements : Achievement[] = [
       {

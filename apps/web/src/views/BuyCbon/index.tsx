@@ -17,7 +17,6 @@ import { useAccount, useBalance } from 'wagmi'
 import Page from '../Page'
 import PreSaleBanner from './components/PreSaleBanner'
 import usePriceQuotes from './hooks/usePriceQuoter'
-import { StyledBuyCbonContainer } from './styles'
 
 const Grid = styled.div`
   display: grid;

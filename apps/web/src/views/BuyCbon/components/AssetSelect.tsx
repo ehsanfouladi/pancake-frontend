@@ -1,9 +1,7 @@
 import { useTranslation } from '@pancakeswap/localization'
 import {
-  ArrowDropDownIcon,
   Box,
   CircleLoader,
-  CopyAddress,
   CopyButton,
   CurrencyLogo,
   Flex,
@@ -14,15 +12,11 @@ import {
 } from '@pancakeswap/uikit'
 import { formatAmount } from '@pancakeswap/utils/formatFractions'
 import CurrencySearchModal from 'components/SearchModal/CurrencySearchModal'
-import { useCallback } from 'react'
-import { useCurrencyBalance } from 'state/wallet/hooks'
 import { useAccount } from 'wagmi'
 import styled from 'styled-components'
 import { Currency, CurrencyAmount } from '@pancakeswap/swap-sdk-core'
 import { useAllOnRampTokens } from 'hooks/Tokens'
-import { CBON, bscTokens } from '@pancakeswap/tokens'
-import { BIG_ONE, BIG_ZERO } from '@pancakeswap/utils/bigNumber'
-import { BIG_INT_TEN } from 'config/constants/exchange'
+import { bscTokens } from '@pancakeswap/tokens'
 
 const AssetSelectButton = styled.div`
   width: 100%;

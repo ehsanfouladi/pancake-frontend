@@ -195,7 +195,6 @@ function bestTradeHookFactory({
           allowedPoolTypes: poolTypes,
           quoterOptimization,
         })
-        console.log("RESSSSSSPONSE", res);
         
         if (res) {
           SmartRouter.metric(

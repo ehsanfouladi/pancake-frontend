@@ -168,7 +168,7 @@ export const fetchPoolsPublicDataAsync = (chainId: number) => async (dispatch, g
     })
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const fetchFarmV3Promise = farmV3ApiFetch(chainId).catch((error) => {
+    const fetchFarmV3Promise = farmV3ApiFetch(chainId).catch(() => {
       return undefined
     })
 
@@ -209,7 +209,6 @@ export const fetchPoolsPublicDataAsync = (chainId: number) => async (dispatch, g
       let stakingTokenPrice = 
       // stakingTokenAddress === bscTokens.cbon.address ? useCbonPrice() :
           stakingTokenAddress ? prices[stakingTokenAddress] : 0
-          console.log("stakingTokenPrice", stakingTokenPrice);
       
       if (stakingTokenAddress && !prices[stakingTokenAddress] && !isPoolFinished) {
         // eslint-disable-next-line no-await-in-loop
@@ -227,7 +226,6 @@ export const fetchPoolsPublicDataAsync = (chainId: number) => async (dispatch, g
         const result = await fetchTokenUSDValue(chainId, [earningTokenAddress])
         earningTokenPrice = result.get(earningTokenAddress) || 0
       }
-      console.log("earningTokenPrice", earningTokenPrice);
 
       const totalStaked = getBalanceNumber(new BigNumber(totalStaking.totalStaked), pool.stakingToken.decimals)
       const apr = !isPoolFinished

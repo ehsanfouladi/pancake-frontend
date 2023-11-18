@@ -30,6 +30,19 @@ export interface Incentives {
   dynamicRate: number
 }
 
+export interface CompetitionIncentives{
+  id: number
+  startTime: number
+  endTime: number
+  poolAddress: string
+  numberOfWinners: number
+  rewardAmount : number
+  rewardCharged : number
+  isBoosted: boolean
+  is_live: boolean
+  is_finished: boolean
+}
+
 export interface Qualification {
   thresholdLockTime: number
   minAmountUSD: string

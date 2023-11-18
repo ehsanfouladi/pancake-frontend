@@ -3,10 +3,10 @@ import { bscTokens } from '@pancakeswap/tokens'
 import { ArrowForwardIcon, Box, IconButton, NextLinkFromReactRouter, Skeleton, SkeletonV2, Text } from '@pancakeswap/uikit'
 import { useCadinuPriceAsBN, useCbonPriceAsBN } from '@pancakeswap/utils/useCakePrice'
 import { useCallback, useEffect, useState } from 'react'
-import { CadinuLockState, Lock } from 'state/types'
+import { CadinuLockState } from 'state/types'
 import styled from 'styled-components'
 import { formatRawAmount } from 'utils/formatCurrencyAmount'
-import { Address, isAddress, zeroAddress } from 'viem'
+import { Address } from 'viem'
 import { erc20ABI, readContracts, useContractRead } from 'wagmi'
 import { getValueLocked } from "../../helpers"
 

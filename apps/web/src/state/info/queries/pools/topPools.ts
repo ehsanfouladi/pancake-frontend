@@ -57,7 +57,6 @@ const useTopPoolAddresses = (): string[] => {
   const [topPoolAddresses, setTopPoolAddresses] = useState([])
   // const [timestamp24hAgo] = getDeltaTimestamps()
   const [, , , , timestamp24hAgo] = getDeltaTimestamps()
-  console.log(timestamp24hAgo);
   
   const chainName = useGetChainName()
 

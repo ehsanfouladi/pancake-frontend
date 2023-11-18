@@ -8,7 +8,7 @@ const stepList = [
   {
     title: <Trans>Look for eligible pairs</Trans>,
     subTitle: (
-      <Trans>Use the hot token list on the Swap page to check which pairs are eligible for trading rewards.</Trans>
+      <Trans>Use the Live Competition section on this page to check which pairs are eligible for trading rewards.</Trans>
     ),
     imgUrl: '/images/trading-reward/step1-1.png',
   },
@@ -16,7 +16,7 @@ const stepList = [
     title: <Trans>Start trading</Trans>,
     subTitle: (
       <Trans>
-        Start trading any eligible pairs to earn rewards in CAKE. The more you trade, the more rewards you will earn
+        Start trading any eligible pairs to earn rewards in CBON. The more you trade, the more rewards you will earn
         from the current reward pool.
       </Trans>
     ),
@@ -81,9 +81,9 @@ const HowToEarn = () => {
                     >
                       {`Step ${index + 1}`}
                     </Text>
-                    <Box margin="0 auto">
+                    {/* <Box margin="0 auto">
                       <Image src={step.imgUrl} width={180} height={180} alt={`step${index + 1}`} />
-                    </Box>
+                    </Box> */}
                   </Flex>
                   <Text lineHeight="110%" bold fontSize={['24px']} color="secondary" mb={['16px']}>
                     {step.title}
