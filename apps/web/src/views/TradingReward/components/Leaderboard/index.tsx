@@ -1,6 +1,8 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Box, Button, Card, CardBody, Flex, Grid, LinkExternal, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
+import truncateHash from '@pancakeswap/utils/truncateHash'
 import Container from 'components/Layout/Container'
+import { lpTokenABI } from 'config/abi/lpTokenAbi'
 import { format } from 'date-fns'
 import isEmpty from 'lodash/isEmpty'
 import { useRouter } from 'next/router'
@@ -8,13 +10,10 @@ import { useCallback, useEffect, useState } from 'react'
 import useSWR from 'swr'
 import { COMPETITION_API_URL } from 'views/TradingReward/constants'
 import { RankListDetail } from 'views/TradingReward/hooks/useRankList'
+import { Address, readContracts } from 'wagmi'
 import LeaderBoardDesktopView from './DesktopView'
 import LeaderBoardMobileView from './MobileView'
 import RankingCard from './RankingCard'
-import { TruncatedText } from 'views/Swap/components/styleds'
-import truncateHash from '@pancakeswap/utils/truncateHash'
-import { Address, readContracts } from 'wagmi'
-import { lpTokenABI } from 'config/abi/lpTokenAbi'
 
 
 const Leaderboard = () => {
