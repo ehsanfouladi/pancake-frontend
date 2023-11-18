@@ -118,7 +118,7 @@ const IncreaseReward = ()=>{
         <Page>
           <Container>
             <PageSection index={1}>
-            {competitionDetails[1].status==='success' && (
+            {competitionDetails && competitionDetails[1].status==='success' && (
               <>
               <Layout>
               <Box ml='25px'>

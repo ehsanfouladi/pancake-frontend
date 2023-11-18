@@ -95,13 +95,13 @@ const HowToEarn = () => {
           </Flex>
         </StyledCard>
       </Box>
-      <LinkExternal
+      {/* <LinkExternal
         external
         href="https://docs.pancakeswap.finance/products/trading-reward/how-to-participate"
         margin={['auto', 'auto', 'auto', '42px auto 0 auto']}
       >
         {t('Learn More')}
-      </LinkExternal>
+      </LinkExternal> */}
     </Box>
   )
 }
