@@ -50,7 +50,7 @@ const TopTradersBanner = () => {
             lineHeight="110%"
             mb={['20px', '20px', '20px', '32px']}
           >
-            {t('reward for Top Traders!')}
+            {t('Reward for Top Traders!')}
           </Text>
           
           <Text bold mb="32px" maxWidth="520px" lineHeight="26.4px" fontSize={['16px', '16px', '16px', '24px']}>

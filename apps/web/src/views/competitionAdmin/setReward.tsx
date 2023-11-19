@@ -103,17 +103,30 @@ const CompetitionAdmin = ()=>{
       console.log(users);
       const finalReward = []
       let totalAmount = 0
-      const newNumberOfWinners = numberOfWinners > topTraders.length ? topTraders.length : numberOfWinners
-      for (var i=0; i<newNumberOfWinners;i++){
-        totalAmount += topTraders[i] ? Number(topTraders[i].amountUSD) : 0
-      }
-      for (var i=0; i<newNumberOfWinners;i++){
-        if(topTraders[i]){
-          finalReward.push(((Number(topTraders[i].amountUSD)/totalAmount)*Number(formatUnits(competitionDetails[1]?.result?.['4'], 18))).toFixed(2).toString())
-        }else{
-          finalReward.push(0)
+      
+      topTraders.forEach((trader, index)=>{
+        if(index<numberOfWinners){
+          totalAmount += Number(trader.amountUSD)
         }
-      }
+      })
+
+      topTraders.forEach((trader, index)=>{
+        if (index<numberOfWinners){
+          finalReward.push(
+            (
+              (Number(trader.amountUSD)/totalAmount) * Number(formatUnits(competitionDetails[1]?.result?.['4'], 18))
+            ).toFixed(2).toString()
+          )
+        }
+      })
+
+      // for (var i=0; i<newNumberOfWinners;i++){
+      //   if(topTraders[i]){
+      //     finalReward.push(((Number(topTraders[i].amountUSD)/totalAmount)*Number(formatUnits(competitionDetails[1]?.result?.['4'], 18))).toFixed(2).toString())
+      //   }else{
+      //     finalReward.push(0)
+      //   }
+      // }
       setState((prevState)=>({
         ...prevState,
         'rewards' : finalReward,
@@ -265,6 +278,7 @@ const CompetitionAdmin = ()=>{
             </PageSection>
             <PageSection index={2}>
               <Button
+              mb='16px'
               disabled={!topTraders || !numberOfWinners}
               onClick={()=>handleAutoInput()}
               >
@@ -323,6 +337,7 @@ const CompetitionAdmin = ()=>{
              
               <DatePickerPortal />
               <Button
+                mt ='15px'
                 onClick={()=>handleSum()}
               >Show Sum</Button>
               <Text>SUM REWARD</Text>
