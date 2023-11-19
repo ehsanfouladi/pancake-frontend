@@ -16,6 +16,7 @@ import { DatePickerPortal } from "views/CadinuLock/components/DatePicker"
 import Layout from "views/CadinuLock/components/Layout"
 import WalletNotConnected from "views/Claim/components/WalletNotConnected"
 import Page from "views/Page"
+import { COMPETITION_API_URL } from "views/TradingReward/constants"
 import { SecondaryLabel } from "views/Voting/CreateProposal/styles"
 import { useAccount, useContractReads, useContractWrite, usePrepareContractWrite, useWaitForTransaction } from "wagmi"
 
@@ -72,7 +73,7 @@ const CompetitionAdmin = ()=>{
     }
     
 
-    const {data: topTraders} = useSWR(`http://localhost:8000/api/competitions/top-traders?competitionId=${competitionId}`, 
+    const {data: topTraders} = useSWR(`${COMPETITION_API_URL}/top-traders?competitionId=${competitionId}`, 
     fetcher)
 
 
