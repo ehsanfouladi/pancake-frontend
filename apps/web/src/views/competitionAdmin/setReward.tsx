@@ -1,5 +1,5 @@
 import { bscTokens } from "@pancakeswap/tokens"
-import { Box, Button, Container, Input, PageSection, Text, useToast } from "@pancakeswap/uikit"
+import { Box, Button, Container, Input, NotFound, PageSection, Text, useToast } from "@pancakeswap/uikit"
 import ApproveConfirmButtons from "components/ApproveConfirmButtons"
 import { ToastDescriptionWithTx } from "components/Toast"
 import { cadinuTradingCompetition } from "config/abi/cadinuTradingCompetition"
