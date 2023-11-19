@@ -1,5 +1,5 @@
 import { bscTokens } from "@pancakeswap/tokens"
-import { Box, Container, Input, NotFound, PageSection, Text, useToast } from "@pancakeswap/uikit"
+import { Box, Button, Container, Input, PageSection, Text, useToast } from "@pancakeswap/uikit"
 import ApproveConfirmButtons from "components/ApproveConfirmButtons"
 import { ToastDescriptionWithTx } from "components/Toast"
 import { cadinuTradingCompetition } from "config/abi/cadinuTradingCompetition"
@@ -8,6 +8,7 @@ import useApproveConfirmTransaction from "hooks/useApproveConfirmTransaction"
 import { useCallWithGasPrice } from "hooks/useCallWithGasPrice"
 import { useRouter } from "next/router"
 import { ChangeEvent, useEffect, useState } from "react"
+import useSWR from "swr"
 import { getCadinuTradingCompetitionAddress } from "utils/addressHelpers"
 import { getCadinuTradingCompetitionContract } from "utils/contractHelpers"
 import { formatUnits, parseUnits } from "viem"
@@ -16,11 +17,11 @@ import Layout from "views/CadinuLock/components/Layout"
 import WalletNotConnected from "views/Claim/components/WalletNotConnected"
 import Page from "views/Page"
 import { SecondaryLabel } from "views/Voting/CreateProposal/styles"
-import { Address, useAccount, useContractReads, useContractWrite, usePrepareContractWrite, useWaitForTransaction } from "wagmi"
+import { useAccount, useContractReads, useContractWrite, usePrepareContractWrite, useWaitForTransaction } from "wagmi"
 
 interface FormState {
-    users: Address[]
-    rewards: number[]
+    users: string[]
+    rewards: number[],
   }
   
 
@@ -32,10 +33,12 @@ const CompetitionAdmin = ()=>{
     const { toastSuccess } = useToast()
     const [numberOfWinners, setNumberOfWinners] = useState(0)
 
+    const [sumReward, setSumReward] = useState(0)
+
     const [state, setState] = useState<FormState>(() => ({
         users:[],
-        rewards:[]
-    }))
+        rewards:[],
+            }))
 
     const contract ={
       address: getCadinuTradingCompetitionAddress(),
@@ -56,6 +59,23 @@ const CompetitionAdmin = ()=>{
       ],
       watch:true
     })
+
+    const fetcher = async (url: string) => {
+      const res = await fetch(url)
+      
+      if (!res.ok) {
+        const error = new Error('An error occurred while fetching the data.')
+        throw error
+      }
+            
+      return  res.json()
+    }
+    
+
+    const {data: topTraders} = useSWR(`http://localhost:8000/api/competitions/top-traders?competitionId=${competitionId}`, 
+    fetcher)
+
+
     useEffect(()=>{
         if (competitionDetails && competitionDetails[1].status==='success' && numberOfWinners === 0){
           setNumberOfWinners(Number(competitionDetails[1]?.result?.['3']))
@@ -67,11 +87,53 @@ const CompetitionAdmin = ()=>{
           }))
         }
     }, [competitionDetails])
+   
+    const handleAutoInput = ()=>{
+      console.log(topTraders);
+      
+      
+
+      setState((prevState)=>({
+        ...prevState,
+        'users': topTraders.map(trader=>{
+          return trader.origin.toString()
+        }).slice(0,numberOfWinners),
+        'rewards' : rewards,
+      }))
+      console.log(users);
+      const finalReward = []
+      let totalAmount = 0
+      const newNumberOfWinners = numberOfWinners > topTraders.length ? topTraders.length : numberOfWinners
+      for (var i=0; i<newNumberOfWinners;i++){
+        totalAmount += topTraders[i] ? Number(topTraders[i].amountUSD) : 0
+      }
+      for (var i=0; i<newNumberOfWinners;i++){
+        if(topTraders[i]){
+          finalReward.push(((Number(topTraders[i].amountUSD)/totalAmount)*Number(formatUnits(competitionDetails[1]?.result?.['4'], 18))).toFixed(2).toString())
+        }else{
+          finalReward.push(0)
+        }
+      }
+      setState((prevState)=>({
+        ...prevState,
+        'rewards' : finalReward,
+      }))
+    }
 
     const {
-        users,
-        rewards
-        } = state
+      users,
+      rewards,
+      
+      } = state
+
+
+      const handleSum = ()=>{
+        let s = 0
+        rewards.forEach(reward => {
+         s += Number(reward)
+        })
+        setSumReward(s)
+      }
 
     const {config} = usePrepareContractWrite({
       address : getCadinuTradingCompetitionAddress(),
@@ -156,9 +218,9 @@ const CompetitionAdmin = ()=>{
     })
 
 
-    if(competitionDetails && account && account.toLowerCase() !== competitionDetails[0].result?.toLowerCase()){
-        return (<NotFound />)
-    }
+    // if(competitionDetails && account && account.toLowerCase() !== competitionDetails[0].result?.toLowerCase()){
+    //     return (<NotFound />)
+    // }
     if(!account){
         return(
             <Container>
@@ -202,6 +264,12 @@ const CompetitionAdmin = ()=>{
              )}
             </PageSection>
             <PageSection index={2}>
+              <Button
+              disabled={!topTraders || !numberOfWinners}
+              onClick={()=>handleAutoInput()}
+              >
+                Auto fill form
+              </Button>
               <form onSubmit={handleFormSubmit}>
                 <Layout>
                   <Box>
@@ -254,6 +322,11 @@ const CompetitionAdmin = ()=>{
           />
              
               <DatePickerPortal />
+              <Button
+                onClick={()=>handleSum()}
+              >Show Sum</Button>
+              <Text>SUM REWARD</Text>
+              <Text>{sumReward}</Text>
             </PageSection>
           </Container>
         </Page>

@@ -40,7 +40,7 @@ const TopTradersBanner = () => {
       >
         <Flex flexDirection="column" alignSelf="center" width={['100%', '100%', '100%', '700px']}>
           <Text bold fontSize={['40px', '40px', '40px', '60px']} color="secondary" lineHeight="110%">
-            {t('Trading Reward')}
+            {t('Trading Competition')}
           </Text>
           <Text
             bold
@@ -50,7 +50,7 @@ const TopTradersBanner = () => {
             lineHeight="110%"
             mb={['20px', '20px', '20px', '32px']}
           >
-            {t('for  Top Traders!')}
+            {t('reward for Top Traders!')}
           </Text>
           
           <Text bold mb="32px" maxWidth="520px" lineHeight="26.4px" fontSize={['16px', '16px', '16px', '24px']}>

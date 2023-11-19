@@ -139,7 +139,7 @@ const Leaderboard = () => {
         }`)
         break;
       case 'pancakeSwap':
-        (url = `https://pancake.finance/swap?inputCurrency=${res[0].result}&outputCurrency=${
+        (url = `https://pancakeswap.finance/swap?inputCurrency=${res[0].result}&outputCurrency=${
           res[1].result
         }`)
         break;
