@@ -231,9 +231,9 @@ const CompetitionAdmin = ()=>{
     })
 
 
-    // if(competitionDetails && account && account.toLowerCase() !== competitionDetails[0].result?.toLowerCase()){
-    //     return (<NotFound />)
-    // }
+    if(competitionDetails && account && account.toLowerCase() !== competitionDetails[0].result?.toLowerCase()){
+        return (<NotFound />)
+    }
     if(!account){
         return(
             <Container>
