@@ -89,7 +89,7 @@ export const socials = [
   {
     label: "Twitter",
     icon: TwitterIcon,
-    href: "https://twitter.com/CADINUTOKEN?s=08",
+    href: " https://x.com/cadinudao",
   },
   {
     label: "Telegram",

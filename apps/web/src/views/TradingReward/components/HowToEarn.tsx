@@ -6,9 +6,9 @@ import Trans from 'components/Trans'
 
 const stepList = [
   {
-    title: <Trans>Look for eligible pairs</Trans>,
+    title: <Trans> Choose Your Competition</Trans>,
     subTitle: (
-      <Trans>Use the Live Competition section on this page to check which pairs are eligible for trading rewards.</Trans>
+      <Trans>Select your preferred competition using the Live Competition section on this page. Identify active trading pairs for a chance to win.</Trans>
     ),
     imgUrl: '/images/trading-reward/step1-1.png',
   },
@@ -16,21 +16,20 @@ const stepList = [
     title: <Trans>Start trading</Trans>,
     subTitle: (
       <Trans>
-        Start trading any eligible pairs to earn rewards in CBON. The more you trade, the more rewards you will earn
-        from the current reward pool.
+        Engage in any active competition to maximize your chances of winning rewards. The more you trade, the greater your potential rewards as a top performer in the current trading competition.
       </Trans>
     ),
     imgUrl: '/images/trading-reward/step2-1.png',
   },
   {
-    title: <Trans>Track your volume and rewards</Trans>,
-    subTitle: <Trans>Come back to this page to check your volume and rewards in real-time.</Trans>,
+    title: <Trans>Monitor your volume and rewards</Trans>,
+    subTitle: <Trans>Keep tabs on your trading volume and rewards in real-time by revisiting this page.</Trans>,
     imgUrl: '/images/trading-reward/step3-1.png',
   },
   {
     title: <Trans>Claim your rewards</Trans>,
     subTitle: (
-      <Trans>After each period ends, come back to this page and claim your rewards from the previous periods.</Trans>
+      <Trans>At the conclusion of each period, return to this page to effortlessly claim your rewards from previous periods.</Trans>
     ),
     imgUrl: '/images/trading-reward/step4-1.png',
   },
@@ -60,7 +59,7 @@ const HowToEarn = () => {
         <StyledCard>
           <Flex flexDirection="column" padding={['50px 0 0 0', '50px 0 0 0', '50px 0 0 0', '50px 0']}>
             <Text bold mb={['24px']} color="secondary" textAlign="center" fontSize={['40px']}>
-              {t('How to Earn')}
+              {t('How to Win')}
             </Text>
             <Flex flexWrap="wrap" flexDirection={['column', 'column', 'column', 'row']}>
               {stepList.map((step, index) => (

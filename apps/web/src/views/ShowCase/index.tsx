@@ -36,35 +36,28 @@ export function AppBody({ children, ...cardProps }: { children: React.ReactNode 
 export default function ShowCase() {
   const Apps = [
     {
-      title: 'VOTING',
+      title: 'Governance', 
       image: '/images/cadinu-apps/Cadinu-Vote.png',
       alt: 'Cadinu-Voting',
-      desc: "Have a say in CADINU's future development through community voting powered by CADINU token and CBON. Your voice matters! \n",
+      desc: "Shape CADINU's Future! \n Create proposals or cast your vote in community decisions.",
       destination: '/voting',
-      enabled: true,
-    },
-    {
-      title: 'LOTTERY',
-      image: '/images/cadinu-apps/Cadinu-Lottery.png',
-      alt: 'Cadinu-LotteryImage',
-      desc: 'Participate in thrilling lotteries powered by the CADINU token. Grab your chance to win amazing rewards at CADINU Lottery!',
-      destination: '/lottery',
-      enabled: true,
-    },
-    {
-      title: 'CLICK TO WIN',
-      image: '/images/cadinu-apps/Cadinu-C2W.png',
-      alt: 'Cadinu-C2WImage',
-      desc: 'Participate in C2W Dapp for a chance to win free CADINU tokens. Just one click away from fantastic prizes.',
-      destination: '/click-to-win',
       enabled: true,
     },
     {
       title: 'MultiSwap',
       image: '/images/cadinu-apps/Cadinu-Swap.png',
       alt: 'Cadinu-MultiSwap',
-      desc: 'Effortlessly exchange cryptocurrencies like Bitcoin, Ethereum and etc with CADINU secure Dapp. Discover fast and seamless trading',
+      desc: "Swiftly trade BTC, ETH, and more on CADINU's secure Dapp for a seamless trading experience.",
       destination: '/swap',
+      enabled: true,
+      // hasCountDown: true,
+    },
+    {
+      title: 'NFT Referral',
+      image: '/images/cadinu-apps/Cadinu-NFT.png',
+      alt: 'Cadinu-MultiSwap',
+      desc: "Engage in NFT affiliate marketing, earn rewards, and unlock exclusive benefits!",
+      destination: '/buy-nft',
       enabled: true,
       // hasCountDown: true,
     },
@@ -72,7 +65,7 @@ export default function ShowCase() {
       title: 'Farming',
       image: '/images/cadinu-apps/Cadinu-Farm.png',
       alt: 'Cadinu-Farming',
-      desc: " Earn CADINU and CBON rewards by providing liquidity to CADINU's decentralized exchange and fueling the CADINU ecosystem",
+      desc: "Stake liquidity in CADINU DEX, earn CBON rewards.",
       destination: '/farms',
       enabled: true,
       // hasCountDown: true,
@@ -81,18 +74,46 @@ export default function ShowCase() {
       title: 'Staking',
       image: '/images/cadinu-apps/Cadinu-Staking.png',
       alt: 'Cadinu-Staking',
-      desc: " Lock up CBON, CADINU, and other tokens to earn passive rewards and support CADINU's growth journey, along with other promising projects.",
+      desc: "Lock tokens, earn passive rewards, support CADINU.",
       destination: '/pools',
       enabled: true,
     },
     {
-      title: 'Lock',
+      title: 'Trading Competition',
+      image: '/images/cadinu-apps/Cadinu-Trading-Competition.png',
+      alt: 'Cadinu-Staking',
+      desc: "Compete, win prizes, claim rewards!",
+      destination: '/trading-competition',
+      enabled: true,
+    },
+    {
+      title: 'Lock Tools',
       image: '/images/cadinu-apps/cadinu-Lock.png',
       alt: 'Cadinu-Lock',
-      desc: " Secure your tokens, liquidity V2 (LP) and liquidity V3 (NFT Position) with Cadinu Lock. Protect your assets from unauthorized access and manipulation. Choose peace of mind today.",
+      desc: "Secure tokens, LP, and NFT with CADINU Lock.",
       destination: '/cadinu-lock',
       enabled: true,
     },
+    {
+      title: 'Lottery',
+      image: '/images/cadinu-apps/Cadinu-Lottery.png',
+      alt: 'Cadinu-LotteryImage',
+      desc: 'Win CADINU rewards in thrilling lottery draws!',
+      destination: '/lottery',
+      enabled: true,
+    },
+    {
+      title: 'Click to Win',
+      image: '/images/cadinu-apps/Cadinu-C2W.png',
+      alt: 'Cadinu-C2WImage',
+      desc: 'Get free CADINU tokens with a simple click.',
+      destination: '/click-to-win',
+      enabled: true,
+    },
+   
+    
+    
+   
   ]
 
   const StyledHeading = styled(Heading)`
@@ -165,7 +186,7 @@ export default function ShowCase() {
       <PageMeta />
       <ShowCasePage>
         <PageSection index={1} background="linear-gradient(135deg, #4c57a3 0%, #899dcf 100%)" hasCurvedDivider={false}>
-          <StyledHeading>Cadinu Apps: The Ultimate Crypto Platform for Games and Apps</StyledHeading>
+          <StyledHeading>CADINU Ecosystem: Explore Our Suite of Applications</StyledHeading>
           {/* <Flex
             flexDirection="column"
             mb="24px"
@@ -203,7 +224,7 @@ export default function ShowCase() {
                     style={{
                       flex: '0 1 24%',
                       // maxWidth: "calc(95% - 1em)"
-                      height: '420px',
+                      height: '370px',
                       border: '10px',
                     }}
                   >

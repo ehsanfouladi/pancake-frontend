@@ -91,21 +91,21 @@ const Questions = () => {
                 )}
               </StyledListText>
             </FoldableText>
-            {/* <FoldableText
-              title={t('My address was previously eligible. Why is it showing not eligible now?')}
+            <FoldableText
+              title={t('Why is My Reward Amount Different from Other Winners?')}
               mt="24px"
             >
               <StyledListText color="textSubtle">
                 {t(
-                  'Each campaign has its own eligibility requirements, like the unlock time of the CAKE staking position.',
+                  "The trading reward amount is determined by dividing the winner's trade volume by the total trading volume of all winners.",
                 )}
               </StyledListText>
               <StyledListText color="textSubtle">
                 {t(
-                  'You may need to extend your locked CAKE staking position. Please follow the instructions on the page.',
+                  ' If your trade volume is relatively lower than other winners, your reward amount will also be proportionately lower.',
                 )}
               </StyledListText>
-            </FoldableText> */}
+            </FoldableText>
           </StyledCardBody>
         </Card>
       </Wrapper>

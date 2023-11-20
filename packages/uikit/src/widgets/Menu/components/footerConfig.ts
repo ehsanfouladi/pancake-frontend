@@ -7,13 +7,13 @@ export const footerLinks: (t: ContextApi["t"]) => FooterLinkType[] = (t) => [
     items: [
       {
         label: t("Contact"),
-        href: "https://cadinu.io",
+        href: "https://t.me/cadinulover",
         isHighlighted: true,
       },
       // {
-      //   label: t("Brand"),
-      //
-      //   href: "https://docs.pancakeswap.finance/brand",
+      //   label: t("Customer Support"),
+      
+      //   href: "https://t.me/cadinulover",
       // },
       // {
       //   label: t("Blog"),
@@ -23,10 +23,10 @@ export const footerLinks: (t: ContextApi["t"]) => FooterLinkType[] = (t) => [
         label: t("Community"),
         href:  "https://t.me/cadinuchat",
       },
-      {
-        label: t("Road map"),
-        href: "https://cadinu.io/#Roadmap",
-      },
+      // {
+      //   label: t("Road map"),
+      //   href: "https://cadinu.io/#Roadmap",
+      // },
     ],
   },
   {
@@ -34,7 +34,7 @@ export const footerLinks: (t: ContextApi["t"]) => FooterLinkType[] = (t) => [
     items: [
       {
         label: t("Customer Support"),
-        href: "https://cadinu.io/#FAQ",
+        href: "https://t.me/cadinulover",
       },
       // {
       //   label: t("Troubleshooting"),
