@@ -5,9 +5,10 @@ export const PANCAKE_ETH_MM = 'https://tokens.pancakeswap.finance/pancakeswap-et
 export const PANCAKE_BSC_MM = 'https://tokens.pancakeswap.finance/pancakeswap-bnb-mm.json'
 export const COINGECKO_ETH = 'https://tokens.coingecko.com/uniswap/all.json'
 export const CMC = 'https://tokens.pancakeswap.finance/cmc.json'
+export const CADINU = 'https://api.cadinu.io/token-list/'
 
 export const ETH_URLS = [PANCAKE_ETH_DEFAULT, PANCAKE_ETH_MM, COINGECKO_ETH]
-export const BSC_URLS = [PANCAKE_EXTENDED, CMC, COINGECKO, PANCAKE_BSC_MM]
+export const BSC_URLS = [CADINU, PANCAKE_EXTENDED, CMC, COINGECKO, PANCAKE_BSC_MM]
 
 // List of official tokens list
 export const OFFICIAL_LISTS = [PANCAKE_EXTENDED, PANCAKE_ETH_DEFAULT]

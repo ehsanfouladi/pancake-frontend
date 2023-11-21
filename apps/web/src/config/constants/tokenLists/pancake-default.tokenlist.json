@@ -265,6 +265,14 @@
       "chainId": 56,
       "decimals": 18,
       "logoURI": "https://cadinu.io/wp-content/uploads/2021/07/CAD-LOG-RED-2-1-e1670616678246.png"
+    },
+    {
+      "name": "Cadinu Bounes Token",
+      "symbol": "CBON",
+      "address": "0x6e64fCF15Be3eB71C3d42AcF44D85bB119b2D98b",
+      "chainId": 56,
+      "decimals": 18,
+      "logoURI": "https://apps.cadinu.io/images/cbonLogo.PNG"
     }
   ]
 }

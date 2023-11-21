@@ -1,4 +1,5 @@
 import { ChainId } from '@pancakeswap/sdk'
+import { bscTokens } from '@pancakeswap/tokens'
 import { ACCESS_RISK_API } from 'config/constants/endpoints'
 
 import { string as zString, object as zObject, enum as zEnum } from 'zod'
@@ -51,6 +52,18 @@ export const fetchRiskToken = async (address: string, chainId: number): Promise<
   const data = zRiskTokenData.parse(riskApi.data)
   // eslint-disable-next-line camelcase
   const { band, scanned_ts } = data
+
+  
+  
+
+  if ( address===bscTokens.cadinu.address){
+    return{
+      address,
+      chainId,
+      riskLevel: TOKEN_RISK_MAPPING['4/5'],
+      scannedTs: parseInt(scanned_ts, 10)
+    }
+  }
 
   return {
     address,

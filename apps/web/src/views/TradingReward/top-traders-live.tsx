@@ -1,11 +1,13 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Box, Button, Card, CardBody, CardFooter, CardHeader, CardRibbon, Flex, IfoSkeletonCardDetails, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { useCbonPrice } from '@pancakeswap/utils/useCakePrice'
 import { lpTokenABI } from 'config/abi/lpTokenAbi'
 import { format } from 'date-fns'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import styled from 'styled-components'
 import useSWR from 'swr'
+import { formatUnits } from 'viem'
 import { Address, readContracts, useAccount } from 'wagmi'
 import { COMPETITION_API_URL } from './constants'
 
@@ -68,6 +70,8 @@ const StyledHeading = styled(Text)`
   const {t} = useTranslation()
   const {isMobile} =useMatchBreakpoints()
   const router = useRouter()
+
+  const cbonPrice = useCbonPrice()
 
   const fetcher = url => fetch(url).then(res => res.json())
 
@@ -153,6 +157,7 @@ const StyledHeading = styled(Text)`
           <Text>  {`Pool: ${competition.token0}/${competition.token1}`}</Text>
           <Text>  {`Start Time: ${format(new Date(Number(competition.startTime * 1000)), 'yyyy-MM-dd HH:mm')}`}</Text>
           <Text>  {`End Time: ${format(new Date(Number(competition.endTime * 1000)), 'yyyy-MM-dd HH:mm')}`}</Text>
+          <Text>  {`Reward: ${competition.rewardAmount} CBON ~ $${(competition.rewardAmount * Number(cbonPrice)).toFixed(2)}` }</Text>
           <Text>  {`Exchange: ${competition.exchangeName}`}</Text>
           </Box>
         </CardBody>

@@ -14,7 +14,7 @@ import {
   useTooltip,
   promotedGradient,
 } from '@pancakeswap/uikit'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useUserTokenRisk } from 'state/user/hooks/useUserTokenRisk'
 import { useAllLists } from 'state/lists/hooks'
 import styled from 'styled-components'
@@ -112,6 +112,8 @@ const AccessRiskComponent: React.FC<AccessRiskProps> = ({ token }) => {
       return tokenInfoList.some((tokenInfo) => tokenInfo.address === token.address)
     })
   }, [lists, token?.address])
+
+
 
   const { targetRef, tooltip, tooltipVisible } = useTooltip(
     <>
