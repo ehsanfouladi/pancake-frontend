@@ -106,6 +106,13 @@ const Questions = () => {
                 )}
               </StyledListText>
             </FoldableText>
+            <FoldableText title={t("I participated in the trading competition, but my wallet isn't appearing on the leaderboard. Why is that?")} mt="24px">
+              <StyledListText color="textSubtle">
+                {t(
+                  "The leaderboard showcases winners and the top 5 participants based on trading volume. If your trading volume is below theirs, your wallet address won't be displayed. However, the trading competition's Dapp continuously monitors your trades, so increasing your trading volume could propel you onto the leaderboard.",
+                )}
+              </StyledListText>
+            </FoldableText>
           </StyledCardBody>
         </Card>
       </Wrapper>
