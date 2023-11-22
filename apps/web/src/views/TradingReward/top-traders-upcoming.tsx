@@ -3,7 +3,7 @@ import { Box, Card, CardBody, CardHeader, CardRibbon, Flex, IfoSkeletonCardDetai
 import { useCbonPrice, useCbonPriceAsBN } from '@pancakeswap/utils/useCakePrice'
 import { format } from 'date-fns'
 import { useEffect } from 'react'
-import styled from 'styled-components'
+import styled, { useTheme } from 'styled-components'
 import useSWR from 'swr'
 import { useAccount } from 'wagmi'
 import { COMPETITION_API_URL } from './constants'
@@ -71,7 +71,7 @@ const StyledHeading = styled(Text)`
   const cbonPrice = useCbonPriceAsBN()
   const {data, isLoading} = useSWR(`${COMPETITION_API_URL}/upcoming-competitions`,fetcher )
 
-
+  const theme = useTheme()
 
   return (
     <StyledBackground  justifyContent='center' >
@@ -108,7 +108,7 @@ const StyledHeading = styled(Text)`
           
           <Text>Competition ID #{competition._id}</Text>
         </CardHeader>
-        <CardBody style={{backgroundColor: 'rgba(255, 255, 255, 0.9)'}}>
+        <CardBody  style={{backgroundColor: theme.colors.background}}>
           <Box>
           <Text>  {`Pool: ${competition.token0}/${competition.token1}`}</Text>
           <Text>  {`Start Time: ${format(new Date(Number(competition.startTime * 1000)), 'yyyy-MM-dd HH:mm')}`}</Text>

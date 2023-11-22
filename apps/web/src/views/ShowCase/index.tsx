@@ -212,9 +212,9 @@ export default function ShowCase() {
             {Apps.map((app) => {
               return (
                 <Link
-                   href={app.destination} 
-                   style={{
-                     pointerEvents: app.enabled  ? 'visible' : 'none' }}>
+                  href={app.destination} 
+                  style={{
+                    pointerEvents: app.enabled  ? 'visible' : 'none' }}>
                   <AppBody
                     
                     m={['15px', '10px']}

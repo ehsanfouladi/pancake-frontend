@@ -1,14 +1,15 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Box, Button, Card, CardBody, CardFooter, CardHeader, CardRibbon, Flex, IfoSkeletonCardDetails, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { Box, Button, Card, CardBody, CardFooter, CardHeader, CardProps, CardRibbon, Flex, IfoSkeletonCardDetails, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { useCbonPriceAsBN } from '@pancakeswap/utils/useCakePrice'
 import { lpTokenABI } from 'config/abi/lpTokenAbi'
 import { format } from 'date-fns'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import styled from 'styled-components'
+import styled, { useTheme } from 'styled-components'
 import useSWR from 'swr'
 import { Address, readContracts, useAccount } from 'wagmi'
 import { COMPETITION_API_URL } from './constants'
+import { BodyWrapper } from 'views/ShowCase'
 
 const LiveCompetitions = () => {
 
@@ -71,6 +72,7 @@ const StyledHeading = styled(Text)`
   const router = useRouter()
 
   const cbonPrice = useCbonPriceAsBN()
+  const theme = useTheme()
 
   const fetcher = url => fetch(url).then(res => res.json())
 
@@ -137,6 +139,7 @@ const StyledHeading = styled(Text)`
           <Link href={`trading-competition/top-traders/${competition._id}`}>
           <Card ribbon={competition.isBoosted && <CardRibbon text='Boosted' ribbonPosition="right" />}
           m='15px' 
+          background={`${({theme})=>theme.colors.background}`}
           style={{
             width:isMobile ? '.9 rem' : '100%',
             flex: '0 1 28%',
@@ -144,6 +147,7 @@ const StyledHeading = styled(Text)`
             // height: '2800px',
             border: '10px',
             backgroundColor: 'transparent'
+            
           }}
           >
             
@@ -151,7 +155,9 @@ const StyledHeading = styled(Text)`
           
           <Text>ID #{competition._id}</Text>
         </CardHeader>
-        <CardBody style={{backgroundColor: 'rgba(255, 255, 255, 0.9)'}}>
+        <CardBody 
+         style={{backgroundColor: theme.colors.background}}
+         >
           <Box>
           <Text>  {`Pool: ${competition.token0}/${competition.token1}`}</Text>
           <Text>  {`Start Time: ${format(new Date(Number(competition.startTime * 1000)), 'yyyy-MM-dd HH:mm')}`}</Text>
@@ -161,7 +167,7 @@ const StyledHeading = styled(Text)`
           </Box>
         </CardBody>
         <CardFooter style={{
-          backgroundColor: 'rgba(255, 255, 255, 0.9)',
+          backgroundColor: theme.colors.background,
           borderBottomRightRadius:'25px',
           borderBottomLeftRadius:'25px',
           textAlign:'center'
