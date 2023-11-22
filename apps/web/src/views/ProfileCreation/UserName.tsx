@@ -196,12 +196,9 @@ const UserName: React.FC<React.PropsWithChildren> = () => {
         const response = await fetch(`${API_PROFILE}/api/user/${account}`)
         const data = await response.json()
         console.log('already',data);
-        
-
         if (response.ok) {
           const dateCreated = formatDistance(parseISO(data.created_at), new Date())
           setMessage(t('Created %dateCreated% ago', { dateCreated }))
-
           actions.setUserName(data.username)
           setExistingUserState(ExistingUserState.CREATED)
           setIsValid(true)
@@ -239,7 +236,7 @@ const UserName: React.FC<React.PropsWithChildren> = () => {
               'Your name must be at least 3 and at most 15 standard letters, ".", "_" and numbers long. You can’t change this once you click Confirm.',
             )}
           </Text>
-          {existingUserState === ExistingUserState.NEW ? (
+          {existingUserState === ExistingUserState.IDLE ? (
             <Skeleton height="40px" width="240px" />
           ) : (
             <InputWrap>
