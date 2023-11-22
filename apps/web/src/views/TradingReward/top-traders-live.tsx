@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Box, Button, Card, CardBody, CardFooter, CardHeader, CardProps, CardRibbon, Flex, IfoSkeletonCardDetails, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { Box, Button, Card, CardBody, CardFooter, CardHeader, CardRibbon, Flex, IfoSkeletonCardDetails, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { useCbonPriceAsBN } from '@pancakeswap/utils/useCakePrice'
 import { lpTokenABI } from 'config/abi/lpTokenAbi'
 import { format } from 'date-fns'
@@ -9,7 +9,6 @@ import styled, { useTheme } from 'styled-components'
 import useSWR from 'swr'
 import { Address, readContracts, useAccount } from 'wagmi'
 import { COMPETITION_API_URL } from './constants'
-import { BodyWrapper } from 'views/ShowCase'
 
 const LiveCompetitions = () => {
 
