@@ -70,7 +70,7 @@ const StyledHeading = styled(Text)`
   const cbonPrice = useCbonPriceAsBN()
   const {data, isLoading} = useSWR(`${COMPETITION_API_URL}/upcoming-competitions`,fetcher )
 
-  const theme = useTheme()
+  const currentTheme = useTheme()
 
   return (
     <StyledBackground  justifyContent='center' >
@@ -107,7 +107,7 @@ const StyledHeading = styled(Text)`
           
           <Text>Competition ID #{competition._id}</Text>
         </CardHeader>
-        <CardBody  style={{backgroundColor: theme.colors.background}}>
+        <CardBody  style={{backgroundColor: currentTheme.colors.background}}>
           <Box>
           <Text>  {`Pool: ${competition.token0}/${competition.token1}`}</Text>
           <Text>  {`Start Time: ${format(new Date(Number(competition.startTime * 1000)), 'yyyy-MM-dd HH:mm')}`}</Text>

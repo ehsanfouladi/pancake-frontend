@@ -71,7 +71,7 @@ const StyledHeading = styled(Text)`
   const router = useRouter()
 
   const cbonPrice = useCbonPriceAsBN()
-  const theme = useTheme()
+  const currentTheme = useTheme()
 
   const fetcher = url => fetch(url).then(res => res.json())
 
@@ -155,7 +155,7 @@ const StyledHeading = styled(Text)`
           <Text>ID #{competition._id}</Text>
         </CardHeader>
         <CardBody 
-         style={{backgroundColor: theme.colors.background}}
+         style={{backgroundColor: currentTheme.colors.background}}
          >
           <Box>
           <Text>  {`Pool: ${competition.token0}/${competition.token1}`}</Text>
@@ -166,7 +166,7 @@ const StyledHeading = styled(Text)`
           </Box>
         </CardBody>
         <CardFooter style={{
-          backgroundColor: theme.colors.background,
+          backgroundColor: currentTheme.colors.background,
           borderBottomRightRadius:'25px',
           borderBottomLeftRadius:'25px',
           textAlign:'center'
