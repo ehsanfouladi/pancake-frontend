@@ -1,13 +1,12 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Box, Button, Card, CardBody, CardFooter, CardHeader, CardRibbon, Flex, IfoSkeletonCardDetails, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
-import { useCbonPrice } from '@pancakeswap/utils/useCakePrice'
+import { useCbonPriceAsBN } from '@pancakeswap/utils/useCakePrice'
 import { lpTokenABI } from 'config/abi/lpTokenAbi'
 import { format } from 'date-fns'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import styled from 'styled-components'
 import useSWR from 'swr'
-import { formatUnits } from 'viem'
 import { Address, readContracts, useAccount } from 'wagmi'
 import { COMPETITION_API_URL } from './constants'
 
@@ -71,7 +70,7 @@ const StyledHeading = styled(Text)`
   const {isMobile} =useMatchBreakpoints()
   const router = useRouter()
 
-  const cbonPrice = useCbonPrice()
+  const cbonPrice = useCbonPriceAsBN()
 
   const fetcher = url => fetch(url).then(res => res.json())
 
