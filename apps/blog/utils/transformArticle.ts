@@ -28,7 +28,7 @@ export const transformArticle = (article: ResponseArticleDataType): ArticleDataT
     publishedAt: article?.attributes?.publishedAt ?? '',
     locale: article?.attributes?.locale ?? '',
     description: article?.attributes?.description ?? '',
-    imgUrl: `http://localhost:1337${article?.attributes?.image?.data?.[0]?.attributes?.url}` ?? '',
+    imgUrl: `${process.env.STRAPI_API_URL}${article?.attributes?.image?.data?.[0]?.attributes?.url}` ?? '',
     categories: article.attributes?.categories?.data?.map((i) => i.attributes.name),
   }
 }
