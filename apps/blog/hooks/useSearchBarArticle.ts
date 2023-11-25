@@ -15,7 +15,7 @@ const useSearchBarArticle = (searchKey: string): SearchBarArticle => {
         ...(searchKey && { _q: searchKey }),
         locale: 'all',
         populate: 'categories,image',
-        sort: 'createAt:desc',
+        sort: 'createdAt:desc',
         pagination: {
           limit: 10,
         },

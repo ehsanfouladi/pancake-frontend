@@ -129,7 +129,7 @@ const NewBlog = () => {
                   {article?.description}
                 </Text>
                 <Text fontSize={['12px', '12px', '14px']} color="textSubtle">
-                  {article?.createAt}
+                  {article?.createdAt}
                 </Text>
               </Flex>
             </StyleBlog>

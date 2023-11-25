@@ -161,7 +161,6 @@ const Locks = () => {
           if(fetched.length > 0){
             setMaxPage(Math.ceil(Number(maxNftLock)&& Number(maxNftLock)/PAGE_SIZE))
             handleLockFetchStatusChange(LockFetchStatus.FETCHED)
-            console.log("liqV3Data>>>>>>",fetched);
             setFetchedData(fetched as [])
           }else{
             handleLockFetchStatusChange(LockFetchStatus.FAILED)
@@ -258,7 +257,6 @@ const Locks = () => {
 
           if (liqV3Data){
             setFetchedData(liqV3Data)
-            console.log("liqV3Data>>>>>>",liqV3Data);
             
             handleLockFetchStatusChange(LockFetchStatus.FETCHED)
             if (isAddress(value)){

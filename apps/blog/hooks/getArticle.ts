@@ -41,7 +41,7 @@ export const getSingleArticle = async ({ url, urlParamsObject = {} }: GetArticle
       locale: '',
       imgUrl: '',
       content: '',
-      createAt: '',
+      createdAt: '',
       publishedAt: '',
       description: '',
       categories: [],
@@ -52,7 +52,8 @@ export const getSingleArticle = async ({ url, urlParamsObject = {} }: GetArticle
 export const getCategories = async (): Promise<Categories[]> => {
   try {
     const response = await fetchAPI('/categories', {
-      fields: 'id,name',
+      fields: ['id','name'],
+
     })
 
     return (response.data as ResponseCategoriesType[]).map((category) => ({

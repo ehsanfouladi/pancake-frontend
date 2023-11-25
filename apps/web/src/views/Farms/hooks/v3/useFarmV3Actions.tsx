@@ -114,7 +114,6 @@ const useFarmV3Actions = ({
         return sendTransactionAsync(newTxn)
       }),
     )
-    console.log("<<<<<<<RESP>>>>>>>>",txn);
     
 
     if (resp?.status) {

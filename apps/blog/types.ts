@@ -32,7 +32,7 @@ export interface ResponseArticleDataType {
     title: string
     slug: string
     description: string
-    createAt: string
+    createdAt: string
     publishedAt: string
     content: string
     locale?: string

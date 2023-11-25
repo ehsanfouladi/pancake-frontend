@@ -7,7 +7,7 @@ export interface ArticleDataType {
   locale: string
   imgUrl: string
   content: string
-  createAt: string
+  createdAt: string
   publishedAt: string
   description: string
   categories: Array<string>
@@ -24,11 +24,11 @@ export const transformArticle = (article: ResponseArticleDataType): ArticleDataT
     slug: article?.attributes?.slug ?? '',
     title: article?.attributes?.title ?? '',
     content: article?.attributes?.content ?? '',
-    createAt: article?.attributes?.createAt ?? '',
+    createdAt: article?.attributes?.createdAt ?? '',
     publishedAt: article?.attributes?.publishedAt ?? '',
     locale: article?.attributes?.locale ?? '',
     description: article?.attributes?.description ?? '',
-    imgUrl: article?.attributes?.image?.data?.[0]?.attributes?.url ?? '',
+    imgUrl: `http://localhost:1337${article?.attributes?.image?.data?.[0]?.attributes?.url}` ?? '',
     categories: article.attributes?.categories?.data?.map((i) => i.attributes.name),
   }
 }

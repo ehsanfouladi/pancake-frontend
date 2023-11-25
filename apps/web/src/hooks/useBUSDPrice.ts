@@ -136,18 +136,7 @@ export function useStablecoinPrice(
       return new Price(stableCoin, stableCoin, '1', '1')
     }
 
-    // if (priceFromLlama && enableLlama) {
-    //   console.log("priceFromLlama>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-
-    //   return new Price(
-    //     currency,
-    //     stableCoin,
-    //     1 * 10 ** currency.decimals,
-    //     getFullDecimalMultiplier(stableCoin.decimals)
-    //       .times(parseFloat(priceFromLlama).toFixed(stableCoin.decimals))
-    //       .toString(),
-    //   )
-    // }
+ 
 
     if (trade) {
       const { inputAmount, outputAmount } = trade

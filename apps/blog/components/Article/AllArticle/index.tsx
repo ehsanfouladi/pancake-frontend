@@ -70,12 +70,12 @@ const AllArticle = () => {
   const [query, setQuery] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
   const [selectedCategories, setSelectCategoriesSelected] = useState(0)
-  const [sortBy, setSortBy] = useState('createAt:desc')
+  const [sortBy, setSortBy] = useState('createdAt:desc')
   const [languageOption, setLanguageOption] = useState('en')
   const languageItems = useLanguage()
   const sortByItems = [
-    { label: t('Newest First'), value: 'createAt:desc' },
-    { label: t('Oldest First'), value: 'createAt:asc' },
+    { label: t('Newest First'), value: 'createdAt:desc' },
+    { label: t('Oldest First'), value: 'createdAt:asc' },
     { label: t('Sort Title A-Z'), value: 'title:asc' },
     { label: t('Sort Title Z-A'), value: 'title:desc' },
   ]

@@ -67,7 +67,7 @@ const ArticleInfo = () => {
           ))}
         </StyledTagGroup>
         <Text color="textSubtle" mb={['26px']} textAlign="right">
-          {article?.createAt}
+          {article?.createdAt}
         </Text>
         <Box mb="24px" height={['155px', '200px', '350px', '420px']}>
           <StyledBackgroundImage imgUrl={article?.imgUrl ?? ''} />

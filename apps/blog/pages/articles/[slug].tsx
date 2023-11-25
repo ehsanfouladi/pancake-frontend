@@ -39,7 +39,7 @@ export const getStaticProps = (async ({ params }) => {
     url: '/articles',
     urlParamsObject: {
       locale: article.locale,
-      sort: 'createAt:desc',
+      sort: 'createdAt:desc',
       populate: 'categories,image',
       pagination: { limit: 6 },
       filters: {
@@ -82,7 +82,6 @@ const ArticlePage: React.FC<InferGetStaticPropsType<typeof getStaticProps>> = ({
       <SWRConfig value={{ fallback }}>
         <Box>
           <ArticleInfo />
-          <HowItWork />
           <SimilarArticles />
         </Box>
       </SWRConfig>

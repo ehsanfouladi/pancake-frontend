@@ -72,8 +72,6 @@ export const ImpermanentLossCalculator = memo(function ImpermanentLossCalculator
 }: Props) {
 
 cbonPrice = useCbonPriceAsBN().toString()
-// const cbon = getCbonPrice()
-// console.log(">>>>>>>>",Number(cbon).toString());
 
   
   const { t } = useTranslation();

@@ -12,7 +12,7 @@ export async function getStaticProps() {
       url: '/articles',
       urlParamsObject: {
         populate: 'categories,image',
-        sort: 'createAt:desc',
+        sort: 'createdAt:desc',
         pagination: { limit: 1 },
       },
     }),
@@ -20,7 +20,7 @@ export async function getStaticProps() {
       url: '/articles',
       urlParamsObject: {
         populate: 'categories,image',
-        sort: 'createAt:desc',
+        sort: 'createdAt:desc',
         pagination: { limit: 9 },
         filters: {
           categories: {

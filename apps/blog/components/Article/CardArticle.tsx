@@ -85,7 +85,7 @@ const CardArticle: React.FC<React.PropsWithChildren<CardArticleProps>> = ({ arti
               {article.description}
             </Text>
             <Text mt="auto" textAlign="right" fontSize={['12px', '12px', '14px']} color="textSubtle">
-              {article.createAt}
+              {article.createdAt}
             </Text>
           </Flex>
         </Flex>

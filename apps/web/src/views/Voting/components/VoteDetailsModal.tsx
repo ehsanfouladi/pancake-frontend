@@ -22,7 +22,6 @@ const VoteDetailsModal: React.FC<React.PropsWithChildren<VoteDetailsModalProps>>
     // lockedCakeBalance,
     // lockedEndTime,
   } = useGetVotingPower(block)
-  console.log("VP>>>>>>>>>>>>>>>>>>", total);
   
   const { theme } = useTheme()
 
