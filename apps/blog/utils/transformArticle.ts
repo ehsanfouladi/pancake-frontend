@@ -28,7 +28,7 @@ export const transformArticle = (article: ResponseArticleDataType): ArticleDataT
     publishedAt: article?.attributes?.publishedAt ?? '',
     locale: article?.attributes?.locale ?? '',
     description: article?.attributes?.description ?? '',
-    imgUrl: `https://cms.cadinu.io/${article?.attributes?.image?.data?.[0]?.attributes?.url}` ?? '',
+    imgUrl: `https://cms.cadinu.io${article?.attributes?.image?.data?.[0]?.attributes?.url}` ?? '',
     categories: article.attributes?.categories?.data?.map((i) => i.attributes.name),
   }
 }
