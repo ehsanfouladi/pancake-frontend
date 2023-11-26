@@ -10,7 +10,7 @@ import useSWR from 'swr'
 import { ArticleDataType } from 'utils/transformArticle'
 import 'swiper/css/bundle'
 
-const StyledChefsChoiceContainer = styled(Flex)`
+const StyledAuthorsChoiceContainer = styled(Flex)`
   margin: 61px auto 48px auto;
 
   ${({ theme }) => theme.mediaQueries.sm} {
@@ -18,13 +18,13 @@ const StyledChefsChoiceContainer = styled(Flex)`
   }
 `
 
-const ChefsChoice = () => {
+const AuthorsChoice = () => {
   const { t } = useTranslation()
-  const { data: articlesData } = useSWR<ArticleDataType[]>('/chefChoiceArticle')
+  const { data: articlesData } = useSWR<ArticleDataType[]>('/authorChoiceArticle')
 
   return (
-    <StyledChefsChoiceContainer justifyContent="center">
-      <ArticleView title={t('Chef’s choice')} subTitle={t('Recommended Readings by Chefs')}>
+    <StyledAuthorsChoiceContainer justifyContent="center">
+      <ArticleView title={t('Author’s choice')} subTitle={t('Recommended Readings by Authors')}>
         <Swiper
           loop
           resizeObserver
@@ -66,8 +66,8 @@ const ChefsChoice = () => {
           ))}
         </Swiper>
       </ArticleView>
-    </StyledChefsChoiceContainer>
+    </StyledAuthorsChoiceContainer>
   )
 }
 
-export default ChefsChoice
+export default AuthorsChoice

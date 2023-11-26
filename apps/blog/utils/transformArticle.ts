@@ -24,7 +24,7 @@ export const transformArticle = (article: ResponseArticleDataType): ArticleDataT
     slug: article?.attributes?.slug ?? '',
     title: article?.attributes?.title ?? '',
     content: article?.attributes?.content ?? '',
-    createdAt: article?.attributes?.createdAt ?? '',
+    createdAt: article?.attributes?.publishedAt.slice(0,10) ?? '',
     publishedAt: article?.attributes?.publishedAt ?? '',
     locale: article?.attributes?.locale ?? '',
     description: article?.attributes?.description ?? '',

@@ -33,13 +33,13 @@ const StyledSocialIcon = styled(Flex)`
   }
 `
 
-const BLOG_URL = 'https://blog.pancakeswap.finance'
+const BLOG_URL = 'https://blog.cadinu.io'
 
 const SocialIcon = () => {
   const router = useRouter()
   return (
     <StyledSocialIcon>
-      <StyledLink external href={`https://twitter.com/share?url=${BLOG_URL}${router.asPath}`}>
+      <StyledLink external href={`https://x.com/share?url=${BLOG_URL}${router.asPath}`}>
         <TwitterIcon width={40} />
       </StyledLink>
       <StyledLink external href={`https://telegram.me/share/url?url=${BLOG_URL}${router.asPath}`}>
@@ -48,9 +48,9 @@ const SocialIcon = () => {
       <StyledLink external href={`https://reddit.com/submit?url=${BLOG_URL}${router.asPath}`}>
         <RedditIcon width={40} />
       </StyledLink>
-      <StyledLink external href="https://discord.com/invite/pancakeswap">
+      {/* <StyledLink external href="https://discord.com/invite/pancakeswap">
         <DiscordIcon width={40} />
-      </StyledLink>
+      </StyledLink> */}
     </StyledSocialIcon>
   )
 }

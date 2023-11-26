@@ -3,11 +3,11 @@ import { InferGetServerSidePropsType } from 'next'
 import { getArticle, getCategories } from 'hooks/getArticle'
 import { Box } from '@pancakeswap/uikit'
 import NewBlog from 'components/NewBlog'
-import ChefsChoice from 'components/ChefsChoice'
+import AuthorsChoice from 'components/AuthorsChoice'
 import AllArticle from 'components/Article/AllArticle'
 
 export async function getStaticProps() {
-  const [latestArticles, chefChoiceArticle, categories] = await Promise.all([
+  const [latestArticles, authorChoiceArticle, categories] = await Promise.all([
     getArticle({
       url: '/articles',
       urlParamsObject: {
@@ -25,7 +25,7 @@ export async function getStaticProps() {
         filters: {
           categories: {
             name: {
-              $eq: 'Chef’s choice',
+              $eq: 'Author’s choice',
             },
           },
         },
@@ -38,7 +38,7 @@ export async function getStaticProps() {
     props: {
       fallback: {
         '/latestArticles': latestArticles.data,
-        '/chefChoiceArticle': chefChoiceArticle.data,
+        '/authorChoiceArticle': authorChoiceArticle.data,
         '/categories': categories,
       },
     },
@@ -51,7 +51,7 @@ const BlogPage: React.FC<InferGetServerSidePropsType<typeof getStaticProps>> = (
     <SWRConfig value={{ fallback }}>
       <Box width="100%" mb="150px">
         <NewBlog />
-        <ChefsChoice />
+        <AuthorsChoice />
         <AllArticle />
       </Box>
     </SWRConfig>

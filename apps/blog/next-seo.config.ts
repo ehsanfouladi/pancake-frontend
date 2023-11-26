@@ -1,19 +1,19 @@
 import { DefaultSeoProps } from 'next-seo'
 
 export const SEO: DefaultSeoProps = {
-  titleTemplate: '%s | PancakeSwap',
-  defaultTitle: 'Blog | PancakeSwap',
+  titleTemplate: '%s | CadinuSwap',
+  defaultTitle: 'Cadinu',
   description:
-    'Cheaper and faster than Uniswap? Discover PancakeSwap, the leading DEX on BNB Smart Chain (BSC) with the best farms in DeFi and a lottery for CAKE.',
+    'Cadinu.io is a global project that aims to facilitate its holders to earn income, enjoy life, and support pets. With our fully decentralized CADINU TOKEN, users can make on-platform and off-platform payments. Our platform offers unique and innovative P2E games that influence the real world and provides opportunities to support needy pets directly and indirectly. Join us in creating a better world for all.',
   twitter: {
     cardType: 'summary_large_image',
-    handle: '@PancakeSwap',
-    site: '@PancakeSwap',
+    handle: '@Cadinu',
+    site: '@Cadinu',
   },
   openGraph: {
-    title: '🥞 PancakeSwap - A next evolution DeFi exchange on BNB Smart Chain (BSC)',
+    title: ' Cadinu - A next evolution DeFi exchange on BNB Smart Chain (BSC)',
     description:
-      'The most popular AMM on BSC! Earn CAKE through yield farming or win it in the Lottery, then stake it in Syrup Pools to earn more tokens! Initial Farm Offerings (new token launch model pioneered by PancakeSwap), NFTs, and more, on a platform you can trust.',
-    images: [{ url: 'https://pancakeswap.finance/images/hero.png' }],
+      'Cadinu.io is a global project that aims to facilitate its holders to earn income, enjoy life, and support pets. With our fully decentralized CADINU TOKEN, users can make on-platform and off-platform payments. Our platform offers unique and innovative P2E games that influence the real world and provides opportunities to support needy pets directly and indirectly. Join us in creating a better world for all.',
+    images: [{ url: 'https://assets.Cadinu.finance/web/og/hero.jpg' }],
   },
 }
