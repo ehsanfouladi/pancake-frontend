@@ -5,6 +5,7 @@ import Balancer from 'react-wrap-balancer'
 import { ArticleDataType } from 'utils/transformArticle'
 import { useRouter } from 'next/router'
 import SocialIcon from 'components/Article/SingleArticle/SocialIcon'
+import rehypeRaw from 'rehype-raw'
 
 const StyledBackgroundImage = styled(Box)<{ imgUrl: string }>`
   height: 100%;
@@ -75,7 +76,8 @@ const ArticleInfo = () => {
         <Box mb="24px" display={['block', 'block', 'block', 'none']}>
           <SocialIcon />
         </Box>
-        {article?.content && <ReactMarkdown>{article?.content}</ReactMarkdown>}
+        {/* @ts-ignore */}
+        {article?.content && <ReactMarkdown rehypePlugins={[[rehypeRaw,{}]]}>{article?.content}</ReactMarkdown>}
       </Flex>
       <Box display={['none', 'none', 'none', 'block']}>
         <SocialIcon />
