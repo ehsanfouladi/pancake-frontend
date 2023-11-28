@@ -39,7 +39,7 @@ const LeaderBoardMobileView: React.FC<React.PropsWithChildren<LeaderBoardMobileV
           ) : (
             <>
               {data.map((rank, index) => (
-                <MobileResult key={rank.origin} rank={rank} index={index} />
+                <MobileResult key={rank.origin} rank={rank} index={index + 3} />
               ))}
             </>
           )}
