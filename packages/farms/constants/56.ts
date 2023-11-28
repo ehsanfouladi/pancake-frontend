@@ -1,9 +1,8 @@
 import { bscTokens } from '@pancakeswap/tokens'
-import { FeeAmount, Pool } from '@pancakeswap/v3-sdk'
+import { FeeAmount } from '@pancakeswap/v3-sdk'
 import { getAddress } from 'viem'
-import { CAKE_BNB_LP_MAINNET } from './common'
-import { defineFarmV3Configs } from '../src/defineFarmV3Configs'
 import { SerializedFarmConfig } from '..'
+import { defineFarmV3Configs } from '../src/defineFarmV3Configs'
 
 export const farmsV3 = defineFarmV3Configs([
   // {
@@ -33,6 +32,13 @@ export const farmsV3 = defineFarmV3Configs([
     token0: bscTokens.usdt,
     token1: bscTokens.bnb,
     lpAddress: '0x0A743fb2efd7a3fD43C4779350467F1B748d8c84',
+    feeAmount: FeeAmount.MEDIUM,
+  },
+  {
+    pid: 6,
+    token0: bscTokens.usdt,
+    token1: bscTokens.cbon,
+    lpAddress: '0x5760e9386bD0273e5c6B28D8131aC0c5b52c600C',
     feeAmount: FeeAmount.MEDIUM,
   },
   // {
