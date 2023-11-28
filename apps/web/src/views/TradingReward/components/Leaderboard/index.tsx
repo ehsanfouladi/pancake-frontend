@@ -14,6 +14,7 @@ import { Address, readContracts } from 'wagmi'
 import LeaderBoardDesktopView from './DesktopView'
 import LeaderBoardMobileView from './MobileView'
 import RankingCard from './RankingCard'
+import { useCbonPriceAsBN } from '@pancakeswap/utils/useCakePrice'
 
 
 const Leaderboard = () => {
@@ -22,6 +23,7 @@ const Leaderboard = () => {
     currentLanguage: { locale },
   } = useTranslation()
   const router = useRouter()
+  const cbonPrice = useCbonPriceAsBN()
   const competitionId = router.query.competitionId
   const { isDesktop } = useMatchBreakpoints()
   const [currentPage, setCurrentPage] = useState(1)
@@ -182,7 +184,7 @@ const Leaderboard = () => {
         <Text bold>Number of Winners:</Text>
         <Text >{currentCompetition.numberOfWinners}</Text>
         <Text bold>Total Prize:</Text>
-        <Text >{currentCompetition.rewardAmount} CBON</Text>
+        <Text >{currentCompetition.rewardAmount} CBON ~${(Number(currentCompetition.rewardAmount) * Number(cbonPrice)).toFixed(2)}</Text>
         </Grid>
         <Grid
           gridGap={['16px', null, null, null, null, '24px']}

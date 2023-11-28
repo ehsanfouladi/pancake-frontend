@@ -33,9 +33,9 @@ export const CurrencyLogo: React.FC<
   console.log("address", address.toLowerCase());
   
   const srcFromPCS = checkedSumAddress && address==="0x76e112203ef59d445452ef7556386dd2df3ed914" ?
-    "https://cadinu.io/dl/200.png"
+    "https://apps.cadinu.io/logo.png"
     : checkedSumAddress && address === "0x6e64fcf15be3eb71c3d42acf44d85bb119b2d98b" ?
-    "https://cadinu.io/dl/CBON200.PNG" 
+    "https://apps.cadinu.io/images/cbonLogo.PNG" 
     : checkedSumAddress
     ? `https://tokens.pancakeswap.finance/images/${imagePath}${checkedSumAddress}.png`
     : ''

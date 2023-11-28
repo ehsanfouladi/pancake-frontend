@@ -13,6 +13,7 @@ import {
 } from '@pancakeswap/uikit'
 import { formatNumber } from '@pancakeswap/utils/formatBalance'
 import truncateHash from '@pancakeswap/utils/truncateHash'
+import { useCbonPriceAsBN } from '@pancakeswap/utils/useCakePrice'
 import { useDomainNameForAddress } from 'hooks/useDomain'
 import { usePriceCakeUSD } from 'state/farms/hooks'
 import { useProfileForAddress } from 'state/profile/hooks'
@@ -50,7 +51,7 @@ const RankingCard: React.FC<React.PropsWithChildren<RankingCardProps>> = ({ rank
   const cakePriceBusd = usePriceCakeUSD()
   const { profile, isLoading: isProfileLoading } = useProfileForAddress(user.origin)
   const { domainName, avatar } = useDomainNameForAddress(user.origin, !profile && !isProfileLoading)
-
+  const cbonPrice = useCbonPriceAsBN()
   // const cakeAmount = useMemo(
   //   () => new BigNumber(user?.estimateRewardUSD).div(cakePriceBusd).toNumber(),
   //   [cakePriceBusd, user?.estimateRewardUSD],
@@ -100,9 +101,9 @@ const RankingCard: React.FC<React.PropsWithChildren<RankingCardProps>> = ({ rank
               <Text textAlign="right" bold color="text" fontSize="20px" lineHeight="110%">
                 {`${formatNumber(user?.estimatedReward)} CBON`}
               </Text>
-              {/* <Text textAlign="right" color="textSubtle" fontSize="12px">
-                {`${formatNumber(cakeAmount)} CAKE`}
-              </Text> */}
+              <Text textAlign="right" color="textSubtle" fontSize="12px">
+                {`~$${formatNumber(user?.estimatedReward * Number(cbonPrice))}`}
+              </Text>
             </Box>
           </Flex>
           <Flex justifyContent="space-between">

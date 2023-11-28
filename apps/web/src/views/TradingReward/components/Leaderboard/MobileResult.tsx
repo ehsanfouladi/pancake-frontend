@@ -2,6 +2,7 @@ import { useTranslation } from '@pancakeswap/localization'
 import { Box, Flex, ProfileAvatar, Text } from '@pancakeswap/uikit'
 import { formatNumber } from '@pancakeswap/utils/formatBalance'
 import truncateHash from '@pancakeswap/utils/truncateHash'
+import { useCbonPriceAsBN } from '@pancakeswap/utils/useCakePrice'
 import { useDomainNameForAddress } from 'hooks/useDomain'
 import { useProfileForAddress } from 'state/profile/hooks'
 import styled from 'styled-components'
@@ -26,6 +27,7 @@ const MobileResult: React.FC<React.PropsWithChildren<MobileResultProps>> = ({ ra
   // const cakePriceBusd = usePriceCakeUSD()
   const { profile, isLoading: isProfileLoading } = useProfileForAddress(rank.origin)
   const { domainName, avatar } = useDomainNameForAddress(rank.origin, !profile && !isProfileLoading)
+  const cbonPrice = useCbonPriceAsBN()
 
   // const cakeAmount = useMemo(
   //   () => new BigNumber(rank?.estimateRewardUSD).div(cakePriceBusd).toNumber(),
@@ -53,9 +55,9 @@ const MobileResult: React.FC<React.PropsWithChildren<MobileResultProps>> = ({ ra
           <Text bold textAlign="right">
             {`$${formatNumber(rank.estimatedReward)} CBON`}
           </Text>
-          {/* <Text fontSize="12px" color="textSubtle" textAlign="right" lineHeight="110%">
-            {`~${formatNumber(cakeAmount)} CAKE`} */}
-          {/* </Text> */}
+          <Text fontSize="12px" color="textSubtle" textAlign="right" lineHeight="110%">
+          {`~$${formatNumber(rank?.estimatedReward * Number(cbonPrice))}`}
+          </Text>
         </Box>
       </Flex>
       <Flex justifyContent="space-between" alignItems="center">

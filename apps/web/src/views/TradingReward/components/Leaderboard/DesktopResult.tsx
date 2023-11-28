@@ -1,6 +1,7 @@
 import { Flex, ProfileAvatar, Td, Text } from '@pancakeswap/uikit'
 import { formatNumber } from '@pancakeswap/utils/formatBalance'
 import truncateHash from '@pancakeswap/utils/truncateHash'
+import { useCbonPriceAsBN } from '@pancakeswap/utils/useCakePrice'
 import { useDomainNameForAddress } from 'hooks/useDomain'
 import { useProfileForAddress } from 'state/profile/hooks'
 import { RankListDetail } from 'views/TradingReward/hooks/useRankList'
@@ -14,6 +15,7 @@ const DesktopResult: React.FC<React.PropsWithChildren<DesktopResultProps>> = ({ 
   
   const { profile, isLoading: isProfileLoading } = useProfileForAddress(rank.origin)
   const { domainName, avatar } = useDomainNameForAddress(rank.origin, !profile && !isProfileLoading)
+  const cbonPrice = useCbonPriceAsBN()
 
   // const cakeAmount = useMemo(
   //   () => new BigNumber(rank?.estimatedReward).times(cakePriceBusd).toNumber(),
@@ -41,7 +43,7 @@ const DesktopResult: React.FC<React.PropsWithChildren<DesktopResultProps>> = ({ 
       <Td textAlign="right">
         <Text bold>{rank?.estimatedReward ? `${formatNumber(rank?.estimatedReward)} CBON` : '-'}</Text>
         <Text fontSize={12} color="textSubtle">
-          {/* {`~${formatNumber(cakeAmount)} CAKE`} */}
+        {`~$${formatNumber(rank?.estimatedReward * Number(cbonPrice))}`}
         </Text>
       </Td>
     </tr>
