@@ -1,6 +1,7 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Box, Button, Card, CardBody, Flex, Grid, LinkExternal, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import truncateHash from '@pancakeswap/utils/truncateHash'
+import { useCbonPriceAsBN } from '@pancakeswap/utils/useCakePrice'
 import Container from 'components/Layout/Container'
 import { lpTokenABI } from 'config/abi/lpTokenAbi'
 import { format } from 'date-fns'
@@ -14,7 +15,6 @@ import { Address, readContracts } from 'wagmi'
 import LeaderBoardDesktopView from './DesktopView'
 import LeaderBoardMobileView from './MobileView'
 import RankingCard from './RankingCard'
-import { useCbonPriceAsBN } from '@pancakeswap/utils/useCakePrice'
 
 
 const Leaderboard = () => {
