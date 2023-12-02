@@ -1,6 +1,7 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Box, Flex, Text } from '@pancakeswap/uikit'
 import { formatNumber } from '@pancakeswap/utils/formatBalance'
+import { useCbonPriceAsBN } from '@pancakeswap/utils/useCakePrice'
 import Link from 'next/link'
 import styled from 'styled-components'
 import { CompetitionIncentives } from './DesktopView'
@@ -20,6 +21,7 @@ interface MobileResultProps {
 
 const MobileResult: React.FC<React.PropsWithChildren<MobileResultProps>> = ({ competition }) => {
   const { t } = useTranslation()
+  const cbonPrice = useCbonPriceAsBN()
 
   return (
     <StyledMobileRow p="16px">
@@ -38,9 +40,13 @@ const MobileResult: React.FC<React.PropsWithChildren<MobileResultProps>> = ({ co
           {t('Reward')}
         </Text>
         <Box>
-          <Text bold textAlign="right">
+          {/* <Text bold textAlign="right">
             {`${formatNumber(Number(competition.rewardAmount))} CBON`}
-          </Text>
+          </Text> */}
+        <Text bold textAlign="right">{`${formatNumber(Number(competition.rewardAmount),0,0)} CBON`}</Text>
+        <Text fontSize={12} color="textSubtle" textAlign="right">
+          {`~$${formatNumber(Number(competition.rewardAmount) * Number(cbonPrice))}` }
+        </Text>
         </Box>
       </Flex>
       <Flex justifyContent="space-between" alignItems="center">

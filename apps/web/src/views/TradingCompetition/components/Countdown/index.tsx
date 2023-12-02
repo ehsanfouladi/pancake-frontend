@@ -15,7 +15,7 @@ const Wrapper = styled(Flex)`
   background: linear-gradient(180deg, #7645d9 0%, #452a7a 100%);
   border: 1px solid #7645d9;
   box-sizing: border-box;
-  border-radius: 0px 0px 24px 24px;
+  border-radius: 24px 24px 24px 24px;
   padding: 16px 18px;
   margin: -30px auto 50px;
   justify-content: space-around;
@@ -26,7 +26,7 @@ const Wrapper = styled(Flex)`
 
   ${({ theme }) => theme.mediaQueries.xl} {
     flex-direction: column;
-    margin: -38px 0 0 36px;
+    // margin: -38px 0 0 36px;
   }
 
   @media screen and (min-width: 1920px) {
@@ -109,22 +109,22 @@ const Countdown: React.FC<
 
   return (
     <Wrapper>
-      <PocketWatchWrapper>
+      {/* <PocketWatchWrapper>
         <PocketWatchIcon />
-      </PocketWatchWrapper>
+      </PocketWatchWrapper> */}
       <Flex flexDirection="column" justifyContent="center">
         {!secondsUntilNextEvent ? (
           <Skeleton height={26} width={190} mb="24px" />
         ) : (
-          <Flex mb="24px" justifyContent="center" alignItems="center">
+          <Flex  justifyContent="center" alignItems="center">
             {renderTimer()}
           </Flex>
         )}
-        {!secondsUntilNextEvent ? (
+        {/* {!secondsUntilNextEvent ? (
           <Skeleton height={42} width={190} />
         ) : (
           <ProgressStepper steps={CompetitionSteps} activeStepIndex={currentPhase.step.index} />
-        )}
+        )} */}
       </Flex>
     </Wrapper>
   )

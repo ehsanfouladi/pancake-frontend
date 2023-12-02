@@ -9,6 +9,7 @@ import isEmpty from 'lodash/isEmpty'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useState } from 'react'
 import useSWR from 'swr'
+import Countdown from 'views/TradingCompetition/components/Countdown'
 import { COMPETITION_API_URL } from 'views/TradingReward/constants'
 import { RankListDetail } from 'views/TradingReward/hooks/useRankList'
 import { Address, readContracts } from 'wagmi'
@@ -161,11 +162,20 @@ const Leaderboard = () => {
       {currentCompetition &&(
 
       
-      <Box mb='24px'>
+        <Box mb='24px'>
+        <Container>
         <Text textAlign="center" color='gold' mb="16px" fontSize={['40px']} bold lineHeight="110%">
           {t(`Competition #${competitionId}`)}
         </Text>
-        <Container>
+        <Flex justifyContent='center'  mt='50px' >
+        <Countdown currentPhase={{
+          'ends':currentCompetition.endTime,
+          'step':{},
+          'state': currentCompetition.is_live ? 'LIVE' : 'UPCOMMING'
+          }} hasCompetitionEnded={currentCompetition.is_finished}
+          />
+          </Flex>
+          
         <Card>
           <CardBody>
           <Grid
@@ -196,6 +206,17 @@ const Leaderboard = () => {
         </LinkExternal>
         <Text bold>Pair:</Text>
         <Text >{currentCompetition.token0}/{currentCompetition.token1}</Text>
+        </Grid>
+        <Grid
+          gridGap={['16px', null, null, null, null, '24px']}
+          gridTemplateColumns={['1fr', null, null, null, null, 'repeat(4, 1fr)']}
+        > 
+        <Text bold>Project Name:</Text>
+        <Text >{currentCompetition.projectName}</Text>
+        <Text bold>Project Url:</Text>
+        <LinkExternal href={currentCompetition.projectUrl}>
+        <Text >{currentCompetition.projectUrl}</Text>
+        </LinkExternal>
         </Grid>
         <Flex flexDirection='row' justifyContent='right'>
         <Button 

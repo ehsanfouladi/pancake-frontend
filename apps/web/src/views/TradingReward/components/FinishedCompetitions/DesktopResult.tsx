@@ -1,4 +1,6 @@
 import { Td, Text } from '@pancakeswap/uikit'
+import { formatNumber } from '@pancakeswap/utils/formatBalance'
+import { useCbonPriceAsBN } from '@pancakeswap/utils/useCakePrice'
 import { format } from 'date-fns'
 import Link from 'next/link'
 import { CompetitionIncentives } from './DesktopView'
@@ -8,7 +10,7 @@ interface DesktopResultProps {
 }
 
 const DesktopResult: React.FC<React.PropsWithChildren<DesktopResultProps>> = ({ competition }) => {
- 
+  const cbonPrice = useCbonPriceAsBN()
   return (
     <tr>
       <Td>
@@ -34,15 +36,15 @@ const DesktopResult: React.FC<React.PropsWithChildren<DesktopResultProps>> = ({ 
       <Td textAlign="left">
         <Text >{`${competition.token0}/${competition.token1}`}</Text>
       </Td>
-      <Td textAlign="left">
+      {/* <Td textAlign="left">
         <Text bold>{`${competition.rewardAmount} CBON`}</Text>
-      </Td>
-      {/* <Td textAlign="right">
-        <Text bold>{`$${formatNumber(competition.rewardAmount)}`}</Text>
-        <Text fontSize={12} color="textSubtle">
-          {`~${formatNumber(cakeAmount)} CAKE`}
-        </Text>
       </Td> */}
+      <Td textAlign="left">
+        <Text bold>{`${formatNumber(Number(competition.rewardAmount),0,0)} CBON`}</Text>
+        <Text fontSize={12} color="textSubtle">
+          {`~$${formatNumber(Number(competition.rewardAmount) * Number(cbonPrice))}` }
+        </Text>
+      </Td>
     </tr>
   )
 }

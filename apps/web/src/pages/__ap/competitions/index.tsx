@@ -1,4 +1,4 @@
-import { Box, Button, Container, Flex, Heading, Input, NotFound, PageSection, useToast } from "@pancakeswap/uikit"
+import { Box, Button, Container, Flex, Heading, Input, NotFound, OptionProps, PageSection, Select, useToast } from "@pancakeswap/uikit"
 import { ToastDescriptionWithTx } from "components/Toast"
 import { cadinuTradingCompetition } from "config/abi/cadinuTradingCompetition"
 import { ChangeEvent, useEffect, useState } from "react"
@@ -28,6 +28,10 @@ interface FormState {
     isBoosted: boolean
     numberOfWinners: number
     signature: string
+    competitionType: string
+    tokenToBuy: string
+    projectName: string
+    projectUrl: string
   }
   
 
@@ -65,7 +69,12 @@ const CompetitionAdmin = ()=>{
         rewardCharged: 0,
         isBoosted: false,
         numberOfWinners: 0,
-        signature: ''
+        signature: '',
+        tokenToBuy: 'TOKEN0',
+        competitionType: 'VOLUME',
+        projectName: '',
+        projectUrl: ''
+
     }))
 
     const {
@@ -76,7 +85,11 @@ const CompetitionAdmin = ()=>{
         poolAddress,
         rewardAmount,
         numberOfWinners,
-        signature
+        signature,
+        tokenToBuy,
+        competitionType,
+        projectName,
+        projectUrl
         } = state
 
     const {config} = usePrepareContractWrite({
@@ -140,6 +153,14 @@ const CompetitionAdmin = ()=>{
         }
       })
     
+
+      
+  const handleTypeOptionChange = (option: OptionProps): void => {
+    updateValue('competitionType', option.value)
+  }
+  const handleTokenOptionChange = (option: OptionProps): void => {
+    updateValue('tokenToBuy', option.value)
+  }
       
     const updateValue = (key: string, value: string | Date) => {
         setState((prevState) => ({
@@ -158,7 +179,10 @@ const CompetitionAdmin = ()=>{
         updateValue(key, value)
       }
     
-    if(competitionDetails && account && account.toLowerCase() !== competitionDetails[0]?.result?.toLowerCase()){
+    if(
+      competitionDetails &&
+      account && 
+      account.toLowerCase() !== competitionDetails[0]?.result?.toLowerCase()){
         return (<NotFound />)
     }
     if(!account){
@@ -241,6 +265,31 @@ const CompetitionAdmin = ()=>{
                   </Box>
                   <Box>
                     <Box mb="24px">
+                      <Label htmlFor="projectName">Project Name</Label>
+                      <Input
+                        id="projectName"
+                        name="projectName"
+                        placeholder='Cadinu Swap'
+                        value={projectName}
+                        scale="lg"
+                        onChange={handleChange}
+                        required 
+                      />
+                    </Box>
+                    <Box mb="24px">
+                      <Label htmlFor="projectUrl">Project URL</Label>
+                      <Input
+                        id="projectUrl"
+                        type="url"
+                        name="projectUrl"
+                        placeholder='https://..'
+                        value={projectUrl}
+                        scale="lg"
+                        onChange={handleChange}
+                        required 
+                      />
+                    </Box>
+                    <Box mb="24px">
                       <Label htmlFor="poolAddress">Pool Address</Label>
                       <Input
                         id="poolAddress"
@@ -252,6 +301,54 @@ const CompetitionAdmin = ()=>{
                         required 
                       />
                     </Box>
+                    <Box mb="24px">
+                      <Label htmlFor="competitionType">Competition Type </Label>
+                      <Select
+                      options={[
+                        {
+                          label: 'Volume',
+                          value: 'VOLUME',
+                        },
+                        {
+                          label: 'Purchase',
+                          value: 'PURCHASE',
+                        },]}
+                        id="competitionType"
+                        onOptionChange={handleTypeOptionChange}
+                      />
+                    </Box>
+                    {competitionType === 'PURCHASE' && 
+                    <>
+                    <Box mb='24px'>
+                    <Label htmlFor="competitionType">Token to buy</Label>
+                      <Select
+                      options={[
+                        {
+                          label: 'token0',
+                          value: 'TOKEN0',
+                        },
+                        {
+                          label: 'token1',
+                          value: 'TOKEN1',
+                        },]}
+                        id="competitionType"
+                        onOptionChange={handleTokenOptionChange}
+                      />
+                    </Box>
+                    </>
+                    }
+                    {/* <Box mb="24px">
+                      <Label htmlFor="poolAddress">Pool Address</Label>
+                      <Input
+                        id="poolAddress"
+                        name="poolAddress"
+                        placeholder='0x000...'
+                        value={poolAddress}
+                        scale="lg"
+                        onChange={handleChange}
+                        required 
+                      />
+                    </Box> */}
                     <Box mb="24px">
                       <Label htmlFor="rewardAmount">Reward Amount</Label>
                       <Input
