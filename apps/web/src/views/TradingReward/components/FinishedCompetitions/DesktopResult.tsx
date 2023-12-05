@@ -34,6 +34,9 @@ const DesktopResult: React.FC<React.PropsWithChildren<DesktopResultProps>> = ({ 
         <Text >{competition.exchangeName}</Text>
       </Td>
       <Td textAlign="left">
+        <Text >{competition.competitionType === 'VOLUME'? 'Trade' : 'Purchase'}</Text>
+      </Td>
+      <Td textAlign="left">
         <Text >{`${competition.token0}/${competition.token1}`}</Text>
       </Td>
       {/* <Td textAlign="left">

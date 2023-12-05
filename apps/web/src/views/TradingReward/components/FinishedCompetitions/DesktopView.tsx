@@ -15,6 +15,7 @@ export interface CompetitionIncentives {
   token1: string
   is_live: boolean
   is_finished: boolean
+  competitionType : string
 
 }
 
@@ -45,6 +46,7 @@ const FinishedCompetitionsDesktopView: React.FC<React.PropsWithChildren<Finished
             <Th textAlign="left">{t('Start Time')}</Th>
             <Th textAlign="left">{t('End Time')}</Th>
             <Th textAlign="left">{t('Exchange')}</Th>
+            <Th textAlign="left">{t('Type')}</Th>
             <Th textAlign="left">{t('Pair')}</Th>
             <Th textAlign="left">{t('Reward')}</Th>
           </tr>

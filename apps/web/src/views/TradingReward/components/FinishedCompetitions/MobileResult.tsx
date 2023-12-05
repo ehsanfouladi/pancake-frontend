@@ -51,6 +51,14 @@ const MobileResult: React.FC<React.PropsWithChildren<MobileResultProps>> = ({ co
       </Flex>
       <Flex justifyContent="space-between" alignItems="center">
         <Text fontSize="12px" color="textSubtle" mr="auto">
+          {t('Type')}
+        </Text>
+        <Text fontWeight="bold" textAlign="right">
+        <Text >{competition.competitionType==='VOLUME' ? 'Trade' : 'Purchase'}</Text>
+        </Text>
+      </Flex>
+      <Flex justifyContent="space-between" alignItems="center">
+        <Text fontSize="12px" color="textSubtle" mr="auto">
           {t('Exchange')}
         </Text>
         <Text fontWeight="bold" textAlign="right">

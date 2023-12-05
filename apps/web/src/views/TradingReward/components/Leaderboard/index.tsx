@@ -218,6 +218,13 @@ const Leaderboard = () => {
         <Text >{currentCompetition.projectUrl}</Text>
         </LinkExternal>
         </Grid>
+        <Grid
+          gridGap={['16px', null, null, null, null, '24px']}
+          gridTemplateColumns={['1fr', null, null, null, null, 'repeat(4, 1fr)']}
+        > 
+        <Text bold>Competition Type:</Text>
+        <Text >{currentCompetition.competitionType === 'VOLUME' ? 'Trade' : 'Purchase'}</Text>
+        </Grid>
         <Flex flexDirection='row' justifyContent='right'>
         <Button 
           scale='sm'
