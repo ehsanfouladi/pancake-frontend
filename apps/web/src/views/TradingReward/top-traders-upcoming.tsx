@@ -180,6 +180,12 @@ const UpcomingCompetitions = () => {
                     verticalAlign='center'
                   >
                     <Box mt="15px" style={{ display: 'flex', flexWrap: 'wrap', flexDirection: 'row' }} width="85%">
+                      <strong style={{ flex: '1 1 160px' }}>Competition Type :</strong>
+                      <span >
+                        {competition.competitionType === 'PURCHASE' ? 'Purchase' : 'Trade'}
+                      </span>
+                    </Box>
+                    <Box mt="15px" style={{ display: 'flex', flexWrap: 'wrap', flexDirection: 'row' }} width="85%">
                       <strong style={{ flex: '1 1 160px' }}>Pool :</strong>
                       <span >{competition.token0}/{competition.token1}</span>
                     </Box>
@@ -204,7 +210,7 @@ const UpcomingCompetitions = () => {
                       <span >{competition.exchangeName}</span>
                     </Box>
                     <Box my="15px" style={{ display: 'flex', flexWrap: 'wrap', flexDirection: 'row' }} width="85%">
-                      <strong style={{ flex: '1 1 160px' }}>Projec:</strong>
+                      <strong style={{ flex: '1 1 160px' }}>Project:</strong>
                       <LinkExternal href={competition.projectUrl}>
                         <span >{competition.projectName}</span>
                       </LinkExternal>

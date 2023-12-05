@@ -134,6 +134,10 @@ const CompetitionAdmin = ()=>{
             poolAddress,
             rewardAmount,
             numberOfWinners,
+            projectName,
+            projectUrl,
+            competitionType,
+            tokenToBuy,
           }),
       })
       } catch (error) {
