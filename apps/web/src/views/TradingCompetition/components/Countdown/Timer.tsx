@@ -9,6 +9,7 @@ export interface TimerProps {
   minutes?: number
   hours?: number
   days?: number
+  months?: number
   showTooltip?: boolean
   blockNumber?: number
   HeadingTextComponent?: React.ElementType
@@ -22,11 +23,17 @@ const StyledTimerFlex = styled(Flex)<{ showTooltip?: boolean }>`
   }
 `
 
-const Timer = ({ minutes, hours, days, showTooltip, HeadingTextComponent, BodyTextComponent }) => {
+const Timer = ({ minutes, hours, days, months, showTooltip, HeadingTextComponent, BodyTextComponent }) => {
   const { t } = useTranslation()
 
   return (
     <StyledTimerFlex alignItems="flex-end" showTooltip={showTooltip}>
+      {Boolean(months) && (
+        <>
+          <HeadingTextComponent mr="2px">{months}</HeadingTextComponent>
+          <BodyTextComponent mr="16px">{t('M')}</BodyTextComponent>
+        </>
+      )}
       {Boolean(days) && (
         <>
           <HeadingTextComponent mr="2px">{days}</HeadingTextComponent>
@@ -78,6 +85,7 @@ const Wrapper: React.FC<React.PropsWithChildren<TimerProps>> = ({
   minutes,
   hours,
   days,
+  months,
   blockNumber,
   showTooltip = false,
   HeadingTextComponent = DefaultHeadingTextComponent,
@@ -96,6 +104,7 @@ const Wrapper: React.FC<React.PropsWithChildren<TimerProps>> = ({
           minutes={minutes}
           hours={hours}
           days={days}
+          months={months}
           HeadingTextComponent={HeadingTextComponent}
           BodyTextComponent={BodyTextComponent}
           showTooltip={showTooltip}

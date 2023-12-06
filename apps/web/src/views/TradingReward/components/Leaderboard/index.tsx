@@ -169,7 +169,7 @@ const Leaderboard = () => {
         </Text>
         <Flex justifyContent='center'  mt='50px' >
         <Countdown currentPhase={{
-          'ends':currentCompetition.endTime,
+          'ends':currentCompetition.endTime ,
           'step':{},
           'state': currentCompetition.is_live ? 'LIVE' : 'UPCOMMING'
           }} hasCompetitionEnded={currentCompetition.is_finished}

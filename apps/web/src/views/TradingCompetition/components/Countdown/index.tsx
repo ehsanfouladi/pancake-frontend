@@ -8,6 +8,7 @@ import { Heading2Text } from '../CompetitionHeadingText'
 import { CompetitionPhaseProps } from '../../types'
 import Timer from './Timer'
 import ProgressStepper from './ProgressStepper'
+import { useMemo } from 'react'
 
 const Wrapper = styled(Flex)`
   width: fit-content;
@@ -73,11 +74,18 @@ const Countdown: React.FC<
 > = ({ currentPhase, hasCompetitionEnded }) => {
   const { theme } = useTheme()
   const { t } = useTranslation()
-  const finishMs = currentPhase.ends
+  const finishMs = Number(currentPhase.ends) *1000
+  
   const currentMs = Date.now()
-  const secondsUntilNextEvent = (finishMs - currentMs) / 1000
+  console.log('finishMs',finishMs);
+  console.log('currentMs',currentMs);
+  const secondsUntilNextEvent = (finishMs - currentMs) / 1000 
+  console.log('secondsUntilNextEvent',secondsUntilNextEvent);
 
-  const { minutes, hours, days } = getTimePeriods(secondsUntilNextEvent)
+
+  const { minutes, hours, days, months } = useMemo(()=> getTimePeriods(secondsUntilNextEvent),[secondsUntilNextEvent])
+  console.log(minutes, hours, days);
+  
 
   const renderTimer = () => {
     if (hasCompetitionEnded) {
@@ -93,6 +101,7 @@ const Countdown: React.FC<
         minutes={minutes}
         hours={hours}
         days={days}
+        months={months}
         HeadingTextComponent={({ children }) => (
           <StyledHeading background={theme.colors.gradientGold} $fill>
             {children}
