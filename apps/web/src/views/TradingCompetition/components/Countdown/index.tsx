@@ -1,14 +1,13 @@
-import styled from 'styled-components'
-import { Flex, Skeleton, PocketWatchIcon, Text } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
+import { Flex, Skeleton, Text } from '@pancakeswap/uikit'
 import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
-import { CompetitionSteps, LIVE } from 'config/constants/trading-competition/phases'
+import { LIVE } from 'config/constants/trading-competition/phases'
 import useTheme from 'hooks/useTheme'
-import { Heading2Text } from '../CompetitionHeadingText'
-import { CompetitionPhaseProps } from '../../types'
-import Timer from './Timer'
-import ProgressStepper from './ProgressStepper'
 import { useMemo } from 'react'
+import styled from 'styled-components'
+import { CompetitionPhaseProps } from '../../types'
+import { Heading2Text } from '../CompetitionHeadingText'
+import Timer from './Timer'
 
 const Wrapper = styled(Flex)`
   width: fit-content;
