@@ -53,7 +53,7 @@ const MobileResult: React.FC<React.PropsWithChildren<MobileResultProps>> = ({ ra
         </Text>
         <Box>
           <Text bold textAlign="right">
-            {`$${formatNumber(rank.estimatedReward)} CBON`}
+            {`${formatNumber(rank.estimatedReward)} CBON`}
           </Text>
           <Text fontSize="12px" color="textSubtle" textAlign="right" lineHeight="110%">
           {`~$${formatNumber(rank?.estimatedReward * Number(cbonPrice))}`}

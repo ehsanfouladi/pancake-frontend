@@ -1,19 +1,20 @@
 import { languageList, useTranslation } from '@pancakeswap/localization'
-import { footerLinks, Menu as UikitMenu, NextLinkFromReactRouter, useModal } from '@pancakeswap/uikit'
+import { NextLinkFromReactRouter, Menu as UikitMenu, footerLinks, useModal } from '@pancakeswap/uikit'
 import USCitizenConfirmModal from 'components/Modal/USCitizenConfirmModal'
 // import { NetworkSwitcher } from 'components/NetworkSwitcher'
+import { useCadinuPriceAsBN, useCbonPriceAsBN } from '@pancakeswap/utils/useCakePrice'
+import { usePhishingBanner } from '@pancakeswap/utils/user'
 import PhishingWarningBanner from 'components/PhishingWarningBanner'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useCakeBusdPrice } from 'hooks/useBUSDPrice'
 import useTheme from 'hooks/useTheme'
+import { IdType } from 'hooks/useUserIsUsCitizenAcknowledgement'
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
-import { useActiveChainId } from 'hooks/useActiveChainId'
-import { usePhishingBanner } from '@pancakeswap/utils/user'
-import { IdType } from 'hooks/useUserIsUsCitizenAcknowledgement'
 import GlobalSettings from './GlobalSettings'
 import { SettingsMode } from './GlobalSettings/types'
-import { useMenuItems } from './hooks/useMenuItems'
 import UserMenu from './UserMenu'
+import { useMenuItems } from './hooks/useMenuItems'
 import { getActiveMenuItem, getActiveSubMenuItem } from './utils'
 
 const LinkComponent = (linkProps) => {
@@ -23,7 +24,9 @@ const LinkComponent = (linkProps) => {
 const Menu = (props) => {
   const { chainId } = useActiveChainId()
   const { isDark, setTheme } = useTheme()
-  const cakePriceUsd = useCakeBusdPrice({ forceMainnet: true })
+  // const cakePriceUsd = useCakeBusdPrice({ forceMainnet: true })
+  const cakePriceUsd = useCadinuPriceAsBN()
+  const cbonPriceUsd = useCbonPriceAsBN()
   const { currentLanguage, setLanguage, t } = useTranslation()
   const { pathname } = useRouter()
   const [onUSCitizenModalPresent] = useModal(
@@ -66,6 +69,7 @@ const Menu = (props) => {
         langs={languageList}
         setLang={setLanguage}
         cakePriceUsd={cakePriceUsd}
+        cbonPriceUsd={cbonPriceUsd}
         links={menuItems}
         subLinks={activeMenuItem?.hideSubNav || activeSubMenuItem?.hideSubNav ? [] : activeMenuItem?.items}
         footerLinks={getFooterLinks}

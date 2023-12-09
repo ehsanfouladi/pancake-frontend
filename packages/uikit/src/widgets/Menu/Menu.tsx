@@ -1,12 +1,13 @@
 import { useIsMounted } from "@pancakeswap/hooks";
 import { AtomBox } from "@pancakeswap/ui/components/AtomBox";
 import throttle from "lodash/throttle";
-import React, { useEffect, useRef, useState, useMemo } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import styled from "styled-components";
 import BottomNav from "../../components/BottomNav";
 import { Box } from "../../components/Box";
 import Flex from "../../components/Box/Flex";
 import CakePrice from "../../components/CakePrice/CakePrice";
+import CbonPrice from "../../components/CakePrice/CbonPrice";
 import Footer from "../../components/Footer";
 import LangSelector from "../../components/LangSelector/LangSelector";
 import MenuItems from "../../components/MenuItems/MenuItems";
@@ -77,6 +78,7 @@ const Menu: React.FC<React.PropsWithChildren<NavProps>> = ({
   currentLang,
   setLang,
   cakePriceUsd,
+  cbonPriceUsd,
   links,
   subLinks,
   footerLinks,
@@ -152,8 +154,11 @@ const Menu: React.FC<React.PropsWithChildren<NavProps>> = ({
                 </AtomBox>
               </Flex>
               <Flex alignItems="center" height="100%">
-                <AtomBox mr="12px" display={{ xs: "none", lg: "block" }}>
+                <AtomBox mr="12px" display={{ xs: "none", lg: "block" }} >
                   <CakePrice chainId={chainId} showSkeleton={false} cakePriceUsd={cakePriceUsd} />
+                </AtomBox>
+                <AtomBox mr="12px" display={{ xs: "none", lg: "block" }} >
+                  <CbonPrice chainId={chainId} showSkeleton={false} cakePriceUsd={cbonPriceUsd} />
                 </AtomBox>
                 <Box mt="4px">
                   <LangSelector
