@@ -74,7 +74,7 @@ const Migration = ()=>{
                   formatUnits(BigInt(Number(v1Balance || 0n) * (10**4)),18)
                   } Cadinu V2`}</Text>
 
-                <Text textAlign='center' mb='25px'>Easyly Migrate To Cadinu V2 by 2 Clicks!</Text>
+                <Text textAlign='center' mb='25px'>Simply Migrate To Cadinu V2 by 2 Clicks!</Text>
                 <ApproveConfirmButtons 
                  isApproveDisabled={ isConfirmed || isConfirming || isApproved }
                  isApproving={isApproving}
