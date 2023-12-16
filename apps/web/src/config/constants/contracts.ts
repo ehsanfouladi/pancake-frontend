@@ -250,5 +250,11 @@ export default {
   },
   cadinuTradingCompetition:{
     56: '0x4a30205174643E43D7a670331b4c23Aa2013CC0E'
+  },
+  cadinuProfileReward:{
+    56: '0x98ae11de1d14E412bfEAe492754e533f6D9903FA'
+  },
+  cadinuMigration:{
+    56: '0x62CFcA5494b89FDA7B4C35f8F971C6a2ADC172F3'
   }
 } as const satisfies Record<string, Record<number, `0x${string}`>>

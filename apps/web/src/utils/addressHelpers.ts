@@ -166,6 +166,14 @@ export const getCadinuReferralAddress = () => {
 export const getCadinuTradingCompetitionAddress = () => {
   return getAddressFromMap(addresses.cadinuTradingCompetition)
 }
+
+export const getCadinuProfileRewardAddress = () => {
+  return getAddressFromMap(addresses.cadinuProfileReward)
+}
+
+export const getCadinuMigrationAddress = () => {
+  return getAddressFromMap(addresses.cadinuMigration)
+}
 // export const 
 // getCadinuCIAsAddress = () => {
 //   return getAddressFromMap(addresses.cadinuCIAs)
