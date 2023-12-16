@@ -4,13 +4,13 @@ import { Card, CardBody, CardHeader, PageSection, Text, useToast } from "@pancak
 import ApproveConfirmButtons from "components/ApproveConfirmButtons"
 import useApproveConfirmTransaction from "hooks/useApproveConfirmTransaction"
 import { useCallWithGasPrice } from "hooks/useCallWithGasPrice"
+import { getCadinuMigrationAddress } from "utils/addressHelpers"
 import { getCadinuMigrationContract } from "utils/contractHelpers"
 import { formatUnits } from "viem"
 import WalletNotConnected from "views/Claim/components/WalletNotConnected"
 import Page from "views/Page"
 import { useAccount, useContractRead } from "wagmi"
 import { CadinuOLDAbi } from "./components/CadinuOLDAbi"
-import { getCadinuMigrationAddress } from "utils/addressHelpers"
 
 const Migration = ()=>{
     const {address:account} = useAccount()
