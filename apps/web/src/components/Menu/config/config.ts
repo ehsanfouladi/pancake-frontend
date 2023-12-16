@@ -170,6 +170,13 @@ const config: (
           // status: { text: t('New'), color: 'success' },
         },
         {
+          label: t('Migration'),
+          href: '/migration',
+          supportChainIds: SUPPORT_ONLY_BSC,
+          image: '/images/voting/lottery.png',
+          status: { text: t('New'), color: 'success' },
+        },
+        {
           label: t('Cadinu Games'),
           href: 'https://cadinu.io/beta-games',
           type: DropdownMenuItemType.EXTERNAL_LINK,
