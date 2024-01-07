@@ -82,7 +82,6 @@ export default function BuyCbon({ userIp }: { userIp: string | null }) {
       abi: preSaleCbonAbi,
       functionName: 'NumberOfPurchases',
     })
-    console.log('fsfsafsa', Number(fetchedNumberOfPurchases))
     setNumberOfPurchases(Number(fetchedNumberOfPurchases))
     // return fetchedNumberOfPurchasesAsInt;
   }

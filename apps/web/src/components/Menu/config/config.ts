@@ -178,9 +178,9 @@ const config: (
         },
         {
           label: t('Cadinu Games'),
-          href: 'https://cadinu.io/beta-games',
-          type: DropdownMenuItemType.EXTERNAL_LINK,
-          // status: { text: t('New'), color: 'success' },
+          href: '/mini-games',
+          type: DropdownMenuItemType.BUTTON,
+          status: { text: t('New'), color: 'success' },
         },
       ].map((item) => addMenuItemSupported(item, chainId)),
     },

@@ -39,6 +39,7 @@ const getPathList = (t: ContextApi['t']): PathList => {
       '/ifo': { title: t('Initial Farm Offering'), image: `${CADINU_ASSET}/web/og/ifo.jpg` },
       '/teams': { basePath: true, title: t('Leaderboard'), image: `${CADINU_ASSET}/web/og/teams.jpg` },
       '/voting': { basePath: true, title: t('Voting'), image: `${CADINU_ASSET}/web/og/voting.jpg` },
+      '/mini-games': { basePath: true, title: t('Mini Games') },
       '/voting/proposal': { title: t('Proposals'), image: `${CADINU_ASSET}/web/og/voting.jpg` },
       '/voting/proposal/create': { title: t('Make a Proposal'), image: `${CADINU_ASSET}/web/og/voting.jpg` },
       '/info': {

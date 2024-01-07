@@ -80,6 +80,11 @@ const config = {
         hostname: 'static-nft.pancakeswap.com',
         pathname: '/mainnet/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'cms.cadinu.io',
+        pathname: '/uploads/**',
+      }
     ],
   },
   async rewrites() {
