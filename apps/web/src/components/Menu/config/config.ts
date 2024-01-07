@@ -179,7 +179,7 @@ const config: (
         {
           label: t('Cadinu Games'),
           href: '/mini-games',
-          type: DropdownMenuItemType.BUTTON,
+          image: '/images/voting/lottery.png',
           status: { text: t('New'), color: 'success' },
         },
       ].map((item) => addMenuItemSupported(item, chainId)),
