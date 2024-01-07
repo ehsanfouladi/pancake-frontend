@@ -1,13 +1,11 @@
-import styled from 'styled-components'
-import useSWR from 'swr'
-import { useState, useEffect } from 'react'
-import { Box, Text, Flex, PaginationButton, SearchInput, InputGroup, SearchIcon, Skeleton, CardHeader, CardBody, CardFooter } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import { useRouter } from 'next/router'
-import useAllGames from '../hooks/useAllGames'
+import { Box, CardHeader, Flex, PaginationButton, Text } from '@pancakeswap/uikit'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
+import styled from 'styled-components'
 import { AppBody } from '..'
-import Image from 'next/image'
+import useAllGames from '../hooks/useAllGames'
 
 
 const StyledCard = styled(Flex)`

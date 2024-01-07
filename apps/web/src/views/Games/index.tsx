@@ -1,20 +1,14 @@
 import {
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
-  CardProps,
+  Card, CardProps,
   Flex,
   Heading,
-  PageSection,
-  Tag
+  PageSection
 } from '@pancakeswap/uikit'
 import { PageMeta } from 'components/Layout/Page'
 import styled, { css } from 'styled-components'
-import styles from './showcaseStyles.module.css'
-import { getGame } from './hooks/getGame'
-import { SWRConfig } from 'swr'
 import AllGames from './components/AllGames'
+import { getGame } from './hooks/getGame'
+import styles from './showcaseStyles.module.css'
 
 export const BodyWrapper = styled(Card)`
   border-radius: 40px;
