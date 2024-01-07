@@ -1,11 +1,30 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Box, CardHeader, Flex, PaginationButton, Text } from '@pancakeswap/uikit'
+import { Box, Card, CardHeader, CardProps, Flex, PaginationButton, Text } from '@pancakeswap/uikit'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import styled from 'styled-components'
-import { AppBody } from '..'
+import styled, { css } from 'styled-components'
 import useAllGames from '../hooks/useAllGames'
+
+
+export const BodyWrapper = styled(Card)`
+  border-radius: 40px;
+  max-width: 380px;
+  width: 200px;
+  z-index: 1;
+  ${
+    css`
+        &:hover {
+          cursor: pointer;
+          opacity: 0.6;
+          transform : scale(1.05);
+        }`
+    }
+`
+
+export function AppBody({ children, ...cardProps }: { children: React.ReactNode } & CardProps) {
+  return <BodyWrapper {...cardProps}>{children}</BodyWrapper>
+}
 
 
 const StyledCard = styled(Flex)`
