@@ -42,7 +42,7 @@ export const footerLinks: (t: ContextApi["t"]) => FooterLinkType[] = (t) => [
       // },
       {
         label: t("Guides"),
-        href: "https://cadinu.io/dl/the%20whitepaper%20of%20cadinu.pdf",
+        href: "https://blog.cadinu.io/articles/CADINU-Token-WhitePaper",
       },
     ],
   },
