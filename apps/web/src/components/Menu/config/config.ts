@@ -182,6 +182,14 @@ const config: (
           image: '/images/voting/lottery.png',
           status: { text: t('New'), color: 'success' },
         },
+        {
+          type: DropdownMenuItemType.DIVIDER,
+        },
+        {
+          label: t('Blog'),
+          href: 'https://blog.cadinu.io',
+          type: DropdownMenuItemType.EXTERNAL_LINK,
+        },
       ].map((item) => addMenuItemSupported(item, chainId)),
     },
   ].map((item) => addMenuItemSupported(item, chainId))
