@@ -23,6 +23,7 @@ import { RankListDetail } from 'views/TradingReward/hooks/useRankList'
 interface RankingCardProps {
   rank: 1 | 2 | 3
   user: RankListDetail
+  competitionType: 'PURCHASE' | 'VOLUME'
 }
 
 const RotatedLaurelLeftIcon = styled(LaurelLeftIcon)`
@@ -45,10 +46,9 @@ const getRankingColor = (rank: number) => {
   return 'gold'
 }
 
-const RankingCard: React.FC<React.PropsWithChildren<RankingCardProps>> = ({ rank, user }) => {
+const RankingCard: React.FC<React.PropsWithChildren<RankingCardProps>> = ({ rank, user, competitionType }) => {
   const { t } = useTranslation()
   const rankColor = getRankingColor(rank)
-  const cakePriceBusd = usePriceCakeUSD()
   const { profile, isLoading: isProfileLoading } = useProfileForAddress(user.origin)
   const { domainName, avatar } = useDomainNameForAddress(user.origin, !profile && !isProfileLoading)
   const cbonPrice = useCbonPriceAsBN()
@@ -98,7 +98,7 @@ const RankingCard: React.FC<React.PropsWithChildren<RankingCardProps>> = ({ rank
               {t('Total Reward')}
             </Text>
             <Box>
-              <Text textAlign="right" bold color="text" fontSize="20px" lineHeight="110%">
+              <Text textAlign="right" bold color="text" fontSize="18px" lineHeight="110%">
                 {`${formatNumber(user?.estimatedReward)} CBON`}
               </Text>
               <Text textAlign="right" color="textSubtle" fontSize="12px">
@@ -108,7 +108,7 @@ const RankingCard: React.FC<React.PropsWithChildren<RankingCardProps>> = ({ rank
           </Flex>
           <Flex justifyContent="space-between">
             <Text bold color="textSubtle">
-              {t('Trading Volume')}
+              {competitionType==='VOLUME'? t('Trading Volume') : t('Token Retention Score')}
             </Text>
             <Text textAlign="right" bold color="text" fontSize="20px">
               {`$${formatNumber(user?.amountUSD)}`}

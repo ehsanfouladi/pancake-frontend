@@ -9,6 +9,7 @@ interface LeaderBoardDesktopViewProps {
   maxPage: number
   isLoading: boolean
   setCurrentPage: (value: number) => void
+  competitionType: 'VOLUME' | 'PURCHASE'
 }
 
 const LeaderBoardDesktopView: React.FC<React.PropsWithChildren<LeaderBoardDesktopViewProps>> = ({
@@ -16,6 +17,7 @@ const LeaderBoardDesktopView: React.FC<React.PropsWithChildren<LeaderBoardDeskto
   maxPage,
   isLoading,
   currentPage,
+  competitionType,
   setCurrentPage,
 }) => {
   const { t } = useTranslation()
@@ -27,7 +29,7 @@ const LeaderBoardDesktopView: React.FC<React.PropsWithChildren<LeaderBoardDeskto
           <tr>
             <Th width="60px">&nbsp;</Th>
             <Th textAlign="left">{t('User')}</Th>
-            <Th textAlign="left">{t('Trading Volume')}</Th>
+            <Th textAlign="left">{competitionType==='VOLUME'? t('Trading Volume') :t('Token Retention Score') }</Th>
             <Th textAlign="right">{t('Total Reward')}</Th>
           </tr>
         </thead>

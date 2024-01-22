@@ -251,9 +251,12 @@ const Leaderboard = () => {
           gridGap={['16px', null, null, null, null, '24px']}
           gridTemplateColumns={['1fr', null, null, null, null, 'repeat(3, 1fr)']}
         >
-          {first && <RankingCard rank={1} user={first as RankListDetail} />}
-          {second && <RankingCard rank={2} user={second as RankListDetail} />}
-          {third && <RankingCard rank={3} user={third as RankListDetail} />}
+          {first && <RankingCard rank={1} user={first as RankListDetail}
+           competitionType={currentCompetition.competitionType}/>}
+          {second && <RankingCard rank={2} user={second as RankListDetail}
+           competitionType={currentCompetition.competitionType}/>}
+          {third && <RankingCard rank={3} user={third as RankListDetail}
+           competitionType={currentCompetition.competitionType}/>}
         </Grid>
       </Container>
       <Box maxWidth={1200} m="auto">
@@ -264,6 +267,7 @@ const Leaderboard = () => {
             isLoading={isLoading}
             currentPage={currentPage}
             setCurrentPage={handleClickPagination}
+            competitionType={currentCompetition?.competitionType ? currentCompetition.competitionType : 'VOLUME'}
           />
         ) : !isEmpty(topTraders) ? (
           <LeaderBoardMobileView
@@ -272,6 +276,7 @@ const Leaderboard = () => {
             isLoading={isLoading}
             currentPage={currentPage}
             setCurrentPage={handleClickPagination}
+            competitionType={currentCompetition?.competitionType ? currentCompetition.competitionType : 'VOLUME'}
           />
         ) : isDesktop ? (
             <LeaderBoardDesktopView
@@ -280,6 +285,7 @@ const Leaderboard = () => {
               isLoading={isLoading}
               currentPage={currentPage}
               setCurrentPage={handleClickPagination}
+              competitionType={currentCompetition?.competitionType ? currentCompetition.competitionType : 'VOLUME'}
             />
           ) :  (
             <LeaderBoardMobileView
@@ -288,6 +294,7 @@ const Leaderboard = () => {
               isLoading={isLoading}
               currentPage={currentPage}
               setCurrentPage={handleClickPagination}
+              competitionType={currentCompetition?.competitionType ? currentCompetition.competitionType : 'VOLUME'}
             />
         )
       }

@@ -9,6 +9,7 @@ interface LeaderBoardMobileViewProps {
   isLoading: boolean
   currentPage: number
   setCurrentPage: (value: number) => void
+  competitionType: 'VOLUME' | 'PURCHASE'
 }
 
 const LeaderBoardMobileView: React.FC<React.PropsWithChildren<LeaderBoardMobileViewProps>> = ({
@@ -17,6 +18,7 @@ const LeaderBoardMobileView: React.FC<React.PropsWithChildren<LeaderBoardMobileV
   currentPage,
   maxPage,
   setCurrentPage,
+  competitionType
 }) => {
   const { t } = useTranslation()
 
@@ -39,7 +41,7 @@ const LeaderBoardMobileView: React.FC<React.PropsWithChildren<LeaderBoardMobileV
           ) : (
             <>
               {data.map((rank, index) => (
-                <MobileResult key={rank.origin} rank={rank} index={index + 3} />
+                <MobileResult key={rank.origin} rank={rank} index={index + 3} competitionType={competitionType} />
               ))}
             </>
           )}

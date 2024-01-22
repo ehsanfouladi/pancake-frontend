@@ -20,9 +20,10 @@ export const StyledMobileRow = styled(Box)`
 interface MobileResultProps {
   rank: RankListDetail
   index: number
+  competitionType: 'PURCHASE' | 'VOLUME'
 }
 
-const MobileResult: React.FC<React.PropsWithChildren<MobileResultProps>> = ({ rank, index }) => {
+const MobileResult: React.FC<React.PropsWithChildren<MobileResultProps>> = ({ rank, index, competitionType }) => {
   const { t } = useTranslation()
   // const cakePriceBusd = usePriceCakeUSD()
   const { profile, isLoading: isProfileLoading } = useProfileForAddress(rank.origin)
@@ -62,7 +63,7 @@ const MobileResult: React.FC<React.PropsWithChildren<MobileResultProps>> = ({ ra
       </Flex>
       <Flex justifyContent="space-between" alignItems="center">
         <Text fontSize="12px" color="textSubtle" mr="auto">
-          {t('Trading Volume')}
+          {competitionType==='VOLUME' ? t('Trading Volume') :t('Token Retention Score')}
         </Text>
         <Text fontWeight="bold" textAlign="right">
           {`$${formatNumber(rank.amountUSD)}`}
