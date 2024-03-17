@@ -59,6 +59,15 @@ export const livePools: SerializedPool[] = [
     contractAddress: '0xE19A46ea362940B783745c275AF13D56Be9a30f4',
     poolCategory: PoolCategory.CORE,
     tokenPerBlock: '1150',
+    isFinished: true,
+  },
+  {
+    sousId: 2004,
+    stakingToken: bscTokens.cbon,
+    earningToken: bscTokens.cadinu,
+    contractAddress: '0xF721F11D5748Ec7b14af8E619C78924EF1f1748f',
+    poolCategory: PoolCategory.CORE,
+    tokenPerBlock: '1157',
     isFinished: false,
   },
   // {
