@@ -68,7 +68,9 @@ export const livePools: SerializedPool[] = [
     contractAddress: '0xF721F11D5748Ec7b14af8E619C78924EF1f1748f',
     poolCategory: PoolCategory.CORE,
     tokenPerBlock: '1157',
+    profileRequirement: {required: true, thresholdPoints:"1000"},
     isFinished: false,
+    version: 3,
   },
   // {
   //   sousId: 1018,
@@ -87,6 +89,7 @@ export const livePools: SerializedPool[] = [
     contractAddress: '0x432B11477608Aa6059D6c5A3e4AB8135110625B6',
     poolCategory: PoolCategory.CORE,
     tokenPerBlock: '1150',
+    isFinished:true,
     version: 3,
   },
   // {
@@ -129,7 +132,31 @@ export const livePools: SerializedPool[] = [
   contractAddress: getAddress(p.contractAddress),
   stakingToken: p.stakingToken.serialize,
   earningToken: p.earningToken.serialize,
+  profileRequirement : p.profileRequirement,
 }))
+
+// export const livePoolsWithInfo: SerializedPoolWithInfo[] = [
+  
+//   {
+//     sousId: 2004,
+//     stakingToken: bscTokens.cbon,
+//     earningToken: bscTokens.cadinu,
+//     contractAddress: '0xF721F11D5748Ec7b14af8E619C78924EF1f1748f',
+//     poolCategory: PoolCategory.CORE,
+//     tokenPerBlock: '1157',
+//     profileRequirement: {required: true, thresholdPoints:"1000"},
+//     isFinished: false,
+//     version: 3
+//   },
+  
+// ].map((p) => ({
+//   ...p,
+//   contractAddress: getAddress(p.contractAddress),
+//   stakingToken: p.stakingToken.serialize,
+//   earningToken: p.earningToken.serialize,
+//   profileRequirement: p.profileRequirement,
+// }))
+
 
 // known finished pools
 const finishedPools = [
@@ -2925,4 +2952,8 @@ const finishedPools = [
   earningToken: p.earningToken.serialize,
 }))
 
-export const pools: SerializedPool[] = [...livePools, ...finishedPools]
+export const pools: SerializedPool[] = [
+    ...livePools,
+    ...finishedPools,
+    //  ...livePoolsWithInfo
+  ]

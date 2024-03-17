@@ -314,7 +314,7 @@ export const fetchPoolsProfileRequirement = async (
   )
   const poolProfileRequireCalls = livePoolsWithV3
     .map(({ contractAddress }) => {
-      return (['pancakeProfileIsRequested', 'pancakeProfileThresholdPoints'] as const).map(
+      return (['cadinuProfileIsRequested', 'cadinuProfileThresholdPoints'] as const).map(
         (method) =>
           ({
             abi: sousChefV3ABI,
