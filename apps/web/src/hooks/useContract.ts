@@ -7,7 +7,7 @@ import { useActiveChainId } from 'hooks/useActiveChainId'
 
 import addresses from 'config/constants/contracts'
 import { useMemo } from 'react'
-import { getMulticallAddress, getPredictionsV1Address, getZapAddress } from 'utils/addressHelpers'
+import { getCadinuTradingCompetitionV2Address, getMulticallAddress, getPredictionsV1Address, getZapAddress } from 'utils/addressHelpers'
 import {
   getBCakeFarmBoosterContract,
   getBCakeFarmBoosterProxyFactoryContract,
@@ -48,6 +48,7 @@ import {
   getTradingRewardTopTradesContract,
   getCadinuLockContract,
   getCadinuLockV3Contract,
+  getCadinuTradingCompetitionV2Contract,
 } from 'utils/contractHelpers'
 
 import { ChainId, WNATIVE, pancakePairV2ABI } from '@pancakeswap/sdk'
@@ -411,4 +412,8 @@ export const useCadinuLockContract = () => {
 }
 export const useCadinuLockV3Contract = () => {
   return useContract (getCadinuLockV3Contract().address, getCadinuLockV3Contract().abi)
+}
+
+export const useCompetitionV2Contract = (chainId: number) => {
+  return useContract (getCadinuTradingCompetitionV2Address(chainId), getCadinuTradingCompetitionV2Contract().abi)
 }

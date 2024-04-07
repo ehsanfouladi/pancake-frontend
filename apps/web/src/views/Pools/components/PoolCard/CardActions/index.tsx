@@ -1,16 +1,17 @@
 import BigNumber from 'bignumber.js'
 
-import styled from 'styled-components'
-import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
-import { Flex, Text, Box, Pool } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import { PoolCategory } from 'config/constants/types'
-import { useProfileRequirement } from 'views/Pools/hooks/useProfileRequirement'
 import { Token } from '@pancakeswap/sdk'
-import ApprovalAction from './ApprovalAction'
-import StakeActions from './StakeActions'
-import HarvestActions from './HarvestActions'
+import { Box, Flex, Pool, Text } from '@pancakeswap/uikit'
+import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
+import { PoolCategory } from 'config/constants/types'
+import { useEffect } from 'react'
+import styled from 'styled-components'
+import { useProfileRequirement } from 'views/Pools/hooks/useProfileRequirement'
 import { ProfileRequirementWarning } from '../../ProfileRequirementWarning'
+import ApprovalAction from './ApprovalAction'
+import HarvestActions from './HarvestActions'
+import StakeActions from './StakeActions'
 
 const InlineText = styled(Text)`
   display: inline;
@@ -34,6 +35,10 @@ const CardActions: React.FC<React.PropsWithChildren<CardActionsProps>> = ({ pool
   const isLoading = !userData
 
   const { notMeetRequired, notMeetThreshold } = useProfileRequirement(profileRequirement)
+  useEffect(()=>{
+    console.log("profileRequirement:", profileRequirement);
+    
+  },[notMeetRequired, notMeetThreshold])
 
   return (
     <Flex flexDirection="column">

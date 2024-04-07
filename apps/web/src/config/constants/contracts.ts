@@ -251,6 +251,9 @@ export default {
   cadinuTradingCompetition:{
     56: '0x4a30205174643E43D7a670331b4c23Aa2013CC0E'
   },
+  cadinuTradingCompetitionV2:{
+    56: '0x0306aA7da1674d88e8DEc3Bcd9c69B434a631Fb6'
+  },
   cadinuProfileReward:{
     56: '0x98ae11de1d14E412bfEAe492754e533f6D9903FA'
   },

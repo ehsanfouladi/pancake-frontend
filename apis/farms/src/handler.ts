@@ -1,8 +1,9 @@
+import { FarmWithPrices, SerializedFarmConfig } from '@pancakeswap/farms'
+import { ChainId, CurrencyAmount, Pair, WBNB } from '@pancakeswap/sdk'
+import { CADINU, USDT } from '@pancakeswap/tokens'
 import BN from 'bignumber.js'
-import { formatUnits } from 'viem'
-import { SerializedFarmConfig, FarmWithPrices } from '@pancakeswap/farms'
-import { ChainId,  CurrencyAmount, Pair } from '@pancakeswap/sdk'
-import { BUSD, CAKE, CBON, CADINU, USDT } from '@pancakeswap/tokens'
+import { GraphQLClient, gql } from 'graphql-request'
+import { Address, formatUnits } from 'viem'
 import { farmFetcher } from './helper'
 import { FarmKV, FarmResult } from './kv'
 import { updateLPsAPR } from './lpApr'
@@ -197,9 +198,10 @@ export async function fetchCakePrice() {
 
 export const fetchCadinuPrice =  async () => {
   const pairConfig = {
-      address: Pair.getAddress(CADINU[ChainId.BSC], USDT[ChainId.BSC]),
+      address: '0xfed93ca309132d9236dcd8501aed82c474342917' as Address,
+      // Pair.getAddress(CADINU[ChainId.BSC], USDT[ChainId.BSC]),
       tokenA: CADINU[ChainId.BSC],
-      tokenB: USDT[ChainId.BSC],
+      tokenB: WBNB[ChainId.BSC],
     }
     
   const client = bscClient
@@ -217,10 +219,29 @@ export const fetchCadinuPrice =  async () => {
     CurrencyAmount.fromRawAmount(token0, reserve0.toString()),
     CurrencyAmount.fromRawAmount(token1, reserve1.toString()),
   )
+const graphClient = new GraphQLClient('https://api.thegraph.com/subgraphs/name/pancakeswap/exchange-v3-bsc', {
+  fetch,
+})
+  const data = await graphClient.request(
+  gql`
+    query getBNBprice{ bundles {
+    ethPriceUSD
+}
+}
+`,
 
-  const a =pair.priceOf(tokenA)
-    
-  return pair.priceOf(tokenA).toSignificant(18)
+)
+
+console.log(data.bundles[0].ethPriceUSD)
+
+
+
+  const cadinuPrice =Number(pair.priceOf(tokenA).toSignificant(18)) * Number(data.bundles[0].ethPriceUSD)
+  console.log(cadinuPrice);
+  
+  return cadinuPrice.toString()
+
+
 }
 
 export async function fetchCbonPrice(){
@@ -286,6 +307,69 @@ export async function fetchCbonPrice(){
 
 }
 
-// AxfsUBa7kMAUS2x
+
+// export async function fetchCadinuPrice() {
+//   const v3PoolAbi = [
+//     {
+//       inputs: [],
+//       name: 'slot0',
+//       outputs: [
+//         {
+//           internalType: 'uint160',
+//           name: 'sqrtPriceX96',
+//           type: 'uint160',
+//         },
+//         {
+//           internalType: 'int24',
+//           name: 'tick',
+//           type: 'int24',
+//         },
+//         {
+//           internalType: 'uint16',
+//           name: 'observationIndex',
+//           type: 'uint16',
+//         },
+//         {
+//           internalType: 'uint16',
+//           name: 'observationCardinality',
+//           type: 'uint16',
+//         },
+//         {
+//           internalType: 'uint16',
+//           name: 'observationCardinalityNext',
+//           type: 'uint16',
+//         },
+//         {
+//           internalType: 'uint32',
+//           name: 'feeProtocol',
+//           type: 'uint32',
+//         },
+//         {
+//           internalType: 'bool',
+//           name: 'unlocked',
+//           type: 'bool',
+//         },
+//       ],
+//       stateMutability: 'view',
+//       type: 'function',
+//     },
+//   ] as const
+//   const address = '0x6172cea10dfd1a61e9f818083f4d65f371a29209'
+//   const client = viemProviders({ chainId: Number(56) })
+//   const slot0 = await client.readContract({
+//     abi: v3PoolAbi,
+//     address: address as `0x${string}`,
+//     functionName: 'slot0',
+//   })
+//   const pricisionFactor = 10 ** 18
+//   const sqrtPriceX96 = slot0[0]
+//   const sqrtPrice = Number((sqrtPriceX96 * BigInt(pricisionFactor)) / BigInt(2 ** 96)) / pricisionFactor
+//   const cbonPrice = sqrtPrice ** 2
+//   return Number(1 / cbonPrice)
+
+//   // return fetchCadinuPrice()
+// }
+
+// // AxfsUBa7kMAUS2x
 
 

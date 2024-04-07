@@ -44,7 +44,8 @@ const NetworkSelect = ({ switchNetwork, chainId }) => {
       {chains
         .filter(
           (chain) =>
-            chain.id === ChainId.LINEA_TESTNET || !('testnet' in chain && chain.testnet) || chain.id === chainId,
+            // chain.id === ChainId.LINEA_TESTNET ||
+             !('testnet' in chain && chain.testnet) || chain.id === chainId,
         )
         .map((chain) => (
           <UserMenuItem
@@ -58,7 +59,7 @@ const NetworkSelect = ({ switchNetwork, chainId }) => {
             </Text>
           </UserMenuItem>
         ))}
-      <UserMenuItem
+      {/* <UserMenuItem
         key={`aptos-${AptosChain.id}`}
         style={{ justifyContent: 'flex-start' }}
         as="a"
@@ -75,7 +76,7 @@ const NetworkSelect = ({ switchNetwork, chainId }) => {
         <Text color="text" pl="12px">
           {AptosChain.name}
         </Text>
-      </UserMenuItem>
+      </UserMenuItem> */}
     </>
   )
 }

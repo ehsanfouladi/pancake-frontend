@@ -12,6 +12,7 @@ import {
   getCadinuMigrationAddress,
   getCadinuProfileAddress,
   getCadinuProfileRewardAddress,
+  getCadinuTradingCompetitionV2Address,
   getCakeFlexibleSideVaultAddress,
   getCakeVaultAddress,
   getClaimAddress,
@@ -96,6 +97,7 @@ import { Address, erc20ABI, erc721ABI } from 'wagmi'
 import { cadinuTradingCompetition } from 'config/abi/cadinuTradingCompetition'
 import { cadinuProfileRewardAbi } from 'config/abi/cadinuProfileReward'
 import { migrationContractAbi } from 'views/Migration/components/migrationContractAbi'
+import { cadinuTradingCompetitionV2 } from 'config/abi/cadinuTradingCompetitionV2'
 
 export const getContract = <TAbi extends Abi | unknown[], TWalletClient extends WalletClient>({
   abi,
@@ -455,6 +457,10 @@ export const getCadinuLevelNftContract = (address: Address, signer?: WalletClien
 
 export const getCadinuTradingCompetitionContract = (address: Address, signer?: WalletClient) => {
   return getContract({ abi: cadinuTradingCompetition, address, signer })
+}
+
+export const getCadinuTradingCompetitionV2Contract = ( signer?: WalletClient) => {
+  return getContract({ abi: cadinuTradingCompetitionV2, address:getCadinuTradingCompetitionV2Address(), signer })
 }
 export const getCadinuMigrationContract = ( signer?: WalletClient) => {
   return getContract({ abi: migrationContractAbi, address:getCadinuMigrationAddress(), signer })
