@@ -1,4 +1,4 @@
-import { Box, Button, Card, CardBody, CardFooter, CardHeader, CardRibbon, ColumnCenter, Container, ErrorIcon, Flex, Heading, InfoIcon, Input, OptionProps, PageSection, Radio, Row, Select, Text, TimerIcon, useToast, useTooltip } from "@pancakeswap/uikit"
+import { Box, Button, Card, CardBody, CardFooter, CardHeader, CardRibbon, ColumnCenter, Container, ErrorIcon, Flex, Heading, Input, OptionProps, PageSection, Radio, Row, Select, Text, TimerIcon, useToast, useTooltip } from "@pancakeswap/uikit"
 import { ToastDescriptionWithTx } from "components/Toast"
 import { ChangeEvent, useMemo, useState } from "react"
 import { getCadinuTradingCompetitionV2Address } from "utils/addressHelpers"
@@ -20,6 +20,7 @@ import { useActiveChainId } from "hooks/useActiveChainId"
 import useApproveConfirmTransaction from "hooks/useApproveConfirmTransaction"
 import { useCallWithGasPriceNative } from "hooks/useCallWithGasPriceNative"
 import { useCompetitionV2Contract } from "hooks/useContract"
+import useNativeCurrency from "hooks/useNativeCurrency"
 import Link from "next/link"
 import useSWR from "swr"
 import { Address, formatEther, parseEther, parseUnits } from 'viem'
@@ -28,7 +29,6 @@ import { COMPETITIONV2_API_URL } from "views/TradingReward/constants"
 import { DatePicker } from "views/Voting/components/DatePicker"
 import { useAccount, useContractReads, useSignMessage } from "wagmi"
 import Banner from "./banner"
-import useNativeCurrency from "hooks/useNativeCurrency"
 
 
 
@@ -535,7 +535,7 @@ const CompetitionAdmin = () => {
                 } ${symbol}`}
             </Text>
             <Text mb='15px' py="4px" textAlign="center" fontSize="18px">
-             {` with referral : ${
+            {` with referral : ${
                 competitionDetails?.[3]?.result && formatEther(competitionDetails?.[3]?.result)?.toString()
               } ${symbol}`}
             </Text>

@@ -182,16 +182,16 @@ const IncreaseReward = () => {
     // This function will be called when the router is ready
     const handleRouterReady = () => {
       const chainIdValue = router.query.chainId;
-      const { id: competitionId } = router.query    
+      const { id: CompetitionId } = router.query    
       const parsedChainId = chainIdValue
         ? Array.isArray(chainIdValue)
           ? parseInt(chainIdValue[0], 10)
           : parseInt(chainIdValue, 10)
         : null;
-      const parsedCompetitionId = competitionId
-        ? Array.isArray(competitionId)
-          ? parseInt(competitionId[0], 10)
-          : parseInt(competitionId, 10)
+      const parsedCompetitionId = CompetitionId
+        ? Array.isArray(CompetitionId)
+          ? parseInt(CompetitionId[0], 10)
+          : parseInt(CompetitionId, 10)
         : null;
       if (Number.isNaN(parsedCompetitionId)){
         console.log('competition id is not a number');
