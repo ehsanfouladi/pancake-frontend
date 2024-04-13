@@ -23,6 +23,8 @@ interface RankingCardProps {
   rank: 1 | 2 | 3
   user: RankListDetail
   competitionType: 'PURCHASE' | 'VOLUME'
+  rewardToken: string
+  tradingToken: string
 }
 
 const RotatedLaurelLeftIcon = styled(LaurelLeftIcon)`
@@ -45,7 +47,9 @@ const getRankingColor = (rank: number) => {
   return 'gold'
 }
 
-const RankingCard: React.FC<React.PropsWithChildren<RankingCardProps>> = ({ rank, user, competitionType }) => {
+const RankingCard: React.FC<React.PropsWithChildren<RankingCardProps>> = ({ 
+  rank, user, competitionType, rewardToken, tradingToken
+ }) => {
   const { t } = useTranslation()
   const rankColor = getRankingColor(rank)
   const { profile, isLoading: isProfileLoading } = useProfileForAddress(user.origin)
@@ -97,20 +101,20 @@ const RankingCard: React.FC<React.PropsWithChildren<RankingCardProps>> = ({ rank
               {t('Total Reward')}
             </Text>
             <Box>
-              <Text textAlign="right" bold color="text" fontSize="18px" lineHeight="110%">
-                {`${formatNumber(user?.estimatedReward)} CBON`}
+              <Text textAlign="right" bold color="text" fontSize="15px" lineHeight="110%">
+                {`${formatNumber(user?.estimatedReward)} ${rewardToken}`}
               </Text>
-              <Text textAlign="right" color="textSubtle" fontSize="12px">
+              {/* <Text textAlign="right" color="textSubtle" fontSize="12px">
                 {`~$${formatNumber(user?.estimatedReward * Number(cbonPrice))}`}
-              </Text>
+              </Text> */}
             </Box>
           </Flex>
           <Flex justifyContent="space-between">
             <Text bold color="textSubtle">
-              {competitionType==='VOLUME'? t('Trading Volume') : t('Token Retention Score')}
+              {competitionType==='VOLUME'? t('Trading Volume') : t('Score')}
             </Text>
-            <Text textAlign="right" bold color="text" fontSize="20px">
-              {`$${formatNumber(user?.amountUSD)}`}
+            <Text textAlign="right" bold color="text" fontSize="15px">
+              {`${formatNumber(user?.amountUSD, 0,3)} ${tradingToken}`}
             </Text>
           </Flex>
         </CardBody>

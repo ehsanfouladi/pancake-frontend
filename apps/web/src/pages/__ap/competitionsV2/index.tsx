@@ -1,4 +1,4 @@
-import { Box, Button, Card, CardBody, CardFooter, CardHeader, CardRibbon, ColumnCenter, Container, ErrorIcon, Flex, Heading, InfoIcon, Input, OptionProps, PageSection, Row, Select, Text, TimerIcon, useToast, useTooltip } from "@pancakeswap/uikit"
+import { Box, Button, Card, CardBody, CardFooter, CardHeader, CardRibbon, ColumnCenter, Container, ErrorIcon, Flex, Heading, InfoIcon, Input, OptionProps, PageSection, Radio, Row, Select, Text, TimerIcon, useToast, useTooltip } from "@pancakeswap/uikit"
 import { ToastDescriptionWithTx } from "components/Toast"
 import { ChangeEvent, useMemo, useState } from "react"
 import { getCadinuTradingCompetitionV2Address } from "utils/addressHelpers"
@@ -21,12 +21,15 @@ import useApproveConfirmTransaction from "hooks/useApproveConfirmTransaction"
 import { useCallWithGasPriceNative } from "hooks/useCallWithGasPriceNative"
 import { useCompetitionV2Contract } from "hooks/useContract"
 import Link from "next/link"
+import useSWR from "swr"
 import { Address, formatEther, parseEther, parseUnits } from 'viem'
 import { ErrorText } from "views/Swap/components/styleds"
 import { COMPETITIONV2_API_URL } from "views/TradingReward/constants"
 import { DatePicker } from "views/Voting/components/DatePicker"
 import { useAccount, useContractReads, useSignMessage } from "wagmi"
 import Banner from "./banner"
+import useNativeCurrency from "hooks/useNativeCurrency"
+
 
 
 interface FormState {
@@ -45,8 +48,7 @@ interface FormState {
   signature: string
   competitionType: string
   tokenToBuy: string
-  myCompetitions: Competition[],
-  isLoading: boolean,
+  
 }
 
 interface Project {
@@ -82,6 +84,7 @@ interface Competition {
   is_reward_set: boolean
   project: Project
   chain_id: number
+
 }
 
 interface EndTimeTooltipComponentProps {
@@ -90,13 +93,13 @@ interface EndTimeTooltipComponentProps {
 const CompetitionAdmin = () => {
   const { address: account } = useAccount()
   const { toastError, toastSuccess } = useToast()
-
+  const {symbol} = useNativeCurrency()
   const {
     t,
     currentLanguage: { locale },
   } = useTranslation();
 
-
+  const [filterBy, setFilterBy] = useState('LIVE')
   const EndTimeTooltipComponent: React.FC<React.PropsWithChildren<EndTimeTooltipComponentProps>> = ({
     endTime,
   }) => {
@@ -177,11 +180,11 @@ const CompetitionAdmin = () => {
     signature: '',
     tokenToBuy: 'TOKEN0',
     competitionType: 'VOLUME',
-    myCompetitions: [],
-    isLoading: false,
+    
+    
   }))
 
-  const {chainId} = useActiveChainId()
+  const { chainId } = useActiveChainId()
 
   const {
     startDate,
@@ -197,25 +200,29 @@ const CompetitionAdmin = () => {
     signature,
     tokenToBuy,
     competitionType,
-    myCompetitions,
-    isLoading,
+    
   } = state
 
 
-  const fetchMyCompetitions = async (signature: string, account: string) => {
-    const res = await fetch(
-      `${COMPETITIONV2_API_URL}/my-competitions`,
-      {
-        method: 'post',
-        headers: {
-          'Content-Type': 'application/json', // Set the content type to application/json
-        },
-        body: JSON.stringify({ "signature": signature, "account": account })
-      }
-    ).then(res => res.json())
-    console.log("res", res);
-    updateValue('myCompetitions', res)
-  };
+  // const fetchMyCompetitions = async () => {
+  //   const response = await fetch(
+  //     `${COMPETITIONV2_API_URL}/my-competitions/${account}?filterBy=${filterBy}`,
+  //     {
+  //       method: 'get',
+  //       headers: {
+  //         'Content-Type': 'application/json', // Set the content type to application/json
+  //       },
+  //     }
+  //   ).then(res => res.json())
+  //   updateValue('myCompetitions', response)
+  // };
+
+  const fetcher = url => fetch(url).then(res => res.json());
+  const { data: myCompetitions, isLoading } = useSWR<Competition[]>(
+    `${COMPETITIONV2_API_URL}/my-competitions/${account}?filterBy=${filterBy}`
+    , fetcher
+  )
+
 
 
   const contract = {
@@ -249,8 +256,8 @@ const CompetitionAdmin = () => {
 
     ]
   })
-  const competitionTypeIndex = (comp_type: string) => {
-    if (comp_type === 'VOLUME') {
+  const competitionTypeIndex = (compType: string) => {
+    if (compType === 'VOLUME') {
       return 0
     }
     return 1
@@ -281,20 +288,20 @@ const CompetitionAdmin = () => {
         rewardToken,
         referralAddress,
         competitionTypeIndex(competitionType)
-          ]
+      ]
       // TODO: check with pnpm dev
       return callWithGasPriceNative(
         competitionV2Contract,
         functionName,
         params,
-        Number(competitionDetails?.[4].result) <= 0 ? competitionDetails[2]?.result : competitionDetails[3]?.result,
+        (Number(competitionDetails?.[4].result) <= 0 || competitionDetails?.[4].error) ? competitionDetails[2]?.result : competitionDetails[3]?.result,
 
       )
     },
     onSuccess: async ({ receipt }) => {
       toastSuccess(t('Competition Created!'), <ToastDescriptionWithTx txHash={receipt.transactionHash} />);
       handleStartCompetition();
-      
+
     },
   });
 
@@ -303,7 +310,7 @@ const CompetitionAdmin = () => {
 
     try {
 
-      fetch(`${COMPETITIONV2_API_URL}/`, {
+      fetch(`${COMPETITIONV2_API_URL}/all-competitions`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -340,15 +347,15 @@ const CompetitionAdmin = () => {
     }
   })
 
-  const { signMessage: showMyCompetitions } = useSignMessage({
-    message: account,
-    onSuccess(data) {
-      updateValue('signature', data);
-      fetchMyCompetitions(data, account);
-      console.log(myCompetitions, signature, account);
+  // const { signMessage: showMyCompetitions } = useSignMessage({
+  //   message: account,
+  //   onSuccess(data) {
+  //     updateValue('signature', data);
+  //     fetchMyCompetitions(data, account);
+  //     console.log(myCompetitions, signature, account);
 
-    }
-  })
+  //   }
+  // })
 
 
   const handleTypeOptionChange = (option: OptionProps): void => {
@@ -385,23 +392,57 @@ const CompetitionAdmin = () => {
   return (
     <Page>
       <Container>
-        <Flex justifyContent='center'>
+        <Banner />
+        <Flex justifyContent='center' mt='25px'>
           <NetworkSwitcher />
         </Flex>
-        <Banner />
         <PageSection index={1} hasCurvedDivider={false} innerProps={{ style: { padding: '0 16px' } }}>
-          <Heading mb="15px">Your Live Competitions:</Heading>
+          {/* <FilterLabel key='All'> */}
+          <Flex flexDirection='row' justifyContent='center' flexWrap='wrap'>
+          <Heading mb="15px" mr='25px'>Your Competitions:</Heading>
+            <Flex flexDirection='row' flexWrap='wrap' mr='15px'>
+              <Radio
+                id='filterByLive'
+                scale="sm"
+                value={filterBy}
+                checked={filterBy === 'LIVE'}
+                onChange={() => setFilterBy('LIVE')}
+                disabled={isLoading}
+              />
+              <Text bold ml="8px">{t('Live')}</Text>
+            </Flex>
+            <Flex flexDirection='row' mr='15px'>
+              <Radio
+                id='filterByUpcoming'
+                scale="sm"
+                value={filterBy}
+                checked={filterBy === 'UPCOMING'}
+                onChange={() => setFilterBy('UPCOMING')}
+                disabled={isLoading}
+              />
+              <Text bold ml="8px">{t('Upcoming')}</Text>
+            </Flex>
+            <Flex flexDirection='row'>
+              <Radio
+                id='filterByFinished'
+                scale="sm"
+                value={filterBy}
+                checked={filterBy === 'FINISHED'}
+                onChange={() => setFilterBy('FINISHED')}
+                disabled={isLoading}
+              />
+              <Text bold ml="8px">{t('Finished')}</Text>
+            </Flex>
+          </Flex>
+          {/* </FilterLabel> */}
           {/* <Input
           value={rewardId}
           onChange={e => setRewardId(e.target.value)}
           type="text"
           placeholder="competition ID"
         /> */}
-          {!myCompetitions || myCompetitions.length === 0 && <Flex flexDirection='row' justifyContent='center'>
-            <Button isLoading={isLoading} onClick={() => showMyCompetitions?.()}>My Competitions</Button>
-          </Flex>}
-          <Flex>
-            {myCompetitions.length > 0 &&
+          <Flex justifyContent='center'>
+            {myCompetitions?.length > 0 ?
               myCompetitions.map(competition => (
                 <>
                   <CardWrapper margin='5px' style={{ flexWrap: "wrap", minWidth: '360px', maxWidth: '28%' }} >
@@ -460,6 +501,7 @@ const CompetitionAdmin = () => {
                           </Box>
 
                         </Flex>
+                        { filterBy === 'LIVE' && 
                         <CardFooter>
                           <Flex flexDirection='row' justifyContent='center'>
                             <Link href={`competitionsV2/increase-reward/${competition._id}?chainId=${competition.chain_id}`}>
@@ -469,29 +511,33 @@ const CompetitionAdmin = () => {
                               </Button>
                             </Link>
                           </Flex>
-                        </CardFooter>
+                        </CardFooter>}
                       </CardBody>
                     </Card>
                   </CardWrapper>
 
                 </>
               ))
+              :(
+                  <Text textAlign='center'>{`No ${filterBy} Competition`}</Text>
+              )
             }
           </Flex>
         </PageSection>
         <PageSection index={2} hasCurvedDivider={false} innerProps={{ style: { padding: '0 16px' } }}>
-          <Heading textAlign='left' mb='25px'>Create New Competition</Heading>
+          <Text mb='15px' textAlign='center' bold fontSize={['35px', '35px', '35px', '50px']} color="secondary" lineHeight="110%">
+            Create New Competition</Text>
           <ColumnCenter style={{ height: "100%", justifyContent: "center" }} border='1' mb='24px'>
-            <InfoIcon />
+            {/* <InfoIcon /> */}
             <Text pt="4px" textAlign="center" fontSize="18px" >
-              Start competition cost: {competitionDetails && competitionDetails[2].result &&
+              {`Start competition cost: ${competitionDetails && competitionDetails[2].result &&
                 (formatEther(competitionDetails[2].result)).toString()
-              } BNB
+                } ${symbol}`}
             </Text>
             <Text mb='15px' py="4px" textAlign="center" fontSize="18px">
-              with referral : {
-                formatEther(competitionDetails?.[3]?.result)?.toString()
-              } BNB
+             {` with referral : ${
+                competitionDetails?.[3]?.result && formatEther(competitionDetails?.[3]?.result)?.toString()
+              } ${symbol}`}
             </Text>
           </ColumnCenter>
           <form onSubmit={handleFormSubmit}>
@@ -607,7 +653,7 @@ const CompetitionAdmin = () => {
                     onChange={handleChange}
                     required
                   />
-                  {Number(competitionDetails?.[4].result) <= 0 && <Row><ErrorIcon color="warning" /><ErrorText mx='5px' severity={2}>This address is not set as a referral.</ErrorText></Row>}
+                  {Number(competitionDetails?.[4].result) <= 0 || competitionDetails?.[4].error && <Row><ErrorIcon color="warning" /><ErrorText mx='5px' severity={2}>This address is not set as a referral.</ErrorText></Row>}
                 </Box>
                 <Box mb="24px">
                   <SecondaryLabel htmlFor="competitionType">Competition Type </SecondaryLabel>
@@ -684,8 +730,8 @@ const CompetitionAdmin = () => {
               </Box>
             </Layout>
           </form>
-          < ApproveConfirmButtons 
-            isApproveDisabled={isApproved || !rewardToken || !rewardAmount }
+          < ApproveConfirmButtons
+            isApproveDisabled={isApproved || !rewardToken || !rewardAmount}
             isApproving={isApproving}
             isConfirmDisabled={
               !startDate ||

@@ -4,28 +4,22 @@ import {
   FarmWithStakedValue,
   filterFarmsByQuery,
 } from '@pancakeswap/farms'
-import { ChainId } from '@pancakeswap/sdk'
 import { useIntersectionObserver } from '@pancakeswap/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 import {
-  ArrowForwardIcon,
-  Box,
-  Button,
-  Farm as FarmUI,
+  Box, Farm as FarmUI,
   Flex,
   FlexLayout,
   Heading,
   Image,
   Link,
-  Loading,
-  NextLinkFromReactRouter,
-  OptionProps,
+  Loading, OptionProps,
   PageHeader,
   SearchInput,
   Select,
   Text,
   Toggle,
-  ToggleView,
+  ToggleView
 } from '@pancakeswap/uikit'
 import BigNumber from 'bignumber.js'
 import Page from 'components/Layout/Page'
@@ -41,13 +35,11 @@ import { useUserFarmStakedOnly, useUserFarmsViewMode } from 'state/user/hooks'
 import styled from 'styled-components'
 import { getFarmApr } from 'utils/apr'
 
-import FarmV3MigrationBanner from 'views/Home/components/Banners/FarmV3MigrationBanner'
-import { useAccount } from 'wagmi'
 import { V3SubgraphHealthIndicator } from 'components/SubgraphHealthIndicator'
+import { useAccount } from 'wagmi'
 import Table from './components/FarmTable/FarmTable'
 import { FarmTypesFilter } from './components/FarmTypesFilter'
 import { FarmsV3Context } from './context'
-import { BCakeBoosterCard } from './components/YieldBooster/components/bCakeV3/BCakeBoosterCard'
 
 const BIG_INT_ZERO = new BigNumber(0)
 const BIG_INT_ONE = new BigNumber(1)

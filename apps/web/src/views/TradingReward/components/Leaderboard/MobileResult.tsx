@@ -63,10 +63,10 @@ const MobileResult: React.FC<React.PropsWithChildren<MobileResultProps>> = ({ ra
       </Flex>
       <Flex justifyContent="space-between" alignItems="center">
         <Text fontSize="12px" color="textSubtle" mr="auto">
-          {competitionType==='VOLUME' ? t('Trading Volume') :t('Token Retention Score')}
+          {competitionType==='VOLUME' ? t('Trading Volume') :t('Score')}
         </Text>
         <Text fontWeight="bold" textAlign="right">
-          {`$${formatNumber(rank.amountUSD)}`}
+          {`${formatNumber(rank.amountUSD)}`}
         </Text>
       </Flex>
     </StyledMobileRow>

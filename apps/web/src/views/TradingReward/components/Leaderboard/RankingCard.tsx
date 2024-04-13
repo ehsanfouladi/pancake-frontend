@@ -108,10 +108,10 @@ const RankingCard: React.FC<React.PropsWithChildren<RankingCardProps>> = ({ rank
           </Flex>
           <Flex justifyContent="space-between">
             <Text bold color="textSubtle">
-              {competitionType==='VOLUME'? t('Trading Volume') : t('Token Retention Score')}
+              {competitionType==='VOLUME'? t('Trading Volume') : t('Score')}
             </Text>
             <Text textAlign="right" bold color="text" fontSize="20px">
-              {`$${formatNumber(user?.amountUSD)}`}
+              {`${formatNumber(user?.amountUSD)}`}
             </Text>
           </Flex>
         </CardBody>

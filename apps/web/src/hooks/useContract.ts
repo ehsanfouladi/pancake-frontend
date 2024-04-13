@@ -9,11 +9,15 @@ import addresses from 'config/constants/contracts'
 import { useMemo } from 'react'
 import { getCadinuTradingCompetitionV2Address, getMulticallAddress, getPredictionsV1Address, getZapAddress } from 'utils/addressHelpers'
 import {
+  getAffiliateProgramContract,
   getBCakeFarmBoosterContract,
   getBCakeFarmBoosterProxyFactoryContract,
   getBCakeFarmBoosterV3Contract,
   getBCakeProxyContract,
   getBunnyFactoryContract,
+  getCadinuLockContract,
+  getCadinuLockV3Contract,
+  getCadinuTradingCompetitionV2Contract,
   getCakeFlexibleSideVaultV2Contract,
   getCakePredictionsContract,
   getCakeVaultV2Contract,
@@ -41,14 +45,10 @@ import {
   getTradingCompetitionContractMoD,
   getTradingCompetitionContractMobox,
   getTradingRewardContract,
+  getTradingRewardTopTradesContract,
   getUnsContract,
-  getAffiliateProgramContract,
   getV3AirdropContract,
   getV3MigratorContract,
-  getTradingRewardTopTradesContract,
-  getCadinuLockContract,
-  getCadinuLockV3Contract,
-  getCadinuTradingCompetitionV2Contract,
 } from 'utils/contractHelpers'
 
 import { ChainId, WNATIVE, pancakePairV2ABI } from '@pancakeswap/sdk'

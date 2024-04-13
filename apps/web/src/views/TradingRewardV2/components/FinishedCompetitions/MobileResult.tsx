@@ -8,7 +8,7 @@ import { useMemo } from 'react'
 import { useChainNameByQuery } from 'state/info/hooks'
 import styled from 'styled-components'
 import { CurrencyLogo } from 'views/Info/components/CurrencyLogo'
-import { Competition } from 'views/TradingRewardV2/components/YourHistoryCard'
+import { Competition } from '../types'
 
 export const StyledMobileRow = styled(Box)`
   background-color: ${({ theme }) => theme.card.background};

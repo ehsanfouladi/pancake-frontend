@@ -55,7 +55,7 @@ const FinishedRoundTable: React.FC<React.PropsWithChildren<FinishedRoundTablePro
             <FinishedRoundRow
               key={finishedRound.id}
               roundId={finishedRound.competition._id}
-              hasWon={true}
+              hasWon
               numberTickets={`${finishedRound.prize_amount} ${
                 finishedRound.competition.reward_token_symbol ? finishedRound.competition.reward_token_symbol : '' 
               }`}
@@ -63,7 +63,7 @@ const FinishedRoundTable: React.FC<React.PropsWithChildren<FinishedRoundTablePro
               onClick={handleHistoryRowClick}
             />
           ))}
-        {winnerData.lenght === numUserRoundsRequested && (
+        {winnerData && winnerData.lenght === numUserRoundsRequested && (
           <Flex justifyContent="center">
             <Button mt="12px" variant="text" width="fit-content" onClick={handleShowMoreClick}>
               {t('Show More')}

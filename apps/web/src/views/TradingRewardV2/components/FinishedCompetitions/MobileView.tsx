@@ -1,6 +1,6 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Box, PaginationButton, Text } from '@pancakeswap/uikit'
-import { Competition } from '../YourHistoryCard'
+import { Competition } from '../types'
 import MobileResult, { StyledMobileRow } from './MobileResult'
 
 interface FinishedCompetitionsMobileViewProps {

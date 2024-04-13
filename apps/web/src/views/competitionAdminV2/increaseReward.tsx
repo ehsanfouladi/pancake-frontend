@@ -15,13 +15,12 @@ import styled from "styled-components"
 import { getCadinuTradingCompetitionV2Address } from "utils/addressHelpers"
 import { formatUnits, parseEther, parseUnits } from "viem"
 import { DatePickerPortal } from "views/CadinuLock/components/DatePicker"
-// import Layout from "views/CadinuLock/components/Layout"
 import WalletNotConnected from "views/Claim/components/WalletNotConnected"
 import Page from "views/Page"
 import FlexRow from "views/Predictions/components/FlexRow"
 import { COMPETITION_V2_API_URL } from "views/TradingRewardV2/constants"
 import { SecondaryLabel } from "views/Voting/CreateProposal/styles"
-import { useAccount, useContractReads, usePrepareContractWrite, useSignMessage } from "wagmi"
+import { useAccount, useContractReads, useSignMessage } from "wagmi"
 
 
 
@@ -44,32 +43,27 @@ const Layout = styled.div`
 const IncreaseReward = () => {
 
   const router = useRouter()
-  const { id: competitionId} = router.query
   const { address: account } = useAccount()
   const [chainId, setChainId] = useState(null);
   const { toastError, toastSuccess } = useToast()
   const [signature, setSignature] = useState('')
   const [amount, setAmount] = useState('')
+  // const [token, setToken] = useState(null)
+  const [competitionId, setCompetitionId] = useState(null)
+
+  // const { id: competitionId} = router.query
 
   const {
     t,
-    currentLanguage: { locale },
   } = useTranslation();
-
-
-
-
-
-  
 
   const contract = {
     address: getCadinuTradingCompetitionV2Address(Number(chainId)),
     abi: cadinuTradingCompetitionV2
   }
-  console.log('contract', contract);
   
   const { data: competitionDetails } = useContractReads({
-    enabled: competitionId !== '',
+    enabled: competitionId !==null  && chainId,
     contracts: [
       {
         ...contract,
@@ -78,19 +72,22 @@ const IncreaseReward = () => {
       {
         ...contract,
         functionName: 'getCompetitionData',
-        args: [competitionId && BigInt((Number(competitionId) - 1).toString())]
+        args: [competitionId && BigInt(competitionId)]
       }
     ],
-    watch: chainId !== null
+    watch: competitionId !== null 
   })
 
-  const token = useToken(competitionDetails?.[1]?.result.rewardToken)
+ 
+  const token = useToken(competitionDetails?.[1]?.result?.rewardToken)
+
   const competitionV2Contract = useCompetitionV2Contract(Number(chainId))
   const { callWithGasPriceNative } = useCallWithGasPriceNative()
   const { isApproving, isApproved, isConfirming, handleApprove, handleConfirm } = useApproveConfirmTransaction({
     token,
     spender: getCadinuTradingCompetitionV2Address(Number(chainId)),
     minAmount: parseUnits(amount.toString(), token?.decimals) ? parseUnits(amount.toString(), token?.decimals) : 0n,
+    targetAmount: parseUnits(amount.toString(), token?.decimals) ? parseUnits(amount.toString(), token?.decimals) : 0n,
     onApproveSuccess: async ({ receipt }) => {
       toastSuccess(
         t('Contract enabled - you can increase competition reward'),
@@ -100,7 +97,7 @@ const IncreaseReward = () => {
     onConfirm: async () => {
       const functionName = 'boostCompetition'
       const params = [
-        Number(competitionId) - 1,
+        Number(competitionId),
         parseEther(amount)
       ]
       // TODO: check with pnpm dev
@@ -120,15 +117,15 @@ const IncreaseReward = () => {
   });
 
 
-  const { config } = usePrepareContractWrite({
-    address: getCadinuTradingCompetitionV2Address(Number(chainId)),
-    abi: cadinuTradingCompetitionV2,
-    functionName: 'boostCompetition',
-    args: [
-      Number(competitionId) - 1,
-      parseEther(amount)
-    ]
-  })
+  // const { config } = usePrepareContractWrite({
+  //   address: getCadinuTradingCompetitionV2Address(Number(chainId)),
+  //   abi: cadinuTradingCompetitionV2,
+  //   functionName: 'boostCompetition',
+  //   args: [
+  //     Number(competitionId) - 1,
+  //     parseEther(amount)
+  //   ]
+  // })
 
   const handleUpdateDatabase = async () => {
 
@@ -185,14 +182,26 @@ const IncreaseReward = () => {
     // This function will be called when the router is ready
     const handleRouterReady = () => {
       const chainIdValue = router.query.chainId;
+      const { id: competitionId } = router.query    
       const parsedChainId = chainIdValue
         ? Array.isArray(chainIdValue)
           ? parseInt(chainIdValue[0], 10)
           : parseInt(chainIdValue, 10)
         : null;
-
-      if (isNaN(parsedChainId)) {
+      const parsedCompetitionId = competitionId
+        ? Array.isArray(competitionId)
+          ? parseInt(competitionId[0], 10)
+          : parseInt(competitionId, 10)
+        : null;
+      if (Number.isNaN(parsedCompetitionId)){
+        console.log('competition id is not a number');
+        setCompetitionId(null)
+      } else {
+        setCompetitionId(parsedCompetitionId)
+      }
+      if (Number.isNaN(parsedChainId)) {
         console.error('chainId is not a number');
+        setChainId(null)
         // Handle the error case here
       } else {
         setChainId(parsedChainId);
@@ -210,7 +219,9 @@ const IncreaseReward = () => {
       };
     }
   }, [router]);
-  if (chainId === null) {
+
+  
+  if (chainId === null || competitionId === null) {
     return <div>Loading...</div>;
   }
 

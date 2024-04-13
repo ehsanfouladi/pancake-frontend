@@ -1,6 +1,6 @@
 import { useTheme } from '@pancakeswap/hooks'
 import { useTranslation } from '@pancakeswap/localization'
-import { Box, Flex, Text } from '@pancakeswap/uikit'
+import { Box, Button, Flex, Link, Text } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 // import { UserRewardCard } from '../UserRewardCard'
 import YourHistoryCard from '../YourHistoryCard'
@@ -51,12 +51,15 @@ const TopTradersBanner = () => {
             lineHeight="110%"
             mb={['20px', '20px', '20px', '32px']}
           >
-            {t('Earn CADINU Bonuses.')}
+            {t('Earn Rewards.')}
           </Text>
           
           <Text bold mb="32px" maxWidth="520px" lineHeight="26.4px" fontSize={['16px', '16px', '16px', '24px']}>
-            {t('Join competitions for exclusive rewards!')}
+            {t('Join competitions for exclusive rewards! ')}
           </Text>
+          <Link href='/__ap/competitionsV2'>
+            <Button > Create New Competition</Button>
+          </Link>
         </Flex>
         <YourHistoryCard handleShowMoreClick={() => console.log('show more')} numUserRoundsRequested ={2}/>
         </Flex>

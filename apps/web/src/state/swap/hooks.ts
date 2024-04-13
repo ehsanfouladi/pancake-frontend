@@ -1,6 +1,6 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Currency, CurrencyAmount, Price, Trade, TradeType } from '@pancakeswap/sdk'
-import { USDC, USDT, STABLE_COIN, CADINU } from '@pancakeswap/tokens'
+import { USDC, USDT, STABLE_COIN, CADINU, CBON } from '@pancakeswap/tokens'
 import tryParseAmount from '@pancakeswap/utils/tryParseAmount'
 import { useUserSlippage } from '@pancakeswap/utils/user'
 import { SLOW_INTERVAL } from 'config/constants'
@@ -261,8 +261,8 @@ export function useDefaultsFromURLSearch():
     if (!chainId || !native || !isReady) return
     const parsed = queryParametersToSwapState(
       query,
-      native.symbol,
-      CADINU[chainId]?.address ?? STABLE_COIN[chainId]?.address ?? USDC[chainId]?.address ?? USDT[chainId]?.address,
+      USDT[chainId]?.address,
+      CBON[chainId]?.address ?? STABLE_COIN[chainId]?.address ?? USDC[chainId]?.address ?? USDT[chainId]?.address,
     )
 
     dispatch(

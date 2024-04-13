@@ -50,7 +50,7 @@ const Leaderboard = () => {
   }
   
 
-  const {data, error, isLoading} = useSWR( ()=>
+  const {data: fetchedData, error, isLoading} = useSWR( ()=>
     `${COMPETITION_V2_API_URL}/top-traders?chainId=${chainId}&competitionId=${competitionId}`, fetcher 
     )
   const {data:currentCompetition} = useSWR( ()=>
@@ -58,32 +58,34 @@ const Leaderboard = () => {
 
   const estimateRewards = useCallback(() =>{
     const winners = []
-    if(currentCompetition && data && totalVolume){
+    if (currentCompetition && fetchedData.data && totalVolume){
 
-      data.map((trader:RankListDetail,index:number)=>{
-        const reward = (trader.amountUSD / totalVolume) * currentCompetition.reward_amount
+      fetchedData.data.map((trader:RankListDetail,index:number)=>{
+        const reward = (trader[`${fetchedData.sortKey}`] / totalVolume) * currentCompetition.reward_amount
         winners.push({
           'origin': trader.origin,
-          'amountUSD': Number(trader.amountUSD),
+          'amountUSD': Number(trader[`${fetchedData.sortKey}`]),
           'estimatedReward': index < numberOfWinners ? reward : 0
         })
       })
 
       setTopTraders(winners)
     }
-  },[numberOfWinners, data, currentCompetition, totalVolume])
+  }, [numberOfWinners, fetchedData, currentCompetition, totalVolume])
   
 
   useEffect(()=>{
     if (currentCompetition && numberOfWinners === 0){
       setNumberOfWinners(currentCompetition?.number_of_winners)
     }
+    console.log(fetchedData);
     
-    if(data && data.length > 0 && numberOfWinners && totalVolume===0){
+    
+    if (fetchedData && fetchedData.data && fetchedData.data.length > 0 && numberOfWinners && totalVolume===0){
       let total = 0
-      data.map((trader:RankListDetail,index:number)=>{
+      fetchedData.data.map((trader:RankListDetail,index:number)=>{
         if(index<numberOfWinners){
-          total += Number(trader.amountUSD)
+          total += Number(trader[`${fetchedData.sortKey}`])
         }
       })
 
@@ -98,11 +100,11 @@ const Leaderboard = () => {
       // }
       setTotalVolume(total)
     }
-  }, [data, numberOfWinners, currentCompetition])
+  }, [fetchedData, numberOfWinners, currentCompetition])
   
 
   useEffect(()=>{
-    if(isEmpty(topTraders) && totalVolume!==0 && data && data.length>0){
+    if (isEmpty(topTraders) && totalVolume !== 0 && fetchedData.data && fetchedData.data.length>0){
       estimateRewards()
     }
     if (topTraders){
@@ -110,7 +112,7 @@ const Leaderboard = () => {
       setSecond(topTraders ? topTraders[1] : null)
       setThird(topTraders ? topTraders[2] : null)
     }
-  },[currentCompetition,data,totalVolume, topTraders])
+  }, [currentCompetition, fetchedData,totalVolume, topTraders])
 
   const handleClickPagination = (value: number) => {
     if (!isLoading) {
@@ -195,7 +197,7 @@ const Leaderboard = () => {
         <Text bold>Number of Winners:</Text>
         <Text >{currentCompetition.number_of_winners}</Text>
         <Text bold>Total Prize:</Text>
-        <Text >{currentCompetition.reward_amount} CBON ~${(Number(currentCompetition.reward_amount) * Number(cbonPrice)).toFixed(2)}</Text>
+            <Text >{`${currentCompetition.reward_amount} ${currentCompetition.reward_token_symbol} `}</Text>
         </Grid>
         <Grid
           gridGap={['16px', null, null, null, null, '24px']}
@@ -253,11 +255,17 @@ const Leaderboard = () => {
           gridTemplateColumns={['1fr', null, null, null, null, 'repeat(3, 1fr)']}
         >
           {first && <RankingCard rank={1} user={first as RankListDetail}
-           competitionType={currentCompetition.competition_type}/>}
+           competitionType={currentCompetition.competition_type}
+           rewardToken={currentCompetition.reward_token_symbol}
+           tradingToken={fetchedData?.symbol}/>}
           {second && <RankingCard rank={2} user={second as RankListDetail}
-           competitionType={currentCompetition.competition_type}/>}
+           competitionType={currentCompetition.competition_type}
+           rewardToken={currentCompetition.reward_token_symbol}
+           tradingToken={fetchedData?.symbol}/>}
           {third && <RankingCard rank={3} user={third as RankListDetail}
-           competitionType={currentCompetition.competition_type}/>}
+           competitionType={currentCompetition.competition_type}
+           rewardToken={currentCompetition.reward_token_symbol}
+           tradingToken={fetchedData?.symbol}/>}
         </Grid>
       </Container>
       <Box maxWidth={1200} m="auto">

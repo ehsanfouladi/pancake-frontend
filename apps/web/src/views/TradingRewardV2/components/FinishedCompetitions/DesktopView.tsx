@@ -1,23 +1,8 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Card, PaginationButton, Table, Td, Th } from '@pancakeswap/uikit'
 import DesktopResult from 'views/TradingRewardV2/components/FinishedCompetitions/DesktopResult'
-import { Competition } from '../YourHistoryCard'
+import { Competition } from '../types'
 
-export interface CompetitionIncentives {
-  _id: number
-  start_time: number
-  end_time: number
-  pool_address: string
-  exchange_name: string
-  reward_amount: string
-  is_boosted: boolean
-  token_0: string
-  token_1: string
-  is_live: boolean
-  is_finished: boolean
-  competition_type : string
-
-}
 
 interface FinishedCompetitionsDesktopViewProps {
   data: Competition[]

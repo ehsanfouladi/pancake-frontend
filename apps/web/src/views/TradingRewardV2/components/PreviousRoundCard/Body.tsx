@@ -18,7 +18,7 @@ import { cadinuTradingCompetitionV2 } from 'config/abi/cadinuTradingCompetitionV
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { getCadinuTradingCompetitionV2Address } from 'utils/addressHelpers'
 import { useContractRead, useContractWrite, usePrepareContractWrite, useWaitForTransaction } from 'wagmi'
-import { Competition } from '../YourHistoryCard'
+import { Competition } from '../types'
 
 const StyledCardBody = styled(CardBody)`
   position: relative;

@@ -7,7 +7,7 @@ import { useMemo } from 'react'
 import { useChainNameByQuery } from 'state/info/hooks'
 import styled from 'styled-components'
 import { CurrencyLogo } from 'views/Info/components/CurrencyLogo'
-import { Competition } from '../YourHistoryCard'
+import { Competition } from '../types'
 
 interface DesktopResultProps {
   competition: Competition

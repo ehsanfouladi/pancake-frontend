@@ -1,15 +1,5 @@
-import CompetitionProject from '../../../views/CompetitionProjects'
-
-// export default CompetitionProjectPage
-// import { NotFound } from '@pancakeswap/uikit'
-
-// const NotFoundPage = () => <NotFound />
-
-// NotFoundPage.chains = []
-
-// export default NotFoundPage
-
 import { SUPPORT_MAINNET_BSC } from 'config/constants/supportChains'
+import CompetitionProject from '../../../views/CompetitionProjects'
 
 const CompetitionProjectPage = () => <CompetitionProject />
 

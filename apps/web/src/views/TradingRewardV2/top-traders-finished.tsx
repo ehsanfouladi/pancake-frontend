@@ -7,7 +7,7 @@ import styled from 'styled-components'
 import useSWR from 'swr'
 import FinishedCompetitionsDesktopView from './components/FinishedCompetitions/DesktopView'
 import FinishedCompetitionsMobileView from './components/FinishedCompetitions/MobileView'
-import { Competition } from './components/YourHistoryCard'
+import { Competition } from './components/types' 
 import { COMPETITION_V2_API_URL } from './constants'
 
 
@@ -88,7 +88,7 @@ const FinishedCompetitions = () => {
                 <SearchInput placeholder="Search" initialValue={keyword} onChange={handleChangeQuery} />
               </InputGroup>
             </Box>
-            <FilterLabel key={'Trade'}>
+            <FilterLabel key='Trade'>
               <Radio
                 scale="sm"
                 value={competitionType}
@@ -98,7 +98,7 @@ const FinishedCompetitions = () => {
               />
               <Text ml="8px">{t('Trade')}</Text>
             </FilterLabel>
-            <FilterLabel key={'Purchase'}>
+            <FilterLabel key='Purchase'>
               <Radio
                 scale="sm"
                 value={competitionType}
@@ -108,7 +108,7 @@ const FinishedCompetitions = () => {
               />
               <Text ml="8px">{t('Purchase')}</Text>
             </FilterLabel>
-            <FilterLabel key={'Purchase'}>
+            <FilterLabel key='All'>
               <Radio
                 scale="sm"
                 value={competitionType}
