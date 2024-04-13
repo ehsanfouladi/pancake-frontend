@@ -190,6 +190,11 @@ const config: (
           href: 'https://blog.cadinu.io',
           type: DropdownMenuItemType.EXTERNAL_LINK,
         },
+        {
+          label: t('Docs'),
+          href: 'https://docs.cadinu.io',
+          type: DropdownMenuItemType.EXTERNAL_LINK,
+        },
       ].map((item) => addMenuItemSupported(item, chainId)),
     },
   ].map((item) => addMenuItemSupported(item, chainId))
