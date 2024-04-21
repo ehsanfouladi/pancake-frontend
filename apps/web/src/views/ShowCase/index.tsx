@@ -88,7 +88,7 @@ export default function ShowCase() {
     },
     {
       title: 'Lock Tools',
-      image: '/images/cadinu-apps/cadinu-Lock.png',
+      image: '/images/cadinu-apps/cadinu-lock.png',
       alt: 'Cadinu-Lock',
       desc: "Secure tokens, LP, and NFT with CADINU Lock.",
       destination: '/cadinu-lock',
