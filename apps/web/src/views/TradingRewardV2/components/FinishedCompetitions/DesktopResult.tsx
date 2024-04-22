@@ -3,7 +3,7 @@ import { CheckmarkCircleIcon, ErrorIcon, Flex, RocketIcon, Td, Text, TimerIcon, 
 import { formatNumber } from '@pancakeswap/utils/formatBalance'
 import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
 import Link from 'next/link'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useChainNameByQuery } from 'state/info/hooks'
 import styled from 'styled-components'
 import { CurrencyLogo } from 'views/Info/components/CurrencyLogo'
@@ -18,8 +18,8 @@ interface EndTimeTooltipComponentProps {
 }
 
 
-
 const DesktopResult: React.FC<React.PropsWithChildren<DesktopResultProps>> = ({ competition }) => {
+  
   const ResponsiveLogo = styled(CurrencyLogo)`
   @media screen and (max-width: 670px) {
     width: 16px;
@@ -53,6 +53,11 @@ const DesktopResult: React.FC<React.PropsWithChildren<DesktopResultProps>> = ({ 
     );
   }
 
+
+  useEffect(()=>{
+    console.log(">>>>>>>>>>>>", competition.end_time);
+    
+  },[competition])
 
   function TimeCountdownDisplay({
     timestamp,
@@ -127,9 +132,9 @@ const DesktopResult: React.FC<React.PropsWithChildren<DesktopResultProps>> = ({ 
       <Td textAlign="left" fontSize=''>
         <Text >{`${competition.token_0}/${competition.token_1}`}</Text>
       </Td>
-      {/* <Td textAlign="left">
-        <Text bold>{`${competition.rewardAmount} CBON`}</Text>
-      </Td> */}
+      <Td textAlign="center">
+        {competition.locked_lp ? <CheckmarkCircleIcon /> : <ErrorIcon />}
+      </Td>
       <Td textAlign="center">
         {competition.is_core ? <CheckmarkCircleIcon /> : <ErrorIcon />}
       </Td>

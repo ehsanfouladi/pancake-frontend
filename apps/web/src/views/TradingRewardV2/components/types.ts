@@ -32,6 +32,7 @@ export interface Competition {
   is_core: boolean
   is_reward_set: boolean
   project: Project
+  locked_lp: boolean
 }
 
 
@@ -45,3 +46,7 @@ export interface RankListDetail {
 
 export const MAX_PER_PAGE = 10
 
+export interface Exchange {
+  id: number
+  name: string
+}

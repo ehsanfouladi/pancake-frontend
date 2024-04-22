@@ -131,13 +131,13 @@ const MobileResult: React.FC<React.PropsWithChildren<MobileResultProps>> = ({ co
             {competition.is_core
               ? (
                 <Box>
-                  <CheckmarkIcon />
+                  <CheckmarkIcon mr='5px' mb='-5px' />
                   Core
                 </Box>
               )
               : (
                 <Box>
-                  <ErrorIcon />
+                  <ErrorIcon mr='5px' mb='-5px' />
                   Not Core
                 </Box>
               )
@@ -150,14 +150,34 @@ const MobileResult: React.FC<React.PropsWithChildren<MobileResultProps>> = ({ co
             {competition.is_verified
               ? (
                 <Box>
-                  <CheckmarkIcon />
+                  <CheckmarkIcon mr='5px' mb='-5px' />
                   Verified
                 </Box>
               )
               : (
                 <Box>
-                  <ErrorIcon />
+                  <ErrorIcon mr='5px' mb='-5px' />
                   Not Verified
+                </Box>
+              )
+            }
+          </Text>
+        </Flex>
+      </Flex>
+      <Flex justifyContent="space-between" alignItems="center">
+        <Flex justifyContent="flex-end" alignItems="center">
+          <Text fontSize="12px" color="textSubtle" ml="auto" width='100%'>
+            {competition.locked_lp
+              ? (
+                <Box>
+                  <CheckmarkIcon mr='5px' mb='-5px' />
+                  Locked Lp
+                </Box>
+              )
+              : (
+                <Box verticalAlign='center'>
+                  <ErrorIcon mr='5px' mb='-5px'/>
+                  No LP Locked
                 </Box>
               )
             }

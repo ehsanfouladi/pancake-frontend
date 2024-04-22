@@ -41,6 +41,7 @@ const FinishedCompetitionsDesktopView: React.FC<React.PropsWithChildren<Finished
             <Th style={{cursor:'pointer'}} onClick={() => { setReverseSort(!reverseSort); setSortBy('end_time') }} textAlign="left">{`End Time ${sortBy === 'end_time' && reverseSort ?  '▴' : '▾'}`}</Th>
             <Th style={{cursor:'pointer'}} onClick={()=>{setReverseSort(!reverseSort); setSortBy('competition_type')}} textAlign="left">{`Type ${sortBy==='competition_type' && reverseSort ?  '▴': '▾'}`}</Th>
             <Th style={{cursor:'pointer'}} onClick={() => { setReverseSort(!reverseSort); setSortBy('token_0') }} textAlign="left">{`Pair ${sortBy === 'token_0' && reverseSort ?  '▴' : '▾'}`}</Th>
+            <Th style={{ cursor: 'pointer' }} onClick={() => { setReverseSort(!reverseSort); setSortBy('locked_lp') }} textAlign="left">{`Locked LP ${sortBy === 'locked_lp' && reverseSort ? '▴' : '▾'}`}</Th>
             <Th style={{ cursor: 'pointer' }} onClick={() => { setReverseSort(!reverseSort); setSortBy('is_core') }} textAlign="left">{`Core ${sortBy === 'is_core' && reverseSort ? '▴' : '▾'}`}</Th>
             <Th style={{ cursor: 'pointer' }} onClick={() => { setReverseSort(!reverseSort); setSortBy('is_verified') }} textAlign="left">{`Verified ${sortBy === 'is_verified' && reverseSort ? '▴' : '▾'}`}</Th>
             <Th style={{ cursor: 'pointer' }} onClick={() => { setReverseSort(!reverseSort); setSortBy('is_boosted') }} textAlign="left">{`Boosted ${sortBy === 'is_boosted' && reverseSort ?  '▴' : '▾'}`}</Th>
