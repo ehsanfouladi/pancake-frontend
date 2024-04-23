@@ -88,7 +88,6 @@ const UpcommingCompetitions = () => {
   }, [])
 
   const ExchangeSwitcher = () => {
-    const { t } = useTranslation()
 
     return (
       <Box height="100%">
@@ -96,7 +95,7 @@ const UpcommingCompetitions = () => {
           mr="8px"
           placement="bottom"
           variant='default'
-          avatarSrc={`/images/exchange.png`}
+          avatarSrc='/images/exchange.png'
           text={
             !selectedExchange ? ('Select an Exchange') :
               <>
@@ -119,7 +118,6 @@ const UpcommingCompetitions = () => {
   }
 
   const RewardTokenSwitcher = () => {
-    const { t } = useTranslation()
 
     return (
       <Box height="100%">
@@ -127,7 +125,7 @@ const UpcommingCompetitions = () => {
           mr="8px"
           placement="bottom"
           variant='default'
-          avatarSrc={`/images/reward.png`}
+          avatarSrc='/images/reward.png'
           text={
             !selectedRewardToken ? ('Select Reward Token') :
               <>
