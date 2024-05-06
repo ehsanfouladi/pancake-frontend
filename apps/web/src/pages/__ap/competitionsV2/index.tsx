@@ -23,7 +23,7 @@ import { useCompetitionV2Contract } from "hooks/useContract"
 import useNativeCurrency from "hooks/useNativeCurrency"
 import Link from "next/link"
 import useSWR from "swr"
-import { Address, formatEther, parseEther, parseUnits } from 'viem'
+import { Address, formatEther, parseEther, parseUnits, zeroAddress } from 'viem'
 import { ErrorText } from "views/Swap/components/styleds"
 import { COMPETITIONV2_API_URL } from "views/TradingReward/constants"
 import { DatePicker } from "views/Voting/components/DatePicker"
@@ -286,7 +286,7 @@ const CompetitionAdmin = () => {
         numberOfWinners,
         parseEther(rewardAmount),
         rewardToken,
-        referralAddress,
+        referralAddress ? referralAddress : zeroAddress,
         competitionTypeIndex(competitionType)
       ]
       // TODO: check with pnpm dev
