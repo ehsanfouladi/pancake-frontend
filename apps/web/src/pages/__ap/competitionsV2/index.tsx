@@ -286,7 +286,7 @@ const CompetitionAdmin = () => {
         numberOfWinners,
         parseEther(rewardAmount),
         rewardToken,
-        referralAddress ? referralAddress : zeroAddress,
+        referralAddress || zeroAddress,
         competitionTypeIndex(competitionType)
       ]
       // TODO: check with pnpm dev
