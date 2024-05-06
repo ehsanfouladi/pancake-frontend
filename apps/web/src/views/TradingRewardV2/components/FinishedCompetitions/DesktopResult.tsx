@@ -54,10 +54,6 @@ const DesktopResult: React.FC<React.PropsWithChildren<DesktopResultProps>> = ({ 
   }
 
 
-  useEffect(()=>{
-    console.log(">>>>>>>>>>>>", competition.end_time);
-    
-  },[competition])
 
   function TimeCountdownDisplay({
     timestamp,
