@@ -2,7 +2,7 @@ import { useTranslation } from "@pancakeswap/localization"
 import { Box, Button, Card, Flex, PresentCheckIcon, PresentNoneIcon, PresentWonIcon, Progress, ProgressBar, Text, useToast, useTooltip } from "@pancakeswap/uikit"
 import { ToastDescriptionWithTx } from "components/Toast"
 import { cadinuProfileRewardAbi } from "config/abi/cadinuProfileReward"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { getCadinuProfileRewardAddress } from "utils/addressHelpers"
 import { formatUnits, } from "viem"
 import { erc20ABI, useAccount, useContractRead, useContractReads, useContractWrite, usePrepareContractWrite, useWaitForTransaction } from "wagmi"
@@ -55,22 +55,14 @@ export const ProfileRewardCard = () => {
     structuralSharing: (prev, next) => (prev === next ? prev : next),
   })
 
-  useEffect(() => {
-    console.log('>>>>>>>>>>>>>>>>>',nextCampaingId);
-  }, [nextCampaingId])
-  
-  
-
-
-
   const { data: rewardInfo, isError: isRewardError, isSuccess:isRewardSuccess} = useContractReads({
     watch: true,
-    enabled: isNextIdSuccess,
+    enabled: isNextIdSuccess && typeof(nextCampaingId) === "bigint",
     contracts: [
       {
         ...cadinuProfileRewardContract,
         functionName: 'getCampaignDataArray',
-        args: [nextCampaingId ? nextCampaingId - 1n : 0n]
+        args: [nextCampaingId && nextCampaingId - 1n]
       },
       {
         ...cadinuProfileRewardContract,
@@ -80,7 +72,7 @@ export const ProfileRewardCard = () => {
       {
         ...cadinuProfileRewardContract,
         functionName: 'cadinuCampaign',
-        args: [nextCampaingId ? nextCampaingId - 1n : 0n]
+        args: [nextCampaingId && nextCampaingId - 1n ]
       }
     ]
   })
