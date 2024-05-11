@@ -68,7 +68,6 @@ const Leaderboard = () => {
           'estimatedReward': index < numberOfWinners ? reward : 0
         })
       })
-      console.log(">>>>",winners);
       
       setTopTraders(winners)
     }
@@ -79,8 +78,7 @@ const Leaderboard = () => {
     if (currentCompetition && numberOfWinners === 0){
       setNumberOfWinners(currentCompetition?.number_of_winners)
     }
-    console.log("fetchedData", fetchedData, currentCompetition,
-      totalVolume);
+    console.log("fetchedData", fetchedData);
     
     
     if (fetchedData && fetchedData.length > 0 && numberOfWinners && totalVolume===0){
@@ -261,15 +259,15 @@ const Leaderboard = () => {
           {first && <RankingCard rank={1} user={first as RankListDetail}
            competitionType={currentCompetition.competition_type}
            rewardToken={currentCompetition.reward_token_symbol}
-           tradingToken={fetchedData?.symbol}/>}
+           tradingToken={fetchedData[0]?.symbol}/>}
           {second && <RankingCard rank={2} user={second as RankListDetail}
            competitionType={currentCompetition.competition_type}
            rewardToken={currentCompetition.reward_token_symbol}
-           tradingToken={fetchedData?.symbol}/>}
+           tradingToken={fetchedData[0]?.symbol}/>}
           {third && <RankingCard rank={3} user={third as RankListDetail}
            competitionType={currentCompetition.competition_type}
            rewardToken={currentCompetition.reward_token_symbol}
-           tradingToken={fetchedData?.symbol}/>}
+           tradingToken={fetchedData[0]?.symbol}/>}
         </Grid>
       </Container>
       <Box maxWidth={1200} m="auto">
