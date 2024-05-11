@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Box, Card, Flex, Text } from '@pancakeswap/uikit'
+import { Box, Card, Flex, LinkExternal, Text } from '@pancakeswap/uikit'
 import Trans from 'components/Trans'
 import styled from 'styled-components'
 
@@ -7,28 +7,28 @@ const stepList = [
   {
     title: <Trans> Choose Your Competition</Trans>,
     subTitle: (
-      <Trans>Select your preferred competition using the Live Competition section on this page. Identify active trading pairs for a chance to win.</Trans>
+      <Trans>Head to the Live Competition section on this page to select your preferred competition. Filter based on reward type, competition type, or swap platform like CADINU SWAP, PancakeSwap, or UniSwap. You can also choose between BSC or ETH chain competitions. Identify active trading pairs for a chance to win rewards in the CADINU Trading Competition Dapp.</Trans>
     ),
     imgUrl: '/images/trading-reward/step1-1.png',
   },
   {
-    title: <Trans>Start trading</Trans>,
+    title: <Trans>Begin trading now!</Trans>,
     subTitle: (
       <Trans>
-        Engage in any active competition to maximize your chances of winning rewards. The more you trade, the greater your potential rewards as a top performer in the current trading competition.
+        Engage in active competitions to increase your chances of winning rewards. The more you trade (both buying and selling volume), the higher your potential rewards as a top performer in the CADINU trading competition "Type Trade". Also, explore purchasing (selling= losing points) and holding assets in the "Type Purchase" competition for more opportunities.
       </Trans>
     ),
     imgUrl: '/images/trading-reward/step2-1.png',
   },
   {
     title: <Trans>Monitor your volume and rewards</Trans>,
-    subTitle: <Trans>Keep tabs on your trading volume and rewards in real-time by revisiting this page.</Trans>,
+    subTitle: <Trans>Stay updated on your trading volume and rewards by regularly checking the leaderboard of your selected trading competition. Compare your progress with other competitors to gauge your performance level and stay ahead in the game.</Trans>,
     imgUrl: '/images/trading-reward/step3-1.png',
   },
   {
     title: <Trans>Claim your rewards</Trans>,
     subTitle: (
-      <Trans>At the conclusion of each period, return to this page to effortlessly claim your rewards from previous periods.</Trans>
+      <Trans>After emerging victorious in each competition, return to this page to effortlessly claim your rewards from previous periods. Simply connect your wallet to the CADINU Swap trading competition to initiate the process and enjoy your well-deserved rewards.</Trans>
     ),
     imgUrl: '/images/trading-reward/step4-1.png',
   },
@@ -86,20 +86,20 @@ const HowToEarn = () => {
                   <Text lineHeight="110%" bold fontSize={['24px']} color="secondary" mb={['16px']}>
                     {step.title}
                   </Text>
-                  <Text color="textSubtle">{step.subTitle}</Text>
+                  <Text color="textSubtle" >{step.subTitle}</Text>
                 </Flex>
               ))}
             </Flex>
           </Flex>
         </StyledCard>
       </Box>
-      {/* <LinkExternal
+      <LinkExternal
         external
-        href="https://docs.pancakeswap.finance/products/trading-reward/how-to-participate"
+        href="https://docs.cadinu.io/products/trading-competation"
         margin={['auto', 'auto', 'auto', '42px auto 0 auto']}
       >
         {t('Learn More')}
-      </LinkExternal> */}
+      </LinkExternal>
     </Box>
   )
 }
