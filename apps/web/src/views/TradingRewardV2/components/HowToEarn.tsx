@@ -15,7 +15,7 @@ const stepList = [
     title: <Trans>Begin trading now!</Trans>,
     subTitle: (
       <Trans>
-        Engage in active competitions to increase your chances of winning rewards. The more you trade (both buying and selling volume), the higher your potential rewards as a top performer in the CADINU trading competition "Type Trade". Also, explore purchasing (selling= losing points) and holding assets in the "Type Purchase" competition for more opportunities.
+        Engage in active competitions to increase your chances of winning rewards. The more you trade (both buying and selling volume), the higher your potential rewards as a top performer in the CADINU trading competition &quot;Type Trade&quot;. Also, explore purchasing (selling= losing points) and holding assets in the &quot;Type Purchase&quot; competition for more opportunities.
       </Trans>
     ),
     imgUrl: '/images/trading-reward/step2-1.png',

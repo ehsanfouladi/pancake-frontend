@@ -62,7 +62,8 @@ export const CampaignCard = () => {
           return {
             origin: address,
             amountUSD: Number(campaignDataArray[0][index]),
-            estimatedReward: Number(formatUnits(campaignDataArray[1][index], 18))
+            estimatedReward: Number(formatUnits(campaignDataArray[1][index], 18)),
+            sortKey:""
           }
         }
       }).filter(x => { if (x !== undefined) { return x } })
