@@ -58,17 +58,18 @@ const Leaderboard = () => {
 
   const estimateRewards = useCallback(() =>{
     const winners = []
-    if (currentCompetition && fetchedData.data && totalVolume){
+    if (currentCompetition && fetchedData && totalVolume){
 
-      fetchedData.data.map((trader:RankListDetail,index:number)=>{
-        const reward = (trader[`${fetchedData.sortKey}`] / totalVolume) * currentCompetition.reward_amount
+      fetchedData.map((trader:RankListDetail,index:number)=>{
+        const reward = (trader[`${trader.sortKey}`] / totalVolume) * currentCompetition.reward_amount
         winners.push({
           'origin': trader.origin,
-          'amountUSD': Number(trader[`${fetchedData.sortKey}`]),
+          'amountUSD': Number(trader[`${trader.sortKey}`]),
           'estimatedReward': index < numberOfWinners ? reward : 0
         })
       })
-
+      console.log(">>>>",winners);
+      
       setTopTraders(winners)
     }
   }, [numberOfWinners, fetchedData, currentCompetition, totalVolume])
@@ -78,14 +79,15 @@ const Leaderboard = () => {
     if (currentCompetition && numberOfWinners === 0){
       setNumberOfWinners(currentCompetition?.number_of_winners)
     }
-    console.log(fetchedData);
+    console.log("fetchedData", fetchedData, currentCompetition,
+      totalVolume);
     
     
-    if (fetchedData && fetchedData.data && fetchedData.data.length > 0 && numberOfWinners && totalVolume===0){
+    if (fetchedData && fetchedData.length > 0 && numberOfWinners && totalVolume===0){
       let total = 0
-      fetchedData.data.map((trader:RankListDetail,index:number)=>{
+      fetchedData.map((trader:RankListDetail,index:number)=>{
         if(index<numberOfWinners){
-          total += Number(trader[`${fetchedData.sortKey}`])
+          total += Number(trader[`${trader.sortKey}`])
         }
       })
 
@@ -104,7 +106,7 @@ const Leaderboard = () => {
   
 
   useEffect(()=>{
-    if (isEmpty(topTraders) && totalVolume !== 0 && fetchedData.data && fetchedData.data.length>0){
+    if (isEmpty(topTraders) && totalVolume !== 0 && fetchedData && fetchedData.length>0){
       estimateRewards()
     }
     if (topTraders){
@@ -112,6 +114,8 @@ const Leaderboard = () => {
       setSecond(topTraders ? topTraders[1] : null)
       setThird(topTraders ? topTraders[2] : null)
     }
+    console.log('topTraders>>', topTraders);
+    
   }, [currentCompetition, fetchedData,totalVolume, topTraders])
 
   const handleClickPagination = (value: number) => {

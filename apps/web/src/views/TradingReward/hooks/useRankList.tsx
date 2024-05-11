@@ -1,8 +1,9 @@
 
-export interface RankListDetail {
+export interface  RankListDetail {
   origin: string
   amountUSD: number
   estimatedReward: number
+  sortKey: string
 }
 
 
