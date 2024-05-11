@@ -255,7 +255,7 @@ export default {
     56: '0x0306aA7da1674d88e8DEc3Bcd9c69B434a631Fb6'
   },
   cadinuProfileReward:{
-    56: '0x98ae11de1d14E412bfEAe492754e533f6D9903FA'
+    56: '0x27cd22ecbdf696a7b50fe70d759cc4f6f2b80a62'
   },
   cadinuMigration:{
     56: '0x62CFcA5494b89FDA7B4C35f8F971C6a2ADC172F3'
