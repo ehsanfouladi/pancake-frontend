@@ -2,7 +2,7 @@ import { useTranslation } from "@pancakeswap/localization"
 import { Box, Button, Card, Flex, PresentCheckIcon, PresentNoneIcon, PresentWonIcon, Progress, ProgressBar, Text, useToast, useTooltip } from "@pancakeswap/uikit"
 import { ToastDescriptionWithTx } from "components/Toast"
 import { cadinuProfileRewardAbi } from "config/abi/cadinuProfileReward"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { getCadinuProfileRewardAddress } from "utils/addressHelpers"
 import { formatUnits, } from "viem"
 import { erc20ABI, useAccount, useContractRead, useContractReads, useContractWrite, usePrepareContractWrite, useWaitForTransaction } from "wagmi"
@@ -51,9 +51,14 @@ export const ProfileRewardCard = () => {
   const { data: nextCampaingId, isLoading: isNextIdLoading, isSuccess: isNextIdSuccess } = useContractRead({
     address: getCadinuProfileRewardAddress(),
     abi: cadinuProfileRewardAbi,
-    functionName: 'nextId'
+    functionName: 'nextId',
+    structuralSharing: (prev, next) => (prev === next ? prev : next),
   })
 
+  useEffect(() => {
+    console.log('>>>>>>>>>>>>>>>>>',nextCampaingId);
+  }, [nextCampaingId])
+  
   
 
 
@@ -65,7 +70,7 @@ export const ProfileRewardCard = () => {
       {
         ...cadinuProfileRewardContract,
         functionName: 'getCampaignDataArray',
-        args: [nextCampaingId - 1n ]
+        args: [nextCampaingId ? nextCampaingId - 1n : 0n]
       },
       {
         ...cadinuProfileRewardContract,
@@ -75,7 +80,7 @@ export const ProfileRewardCard = () => {
       {
         ...cadinuProfileRewardContract,
         functionName: 'cadinuCampaign',
-        args: [nextCampaingId - 1n ]
+        args: [nextCampaingId ? nextCampaingId - 1n : 0n]
       }
     ]
   })
@@ -247,7 +252,9 @@ export const ProfileRewardCard = () => {
   }
 
 
-
+  if (!nextCampaingId){
+    return (<></>)
+  }
   return (<>
     {rewardInfo?.[2].result?.[7] && (<Box width={['100%', '100%', '100%', '100%']} mb='15px'>
     <Card style={{ width: '100%' }}>
@@ -264,7 +271,7 @@ export const ProfileRewardCard = () => {
             <Text bold textAlign="right" mb="24px">
               {t('Your Profile Reward')}
             </Text>
-            <Text bold>Campaign ID: {(nextCampaingId - 1n).toString()}</Text>
+            <Text bold>Campaign ID: {nextCampaingId && ( nextCampaingId - 1n).toString()}</Text>
             <Text bold>Your Unclaimed Rewards Points: {userUnusedPoints?.points}</Text>
             <Box mb='25px'>
               <Text bold>Global Rewards:</Text>
