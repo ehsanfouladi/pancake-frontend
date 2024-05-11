@@ -4,6 +4,7 @@ import { useProfileForAddress } from 'state/profile/hooks'
 import { Achievement } from 'state/types'
 import { NftProfileLayout } from 'views/Profile'
 import Achievements from 'views/Profile/components/Achievements'
+import { ProfileRewardCard } from 'views/Profile/components/ProfileRewards'
 import { UserRewardCard } from 'views/TradingReward/components/UserRewardCard'
 
 const NftProfileAchievementsPage = () => {
@@ -29,6 +30,7 @@ const refresh = ()=>{
 
   return (
     <>
+    <ProfileRewardCard />
     <Flex flexWrap='wrap' flexDirection='row' justifyContent='space-between'>
     <UserRewardCard />
     

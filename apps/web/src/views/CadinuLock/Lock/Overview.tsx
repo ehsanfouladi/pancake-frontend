@@ -2,7 +2,7 @@ import { useTranslation } from '@pancakeswap/localization'
 import { pancakePairV2ABI } from '@pancakeswap/sdk'
 import { bscTokens } from '@pancakeswap/tokens'
 import { Box, Breadcrumbs, Card, CardBody, CardHeader, Container, Flex, Heading, LinkExternal, Loading, PaginationButton, Skeleton, Table, Td, Text, Th, useMatchBreakpoints } from '@pancakeswap/uikit'
-import { useCadinuPriceAsBN, useCbonPriceAsBN } from '@pancakeswap/utils/useCakePrice'
+import { useCadinuPrice, useCadinuPriceAsBN, useCbonPriceAsBN } from '@pancakeswap/utils/useCakePrice'
 import { CadinuLockAbi } from 'config/abi/cadinuLock'
 import throttle from 'lodash/throttle'
 import Link from 'next/link'
@@ -146,7 +146,7 @@ const Overview = () => {
         
   
   
-  const cadinuPrice = useCadinuPriceAsBN().toString()
+  const cadinuPrice = useCadinuPrice().toString()
   const cbonPrice = useCbonPriceAsBN().toString()
   const getTokenValue = useCallback(async()=>{
     if (tokenId === bscTokens.cadinu.address){
@@ -170,6 +170,7 @@ const Overview = () => {
       }
       if(!valueLocked || valueLocked==='' ){
         getTokenValue()
+        console.log('price', valueLocked)
       }
     }
   

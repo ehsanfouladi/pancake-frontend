@@ -106,13 +106,13 @@ export const getStaticProps: GetStaticProps = async () => {
   try {
     const result = await infoServerClient.request<any>(gql`
       query tvl {
-        pancakeFactories(first: 1) {
+        cadinuFactories(first: 1) {
           totalLiquidityUSD
         }
       }
     `)
     const cake = await (await fetch('https://farms.cadinu.io/price/cadinu')).json()
-    const { totalLiquidityUSD } = result.pancakeFactories[0]
+    const { totalLiquidityUSD } = result.cadinuFactories[0]
     const cakeVaultV2 = getCakeVaultAddress()
     const cakeContract = getCakeContract()
     const totalCakeInVault = await cakeContract.read.balanceOf([cakeVaultV2])
