@@ -1,12 +1,11 @@
 import { useTranslation } from "@pancakeswap/localization"
-import { Box, Button, Card, Flex, PresentCheckIcon, PresentNoneIcon, PresentWonIcon, Progress, ProgressBar, Text, useToast, useTooltip } from "@pancakeswap/uikit"
+import { Balance, Box, Button, Card, Flex, PresentCheckIcon, PresentNoneIcon, PresentWonIcon, Progress, ProgressBar, Text, useToast, useTooltip } from "@pancakeswap/uikit"
 import { ToastDescriptionWithTx } from "components/Toast"
 import { cadinuProfileRewardAbi } from "config/abi/cadinuProfileReward"
 import { useState } from "react"
 import { getCadinuProfileRewardAddress } from "utils/addressHelpers"
 import { formatUnits, } from "viem"
 import { erc20ABI, useAccount, useContractRead, useContractReads, useContractWrite, usePrepareContractWrite, useWaitForTransaction } from "wagmi"
-
 
 
 interface Rewards {
@@ -27,27 +26,17 @@ export const ProfileRewardCard = () => {
     EXCLUSIVE: 'exclusive',
     GLOBAL: 'global'
   }
-  const { t } = useTranslation()
-  const { address: account, isConnected  } = useAccount()
-  // const [campaignId, setCampaignId] = useState<bigint>(0n)
-  const [selectedRewardIndex, setSelectedRewardIndex] = useState<bigint>(0n)
-  const {toastSuccess} = useToast()
 
-  const handleGlobalClaim = (index: number) => {
-    setSelectedRewardIndex(BigInt(index))
-    claimGlobalReward()
-  }
-  const handleExclusiveClaim = (index: number) => {
-    setSelectedRewardIndex(BigInt(index))
-    claimExclusiveReward()
-  }
-  
   const cadinuProfileRewardContract = {
     address: getCadinuProfileRewardAddress(),
     abi: cadinuProfileRewardAbi
   }
 
-
+  const { t } = useTranslation()
+  const { address: account, isConnected  } = useAccount()
+  // const [campaignId, setCampaignId] = useState<bigint>(0n)
+  const [selectedRewardIndex, setSelectedRewardIndex] = useState<bigint>(0n)
+  const {toastSuccess} = useToast()
   const { data: nextCampaingId, isLoading: isNextIdLoading, isSuccess: isNextIdSuccess } = useContractRead({
     address: getCadinuProfileRewardAddress(),
     abi: cadinuProfileRewardAbi,
@@ -55,9 +44,10 @@ export const ProfileRewardCard = () => {
     structuralSharing: (prev, next) => (prev === next ? prev : next),
   })
 
-  const { data: rewardInfo, isError: isRewardError, isSuccess:isRewardSuccess} = useContractReads({
+
+  const { data: rewardInfo, isError: isRewardError, isSuccess: isRewardSuccess } = useContractReads({
     watch: true,
-    enabled: isNextIdSuccess && typeof(nextCampaingId) === "bigint",
+    enabled: isNextIdSuccess && typeof (nextCampaingId) === "bigint",
     contracts: [
       {
         ...cadinuProfileRewardContract,
@@ -72,19 +62,29 @@ export const ProfileRewardCard = () => {
       {
         ...cadinuProfileRewardContract,
         functionName: 'cadinuCampaign',
-        args: [nextCampaingId && nextCampaingId - 1n ]
+        args: [nextCampaingId && nextCampaingId - 1n]
       }
     ]
   })
-  
-  
-  const {data:rewardTokenInfo} = useContractReads({
+
+
+  const { data: rewardTokenInfo } = useContractReads({
     enabled: isRewardSuccess,
-    contracts:[
-      {address: rewardInfo?.[2].result?.[0], abi: erc20ABI, functionName:'symbol'},
-      {address: rewardInfo?.[2].result?.[0], abi: erc20ABI, functionName:'decimals'}
+    contracts: [
+      { address: rewardInfo?.[2].result?.[0], abi: erc20ABI, functionName: 'symbol' },
+      { address: rewardInfo?.[2].result?.[0], abi: erc20ABI, functionName: 'decimals' }
     ]
   })
+
+  const handleGlobalClaim = (index: number) => {
+    setSelectedRewardIndex(BigInt(index))
+    claimGlobalReward()
+  }
+  const handleExclusiveClaim = (index: number) => {
+    setSelectedRewardIndex(BigInt(index))
+    claimExclusiveReward()
+  }
+  
 
   const exclusiveRewards: Rewards[] = rewardInfo?.[0]?.result[0]?.map((res, index) => {
     return {
@@ -171,7 +171,7 @@ export const ProfileRewardCard = () => {
           <Flex flex='wrap' flexDirection='column' justifyContent='center' verticalAlign='center'>
             <Text bold>{t("Required Points")}:</Text>
             <Text>
-              {points}
+              {<Balance value={points} decimals={0} startFromValue />}
             </Text>
             <Text bold>{t("Reward")}:</Text>
             <Text>
@@ -248,13 +248,13 @@ export const ProfileRewardCard = () => {
     return (<></>)
   }
   return (<>
-    {rewardInfo?.[2].result?.[7] && (<Box width={['100%', '100%', '100%', '100%']} mb='15px'>
+    {rewardInfo?.[2].result?.[7] ? (<Box width={['100%', '100%', '100%', '100%']} mb='15px'>
     <Card style={{ width: '100%' }}>
       <Box padding={['24px']} style={{textAlign:'center'}}>
         <Text bold>No Active Campaign</Text>
       </Box>
     </Card>
-    </Box>)}
+    </Box>):(
     <Box width={['100%', '100%', '100%', '100%']} mb='15px'>
       {!isRewardError &&
         <Card
@@ -332,7 +332,7 @@ export const ProfileRewardCard = () => {
           </Box>
         </Card>
       }
-    </Box>
+    </Box>)}
     </>
   )
 }
