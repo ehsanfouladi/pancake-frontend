@@ -2,7 +2,7 @@ import { useTranslation } from "@pancakeswap/localization"
 import { Balance, Box, Button, Card, Flex, PresentCheckIcon, PresentNoneIcon, PresentWonIcon, Progress, ProgressBar, Text, useToast, useTooltip } from "@pancakeswap/uikit"
 import { ToastDescriptionWithTx } from "components/Toast"
 import { cadinuProfileRewardAbi } from "config/abi/cadinuProfileReward"
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { getCadinuProfileRewardAddress } from "utils/addressHelpers"
 import { formatUnits, } from "viem"
 import { erc20ABI, useAccount, useContractRead, useContractReads, useContractWrite, usePrepareContractWrite, useWaitForTransaction } from "wagmi"
@@ -34,16 +34,17 @@ export const ProfileRewardCard = () => {
 
   const { t } = useTranslation()
   const { address: account, isConnected } = useAccount()
-  // const [campaignId, setCampaignId] = useState<bigint>(0n)
+  
   const [selectedRewardIndex, setSelectedRewardIndex] = useState<bigint>(0n)
   const { toastSuccess } = useToast()
+
+
   const { data: nextCampaingId, isLoading: isNextIdLoading, isSuccess: isNextIdSuccess } = useContractRead({
     address: getCadinuProfileRewardAddress(),
     abi: cadinuProfileRewardAbi,
     functionName: 'nextId',
     structuralSharing: (prev, next) => (prev === next ? prev : next),
   })
-
 
   const { data: rewardInfo, isError: isRewardError, isSuccess: isRewardSuccess } = useContractReads({
     watch: true,
@@ -67,6 +68,14 @@ export const ProfileRewardCard = () => {
     ]
   })
 
+  const userUnusedPoints = useMemo(() => {
+    const points = Number(rewardInfo?.[1]?.result)
+    const totalPoints = Number(rewardInfo?.[0]?.result[0]?.at(-1))
+    return {
+      points,
+      pointsPercent: 100 * points / totalPoints
+    }
+  }, [rewardInfo]) 
 
   const { data: rewardTokenInfo } = useContractReads({
     enabled: isRewardSuccess,
@@ -106,10 +115,10 @@ export const ProfileRewardCard = () => {
     }
   })
 
-  const userUnusedPoints: UserPoints = {
-    points: Number(rewardInfo?.[1]?.result),
-    pointsPercent: 100 * Number(rewardInfo?.[1]?.result) / Number(rewardInfo?.[0]?.result[0]?.at(-1))
-  }
+  // const userUnusedPoints: UserPoints = {
+  //   points: Number(rewardInfo?.[1]?.result),
+  //   pointsPercent: 100 * Number(rewardInfo?.[1]?.result) / Number(rewardInfo?.[0]?.result[0]?.at(-1))
+  // }
 
   const { config: globalRewardsConfig } = usePrepareContractWrite({
     enabled: isConnected,
