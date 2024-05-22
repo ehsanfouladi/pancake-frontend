@@ -78,8 +78,6 @@ const Leaderboard = () => {
     if (currentCompetition && numberOfWinners === 0){
       setNumberOfWinners(currentCompetition?.number_of_winners)
     }
-    console.log("fetchedData", fetchedData);
-    
     
     if (fetchedData && fetchedData.length > 0 && numberOfWinners && totalVolume===0){
       let total = 0

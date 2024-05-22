@@ -210,52 +210,6 @@ const StarsDecorations = styled(Box)`
   }
 `
 
-// const CnyDecorations = styled(Box)`
-//   position: absolute;
-//   width: 100%;
-//   height: 100%;
-//   z-index: 0;
-//
-//   & :nth-child(1),
-//   & :nth-child(2) {
-//     display: none;
-//     z-index: 1;
-//   }
-//
-//   & :nth-child(1) {
-//     position: absolute;
-//     top: 0;
-//     left: 15%;
-//     animation: ${floatingStarsLeft} 3s ease-in-out infinite;
-//     animation-delay: 0.25s;
-//   }
-//
-//   & :nth-child(2) {
-//     position: absolute;
-//     bottom: 0;
-//     right: 15%;
-//     animation: ${floatingStarsLeft} 3.5s ease-in-out infinite;
-//     animation-delay: 0.5s;
-//   }
-//
-//   & :nth-child(3) {
-//     display: none;
-//     position: absolute;
-//     top: 50%;
-//     left: 50%;
-//     z-index: 0;
-//     transform: translate(-50%, -50%);
-//   }
-//
-//   ${({ theme }) => theme.mediaQueries.lg} {
-//     & :nth-child(1),
-//     & :nth-child(2),
-//     & :nth-child(3) {
-//       display: block;
-//     }
-//   }
-// `
-
 const Hero = () => {
   const { t } = useTranslation()
   const {
@@ -264,8 +218,6 @@ const Hero = () => {
   } = useLottery()
 
   const price = useCadinuPrice()
-  console.log("PRIX", price.data);
-  
 
   // const cakePriceBusd = useMemo(() => (price ? new BigNumber(price.toSignificant(6)) : BIG_ZERO), [price])
   const prizeInBusd = amountCollectedInCadinu.times(Number(price.data))
