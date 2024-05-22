@@ -33,10 +33,10 @@ export const ProfileRewardCard = () => {
   }
 
   const { t } = useTranslation()
-  const { address: account, isConnected  } = useAccount()
+  const { address: account, isConnected } = useAccount()
   // const [campaignId, setCampaignId] = useState<bigint>(0n)
   const [selectedRewardIndex, setSelectedRewardIndex] = useState<bigint>(0n)
-  const {toastSuccess} = useToast()
+  const { toastSuccess } = useToast()
   const { data: nextCampaingId, isLoading: isNextIdLoading, isSuccess: isNextIdSuccess } = useContractRead({
     address: getCadinuProfileRewardAddress(),
     abi: cadinuProfileRewardAbi,
@@ -84,7 +84,7 @@ export const ProfileRewardCard = () => {
     setSelectedRewardIndex(BigInt(index))
     claimExclusiveReward()
   }
-  
+
 
   const exclusiveRewards: Rewards[] = rewardInfo?.[0]?.result[0]?.map((res, index) => {
     return {
@@ -112,7 +112,7 @@ export const ProfileRewardCard = () => {
   }
 
   const { config: globalRewardsConfig } = usePrepareContractWrite({
-    enabled : isConnected,
+    enabled: isConnected,
     address: getCadinuProfileRewardAddress(),
     abi: cadinuProfileRewardAbi,
     functionName: 'withdrawGlobalReward',
@@ -120,29 +120,29 @@ export const ProfileRewardCard = () => {
   })
 
   const { data: globalClaimData, write: claimGlobalReward } = useContractWrite(globalRewardsConfig)
-  const {data:globalFinal} = useWaitForTransaction({
+  const { data: globalFinal } = useWaitForTransaction({
     hash: globalClaimData?.hash,
     onSuccess: async (hash) => {
       toastSuccess(t('Amount Withdrew Successfully!'), <ToastDescriptionWithTx txHash={globalClaimData?.hash.toString()} />)
     },
-})
+  })
 
 
 
   const { config: exclusiveRewardsConfig } = usePrepareContractWrite({
-    enabled : isConnected,
+    enabled: isConnected,
     address: getCadinuProfileRewardAddress(),
     abi: cadinuProfileRewardAbi,
     functionName: 'withdrawExclusiveReward',
     args: [selectedRewardIndex]
   })
   const { data: exclusiveClaimData, write: claimExclusiveReward } = useContractWrite(exclusiveRewardsConfig)
-  const {data:exclusiveFinal} = useWaitForTransaction({
+  const { data: exclusiveFinal } = useWaitForTransaction({
     hash: exclusiveClaimData?.hash,
     onSuccess: async (hash) => {
       toastSuccess(t('Amount Withdrew Successfully!'), <ToastDescriptionWithTx txHash={exclusiveClaimData?.hash.toString()} />)
     },
-})
+  })
 
 
   const RewardTooltipComponent: React.FC<React.PropsWithChildren<{
@@ -171,13 +171,13 @@ export const ProfileRewardCard = () => {
           <Flex flex='wrap' flexDirection='column' justifyContent='center' verticalAlign='center'>
             <Text bold>{t("Required Points")}:</Text>
             <Text>
-              {<Balance value={points} decimals={0} startFromValue />}
+              <Balance value={points} decimals={0} startFromValue />
             </Text>
             <Text bold>{t("Reward")}:</Text>
             <Text>
               {formatUnits(BigInt(reward), rewardTokenInfo?.[1].result)} {rewardTokenInfo?.[0].result}
             </Text>
-            
+
             <Button
               variant="tertiary" ml='15px' scale="sm"
               disabled={
@@ -233,106 +233,106 @@ export const ProfileRewardCard = () => {
           {rewardTooltipVisible && rewardTooltip}
         </Flex>
       )
-    } 
-      return (
-        <Flex alignItems="center" ref={rewardRef}>
-          <PresentCheckIcon style={{ display: 'flex', position: 'fixed', marginLeft: '-10px' }} width='35px' />
-          {rewardTooltipVisible && rewardTooltip}
-        </Flex>
-      )
-    
+    }
+    return (
+      <Flex alignItems="center" ref={rewardRef}>
+        <PresentCheckIcon style={{ display: 'flex', position: 'fixed', marginLeft: '-10px' }} width='35px' />
+        {rewardTooltipVisible && rewardTooltip}
+      </Flex>
+    )
+
   }
 
 
-  if (!nextCampaingId){
+  if (!nextCampaingId) {
     return (<></>)
   }
   return (<>
     {rewardInfo?.[2].result?.[7] ? (<Box width={['100%', '100%', '100%', '100%']} mb='15px'>
-    <Card style={{ width: '100%' }}>
-      <Box padding={['24px']} style={{textAlign:'center'}}>
-        <Text bold>No Active Campaign</Text>
-      </Box>
-    </Card>
-    </Box>):(
-    <Box width={['100%', '100%', '100%', '100%']} mb='15px'>
-      {!isRewardError &&
-        <Card
-          style={{ width: '100%' }}>
-          <Box padding={['24px']}>
-            <Text bold textAlign="right" mb="24px">
-              {t('Your Profile Reward')}
-            </Text>
-            <Text bold>Campaign ID: {nextCampaingId && ( nextCampaingId - 1n).toString()}</Text>
-            <Text bold>Your Unclaimed Rewards Points: {userUnusedPoints?.points}</Text>
-            <Box mb='25px'>
-              <Text bold>Global Rewards:</Text>
-              <br />
-              <Progress variant="round"
-                scale='md'
-              >
-                <ProgressBar
-                  $useDark
-                  $background="linear-gradient(273deg, #ffd800 -2.87%, #eb8c00 113.73%)"
-                  style={{ width: `${Math.min(Math.max(userUnusedPoints.pointsPercent, 0), 100)}%` }}
-                />
-                {globalRewards?.map(reward => (
-                  <Box
-                    top={0}
-                    left={`${reward.pointsPercent}%`}
-                    bottom={0}
-                    right={0}
-                    position="absolute"
-                    display="flex">
-                    {RewardDisplay(
-                      reward.index,
-                      reward.pointsPercent,
-                      reward.points,
-                      reward.reward,
-                      userUnusedPoints.pointsPercent,
-                      false,
-                      REWARD_TYPE.GLOBAL
-                    )}
-                  </Box>
-                ))}
-              </Progress>
+      <Card style={{ width: '100%' }}>
+        <Box padding={['24px']} style={{ textAlign: 'center' }}>
+          <Text bold>No Active Campaign</Text>
+        </Box>
+      </Card>
+    </Box>) : (
+      <Box width={['100%', '100%', '100%', '100%']} mb='15px'>
+        {!isRewardError &&
+          <Card
+            style={{ width: '100%' }}>
+            <Box padding={['24px']}>
+              <Text bold textAlign="right" mb="24px">
+                {t('Your Profile Reward')}
+              </Text>
+              <Text bold>Campaign ID: {nextCampaingId && (nextCampaingId - 1n).toString()}</Text>
+              <Text bold>Your Unclaimed Rewards Points: {userUnusedPoints?.points}</Text>
+              <Box mb='25px'>
+                <Text bold>Global Rewards:</Text>
+                <br />
+                <Progress variant="round"
+                  scale='md'
+                >
+                  <ProgressBar
+                    $useDark
+                    $background="linear-gradient(273deg, #ffd800 -2.87%, #eb8c00 113.73%)"
+                    style={{ width: `${Math.min(Math.max(userUnusedPoints.pointsPercent, 0), 100)}%` }}
+                  />
+                  {globalRewards?.map(reward => (
+                    <Box
+                      top={0}
+                      left={`${reward.pointsPercent}%`}
+                      bottom={0}
+                      right={0}
+                      position="absolute"
+                      display="flex">
+                      {RewardDisplay(
+                        reward.index,
+                        reward.pointsPercent,
+                        reward.points,
+                        reward.reward,
+                        userUnusedPoints.pointsPercent,
+                        false,
+                        REWARD_TYPE.GLOBAL
+                      )}
+                    </Box>
+                  ))}
+                </Progress>
+              </Box>
+              <Box mb='25px'>
+                <Text bold>Exclusive Rewards:</Text>
+                <br />
+                <Progress variant="round"
+                  showProgressBunny
+                  scale='md'
+                >
+                  <ProgressBar
+                    $useDark
+                    $background="linear-gradient(273deg, #ff6600 -2.87%, #995c00 113.73%)"
+                    style={{ width: `${Math.min(Math.max(userUnusedPoints.pointsPercent, 0), 100)}%` }}
+                  />
+                  {exclusiveRewards?.map(reward => (
+                    <Box
+                      top={0}
+                      left={`${reward.pointsPercent}%`}
+                      bottom={0}
+                      right={0}
+                      position="absolute"
+                      display="flex">
+                      {RewardDisplay(
+                        reward.index,
+                        reward.pointsPercent,
+                        reward.points,
+                        reward.reward,
+                        userUnusedPoints.pointsPercent,
+                        reward.isTaken,
+                        REWARD_TYPE.EXCLUSIVE)}
+                    </Box>
+                  ))}
+                </Progress>
+              </Box>
             </Box>
-            <Box mb='25px'>
-              <Text bold>Exclusive Rewards:</Text>
-              <br />
-              <Progress variant="round"
-                showProgressBunny
-                scale='md'
-              >
-                <ProgressBar
-                  $useDark
-                  $background="linear-gradient(273deg, #ff6600 -2.87%, #995c00 113.73%)"
-                  style={{ width: `${Math.min(Math.max(userUnusedPoints.pointsPercent, 0), 100)}%` }}
-                />
-                {exclusiveRewards?.map(reward => (
-                  <Box
-                    top={0}
-                    left={`${reward.pointsPercent}%`}
-                    bottom={0}
-                    right={0}
-                    position="absolute"
-                    display="flex">
-                    {RewardDisplay(
-                      reward.index,
-                      reward.pointsPercent,
-                      reward.points,
-                      reward.reward,
-                      userUnusedPoints.pointsPercent,
-                      reward.isTaken,
-                      REWARD_TYPE.EXCLUSIVE)}
-                  </Box>
-                ))}
-              </Progress>
-            </Box>
-          </Box>
-        </Card>
-      }
-    </Box>)}
-    </>
+          </Card>
+        }
+      </Box>)}
+  </>
   )
 }
