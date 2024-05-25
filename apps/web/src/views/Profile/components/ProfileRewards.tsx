@@ -6,9 +6,10 @@ import { useMemo, useState } from "react"
 import { getCadinuProfileRewardAddress } from "utils/addressHelpers"
 import { formatUnits, } from "viem"
 import { erc20ABI, useAccount, useContractRead, useContractReads, useContractWrite, usePrepareContractWrite, useWaitForTransaction } from "wagmi"
+import RewardProgressBar from "./RewardProgressBar"
 
 
-interface Rewards {
+export interface Rewards {
   index: number
   points: number
   reward: number
@@ -68,15 +69,6 @@ export const ProfileRewardCard = () => {
     ]
   })
 
-  const userUnusedPoints = useMemo(() => {
-    const points = Number(rewardInfo?.[1]?.result)
-    const totalPoints = Number(rewardInfo?.[0]?.result[0]?.at(-1))
-    return {
-      points,
-      pointsPercent: 100 * points / totalPoints
-    }
-  }, [rewardInfo]) 
-
   const { data: rewardTokenInfo } = useContractReads({
     enabled: isRewardSuccess,
     contracts: [
@@ -85,15 +77,18 @@ export const ProfileRewardCard = () => {
     ]
   })
 
-  const handleGlobalClaim = (index: number) => {
-    setSelectedRewardIndex(BigInt(index))
-    claimGlobalReward()
-  }
-  const handleExclusiveClaim = (index: number) => {
-    setSelectedRewardIndex(BigInt(index))
-    claimExclusiveReward()
-  }
+  const userUnusedPoints: UserPoints = useMemo(() => {
+    const points = Number(rewardInfo?.[1]?.result)
+    const totalPoints = Number(rewardInfo?.[0]?.result[0]?.at(-1))
+    return {
+      points,
+      pointsPercent: 100 * points / totalPoints
+    }
+  }, [rewardInfo]) 
 
+ 
+
+  
 
   const exclusiveRewards: Rewards[] = rewardInfo?.[0]?.result[0]?.map((res, index) => {
     return {
@@ -136,6 +131,11 @@ export const ProfileRewardCard = () => {
     },
   })
 
+  const handleGlobalClaim = (index: number) => {
+    setSelectedRewardIndex(BigInt(index))
+    claimGlobalReward?.()
+  }
+  
 
 
   const { config: exclusiveRewardsConfig } = usePrepareContractWrite({
@@ -153,104 +153,13 @@ export const ProfileRewardCard = () => {
     },
   })
 
-
-  const RewardTooltipComponent: React.FC<React.PropsWithChildren<{
-    points: number,
-    reward: number,
-    userUnusedPointsPercent: number,
-    isTaken: boolean,
-    rewardType: string,
-    index: number
-  }>> = ({
-    index,
-    reward,
-    points,
-    userUnusedPointsPercent,
-    isTaken,
-    rewardType,
-  }) => {
-      setSelectedRewardIndex(BigInt(index))
-      if (isTaken) {
-        return (<Flex flex='wrap' flexDirection='column' justifyContent='center' verticalAlign='center'>
-          <Text bold>{t("This reward has been taken.")}</Text>
-        </Flex>)
-      }
-      return (
-        <>
-          <Flex flex='wrap' flexDirection='column' justifyContent='center' verticalAlign='center'>
-            <Text bold>{t("Required Points")}:</Text>
-            <Text>
-              <Balance value={points} decimals={0} startFromValue />
-            </Text>
-            <Text bold>{t("Reward")}:</Text>
-            <Text>
-              {formatUnits(BigInt(reward), rewardTokenInfo?.[1].result)} {rewardTokenInfo?.[0].result}
-            </Text>
-
-            <Button
-              variant="tertiary" ml='15px' scale="sm"
-              disabled={
-                points > userUnusedPointsPercent
-                  || rewardType === REWARD_TYPE.GLOBAL ? !claimGlobalReward : !claimExclusiveReward
-              }
-              onClick={() => { if (rewardType === REWARD_TYPE.EXCLUSIVE) { handleExclusiveClaim(index) } else { handleGlobalClaim(index) } }}
-            >Claim</Button>
-          </Flex>
-        </>
-      );
-    }
-  function RewardDisplay(
-    index: number,
-    pointsPercent: number,
-    points: number,
-    reward: number,
-    userUnusedPointsPercent: number,
-    isTaken: boolean,
-    rewardType: string
-  ) {
-    const {
-      targetRef: rewardRef,
-      tooltip: rewardTooltip,
-      tooltipVisible: rewardTooltipVisible,
-    } = useTooltip(<RewardTooltipComponent
-      index={index}
-      isTaken={isTaken}
-      reward={reward}
-      points={points}
-      userUnusedPointsPercent={userUnusedPointsPercent}
-      rewardType={rewardType}
-
-    />, {
-      placement: "top",
-    });
-    if (isTaken) {
-      return (
-        <Flex alignItems="center" ref={rewardRef}>
-          <PresentNoneIcon color='success' style={{
-            display: 'flex',
-            position: 'fixed',
-            marginLeft: '-10px',
-          }} width='35px' />
-          {rewardTooltipVisible && rewardTooltip}
-        </Flex>
-      )
-    }
-    if (pointsPercent <= userUnusedPointsPercent) {
-      return (
-        <Flex alignItems="center" ref={rewardRef}>
-          <PresentWonIcon style={{ display: 'flex', position: 'fixed', marginLeft: '-10px' }} width='35px' />
-          {rewardTooltipVisible && rewardTooltip}
-        </Flex>
-      )
-    }
-    return (
-      <Flex alignItems="center" ref={rewardRef}>
-        <PresentCheckIcon style={{ display: 'flex', position: 'fixed', marginLeft: '-10px' }} width='35px' />
-        {rewardTooltipVisible && rewardTooltip}
-      </Flex>
-    )
-
+  const handleExclusiveClaim = (index: number) => {
+    setSelectedRewardIndex(BigInt(index))
+    claimExclusiveReward?.()
   }
+
+  
+  
 
 
   if (!nextCampaingId) {
@@ -287,21 +196,26 @@ export const ProfileRewardCard = () => {
                   />
                   {globalRewards?.map(reward => (
                     <Box
+                      key={reward.index}
                       top={0}
                       left={`${reward.pointsPercent}%`}
                       bottom={0}
                       right={0}
                       position="absolute"
                       display="flex">
-                      {RewardDisplay(
-                        reward.index,
-                        reward.pointsPercent,
-                        reward.points,
-                        reward.reward,
-                        userUnusedPoints.pointsPercent,
-                        false,
-                        REWARD_TYPE.GLOBAL
-                      )}
+                      <RewardProgressBar
+                        index={reward.index}
+                        pointsPercent={reward.pointsPercent}
+                        points={reward.points}
+                        reward={formatUnits(BigInt(reward.reward), rewardTokenInfo?.[1].result)} 
+                        userUnusedPointsPercent={userUnusedPoints.pointsPercent}
+                        isTaken={false}
+                        rewardType={REWARD_TYPE.GLOBAL}
+                        disabled={reward.points > userUnusedPoints.points || !claimGlobalReward }
+                        symbol={rewardTokenInfo?.[0].result}
+                        setSelectedRewardIndex={setSelectedRewardIndex}
+                        handleClaim={handleGlobalClaim}
+                      />
                     </Box>
                   ))}
                 </Progress>
@@ -326,14 +240,19 @@ export const ProfileRewardCard = () => {
                       right={0}
                       position="absolute"
                       display="flex">
-                      {RewardDisplay(
-                        reward.index,
-                        reward.pointsPercent,
-                        reward.points,
-                        reward.reward,
-                        userUnusedPoints.pointsPercent,
-                        reward.isTaken,
-                        REWARD_TYPE.EXCLUSIVE)}
+                      <RewardProgressBar
+                        index={reward.index}
+                        pointsPercent={reward.pointsPercent}
+                        points={reward.points}
+                        reward={formatUnits(BigInt(reward.reward), rewardTokenInfo?.[1].result)} 
+                        userUnusedPointsPercent={userUnusedPoints.pointsPercent}
+                        isTaken={reward.isTaken}
+                        rewardType={REWARD_TYPE.GLOBAL}
+                        disabled={reward.points > userUnusedPoints.points || !claimExclusiveReward}
+                        symbol={rewardTokenInfo?.[0].result}
+                        setSelectedRewardIndex={setSelectedRewardIndex}
+                        handleClaim={handleExclusiveClaim}
+                      />
                     </Box>
                   ))}
                 </Progress>
