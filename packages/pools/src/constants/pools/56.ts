@@ -92,6 +92,17 @@ export const livePools: SerializedPool[] = [
     isFinished:true,
     version: 3,
   },
+  {
+    sousId: 350,
+    stakingToken: bscTokens.cbon,
+    earningToken: bscTokens.cadinu,
+    contractAddress: '0x648f2a29C605cb6CC99FD37F7979dF1Fb1a7259E',
+    poolCategory: PoolCategory.CORE,
+    tokenPerBlock: '30000',
+    profileRequirement: {required: true, thresholdPoints:"6000"},
+    isFinished: false,
+    version: 3,
+  },
   // {
   //   sousId: 347,
   //   stakingToken: bscTokens.cake,
